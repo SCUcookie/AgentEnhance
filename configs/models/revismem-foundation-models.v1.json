@@ -1,0 +1,51 @@
+{
+  "schema_version": "model_bundle_spec.v1",
+  "bundle_id": "revismem-foundation-models-v1",
+  "status": "frozen_identity_pending_bytes",
+  "purpose": "ReVisMem coarse-to-fine multimodal evidence retrieval and revisitation policy",
+  "models": [
+    {
+      "role": "visual_reasoner_and_future_lora_base",
+      "model_id": "Qwen/Qwen3-VL-8B-Instruct",
+      "source": "modelscope",
+      "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+      "license": "Apache-2.0",
+      "required": true
+    },
+    {
+      "role": "multimodal_region_embedding",
+      "model_id": "Qwen/Qwen3-VL-Embedding-2B",
+      "source": "modelscope",
+      "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "license": "Apache-2.0",
+      "required": true
+    },
+    {
+      "role": "multimodal_region_reranking",
+      "model_id": "Qwen/Qwen3-VL-Reranker-2B",
+      "source": "modelscope",
+      "revision": "5b295e981b1de77d875cdaafbc3a852420b6f3d4",
+      "license": "Apache-2.0",
+      "required": true
+    },
+    {
+      "role": "fixed_clip_similarity_baseline",
+      "model_id": "openai/clip-vit-large-patch14",
+      "source": "huggingface_server_cache",
+      "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41",
+      "model_safetensors_sha256": "a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb",
+      "required": true
+    }
+  ],
+  "excluded_from_foundation": [
+    {
+      "model_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "reason": "The 8B model is the selected first training base; downloading both variants would add no new role to the foundation run."
+    },
+    {
+      "model_id": "google/siglip-so400m-patch14-384",
+      "reason": "The cached CLIP model is the frozen similarity baseline; SigLIP remains an optional later baseline."
+    }
+  ],
+  "publication_rule": "Each downloaded snapshot remains under an incoming partial path until its exact revision, per-file SHA-256 inventory, offline load, and read-only publication checks pass."
+}

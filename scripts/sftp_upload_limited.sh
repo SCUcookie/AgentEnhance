@@ -35,6 +35,7 @@ local_abs=$(cd "$(dirname "$local_file")" && pwd -P)/$(basename "$local_file")
 
 partial_file="${remote_file}.partial.${local_sha:0:16}"
 remote_parent=${remote_file%/*}
+local_size=$(wc -c <"$local_file" | tr -d '[:space:]')
 
 ssh "$ssh_target" "test -d '$remote_parent' && test -w '$remote_parent' && test ! -e '$remote_file'"
 
@@ -45,12 +46,22 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 if ssh "$ssh_target" "test -f '$partial_file'"; then
-  transfer_command=reput
+  remote_size=$(ssh "$ssh_target" "stat -c %s -- '$partial_file'")
+  if (( remote_size > local_size )); then
+    echo "remote partial is larger than local source; refusing to overwrite: $partial_file" >&2
+    exit 74
+  elif (( remote_size == local_size )); then
+    transfer_command=verify_only
+  else
+    transfer_command=reput
+  fi
 else
   transfer_command=put
 fi
-printf '%s -p "%s" "%s"\n' "$transfer_command" "$local_abs" "$partial_file" >"$batch_file"
-sftp -q -l "$rate_limit" -b "$batch_file" "$ssh_target"
+if [[ "$transfer_command" != verify_only ]]; then
+  printf '%s -p "%s" "%s"\n' "$transfer_command" "$local_abs" "$partial_file" >"$batch_file"
+  sftp -q -l "$rate_limit" -b "$batch_file" "$ssh_target"
+fi
 
 remote_sha=$(ssh "$ssh_target" "sha256sum -- '$partial_file' | awk '{print \$1}'")
 if [[ "$remote_sha" != "$local_sha" ]]; then

@@ -1,0 +1,77 @@
+{
+  "schema_version": "experiment_spec.v1",
+  "experiment_id": "revismem-rs-memtrack-stage0-v1",
+  "status": "draft",
+  "parent_experiment_id": null,
+  "hypothesis": "At an identical visual-token budget, a learned coarse-to-fine evidence policy can improve oracle-evidence recall or reduce raw-region revisits relative to a frozen rule cascade on deterministic SpaceNet 7 temporal questions.",
+  "changed_factor": "evidence_access_policy",
+  "dataset": {
+    "dataset_id": "rs-memtrack-spacenet7-stage0",
+    "version": "0.1.0",
+    "digest": "pending",
+    "splits": [
+      "train",
+      "dev",
+      "selection"
+    ]
+  },
+  "arms": [
+    {
+      "arm_id": "fixed-coarse-to-fine",
+      "role": "baseline",
+      "adapter": "revismem_fixed_policy_v1",
+      "config": {
+        "levels": [
+          "semantic_summary",
+          "region_embedding",
+          "raw_region_revisit"
+        ],
+        "visual_token_budget": 4096
+      }
+    },
+    {
+      "arm_id": "learned-coarse-to-fine",
+      "role": "treatment",
+      "adapter": "revismem_learned_policy_v1",
+      "config": {
+        "levels": [
+          "semantic_summary",
+          "region_embedding",
+          "raw_region_revisit"
+        ],
+        "visual_token_budget": 4096,
+        "policy_base": "Qwen/Qwen3-VL-8B-Instruct",
+        "parameter_efficient_training": "lora",
+        "region_encoder": "Qwen/Qwen3-VL-Embedding-2B",
+        "region_reranker": "Qwen/Qwen3-VL-Reranker-2B"
+      }
+    }
+  ],
+  "seeds": [
+    20260902
+  ],
+  "metrics": {
+    "primary": "evidence_recall_at_visual_token_budget",
+    "guardrails": [
+      "source_pointer_precision",
+      "answer_accuracy",
+      "visual_tokens_per_query",
+      "raw_region_revisit_rate",
+      "peak_vram_gib",
+      "failed_sample_rate"
+    ],
+    "evaluator_version": "rs_memtrack_stage0_eval_v1"
+  },
+  "decision_rule": "Stage-0 preparation may train and debug but supports no scientific claim. Freeze only after the dataset digest and model placement hashes are recorded. A later selection decision must compare paired questions at the same visual-token budget and reject the treatment if source pointer precision or answer accuracy regresses.",
+  "resources": {
+    "max_gpu_hours": 48,
+    "max_wall_hours": 12.5,
+    "max_disk_gib": 200,
+    "max_api_cost_usd": 0
+  },
+  "retry_policy": {
+    "max_attempts": 1,
+    "automatic_retry": false,
+    "fresh_output_required": true
+  }
+}
