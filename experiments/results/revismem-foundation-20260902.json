@@ -1,0 +1,101 @@
+{
+  "schema_version": "revismem_foundation_result.v1",
+  "report_id": "revismem-foundation-20260902",
+  "scope": "Pinned model placement, official source archive acquisition, and real two-GPU multimodal LoRA execution smoke",
+  "scientific_claim_allowed": false,
+  "models": [
+    {
+      "model_id": "Qwen/Qwen3-VL-8B-Instruct",
+      "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+      "total_bytes": 17545916927,
+      "file_count": 18,
+      "lfs_file_count": 7,
+      "model_files_inventory_sha256": "a9246eb726bbc0f09a388d27a989a5c1c483915508ee38cb8b1c41e435914dbb",
+      "read_only": true,
+      "offline_load": "passed"
+    },
+    {
+      "model_id": "Qwen/Qwen3-VL-Embedding-2B",
+      "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "total_bytes": 4271069478,
+      "file_count": 20,
+      "lfs_file_count": 4,
+      "model_files_inventory_sha256": "7c91bdd2cdf46e9f0e112bcf3f1dcc45a35076e1543ab109629ca57d665f5b33",
+      "read_only": true,
+      "offline_load": "passed_with_repository_bundled_Qwen3VLEmbedder",
+      "validation_output": {
+        "shape": [
+          1,
+          2048
+        ],
+        "finite": true,
+        "l2_norm": 1.0012741088867188
+      }
+    },
+    {
+      "model_id": "Qwen/Qwen3-VL-Reranker-2B",
+      "revision": "5b295e981b1de77d875cdaafbc3a852420b6f3d4",
+      "total_bytes": 4271057309,
+      "file_count": 22,
+      "lfs_file_count": 4,
+      "model_files_inventory_sha256": "2991633026014122cdc9b8c2f1c8edd23439ef97a867e73caa87fd8989a4eeea",
+      "read_only": true,
+      "offline_load": "passed_with_repository_bundled_Qwen3VLReranker",
+      "validation_output": {
+        "finite": true,
+        "score": 0.78515625
+      }
+    }
+  ],
+  "environment": {
+    "isolation": "venv with system-site-packages; shared base environment was not modified",
+    "path": "environments/revismem-qwen3vl-py310",
+    "python": "3.10.18",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.57.3",
+    "peft": "0.18.0",
+    "qwen_vl_utils": "0.0.14",
+    "sentence_transformers": "5.4.0",
+    "requirements_freeze_sha256": "cb5e0dc46d9aa246bb385c49c5f78c61410b9c712b265f60a57d8deae3d64391"
+  },
+  "dataset_source": {
+    "dataset_id": "spacenet7-buildings-source-archive",
+    "source": "official SpaceNet S3 archive",
+    "bytes": 9161814623,
+    "sha256": "00a4c862a78da923100c59679db0917b60defbeb7d16ab44a65798b645a775bf",
+    "read_only": true,
+    "derived_stage0_status": "pending_extraction_and_split_freeze"
+  },
+  "training_smoke": {
+    "experiment_id": "qwen3-vl-lora-ddp-smoke-v1",
+    "run_id": "qwen3vl-lora-ddp-smoke-v1-20260902T2040-a1",
+    "status": "completed",
+    "independent_audit": "passed",
+    "physical_gpus": [
+      0,
+      1
+    ],
+    "world_size": 2,
+    "backend": "nccl",
+    "real_pixel_values_present": true,
+    "steps": 2,
+    "trainable_parameter_count": 1916928,
+    "minimum_parameter_delta_l2": 0.00961501058191061,
+    "ddp_parameter_sync_max_abs_diff": 0.0,
+    "maximum_peak_vram_bytes": 17676360192,
+    "adapter_model_sha256": "382e54afb5a7378fde95e9c714333d01c6022f31d85690a196dd5833f7b5b2ff",
+    "independent_audit_sha256": "49112bd28724adccd6b8c7d276d2c6b185f0e0a0f6717de5d9c1d4ac02b912f5",
+    "training_summary_sha256": "e2a984921db308adce4bd096affa77362911b82bc9c32813959658b29ab66a24",
+    "run_record_sha256": "54fb470743c275a87645011251c921bb91e284c9caa6b537206470b69d9cf49c",
+    "run_inventory_sha256": "78eda16e00429f975a0bd28acfe8988a791e26b6f6aaaa826b74f4c1e97c29db",
+    "started_at_utc": "2026-09-02T12:42:08.858187+00:00",
+    "completed_at_utc": "2026-09-02T12:43:24.337010+00:00"
+  },
+  "decision": "foundation_execution_passed",
+  "limitations": [
+    "The two-image, two-step smoke validates execution and synchronization only; it does not measure model quality or ReVisMem effectiveness.",
+    "Mean smoke loss was not required to decrease and increased slightly from 5.960463766996327e-08 to 7.94728478581419e-08; parameter update and synchronization nevertheless passed the frozen execution gates.",
+    "The generic SentenceTransformer loader was rejected because it reported unmatched and newly initialized Qwen weights; only the bundled official embedding/reranker implementations are accepted.",
+    "SpaceNet 7 has not yet been extracted into disjoint AOI splits or transformed into RS-MemTrack episodes."
+  ]
+}

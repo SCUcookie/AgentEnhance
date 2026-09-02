@@ -1,32 +1,59 @@
 {
   "schema_version": "model_bundle_spec.v1",
   "bundle_id": "revismem-foundation-models-v1",
-  "status": "frozen_identity_pending_bytes",
+  "status": "placed_verified_offline",
   "purpose": "ReVisMem coarse-to-fine multimodal evidence retrieval and revisitation policy",
   "models": [
     {
       "role": "visual_reasoner_and_future_lora_base",
       "model_id": "Qwen/Qwen3-VL-8B-Instruct",
-      "source": "modelscope",
+      "source": "modelscope_git_lfs",
       "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
       "license": "Apache-2.0",
-      "required": true
+      "required": true,
+      "placement": {
+        "path": "checkpoints/base-models/qwen3-vl-8b-instruct/rev-5d854aab08710c16b980ec6d603d863b3821b915",
+        "file_count": 18,
+        "lfs_file_count": 7,
+        "total_bytes": 17545916927,
+        "model_files_inventory_sha256": "a9246eb726bbc0f09a388d27a989a5c1c483915508ee38cb8b1c41e435914dbb",
+        "read_only": true,
+        "offline_validation": "Per-file SHA-256, AutoConfig, Qwen3VLProcessor, full BF16 weight load, and two-rank LoRA training passed."
+      }
     },
     {
       "role": "multimodal_region_embedding",
       "model_id": "Qwen/Qwen3-VL-Embedding-2B",
-      "source": "modelscope",
+      "source": "modelscope_git_lfs",
       "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
       "license": "Apache-2.0",
-      "required": true
+      "required": true,
+      "placement": {
+        "path": "checkpoints/base-models/qwen3-vl-embedding-2b/rev-c35dddf20620fe32745cb3d01f87ba64ae316313",
+        "file_count": 20,
+        "lfs_file_count": 4,
+        "total_bytes": 4271069478,
+        "model_files_inventory_sha256": "7c91bdd2cdf46e9f0e112bcf3f1dcc45a35076e1543ab109629ca57d665f5b33",
+        "read_only": true,
+        "offline_validation": "Per-file SHA-256 and the repository-provided Qwen3VLEmbedder produced a finite normalized 2048-dimensional embedding on CPU with networking disabled."
+      }
     },
     {
       "role": "multimodal_region_reranking",
       "model_id": "Qwen/Qwen3-VL-Reranker-2B",
-      "source": "modelscope",
+      "source": "modelscope_git_lfs",
       "revision": "5b295e981b1de77d875cdaafbc3a852420b6f3d4",
       "license": "Apache-2.0",
-      "required": true
+      "required": true,
+      "placement": {
+        "path": "checkpoints/base-models/qwen3-vl-reranker-2b/rev-5b295e981b1de77d875cdaafbc3a852420b6f3d4",
+        "file_count": 22,
+        "lfs_file_count": 4,
+        "total_bytes": 4271057309,
+        "model_files_inventory_sha256": "2991633026014122cdc9b8c2f1c8edd23439ef97a867e73caa87fd8989a4eeea",
+        "read_only": true,
+        "offline_validation": "Per-file SHA-256 and the repository-provided Qwen3VLReranker produced a finite score on CPU with networking disabled."
+      }
     },
     {
       "role": "fixed_clip_similarity_baseline",
@@ -37,6 +64,17 @@
       "required": true
     }
   ],
+  "runtime": {
+    "path": "environments/revismem-qwen3vl-py310",
+    "python": "3.10.18",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.57.3",
+    "qwen_vl_utils": "0.0.14",
+    "peft": "0.18.0",
+    "sentence_transformers": "5.4.0",
+    "requirements_freeze_sha256": "cb5e0dc46d9aa246bb385c49c5f78c61410b9c712b265f60a57d8deae3d64391",
+    "compatibility_note": "Embedding and reranker validation must use the model repositories' bundled Qwen3VLEmbedder and Qwen3VLReranker implementations. Generic SentenceTransformer loading was rejected after it reported unmatched and newly initialized weights."
+  },
   "excluded_from_foundation": [
     {
       "model_id": "Qwen/Qwen3-VL-4B-Instruct",

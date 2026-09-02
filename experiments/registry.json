@@ -25,6 +25,19 @@
         "clip-ddp-smoke-v1-r1-20260902T1857-a1"
       ],
       "result_path": "experiments/results/clip-memory-projector-ddp-smoke-20260902.json"
+    },
+    {
+      "experiment_id": "qwen3-vl-lora-ddp-smoke-v1",
+      "status": "terminal_completed",
+      "parent_experiment_id": "clip-memory-projector-ddp-smoke-v1-recovery1",
+      "spec_path": "experiments/qwen3-vl-lora-ddp-smoke-v1/spec.json",
+      "spec_digest": "sha256:c76caa2c6736a5667a4b53fd8596a5df83b69b69d51b8291309caced8b117b2a",
+      "bundle_path": "experiments/qwen3-vl-lora-ddp-smoke-v1",
+      "bundle_archive_sha256": "sha256:425bb729d78dd4c716bd44d2bffa78cb1f4b4b93859394eaad678f787b662486",
+      "run_ids": [
+        "qwen3vl-lora-ddp-smoke-v1-20260902T2040-a1"
+      ],
+      "result_path": "experiments/results/revismem-foundation-20260902.json"
     }
   ]
 }

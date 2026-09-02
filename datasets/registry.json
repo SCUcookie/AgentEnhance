@@ -1,4 +1,19 @@
 {
   "schema_version": "dataset_registry.v1",
-  "datasets": []
+  "datasets": [
+    {
+      "dataset_id": "spacenet7-buildings-source-archive",
+      "version": "official-train-20200824",
+      "classification": "public_external",
+      "status": "raw_archive_verified",
+      "source_url": "https://spacenet-dataset.s3.amazonaws.com/spacenet/SN7_buildings/tarballs/SN7_buildings_train.tar.gz",
+      "source_last_modified": "2020-08-24",
+      "archive_bytes": 9161814623,
+      "archive_sha256": "00a4c862a78da923100c59679db0917b60defbeb7d16ab44a65798b645a775bf",
+      "content_root": "datasets/raw/spacenet7/SN7_buildings_train.tar.gz",
+      "read_only": true,
+      "derived_dataset_id": "rs-memtrack-spacenet7-stage0",
+      "derived_dataset_status": "pending_extraction_and_split_freeze"
+    }
+  ]
 }

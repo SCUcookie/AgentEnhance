@@ -1,6 +1,6 @@
 # ReVisMem foundation
 
-Status: model identities frozen; model bytes and Stage-0 dataset pending.
+Status: foundation models placed and verified; SpaceNet 7 source archived; derived Stage-0 dataset pending.
 
 ## Research boundary
 
@@ -57,3 +57,18 @@ curve cannot establish that ReVisMem improves multimodal memory. A scientific
 claim requires paired baselines, multiple predeclared seeds, an untouched final
 split, independent metric recomputation, and comparison at the same visual
 token budget.
+
+## Foundation execution, 2026-09-02
+
+- The exact ModelScope Git/LFS commits for Qwen3-VL 8B Instruct, Qwen3-VL
+  Embedding 2B, and Qwen3-VL Reranker 2B were materialized with per-file
+  SHA-256 inventories, published read-only, and loaded with networking disabled.
+- The embedding and reranker must be loaded through the implementations bundled
+  in their model repositories. A generic `SentenceTransformer` load was rejected
+  because it reported unmatched weights and newly initialized the backbone.
+- The official SpaceNet 7 training archive is stored read-only with 9,161,814,623
+  bytes and SHA-256
+  `00a4c862a78da923100c59679db0917b60defbeb7d16ab44a65798b645a775bf`.
+- A two-GPU Qwen3-VL 8B LoRA execution smoke passed independent audit. This
+  confirms offline model loading, real pixel processing, NCCL synchronization,
+  adapter update, checkpoint creation, and peak-VRAM viability only.
