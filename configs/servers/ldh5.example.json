@@ -1,0 +1,28 @@
+{
+  "schema_version": "server_profile.v1",
+  "profile_id": "ldh5-gpu",
+  "ssh_alias": "agent-enhance-gpu",
+  "host_hint": "10.184.17.183",
+  "storage_candidates": ["/data1", "/data2"],
+  "remote_root_env": "AGENT_ENHANCE_REMOTE_ROOT",
+  "large_transfer": {
+    "protocol": "sftp",
+    "rate_limit_kbit_per_second": 8192,
+    "resume": true,
+    "sha256_before_publish": true
+  },
+  "gpu_policy": {
+    "runtime_discovery_required": true,
+    "minimum_idle_polls": 3,
+    "max_memory_used_mib": 1024,
+    "max_utilization_percent": 0,
+    "protect_unrelated_processes": true
+  },
+  "last_known_snapshot": {
+    "observed_at": "2026-08-31T00:00:00+08:00",
+    "visible_gpu_count": 7,
+    "gpu_model": "NVIDIA GeForce RTX 4090",
+    "data2_free_tib_approx": 1.5,
+    "authoritative_for_launch": false
+  }
+}

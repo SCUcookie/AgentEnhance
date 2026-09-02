@@ -1,0 +1,18 @@
+{
+  "schema_version": "agent_enhance_project.v1",
+  "project_id": "agent-enhance",
+  "purpose": "reproducible multimodal memory enhancement experiments for a personal agent",
+  "timezone": "Asia/Shanghai",
+  "canonical_branch": "main",
+  "origin": "git@github.com:SCUcookie/AgentEnhance.git",
+  "authority_policy": {
+    "canonical": ["raw_bytes", "raw_messages", "human_annotations", "external_receipts"],
+    "rebuildable": ["ocr", "asr", "keyframes", "summaries", "embeddings", "indexes", "model_judgments"]
+  },
+  "server_policy": {
+    "storage_candidates": ["/data1", "/data2"],
+    "large_file_transport": "rate_limited_resumable_sftp",
+    "default_sftp_limit_kbit_per_second": 8192,
+    "live_resource_discovery_required": true
+  }
+}

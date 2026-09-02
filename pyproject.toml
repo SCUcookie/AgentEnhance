@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-enhance"
+version = "0.1.0"
+description = "Reproducible multimodal memory enhancement experiment control plane"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+agent-enhance = "agent_enhance.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

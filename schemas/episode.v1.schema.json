@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-enhance.local/schemas/episode.v1.schema.json",
+  "title": "AgentEnhance temporal multimodal episode v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "episode_id", "group_id", "annotation_version", "events", "queries"],
+  "properties": {
+    "schema_version": {"const": "memory_episode.v1"},
+    "episode_id": {"type": "string", "minLength": 1},
+    "group_id": {"type": "string", "minLength": 1},
+    "annotation_version": {"type": "string", "minLength": 1},
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["event_id", "sequence", "occurred_at", "event_type", "modality", "source_sha256"],
+        "properties": {
+          "event_id": {"type": "string"},
+          "sequence": {"type": "integer", "minimum": 1},
+          "occurred_at": {"type": "string", "format": "date-time"},
+          "event_type": {"enum": ["observation", "message", "correction", "forget", "conflict", "system_boundary"]},
+          "modality": {"enum": ["text", "code", "image", "audio", "video", "file"]},
+          "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "content_ref": {"type": ["string", "null"]},
+          "inline_public_content": {"type": ["string", "null"]},
+          "metadata": {"type": "object"}
+        }
+      }
+    },
+    "queries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["query_id", "after_sequence", "query_text", "task_type", "expected_evidence_ids", "answer_constraints"],
+        "properties": {
+          "query_id": {"type": "string"},
+          "after_sequence": {"type": "integer", "minimum": 1},
+          "query_text": {"type": "string"},
+          "task_type": {"enum": ["retrieval", "current_value", "conflict", "forgetting", "multi_hop", "cross_modal", "answer"]},
+          "expected_evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+          "forbidden_evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+          "answer_constraints": {"type": "object"}
+        }
+      }
+    }
+  }
+}

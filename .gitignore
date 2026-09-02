@@ -1,0 +1,46 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*password*
+*secret*
+configs/servers/*.local.json
+
+# Authority data and large/generated artifacts
+.local/
+data/
+artifacts/
+checkpoints/
+outputs/
+runs/
+reports/private/
+*.sqlite
+*.sqlite3
+*.db
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.npy
+*.npz
+*.parquet
+*.tar
+*.tar.gz
+*.zip
+
+# Keep only small, reviewed fixtures under tests/fixtures
+tests/fixtures/generated/

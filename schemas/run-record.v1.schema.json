@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-enhance.local/schemas/run-record.v1.schema.json",
+  "title": "AgentEnhance run record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "experiment_id", "arm_id", "seed", "attempt", "status", "spec_digest", "dataset_digest", "code", "environment", "paths", "events_path"],
+  "properties": {
+    "schema_version": {"const": "run_record.v1"},
+    "run_id": {"type": "string"},
+    "experiment_id": {"type": "string"},
+    "arm_id": {"type": "string"},
+    "seed": {"type": "integer"},
+    "attempt": {"type": "integer", "minimum": 1},
+    "parent_run_id": {"type": ["string", "null"]},
+    "status": {"enum": ["planned", "preflight_passed", "running", "completed", "failed", "cancelled", "unknown"]},
+    "spec_digest": {"type": "string"},
+    "dataset_digest": {"type": "string"},
+    "code": {"type": "object"},
+    "environment": {"type": "object"},
+    "paths": {"type": "object"},
+    "events_path": {"type": "string"},
+    "terminal_reason": {"type": ["string", "null"]},
+    "output_inventory_sha256": {"type": ["string", "null"]}
+  }
+}

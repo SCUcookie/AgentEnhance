@@ -1,0 +1,33 @@
+{
+  "schema_version": "run_record.v1",
+  "run_id": "replace-me",
+  "experiment_id": "replace-me",
+  "arm_id": "replace-me",
+  "seed": 0,
+  "attempt": 1,
+  "parent_run_id": null,
+  "status": "planned",
+  "spec_digest": "sha256:replace-me",
+  "dataset_digest": "sha256:replace-me",
+  "code": {
+    "commit": "replace-me",
+    "tree": "replace-me",
+    "dirty": false,
+    "dirty_diff_sha256": null
+  },
+  "environment": {
+    "lock_sha256": "replace-me",
+    "hardware_snapshot": "environment/hardware.json",
+    "software_snapshot": "environment/software.json"
+  },
+  "paths": {
+    "predictions": "predictions/",
+    "raw_metrics": "metrics/raw.json",
+    "logs": "logs/",
+    "resource_ledger": "resources.jsonl",
+    "inventory": "SHA256SUMS"
+  },
+  "events_path": "events.jsonl",
+  "terminal_reason": null,
+  "output_inventory_sha256": null
+}

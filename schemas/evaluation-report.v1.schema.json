@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-enhance.local/schemas/evaluation-report.v1.schema.json",
+  "title": "AgentEnhance evaluation report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "report_id", "experiment_id", "spec_digest", "dataset_digest", "evaluator_version", "run_ids", "sample_accounting", "metrics", "decision", "failures"],
+  "properties": {
+    "schema_version": {"const": "evaluation_report.v1"},
+    "report_id": {"type": "string"},
+    "experiment_id": {"type": "string"},
+    "spec_digest": {"type": "string"},
+    "dataset_digest": {"type": "string"},
+    "evaluator_version": {"type": "string"},
+    "run_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "sample_accounting": {
+      "type": "object",
+      "required": ["expected", "evaluated", "failed", "missing", "duplicate"],
+      "properties": {
+        "expected": {"type": "integer", "minimum": 0},
+        "evaluated": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "missing": {"type": "integer", "minimum": 0},
+        "duplicate": {"type": "integer", "minimum": 0}
+      }
+    },
+    "metrics": {"type": "object"},
+    "decision": {"enum": ["accept", "reject", "inconclusive", "invalid"]},
+    "failures": {"type": "array", "items": {"type": "object"}}
+  }
+}

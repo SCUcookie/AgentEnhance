@@ -1,0 +1,23 @@
+{
+  "schema_version": "dataset_manifest.v1",
+  "dataset_id": "replace-me",
+  "version": "0.0.0",
+  "classification": "synthetic_public",
+  "modalities": ["text"],
+  "authority": {
+    "immutable": true,
+    "content_addressed": true,
+    "source_policy": "Original bytes and annotations are immutable; all derivatives are versioned projections."
+  },
+  "grouping_key": "episode_id",
+  "splits": {
+    "train": {"episode_count": 0, "index_sha256": "pending", "sealed": false},
+    "dev": {"episode_count": 0, "index_sha256": "pending", "sealed": false},
+    "selection": {"episode_count": 0, "index_sha256": "pending", "sealed": false},
+    "final": {"episode_count": 0, "index_sha256": "pending", "sealed": true}
+  },
+  "license": null,
+  "consent_basis": null,
+  "content_root": "${AGENT_ENHANCE_DATA_ROOT}/replace-me/0.0.0",
+  "digest": "pending"
+}

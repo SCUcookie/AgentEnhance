@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-enhance.local/schemas/experiment-spec.v1.schema.json",
+  "title": "AgentEnhance experiment spec v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "experiment_id", "status", "hypothesis", "changed_factor", "dataset", "arms", "seeds", "metrics", "decision_rule", "resources", "retry_policy"],
+  "properties": {
+    "schema_version": {"const": "experiment_spec.v1"},
+    "experiment_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "status": {"enum": ["draft", "frozen", "terminal"]},
+    "parent_experiment_id": {"type": ["string", "null"]},
+    "hypothesis": {"type": "string", "minLength": 1},
+    "changed_factor": {"type": "string", "minLength": 1},
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_id", "version", "digest", "splits"],
+      "properties": {
+        "dataset_id": {"type": "string"},
+        "version": {"type": "string"},
+        "digest": {"type": "string"},
+        "splits": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["train", "dev", "selection", "final"]}}
+      }
+    },
+    "arms": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["arm_id", "role", "adapter", "config"],
+        "properties": {
+          "arm_id": {"type": "string"},
+          "role": {"enum": ["baseline", "treatment"]},
+          "adapter": {"type": "string"},
+          "config": {"type": "object"}
+        }
+      }
+    },
+    "seeds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer", "minimum": 0}},
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "guardrails", "evaluator_version"],
+      "properties": {
+        "primary": {"type": "string"},
+        "guardrails": {"type": "array", "items": {"type": "string"}},
+        "evaluator_version": {"type": "string"}
+      }
+    },
+    "decision_rule": {"type": "string", "minLength": 1},
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_gpu_hours", "max_wall_hours", "max_disk_gib", "max_api_cost_usd"],
+      "properties": {
+        "max_gpu_hours": {"type": "number", "minimum": 0},
+        "max_wall_hours": {"type": "number", "exclusiveMinimum": 0},
+        "max_disk_gib": {"type": "number", "exclusiveMinimum": 0},
+        "max_api_cost_usd": {"type": "number", "minimum": 0}
+      }
+    },
+    "retry_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_attempts", "automatic_retry", "fresh_output_required"],
+      "properties": {
+        "max_attempts": {"type": "integer", "minimum": 1},
+        "automatic_retry": {"const": false},
+        "fresh_output_required": {"const": true}
+      }
+    }
+  }
+}

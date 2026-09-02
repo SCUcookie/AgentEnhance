@@ -1,0 +1,46 @@
+{
+  "schema_version": "experiment_spec.v1",
+  "experiment_id": "memory-baseline-smoke-v1",
+  "status": "draft",
+  "parent_experiment_id": null,
+  "hypothesis": "The harness can execute paired multimodal-memory baselines with complete provenance and identical evaluation inputs.",
+  "changed_factor": "retrieval_strategy",
+  "dataset": {
+    "dataset_id": "multimodal-memory-smoke",
+    "version": "1.0.0",
+    "digest": "pending",
+    "splits": ["dev"]
+  },
+  "arms": [
+    {
+      "arm_id": "recent-only",
+      "role": "baseline",
+      "adapter": "recent_only_v1",
+      "config": {"max_events": 8, "token_budget": 4096}
+    },
+    {
+      "arm_id": "hybrid-source-bound",
+      "role": "treatment",
+      "adapter": "hybrid_source_bound_v1",
+      "config": {"lexical_k": 20, "dense_k": 20, "final_k": 8, "token_budget": 4096}
+    }
+  ],
+  "seeds": [20260902],
+  "metrics": {
+    "primary": "evidence_recall_at_8",
+    "guardrails": ["source_precision", "tombstone_leakage", "duplicate_canonical_rate"],
+    "evaluator_version": "memory_eval_v1"
+  },
+  "decision_rule": "Smoke-only: all contracts and provenance gates pass; no scientific claim is allowed.",
+  "resources": {
+    "max_gpu_hours": 0,
+    "max_wall_hours": 0.25,
+    "max_disk_gib": 1,
+    "max_api_cost_usd": 0
+  },
+  "retry_policy": {
+    "max_attempts": 1,
+    "automatic_retry": false,
+    "fresh_output_required": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-enhance.local/schemas/run-event.v1.schema.json",
+  "title": "AgentEnhance append-only run event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "sequence", "recorded_at", "event_type", "payload"],
+  "properties": {
+    "schema_version": {"const": "run_event.v1"},
+    "run_id": {"type": "string"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "event_type": {
+      "enum": ["planned", "preflight_passed", "launched", "heartbeat", "checkpoint", "completed", "failed", "cancelled", "unknown", "resolved"]
+    },
+    "payload": {"type": "object"}
+  }
+}
