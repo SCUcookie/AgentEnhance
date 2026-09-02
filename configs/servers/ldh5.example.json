@@ -19,9 +19,11 @@
     "protect_unrelated_processes": true
   },
   "last_known_snapshot": {
-    "observed_at": "2026-08-31T00:00:00+08:00",
+    "observed_at": "2026-09-02T18:14:59+08:00",
     "visible_gpu_count": 7,
     "gpu_model": "NVIDIA GeForce RTX 4090",
+    "gpu_memory_mib_each": 24564,
+    "data1_free_tib_approx": 1.7,
     "data2_free_tib_approx": 1.5,
     "authoritative_for_launch": false
   }
