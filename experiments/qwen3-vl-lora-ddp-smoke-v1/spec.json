@@ -1,0 +1,77 @@
+{
+  "schema_version": "experiment_spec.v1",
+  "experiment_id": "qwen3-vl-lora-ddp-smoke-v1",
+  "status": "frozen",
+  "parent_experiment_id": "clip-memory-projector-ddp-smoke-v1-recovery1",
+  "hypothesis": "The exact published Qwen3-VL 8B snapshot can consume real image pixels, update language-attention LoRA parameters, and produce synchronized adapter weights across exactly two NCCL ranks within two optimization steps.",
+  "changed_factor": "qwen3vl_multimodal_lora_execution_world_size_2",
+  "dataset": {
+    "dataset_id": "synthetic-qwen3vl-color-evidence",
+    "version": "1.0.0",
+    "digest": "sha256:147e63281d8680b55ffa8424bfbe7ec8befb2e0ecabd771d7e0535c940805e64",
+    "splits": [
+      "dev"
+    ]
+  },
+  "arms": [
+    {
+      "arm_id": "offline-forward-contract",
+      "role": "baseline",
+      "adapter": "qwen3vl_offline_forward_contract_v1",
+      "config": {
+        "execution": "contract-only",
+        "model_id": "Qwen/Qwen3-VL-8B-Instruct",
+        "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+        "model_inventory_sha256": "a9246eb726bbc0f09a388d27a989a5c1c483915508ee38cb8b1c41e435914dbb"
+      }
+    },
+    {
+      "arm_id": "lora-ddp-two-gpu",
+      "role": "treatment",
+      "adapter": "qwen3vl_language_attention_lora_v1",
+      "config": {
+        "execution": "torch-distributed-nccl",
+        "world_size": 2,
+        "model_id": "Qwen/Qwen3-VL-8B-Instruct",
+        "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+        "model_inventory_sha256": "a9246eb726bbc0f09a388d27a989a5c1c483915508ee38cb8b1c41e435914dbb",
+        "model_dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "lora_rank": 4,
+        "lora_alpha": 8,
+        "target_modules_regex": "model\\.language_model\\.layers\\.\\d+\\.self_attn\\.(q_proj|v_proj)",
+        "vision_tower_trainable": false,
+        "steps": 2,
+        "per_rank_batch_size": 1
+      }
+    }
+  ],
+  "seeds": [
+    20260902
+  ],
+  "metrics": {
+    "primary": "ddp_parameter_sync_max_abs_diff",
+    "guardrails": [
+      "real_pixel_values_present",
+      "assistant_target_tokens_positive",
+      "finite_loss",
+      "trainable_parameter_delta_l2_positive",
+      "adapter_file_sha256_verified",
+      "world_size_exactly_2",
+      "peak_vram_recorded"
+    ],
+    "evaluator_version": "qwen3vl_lora_ddp_smoke_audit_v1"
+  },
+  "decision_rule": "Pass only if exactly two ranks process real image pixels, losses are finite, LoRA parameters change, cross-rank maximum parameter difference is at most 1e-6, and every saved adapter file matches its recorded SHA-256. This execution smoke supports no model-quality or ReVisMem-effectiveness claim.",
+  "resources": {
+    "max_gpu_hours": 1.0,
+    "max_wall_hours": 0.5,
+    "max_disk_gib": 2,
+    "max_api_cost_usd": 0
+  },
+  "retry_policy": {
+    "max_attempts": 1,
+    "automatic_retry": false,
+    "fresh_output_required": true
+  }
+}

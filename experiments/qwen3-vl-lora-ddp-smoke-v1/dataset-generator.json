@@ -1,0 +1,26 @@
+{
+  "schema_version": "synthetic_multimodal_generator.v1",
+  "dataset_id": "synthetic-qwen3vl-color-evidence",
+  "version": "1.0.0",
+  "image": {
+    "mode": "RGB",
+    "width": 112,
+    "height": 112
+  },
+  "samples": [
+    {
+      "sample_id": "solid-red",
+      "rgb": [255, 0, 0],
+      "question": "Answer with one lowercase word: what is the solid color?",
+      "answer": "red"
+    },
+    {
+      "sample_id": "solid-blue",
+      "rgb": [0, 0, 255],
+      "question": "Answer with one lowercase word: what is the solid color?",
+      "answer": "blue"
+    }
+  ],
+  "rank_assignment": "sample_index_equals_global_rank",
+  "purpose": "Execution-only multimodal DDP and LoRA smoke; no effectiveness claim"
+}
