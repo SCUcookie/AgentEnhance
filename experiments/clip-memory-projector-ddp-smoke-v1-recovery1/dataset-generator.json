@@ -1,0 +1,11 @@
+{
+  "schema_version": "synthetic_memory_pair_generator.v1",
+  "generator": "deterministic_clip_tensor_pairs",
+  "seed": 20260902,
+  "per_rank_batch_size": 2,
+  "sequence_length": 16,
+  "pixel_distribution": "normal_0_1",
+  "text_distribution": "uniform_valid_clip_token_ids",
+  "rank_specific_inputs": true,
+  "external_data_accessed": false
+}

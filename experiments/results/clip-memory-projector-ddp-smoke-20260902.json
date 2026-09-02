@@ -1,0 +1,79 @@
+{
+  "schema_version": "foundation_smoke_result.v1",
+  "report_id": "clip-memory-projector-ddp-smoke-20260902",
+  "scope": "Minimum model-placement and two-GPU training foundation only",
+  "scientific_claim_allowed": false,
+  "model": {
+    "model_id": "openai/clip-vit-large-patch14",
+    "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41",
+    "source": "pre-existing Hugging Face cache on the server",
+    "immutable_store": "checkpoints/base-models/openai-clip-vit-large-patch14/rev-32bd64288804d66eefd0ccbe215aa642df71cc41",
+    "model_safetensors_bytes": 1710540580,
+    "model_safetensors_sha256": "a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb",
+    "sha256_inventory_sha256": "071f40493525eaae9311f685e2bf2f41c12d41c8d409c4250fc913b7149e64ac",
+    "read_only": true,
+    "offline_load_verified": true
+  },
+  "environment": {
+    "isolation": "venv with system-site-packages; shared base environment was not modified",
+    "logical_path": "environments/clip-ddp-smoke-py310",
+    "python": "3.10.4",
+    "pytorch": "2.1.0+cu121",
+    "transformers": "4.29.2",
+    "safetensors": "0.4.5",
+    "requirements_freeze_sha256": "7812d015f48873de0c51a2263d41cb50074a4d24816343a2804fc0149d38e5d0"
+  },
+  "hardware": {
+    "gpu_model": "NVIDIA GeForce RTX 4090",
+    "selected_physical_gpus": [
+      0,
+      1
+    ],
+    "preflight_fresh_poll_count": 3,
+    "preflight_passed": true
+  },
+  "dataset": {
+    "dataset_id": "synthetic-clip-memory-pairs",
+    "version": "1.0.0",
+    "digest": "sha256:1f98f5c1d2369703d7e65b128447bc2d1c1e66f3cc755396ab893877eaf17a5a",
+    "contains_personal_memory": false
+  },
+  "initial_run": {
+    "run_id": "clip-ddp-smoke-v1-20260902T1850-a1",
+    "status": "failed",
+    "terminal_reason": "TORCHRUN_ENTRYPOINT_MISSING_BEFORE_TRAINING",
+    "gpu_process_started": false,
+    "events_sha256": "b63fed779b10da155b51a7160ca9f0840e34a975ac7727cb4b9e068c5c88e1cf",
+    "screen_log_sha256": "c87ecbc0a8cc34c4f451f5519eb1e981206d144920178e4f187759f4f44e9835",
+    "run_record_sha256": "2ceaaeaed399dcbef44465e111787720bd35568936558b2f20757ba83d54b135"
+  },
+  "recovery_run": {
+    "run_id": "clip-ddp-smoke-v1-r1-20260902T1857-a1",
+    "status": "completed",
+    "changed_factor_from_parent": "launcher entrypoint only",
+    "distributed_entrypoint": "python -m torch.distributed.run",
+    "backend": "nccl",
+    "world_size": 2,
+    "steps": 20,
+    "per_rank_batch_size": 2,
+    "seed": 20260902,
+    "started_at_utc": "2026-09-02T10:59:02.887747+00:00",
+    "completed_at_utc": "2026-09-02T10:59:28.687559+00:00",
+    "mean_initial_loss": 1.0364333391189575,
+    "mean_final_loss": 0.18638886511325836,
+    "minimum_parameter_delta_l2": 20.358430862426758,
+    "ddp_parameter_sync_max_abs_diff": 0.0,
+    "checkpoint_sha256": "f5bade33167325dc8e6b773bc4dee1be6721a45ff180f4285725349e2d8d9f15",
+    "independent_cpu_audit_status": "passed",
+    "independent_audit_sha256": "b671038826a175647744a951b783efe264cc99c0309217ffe416836fb1bab7d0",
+    "training_summary_sha256": "ed94b59a1888f0f8d1bbf451a9fa8fc7ad52e93328b0d7c4205af5a17769831b",
+    "run_record_sha256": "d8e15732336060fdc1e80e24227dfd12d2239aad371518ee89901c4c94012320",
+    "output_inventory_sha256": "4764286128dcf2d8f628ec510ab78eace5a21abce55de03ce1ff16bef3bef343"
+  },
+  "decision": "foundation_passed",
+  "limitations": [
+    "The CLIP backbone was frozen; only a small two-layer memory projector was trained.",
+    "Inputs were deterministic synthetic image tensors and token IDs.",
+    "This run validates placement, offline loading, NCCL/DDP execution, synchronization, checkpointing, and auditability—not memory-system quality."
+  ]
+}

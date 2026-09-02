@@ -1,4 +1,30 @@
 {
   "schema_version": "experiment_registry.v1",
-  "experiments": []
+  "experiments": [
+    {
+      "experiment_id": "clip-memory-projector-ddp-smoke-v1",
+      "status": "terminal_failed",
+      "spec_path": "configs/experiments/clip-memory-projector-ddp-smoke-v1.json",
+      "spec_digest": "sha256:0e2eb09abff3517eabc3ff0e0adfc3a8c156e1e32a52743c5479aa04254ec8b7",
+      "bundle_path": "experiments/clip-memory-projector-ddp-smoke-v1",
+      "bundle_archive_sha256": "sha256:4bafa2b4a3ab7d810f81456a0da78d668339154d8ef497865d5190f66eec38c4",
+      "run_ids": [
+        "clip-ddp-smoke-v1-20260902T1850-a1"
+      ],
+      "terminal_reason": "TORCHRUN_ENTRYPOINT_MISSING_BEFORE_TRAINING"
+    },
+    {
+      "experiment_id": "clip-memory-projector-ddp-smoke-v1-recovery1",
+      "status": "terminal_completed",
+      "parent_experiment_id": "clip-memory-projector-ddp-smoke-v1",
+      "spec_path": "configs/experiments/clip-memory-projector-ddp-smoke-v1-recovery1.json",
+      "spec_digest": "sha256:ddd56a5f3df199b0b592ba987456b3b437be0877aa0b657035c9259dc95835dc",
+      "bundle_path": "experiments/clip-memory-projector-ddp-smoke-v1-recovery1",
+      "bundle_archive_sha256": "sha256:b06f816cc9ffbdda7af95b57db251224517f0ce73365e48768e3696865c23453",
+      "run_ids": [
+        "clip-ddp-smoke-v1-r1-20260902T1857-a1"
+      ],
+      "result_path": "experiments/results/clip-memory-projector-ddp-smoke-20260902.json"
+    }
+  ]
 }

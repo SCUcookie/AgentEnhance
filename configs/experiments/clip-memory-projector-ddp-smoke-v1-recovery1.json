@@ -1,0 +1,64 @@
+{
+  "schema_version": "experiment_spec.v1",
+  "experiment_id": "clip-memory-projector-ddp-smoke-v1-recovery1",
+  "status": "frozen",
+  "parent_experiment_id": "clip-memory-projector-ddp-smoke-v1",
+  "hypothesis": "After correcting only the isolated-venv distributed entrypoint, a source-identified CLIP backbone and a trainable memory projection head can complete a deterministic two-GPU DDP smoke run with finite optimization, synchronized parameters, and a verifiable checkpoint.",
+  "changed_factor": "execution_world_size_2",
+  "dataset": {
+    "dataset_id": "synthetic-clip-memory-pairs",
+    "version": "1.0.0",
+    "digest": "sha256:1f98f5c1d2369703d7e65b128447bc2d1c1e66f3cc755396ab893877eaf17a5a",
+    "splits": ["dev"]
+  },
+  "arms": [
+    {
+      "arm_id": "single-process-contract",
+      "role": "baseline",
+      "adapter": "clip_memory_projector_v1",
+      "config": {
+        "execution": "contract-only",
+        "base_model": "openai/clip-vit-large-patch14",
+        "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41"
+      }
+    },
+    {
+      "arm_id": "ddp-two-gpu",
+      "role": "treatment",
+      "adapter": "clip_memory_projector_v1",
+      "config": {
+        "execution": "torch-distributed-nccl",
+        "distributed_entrypoint": "python -m torch.distributed.run",
+        "world_size": 2,
+        "base_model": "openai/clip-vit-large-patch14",
+        "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41",
+        "model_safetensors_sha256": "a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb",
+        "trainable_component": "two-layer-memory-projector"
+      }
+    }
+  ],
+  "seeds": [20260902],
+  "metrics": {
+    "primary": "ddp_parameter_sync_max_abs_diff",
+    "guardrails": [
+      "finite_loss",
+      "mean_final_loss_below_mean_initial_loss",
+      "trainable_parameter_delta_l2_positive",
+      "checkpoint_sha256_verified",
+      "world_size_exactly_2"
+    ],
+    "evaluator_version": "clip_ddp_smoke_audit_v1"
+  },
+  "decision_rule": "Pass only if world size is exactly two, all rank losses are finite, mean final loss is below mean initial loss, projector parameters changed, cross-rank maximum parameter difference is at most 1e-7, and the checkpoint hash is verified. This smoke test supports no scientific effectiveness claim.",
+  "resources": {
+    "max_gpu_hours": 0.1,
+    "max_wall_hours": 0.5,
+    "max_disk_gib": 5,
+    "max_api_cost_usd": 0
+  },
+  "retry_policy": {
+    "max_attempts": 1,
+    "automatic_retry": false,
+    "fresh_output_required": true
+  }
+}

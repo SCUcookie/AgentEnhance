@@ -44,7 +44,12 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-printf 'reput -p "%s" "%s"\n' "$local_abs" "$partial_file" >"$batch_file"
+if ssh "$ssh_target" "test -f '$partial_file'"; then
+  transfer_command=reput
+else
+  transfer_command=put
+fi
+printf '%s -p "%s" "%s"\n' "$transfer_command" "$local_abs" "$partial_file" >"$batch_file"
 sftp -q -l "$rate_limit" -b "$batch_file" "$ssh_target"
 
 remote_sha=$(ssh "$ssh_target" "sha256sum -- '$partial_file' | awk '{print \$1}'")
