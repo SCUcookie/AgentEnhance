@@ -21,8 +21,19 @@ rate_limit=${3:-20M}
 parent=${final_file%/*}
 partial="${final_file}.partial"
 mkdir -p "$parent"
-curl --fail --location --retry 12 --retry-all-errors --retry-delay 10 \
-  --continue-at - --limit-rate "$rate_limit" --output "$partial" "$url"
+curl_args=(
+  --fail
+  --location
+  --retry 12
+  --retry-delay 10
+  --continue-at -
+  --limit-rate "$rate_limit"
+  --output "$partial"
+)
+if curl --help all 2>/dev/null | grep -q -- '--retry-all-errors'; then
+  curl_args+=(--retry-all-errors)
+fi
+curl "${curl_args[@]}" "$url"
 sha256=$(sha256sum -- "$partial" | awk '{print $1}')
 bytes=$(stat -c '%s' "$partial")
 mv -- "$partial" "$final_file"

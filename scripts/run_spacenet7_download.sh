@@ -2,13 +2,13 @@
 set -euo pipefail
 
 root=/data1/2026/ldh/AgentEnhance
-downloader="$root/incoming/download_http_resumable.sh"
+downloader="$root/incoming/download_http_resumable.v2.sh"
 url=https://spacenet-dataset.s3.amazonaws.com/spacenet/SN7_buildings/tarballs/SN7_buildings_train.tar.gz
 final_file="$root/datasets/raw/spacenet7/SN7_buildings_train.tar.gz"
 expected_bytes=9161814623
 
 [[ -x "$downloader" ]] || { echo "missing downloader: $downloader" >&2; exit 66; }
-[[ "$(sha256sum "$downloader" | cut -d ' ' -f 1)" == cc37a2092a21b4726fe7f0ad8d654cd3cc30e8c915f5a345b00a4a684972cd28 ]] || {
+[[ "$(sha256sum "$downloader" | cut -d ' ' -f 1)" == 76402a95e5f2d0c4fbc31354cc97488d77ebc0595c403f86cff6841c837a2206 ]] || {
   echo "downloader SHA-256 mismatch" >&2
   exit 74
 }

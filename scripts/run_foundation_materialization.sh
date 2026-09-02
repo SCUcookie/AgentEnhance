@@ -3,13 +3,13 @@ set -euo pipefail
 
 root=/data1/2026/ldh/AgentEnhance
 python_bin="$root/environments/revismem-qwen3vl-py310/bin/python"
-materializer="$root/incoming/materialize_modelscope_snapshot.py"
+materializer="$root/incoming/materialize_modelscope_git_lfs.py"
 incoming="$root/incoming/models"
 store="$root/checkpoints/base-models"
 
 [[ -x "$python_bin" ]] || { echo "missing Python environment: $python_bin" >&2; exit 66; }
 [[ -f "$materializer" ]] || { echo "missing materializer: $materializer" >&2; exit 66; }
-[[ "$(sha256sum "$materializer" | cut -d ' ' -f 1)" == a9af941df225e8cd179c9df12f4e931ba2bfd95212c0a1090b32c56a9c2293c1 ]] || {
+[[ "$(sha256sum "$materializer" | cut -d ' ' -f 1)" == 8ec34f46e8e88c14daed762b9ffe68df86cba91512482dabdfa50de4618acb7f ]] || {
   echo "materializer SHA-256 mismatch" >&2
   exit 74
 }
@@ -43,10 +43,11 @@ PY
 
   "$python_bin" "$materializer" \
     --model-id "$model_id" \
+    --source-url "https://www.modelscope.cn/$model_id.git" \
     --revision "$revision" \
     --incoming-root "$incoming" \
     --final-dir "$final_dir" \
-    --max-workers 4
+    --concurrent-transfers 4
 }
 
 verify_or_materialize \
