@@ -1,0 +1,49 @@
+{
+  "all_methods_deterministic": false,
+  "claim_scope": "execution multiplicity only; no benchmark score or method ranking",
+  "decision_rule_applied": true,
+  "methods": {
+    "m2a": {
+      "byte_identical_semantics": false,
+      "combined_semantic_sha256": [
+        "d4ecb64e6d5a3568dd6ea242e6bea62b92e9731fba0e7fa7da2bfc70939b61c4",
+        "aa2996731d406edddb4b99ef9c724e28cd3f868f1c578932a0a42c953c0d68c3",
+        "832fd129f4341e944c0ad0030c6e7b694d6bd793317ac186a711dbd807dbfac6"
+      ],
+      "full_run_seed_policy": "three independent seeded runs",
+      "replicates": 3
+    },
+    "mmfu_single": {
+      "byte_identical_semantics": false,
+      "combined_semantic_sha256": [
+        "c2b4813713ee45176b4617c56caa0ed37609d1ec96a831ee868866f807aaef05",
+        "0ea3f3b7bc8f8f718216a5216c680fd1739efc370a03dea388c24b59863d2780",
+        "0ea3f3b7bc8f8f718216a5216c680fd1739efc370a03dea388c24b59863d2780"
+      ],
+      "full_run_seed_policy": "three independent seeded runs",
+      "replicates": 3
+    },
+    "simplemem": {
+      "byte_identical_semantics": false,
+      "combined_semantic_sha256": [
+        "07502f78f366d7e008d581eb0cfb4e52e75c6007a8500ae5b55d08e8ffad0ccf",
+        "974225b6dfe9eb1e884779049354910003c41202d5cc7c4b85b30f88c7a558b8",
+        "5dc034b6721bad3af215c6fc362bf6ccf3687b378f09f7833ce14d717366f365"
+      ],
+      "full_run_seed_policy": "three independent seeded runs",
+      "replicates": 3
+    },
+    "vilomem": {
+      "byte_identical_semantics": false,
+      "combined_semantic_sha256": [
+        "db7321fbbd4af3c074479110efba46bcfc6688d618f7d39dfd96cf02205a4428",
+        "5d4a2efac4979f6f364db944b75a1f827ab614b572a974104b472ed9ca0257f2",
+        "f7c29b896e42c2d335b7c3604477c0a8276ae784df91cdc8314a74e2321da470"
+      ],
+      "full_run_seed_policy": "three independent seeded runs",
+      "replicates": 3
+    }
+  },
+  "schema_version": "agentenhance.wma_determinism_gate_audit.v1",
+  "status": "TERMINAL_ACCEPTED"
+}

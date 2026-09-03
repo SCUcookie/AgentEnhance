@@ -1,0 +1,54 @@
+{
+  "schema_version": "agentenhance.wma_full_stack_integration_prefreeze.v1",
+  "gate_id": "wma-r1-full-stack-integration-20260903-v1",
+  "status": "FROZEN_BEFORE_INTEGRATION_RUN",
+  "frozen_at": "2026-09-03T21:46:00+08:00",
+  "purpose": "Validate the final seeded launcher, 128k services, one-shot unit runner, immutable output checks, and owned-service cleanup before any full-split run.",
+  "evidence_role": "technical-integration-only",
+  "main_comparison_eligible": false,
+  "fixed_unit": {
+    "baseline": "MMFU_Single",
+    "sample_index": 100,
+    "sample_id": "mobile_05",
+    "sessions": 11,
+    "qa": 13,
+    "seed": 0
+  },
+  "model_stack": {
+    "answer_and_judge": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "answer_model_ctx": 128000,
+    "service_max_model_len": 131072,
+    "temperature": 0,
+    "embedding": "Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+    "embedding_dimensions": [1024, 384]
+  },
+  "identities": {
+    "wma_source_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "dataset_manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+    "wma_config_sha256": "74cc054fd3a262571d67deb61f929bca68610b67320f8ea13c6b922e0257a184",
+    "environment_lock_sha256": "8cf96ec2e711fe0bccdacfd8de676b704018a53d884e932af1753a5c0f8d2936",
+    "integration_controller_sha256": "027870e6b1d6ec9b82a447b9fb2f3dfd31ad0b4478cdd4367bdb45f330ad1869",
+    "unit_runner_sha256": "fcff3ee9ccbcc9a58be95cbe0dd9b85ebefb30094f9c67dc97797811d1654d60",
+    "seeded_launcher_sha256": "f362f371ea4bdf73f5a4ece64a524d55a27fc95147bcb87308202608de3b1064",
+    "service_start_sha256": "0763c1c1bac4326168ec873181c037f506f41be8e50d0f242a0957aef5eb8b5b",
+    "service_stop_sha256": "cc3cb31f83b5917f77831261d73602dc47cdd5e53e84b664a6e0ed45ae923ffe"
+  },
+  "acceptance": [
+    "the package manifest verifies before a run root is created",
+    "the unit emits TERMINAL_ACCEPTED and no TERMINAL_REJECTED",
+    "11 session and 13 QA records match mobile_05",
+    "all unit artifacts pass their SHA256SUMS inventory",
+    "all three project-owned tmux services stop and allocated GPUs return to idle"
+  ],
+  "failure_rule": "Preserve the complete integration root as terminal-rejected; any recovery requires a new prefreeze and fresh root.",
+  "prohibited_uses": [
+    "writing its scores into comparisons/reproduced-results.v1.csv",
+    "using its score to select methods, metrics, prompts, or full-run seeds",
+    "reusing or editing a failed integration root"
+  ],
+  "resource_ceiling": {
+    "gpus": [1, 3, 4, 5],
+    "wall_time_hours": 4,
+    "output_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-full-stack-integration-20260903-v1"
+  }
+}
