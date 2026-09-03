@@ -1,0 +1,66 @@
+{
+  "schema_version": "agentenhance.model_retention_policy.v2",
+  "policy_id": "baseline-model-retention-20260903-v2",
+  "status": "FROZEN_BEFORE_ANY_MODEL_CLEANUP",
+  "frozen_at": "2026-09-03T23:51:00+08:00",
+  "supersedes_for_cleanup_decisions": "comparisons/model-retention-policy.v1.json",
+  "purpose": "Free project-owned baseline weight storage only after the complete local reproduction evidence is independently retained and the identical immutable model remains rematerializable.",
+  "retained_reproduction_bundle": [
+    "dataset identity, split manifest, and source-unit ordering",
+    "source repository identity, commit, dirty-tree state, and applied patch or overlay hashes",
+    "resolved configuration, prompts, seeds, environment lock, hardware mapping, and launch command with secrets removed",
+    "all predictions, session records, QA records, raw metric records, sufficient statistics, and seed-level values",
+    "stdout, stderr, timing, resource observations, failure records, and terminal sentinels",
+    "postprocessed method and slice summaries without favorable-unit deletion",
+    "archive manifests, complete archive SHA-256 values, and transfer receipts",
+    "pre-download and post-download model manifests including every relative file path, byte size, and SHA-256"
+  ],
+  "eligible_weight_roots": [
+    "/data1/2026/ldh/AgentEnhance/cache/models/<exact-project-owned-model-id>",
+    "/data2/2026/ldh/AgentEnhance/cache/models/<exact-project-owned-model-id>"
+  ],
+  "protected_assets": [
+    "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+    "all pre-existing or shared models, caches, datasets, source checkouts, environments, results, logs, manifests, and archives"
+  ],
+  "cleanup_preconditions_all_required": [
+    "Every lifecycle and full numerical run associated with the model is TERMINAL_ACCEPTED and has no contradictory rejection sentinel.",
+    "Expected run, seed, sample, prediction, and metric cardinalities match the frozen manifests; failed or missing registered units are retained under the frozen missing-run rule.",
+    "Postprocessing and result-row validation are TERMINAL_ACCEPTED before any cleanup eligibility audit begins.",
+    "The complete evidence archive is TERMINAL_ACCEPTED on a storage root outside the model target and an independent read-only audit verifies every archive SHA-256 and required member.",
+    "The retained pre-download manifest binds a public or otherwise still-accessible repository, immutable revision, access condition, exact target, allow-patterns, expected file count, and expected byte total.",
+    "The retained post-download manifest binds the resolved revision plus every relative model file path, byte size, and SHA-256.",
+    "A fresh hash audit proves the on-disk model matches the retained post-download manifest immediately before quarantine.",
+    "The exact target resolves beneath one eligible_weight_root, is not a symlink, mount point, bind mount, shared cache, dataset, environment, source checkout, run root, result root, or archive root.",
+    "A read-only process audit finds no command line, memory map, current working directory, root directory, or open file descriptor referencing the exact model target.",
+    "A project reference audit attributes the target only to the accepted reproduction family and its retained manifests; no active or pending run depends on it.",
+    "The cleanup record is fully rendered and validated in DRY_RUN_ELIGIBLE state before any rename or deletion."
+  ],
+  "two_phase_cleanup": {
+    "phase_1": "Atomically rename the exact target on the same filesystem to a unique project-owned quarantine path recorded with original device, inode, file count, and byte count.",
+    "phase_1_gate": "Repeat the no-process-reference and retained-evidence checks against both original and quarantine paths; any discrepancy stops with the quarantine retained.",
+    "phase_2": "Delete only the explicit resolved quarantine path, without globs, shell expansion, symlink traversal, or recursive targets derived from environment variables.",
+    "postcondition": "Verify that both original and quarantine paths are absent while every retained run, result, manifest, and archive path remains present and hash-valid."
+  },
+  "cleanup_record_required": [
+    "policy id and policy SHA-256",
+    "cleanup timestamp and operator",
+    "exact original and quarantine paths",
+    "model repository, immutable revision, materialization record, and materialization-record SHA-256",
+    "associated lifecycle, numerical run, postprocess, and archive identities",
+    "archive paths, archive SHA-256 values, and independent verification timestamp",
+    "pre-cleanup device, inode, file count, byte count, and complete current model hash result",
+    "process-reference and project-reference audit findings",
+    "phase-1 rename result, phase-2 deletion result, and post-delete absence checks",
+    "post-delete retained-evidence presence and hash checks"
+  ],
+  "fail_closed_rules": [
+    "A rejected, incomplete, missing, ambiguous, or unaudited reproduction never authorizes cleanup.",
+    "A private, gated, deleted, mutable-only, or no-longer-accessible model repository never qualifies as rematerializable without a separately retained lawful weight archive.",
+    "A model used by more than one reproduction may be deleted only after every dependent reproduction is accepted, archived, and retired from active or pending execution.",
+    "A failed archive, failed transfer, hash mismatch, active process reference, target collision, or path ambiguity stops cleanup without deleting the quarantine.",
+    "No cleanup outcome is evidence of model quality and no storage decision may change admitted numerical results."
+  ],
+  "validator": "scripts/validate_model_retention_policy_v2.py"
+}
