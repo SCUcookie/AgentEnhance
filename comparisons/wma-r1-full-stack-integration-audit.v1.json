@@ -1,0 +1,41 @@
+{
+  "schema_version": "agentenhance.wma_full_stack_integration_audit.v1",
+  "gate_id": "wma-r1-full-stack-integration-20260903-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "main_comparison_eligible": false,
+  "claim_scope": "technical integration only; no benchmark accuracy, ranking, or SOTA claim",
+  "fixed_unit": {
+    "baseline": "MMFU_Single",
+    "sample_index": 100,
+    "sample_id": "mobile_05",
+    "seed": 0,
+    "sessions_expected": 11,
+    "sessions_observed": 11,
+    "qa_expected": 13,
+    "qa_observed": 13
+  },
+  "evidence": {
+    "server_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-full-stack-integration-20260903-v1",
+    "root_inventory_sha256": "205d299a193321979fa5489a614bd40555270f6e6035ca4790ab5b4afd99f202",
+    "unit_inventory_sha256": "ec4d84072488964847c938445e436d2bc5fa468f709982c5fd9ebdf94e4266bf",
+    "root_sha_checks": 40,
+    "unit_sha_checks": 21,
+    "sha_failures": 0,
+    "log_anomalies": 0
+  },
+  "verified_stack": {
+    "seeded_launcher": true,
+    "service_max_model_len": 131072,
+    "service_kv_cache_tokens": 166864,
+    "max_concurrency_at_131072_tokens": 1.27,
+    "answer_model": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "embedding_model": "Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313"
+  },
+  "cleanup": {
+    "project_tmux_sessions_remaining": 0,
+    "project_workers_remaining": 0,
+    "gpu_memory_after_mib": {"1": 14, "3": 14, "4": 14, "5": 14},
+    "status": "STOPPED_AND_RELEASED"
+  },
+  "admission_effect": "The frozen Wave-1 full controller may start; this integration score remains prohibited from reproduced-results and all paper tables."
+}
