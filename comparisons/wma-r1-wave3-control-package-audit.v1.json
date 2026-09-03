@@ -1,0 +1,53 @@
+{
+  "schema_version": "agentenhance.wma_wave3_control_package_audit.v1",
+  "audit_id": "wma-r1-wave3-environment-lifecycle-control-package-20260904-v1",
+  "status": "TERMINAL_ACCEPTED_FOR_PREREQUISITE_EXECUTION_ONLY",
+  "audited_at": "2026-09-04T00:58:16+08:00",
+  "scientific_evidence_role": "control-package transport and identity evidence only; no environment, lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "source_commit": "6fd4f4bd77c897478ccf50e180feef8d8d27c1f5",
+  "archive": {
+    "logical_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave3-environment-lifecycle-design-20260904-v1-control.tar.gz",
+    "bytes": 21249,
+    "sha256": "8548357651fdcab54de4fb1e83db0ce33568db07b9c923af2d711d76a5407773",
+    "format": "git archive tar.gz",
+    "sftp_rate_limit_kbit_per_second": 4096
+  },
+  "unpacked_root": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave3-environment-lifecycle-design-20260904-v1-control",
+  "file_count": 13,
+  "file_inventory": [
+    {"path": "Makefile", "sha256": "5ec828426bf8a7de5594442486f32a64c9f2eeb799f5658b5f51f10a86ecbc77"},
+    {"path": "comparisons/wma-r1-wave3-environment-materialization-prefreeze.v1.json", "sha256": "038a1c5c81f973d0abae632547cfd94faf59be53066e870cf9d95c5f6c0c0bcf"},
+    {"path": "comparisons/wma-r1-wave3-lifecycle-design-prefreeze.v1.json", "sha256": "0e728970048457b7017cbbdf94d7e0aa2d63bee88ec31e46d0ffb22c4fa61943"},
+    {"path": "requirements/wave3/memgas-py39-top-level.txt", "sha256": "b11ec084a1ff0466e2edf8a5c71d184c9a3f6cf8740605933556af55e4f3d9a0"},
+    {"path": "requirements/wave3/memoryos-py39-top-level.txt", "sha256": "70bff7a1d966ef3888af41e06b58bbea7e8e59376806a91005a9a8c6ef352455"},
+    {"path": "scripts/check_wma_wave3_adapter.py", "sha256": "c2863a22cc61f2326edc7249116e312bca32d8ef64d8b5964e3bc823b79fd163"},
+    {"path": "scripts/materialize_wma_wave3_environment.py", "sha256": "09cca86b2f323020b0354ccd26f180f92f2ede53e3f0f4c4937b03b266902571"},
+    {"path": "scripts/remote_wma_wave3_adapter_lifecycle.sh", "sha256": "17be69713f88a55e95d9fd5daf5ef279cc116f820d714b3a3350ba87c65ee34d"},
+    {"path": "scripts/validate_wma_wave3_environment_and_lifecycle.py", "sha256": "8acb07cad29ede9a55351b219f46468f32da9e1cd3b280cdce5766fd5dd53cd5"},
+    {"path": "scripts/wma_wave3_overlay/memgas_wma_adapter.py", "sha256": "f1852395be38c094efea68551bf487e70d5a1f22808f186dac110d5ea2f826a6"},
+    {"path": "scripts/wma_wave3_overlay/memoryos_wma_adapter.py", "sha256": "2211e7bb1c526276733d2305ebe4b01e06422db244e901764767bdaaf06037c6"},
+    {"path": "scripts/wma_wave3_overlay/sitecustomize.py", "sha256": "0c50912aad443a55308c1203226059f6301ad4a8aade116bc723fb1824f0a26b"},
+    {"path": "tests/test_wma_wave3_adapter_overlay.py", "sha256": "7987e4f70e0d37bc785905e66a5c7228435de93f5874c2fa7339f819857fe207"}
+  ],
+  "transport_incident": {
+    "first_command": "reput",
+    "result": "No remote file existed, so SFTP reported stat remote: No such file or directory and wrote no bytes.",
+    "partial_remote_created": false,
+    "accepted_command": "put",
+    "interpretation": "Initial upload requires put; if that transfer is interrupted, the frozen recovery transport is reput against the retained partial file."
+  },
+  "independent_checks": {
+    "archive_sha256_matched_after_upload": true,
+    "fresh_unpack_root_required_and_observed": true,
+    "all_unpacked_file_hashes_matched": true,
+    "wave3_environment_or_lifecycle_processes_at_audit": 0
+  },
+  "decision": "ACCEPT the control package as the only eligible server-side implementation for the future Wave3 model/environment/lifecycle prerequisite sequence.",
+  "next_allowed_gate": "Wait for Wave-1 terminal acceptance and service release. Then execute the already frozen model materializations; this transport audit does not authorize environment or lifecycle execution by itself.",
+  "prohibited_actions": [
+    "editing any file in the accepted unpacked control root",
+    "treating a transport checksum as environment or lifecycle evidence",
+    "starting model, environment, or lifecycle materialization while Wave-1 is active",
+    "populating a numerical comparison-table cell from this audit"
+  ]
+}
