@@ -22,6 +22,7 @@ MODEL_METADATA_AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-llmlingua-
 MODEL_MANIFEST = ROOT / "comparisons" / "wma-r1-wave5-structmem-model-prefetch-manifest.v1.json"
 MODEL_MATERIALIZATION_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-model-materialization-prefreeze.v1.json"
 DEPENDENCY_LOCK_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-dependency-lock-prefreeze.v1.json"
+CONTROL_PACKAGE_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-postwave1-control-package-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -232,4 +233,17 @@ assert dependency_lock["execution_contract"]["dependency_installations"] == 0
 assert dependency_lock["outputs"]["independent_lock_passes"] == 2
 serialized = DEPENDENCY_LOCK_PREFREEZE.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
-print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "model_files": frozen_model["expected_file_count"], "model_bytes": frozen_model["expected_total_bytes"], "model_materialization_gate": model_materialization["status"], "model_materializer_tests": model_materializer["unit_tests"], "dependency_lock_gate": dependency_lock["status"], "direct_dependencies": workspace["direct_dependency_count"], "lock_materializer_tests": lock_impl["unit_tests"], "numeric_rows_added": 0}, sort_keys=True))
+control_package = json.loads(CONTROL_PACKAGE_PREFREEZE.read_text(encoding="utf-8"))
+assert control_package["status"] == "FROZEN_BEFORE_TRANSFER"
+assert control_package["archive"]["member_count"] == len(control_package["members"]) == 9
+assert sum(row["bytes"] for row in control_package["members"]) == control_package["archive"]["member_total_bytes"] == 44512
+for row in control_package["members"]:
+    path = ROOT / row["path"]
+    assert path.stat().st_size == row["bytes"]
+    assert sha256_file(path) == row["sha256"]
+assert control_package["transfer_contract"]["resume_command"] == "reput"
+assert control_package["transfer_contract"]["rate_limit_kbit_per_second"] == 4096
+assert control_package["extraction_contract"]["execution_after_extraction"] is False
+serialized = CONTROL_PACKAGE_PREFREEZE.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "model_files": frozen_model["expected_file_count"], "model_bytes": frozen_model["expected_total_bytes"], "model_materialization_gate": model_materialization["status"], "model_materializer_tests": model_materializer["unit_tests"], "dependency_lock_gate": dependency_lock["status"], "direct_dependencies": workspace["direct_dependency_count"], "lock_materializer_tests": lock_impl["unit_tests"], "control_package_files": control_package["archive"]["member_count"], "numeric_rows_added": 0}, sort_keys=True))

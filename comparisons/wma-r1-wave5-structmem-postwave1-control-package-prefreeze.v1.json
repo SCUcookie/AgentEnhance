@@ -1,0 +1,59 @@
+{
+  "schema_version": "agentenhance.control_package_prefreeze.v1",
+  "package_id": "wma-r1-wave5-structmem-postwave1-control-20260904-v1",
+  "status": "FROZEN_BEFORE_TRANSFER",
+  "frozen_at": "2026-09-04T13:35:00+08:00",
+  "source_commit": "38c1592",
+  "scientific_evidence_role": "transport identity only; transfer or extraction does not authorize model download, dependency resolution, installation, import, lifecycle, numerical result, superiority, or SOTA claim",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave5-structmem-postwave1-control-20260904-v1.tar.gz",
+    "remote_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave5-structmem-postwave1-control-20260904-v1.tar.gz",
+    "bytes": 13372,
+    "sha256": "afe4839f96c4bc9138948ce6886f2530278992f63e2a3f1ec762e26832343736",
+    "member_count": 9,
+    "member_total_bytes": 44512
+  },
+  "members": [
+    {"path": "comparisons/wma-r1-wave5-structmem-llmlingua-metadata-audit.v1.json", "bytes": 2507, "sha256": "ace41dc132d5faf2190227be44d777c876696a90849ccf9f5af0aa8d96c34f3b"},
+    {"path": "comparisons/wma-r1-wave5-structmem-model-prefetch-manifest.v1.json", "bytes": 3524, "sha256": "5d67ff68a6baaf50d815abc8d978fea630b378ed63bba1eb8a18b78b84e51a36"},
+    {"path": "comparisons/wma-r1-wave5-structmem-model-materialization-prefreeze.v1.json", "bytes": 5198, "sha256": "7bd8d242bb176895eb26d5905bc2393d7d9026db60ed1b9f28efbe4248b8d48b"},
+    {"path": "comparisons/wma-r1-wave5-structmem-dependency-lock-prefreeze.v1.json", "bytes": 7549, "sha256": "4f21b639718c0150580ab90f9cb7b9e90eb9eeabb4c2d090bbd5b0220bdba03b"},
+    {"path": "requirements/inputs/structmem-py311-lock-workspace.v1.toml", "bytes": 1616, "sha256": "aaadfad3524aad6b6659b8ac5d2f6e8a1c1dcb54d898fd73d3ee66f083b04e0b"},
+    {"path": "scripts/materialize_hf_model_snapshot_v2.py", "bytes": 10084, "sha256": "b009d7135b0e8d756e38898a24f3a2498a6bb08da6d25997135c20250d8056f3"},
+    {"path": "scripts/materialize_structmem_uv_lock.py", "bytes": 9731, "sha256": "88a1a40092c6686864da6567b30c74f632477bc24410b3d76bbdd33fd0a86459"},
+    {"path": "tests/test_hf_model_materializer_v2.py", "bytes": 2858, "sha256": "4db203d071bc2c3b7a36651224a0620e23198713325ddf2c13220b8accb8a942"},
+    {"path": "tests/test_structmem_uv_lock_materializer.py", "bytes": 1445, "sha256": "1e28ea96bfd5b7aec581ad8e6667fc1ce9a9d35bc1fbe89cb7b06a6ebb4a8083"}
+  ],
+  "transfer_contract": {
+    "protocol": "sftp",
+    "resume_command": "reput",
+    "rate_limit_kbit_per_second": 4096,
+    "parallel_transfers": 1,
+    "retry_count": 0,
+    "overwrite_existing_remote_archive": false,
+    "post_transfer_sha256_required": true
+  },
+  "extraction_contract": {
+    "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave5-structmem-postwave1-control-20260904-v1",
+    "fresh_destination_required": true,
+    "safe_relative_regular_members_only": true,
+    "member_paths_sizes_hashes_must_equal_manifest": true,
+    "execution_after_extraction": false
+  },
+  "acceptance": [
+    "The remote archive was absent before transfer and matches the frozen 13372-byte SHA-256 identity afterward.",
+    "SFTP uses reput at 4096 Kbit/s with one transfer and zero retries.",
+    "The archive contains exactly nine safe relative regular files and no symlink, device, hardlink, absolute path, or parent traversal.",
+    "The extracted paths, sizes, and SHA-256 values exactly equal all nine frozen member rows.",
+    "No included stage is executed and no GPU, model, package index, shared environment, or benchmark is touched."
+  ],
+  "failure": "Any collision, interrupted transfer, archive hash mismatch, unsafe member, extraction mismatch, or unexpected path rejects the fresh transport target without deleting or repairing it in place.",
+  "next_gate_after_acceptance": "Retain a terminal transport audit. All model and dependency stages remain blocked by their independent Wave1 resource gates.",
+  "prohibited_actions": [
+    "transferring before this manifest is committed",
+    "using scp, rsync, unbounded SFTP, overwrite, retry, or parallel transfer",
+    "extracting over an existing destination",
+    "executing any packaged script during transport acceptance",
+    "treating transport as scientific or numerical evidence"
+  ]
+}
