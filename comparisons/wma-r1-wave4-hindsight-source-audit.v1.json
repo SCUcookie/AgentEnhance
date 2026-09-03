@@ -1,0 +1,59 @@
+{
+  "schema_version": "agentenhance.wma_wave4_hindsight_source_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-source-audit-20260904-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T01:13:36+08:00",
+  "scientific_evidence_role": "engineering source acceptance only; no adapter, lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave4-tierb-source-readiness-prefreeze.v1.json",
+    "sha256": "33f182f5a632e06c8506aea793b5da5251b9e8fa20a667f40bbe1f46e7e67889"
+  },
+  "control_package": {
+    "logical_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-source-20260904-v1-control.tar.gz",
+    "sha256": "81cfdcb0709534a030846952daf157901c3b9f9165803b40286bc19b099dc7d4",
+    "sftp_rate_limit_kbit_per_second": 4096,
+    "materializer_sha256_verified": "6f0613feb7e25306c79759dfe5b6e8ed78f2957422006206570b9ce593b349ad"
+  },
+  "source": {
+    "method_id": "hindsight",
+    "repository": "https://github.com/vectorize-io/hindsight.git",
+    "revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "git_tree": "cf75ad9d89e7b229429e56a067ccde617b379af7",
+    "target": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-source-materialization-20260904-v1",
+    "tracked_file_count": 4323,
+    "tracked_total_bytes": 222626687,
+    "license": "MIT",
+    "worktree_clean": true,
+    "submodule_count": 0,
+    "git_lfs_pointer_count": 0,
+    "prohibited_weight_file_count": 0,
+    "active_process_references_at_audit": 0,
+    "record_sha256": "fca8a4732227f41cf2304e50096e816d173311edc23fb235f3850d45615f1a15",
+    "evidence_inventory_sha256": "7d976207d70708822551c0cc9770040ddd9e9776dbd9a6ac7ee872535827a824",
+    "source_inventory_sha256": "a9876d026964ed175fe0e219ac2cadd19b2f820e42124a0fdb83cf71f6e20cbb",
+    "all_source_hashes_verified_independently": true
+  },
+  "wave1_non_interference_observation": {
+    "before_source_stage": {
+      "accepted_units": 37,
+      "rejected_units": 0,
+      "observed_at": "2026-09-04T01:06:14+08:00"
+    },
+    "after_source_audit": {
+      "accepted_units": 39,
+      "rejected_units": 0,
+      "observed_at": "2026-09-04T01:13:36+08:00"
+    },
+    "interpretation": "Wave-1 advanced during source-only acquisition and exposed no rejected unit. This observation proves only absence of the configured coarse interference signal, not causal non-interference."
+  },
+  "decision": "ACCEPT the exact Hindsight source tree for read-only package/API/deployment feasibility audit.",
+  "next_allowed_gate": "Audit the accepted source without installing dependencies or starting services. Freeze an execution-source subset and adapter mapping only if official retain/recall operations can be separated from final answer generation.",
+  "prohibited_actions": [
+    "editing the accepted Hindsight checkout in place",
+    "starting PostgreSQL, pgvector, models, dependencies, API calls, lifecycle checks, or numerical evaluation from source acceptance alone",
+    "using Hindsight reflect to replace the common WMA answer generator",
+    "treating source availability or official paper scores as a local reproduction result",
+    "populating a numerical comparison-table cell from this audit"
+  ]
+}

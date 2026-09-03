@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-tierb-source-readiness-prefreeze.v1.json"
+AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -22,6 +23,7 @@ def sha256_file(path: Path) -> str:
 
 
 payload = json.loads(PREFREEZE_PATH.read_text(encoding="utf-8"))
+audit = json.loads(AUDIT_PATH.read_text(encoding="utf-8"))
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
 candidates = {row["method_id"]: row for row in payload["candidates"]}
@@ -51,12 +53,34 @@ assert stage["execution"]["retry_count"] == 0
 
 serialized = PREFREEZE_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert audit["status"] == "TERMINAL_ACCEPTED"
+assert audit["prefreeze"]["sha256"] == sha256_file(ROOT / audit["prefreeze"]["path"])
+assert audit["control_package"]["sftp_rate_limit_kbit_per_second"] == 4096
+source = audit["source"]
+assert source["revision"] == candidates["hindsight"]["observed_head"]
+assert source["tracked_file_count"] == 4323
+assert source["tracked_total_bytes"] == 222626687
+assert source["license"] == "MIT"
+assert source["worktree_clean"] is True
+assert source["submodule_count"] == 0
+assert source["git_lfs_pointer_count"] == 0
+assert source["prohibited_weight_file_count"] == 0
+assert source["active_process_references_at_audit"] == 0
+assert source["all_source_hashes_verified_independently"] is True
+before = audit["wave1_non_interference_observation"]["before_source_stage"]
+after = audit["wave1_non_interference_observation"]["after_source_audit"]
+assert after["accepted_units"] >= before["accepted_units"]
+assert before["rejected_units"] == after["rejected_units"] == 0
+serialized = AUDIT_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {
             "status": "PASS",
             "tierb_candidates": len(candidates),
             "source_materialization_eligible": ["hindsight"],
+            "accepted_hindsight_source_files": source["tracked_file_count"],
             "numeric_result_rows_added": 0,
         },
         sort_keys=True,
