@@ -1,0 +1,71 @@
+{
+  "schema_version": "agentenhance.method_identity_alias_audit.v1",
+  "audit_id": "omnimem-omni-simplemem-identity-20260903-v1",
+  "audited_at": "2026-09-03T23:56:06+08:00",
+  "status": "TERMINAL_ACCEPTED_IDENTITY_ALIAS",
+  "scientific_evidence_role": "method identity and de-duplication only; no source-reported or local score is admitted",
+  "question": "Do the registered omnimem-agent and omni-simplemem entries denote two independently comparable methods, or one paper method exposed under two names and locations?",
+  "primary_source": {
+    "title_current": "OmniMem: Autoresearch-Guided Discovery of Lifelong Multimodal Agent Memory",
+    "arxiv_id": "2604.01007",
+    "url": "https://arxiv.org/abs/2604.01007",
+    "paper_code_url": "https://github.com/aiming-lab/OmniMem",
+    "paper_code_url_observed_state": "HTTP_404_AND_GIT_REPOSITORY_NOT_FOUND",
+    "paper_method_features": [
+      "multimodal atomic units",
+      "novelty-filtered ingestion",
+      "FAISS dense plus BM25 sparse retrieval",
+      "knowledge-graph expansion",
+      "pyramid retrieval"
+    ]
+  },
+  "live_official_implementation": {
+    "repository": "https://github.com/aiming-lab/SimpleMem",
+    "head_observed_at_audit": "db80b6a7c591e0ea730a058e9f5fc4eb06572299",
+    "relative_path": "OmniSimpleMem",
+    "implementation_name": "Omni-SimpleMem",
+    "evidence": "The implementation README cites arXiv:2604.01007 and documents the same MAU, novelty filtering, hybrid dense-sparse retrieval, knowledge graph, and pyramid retrieval mechanisms."
+  },
+  "frozen_worldmemarena_copy": {
+    "repository": "https://github.com/UCSB-AI/WorldMemArena",
+    "repository_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "relative_path": "eval_framework/baselines/SimpleMem/OmniSimpleMem",
+    "path_introducing_commit": "18b78cd39434777fbc4ac8047b2161cb08bd3784",
+    "readme_sha256": "6ea29ec82fd49b69b4bc36936d574bc2b50ded85d13163e047f0cf82726664e3",
+    "adapter_relative_path": "eval_framework/memory_adapters/simplemem_adapter.py",
+    "adapter_registry_name": "Omni-SimpleMem"
+  },
+  "identity_decision": {
+    "canonical_local_method_id": "omni-simplemem",
+    "canonical_display_name": "OmniMem (Omni-SimpleMem implementation)",
+    "deprecated_alias": "omnimem-agent",
+    "independent_method_count": 1,
+    "separate_numerical_run_for_deprecated_alias": false,
+    "reason": "The two records resolve to the same arXiv method and implementation lineage; treating them as separate baselines would double-count one method."
+  },
+  "comparison_rules": [
+    "Run and report the frozen WorldMemArena Omni-SimpleMem adapter once under canonical method id omni-simplemem.",
+    "Attribute that run to arXiv:2604.01007 while separately recording the WorldMemArena repository commit and adapter patch identity.",
+    "Do not create an omnimem-agent numeric row, paired comparison, seed family, or SOTA count in addition to omni-simplemem.",
+    "Do not import the paper's reported scores into the local-reproduction table.",
+    "If a future independent aiming-lab/OmniMem repository appears, compare its file and mechanism identity before changing this alias decision."
+  ],
+  "superseded_claims": [
+    {
+      "path": "comparisons/baseline-register.v2.csv",
+      "field": "omni-simplemem.notes",
+      "old_claim": "Canonical benchmark-native implementation distinct from the OmniMem paper",
+      "replacement": "The vendored Omni-SimpleMem implementation is the runnable implementation of arXiv:2604.01007 and is canonical for the local WMA track."
+    },
+    {
+      "path": "comparisons/recent-method-reproduction-roadmap.v1.json",
+      "field": "groups.wave3_official_repo_adapter.methods",
+      "old_claim": "omnimem-agent requires a separate official-repository adapter",
+      "replacement": "omnimem-agent is an alias covered once by the Wave-2 omni-simplemem lifecycle and numerical run."
+    }
+  ],
+  "prohibited_interpretations": [
+    "This identity audit does not establish implementation correctness, lifecycle acceptance, numerical quality, or SOTA status.",
+    "The missing standalone repository is not evidence that the method lacks runnable public code."
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "agentenhance.recent_method_reproduction_roadmap.v2",
+  "roadmap_id": "recent-memory-methods-2025-2026-20260903-v2",
+  "status": "FROZEN_BEFORE_ANY_ACCEPTED_WMA_MAIN_RESULT",
+  "frozen_at": "2026-09-03T23:56:06+08:00",
+  "supersedes": "comparisons/recent-method-reproduction-roadmap.v1.json",
+  "superseded_roadmap_sha256": "bf295a48582b9e2fb37847b7e46a32d2203e3f8c10986c7cd26cbbafa254b6e2",
+  "reason_for_revision": "Resolve the newly verified OmniMem/Omni-SimpleMem identity alias before any complete WMA result can be admitted, preventing duplicate execution and double-counting.",
+  "identity_audit": {
+    "path": "comparisons/omnimem-method-identity-audit.v1.json",
+    "sha256": "16198f11c6f8236d6f5e383d5216c94e7fa4db1acf9d395a78be9ebfe25b6ddc",
+    "canonical_method_id": "omni-simplemem",
+    "deprecated_alias": "omnimem-agent"
+  },
+  "inherited_without_change": [
+    "scope and evidence policy",
+    "method execution order except the duplicate alias",
+    "local-results-first numeric policy",
+    "matched-track boundaries",
+    "seed and missing-run rules",
+    "all non-OmniMem method group assignments"
+  ],
+  "effective_group_adjustments": [
+    {
+      "group_id": "wave2_registered_wma",
+      "methods": ["a-mem", "universalrag", "mgmemory", "augustus", "mirix", "omni-simplemem"],
+      "change": "omni-simplemem is the sole canonical execution of arXiv:2604.01007"
+    },
+    {
+      "group_id": "wave3_official_repo_adapter",
+      "methods": ["memoryos", "memgas"],
+      "change": "remove deprecated alias omnimem-agent; no separate run is allowed"
+    }
+  ],
+  "effective_coverage": {
+    "registered_recent_rows": 27,
+    "resolved_unique_method_entities": 26,
+    "deprecated_alias_rows": 1,
+    "wma_track_unique_candidates": 14,
+    "note": "Counts distinguish bibliographic registry rows from independently executable method entities."
+  },
+  "source_discovery_snapshot": {
+    "observed_at": "2026-09-03T23:56:06+08:00",
+    "read_only_git_ls_remote": {
+      "https://github.com/aiming-lab/SimpleMem.git": "db80b6a7c591e0ea730a058e9f5fc4eb06572299",
+      "https://github.com/BAI-LAB/MemoryOS.git": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+      "https://github.com/Applied-Machine-Learning-Lab/ICLR2026_MemGAS.git": "c2d4e9fdc331074802a711baf4371197f9194399",
+      "https://github.com/aiming-lab/OmniMem.git": "REPOSITORY_NOT_FOUND"
+    },
+    "interpretation": "These are discovery-time remote heads, not execution authorization. Each future adapter still requires an immutable source prefreeze and lifecycle acceptance."
+  },
+  "numeric_policy": "Only the canonical omni-simplemem local run may populate an OmniMem-family WMA row. Official paper values remain source-reported context and cannot fill local-result cells.",
+  "next_gates": {
+    "omni-simplemem": "Complete the already frozen Wave-2 image-aware lifecycle gate, then freeze its full three-seed WMA execution.",
+    "memoryos": "Audit the existing official checkout at 587ed7755c7aed179965792830ff1b5ad9a6fa92 and freeze a fail-closed WMA adapter lifecycle.",
+    "memgas": "Materialize and audit official commit c2d4e9fdc331074802a711baf4371197f9194399, then freeze the quickstart API mapping and local embedding model before lifecycle execution."
+  },
+  "prohibited_actions": [
+    "Do not execute or report omnimem-agent as a second method beside omni-simplemem.",
+    "Do not edit historical v1 artifacts to conceal the resolved identity error.",
+    "Do not treat a current remote HEAD as a frozen execution revision without a separate source package audit.",
+    "Do not import official scores into same-protocol local-result rows."
+  ],
+  "validator": {
+    "path": "scripts/validate_recent_method_reproduction_roadmap_v2.py",
+    "sha256": "0b701557285eaf5fff2eb89b9c7a9e512cc21547ee1014fefa8c00e90043f0ff"
+  }
+}
