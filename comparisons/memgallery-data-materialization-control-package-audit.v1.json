@@ -1,0 +1,85 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "mem-gallery-data-materialization-20260904-v1-control",
+  "status": "TERMINAL_ACCEPTED_AFTER_VALIDATION_RECOVERY1",
+  "accepted_at": "2026-09-04T07:27:00+08:00",
+  "scientific_evidence_role": "Result-free dataset materialization control package only; this audit accepts no dataset download, method execution, metric, comparison, or SOTA claim.",
+  "bound_stage": {
+    "path": "comparisons/memgallery-data-materialization-prefreeze.v1.json",
+    "sha256": "6c4bbcd59721a13237c280093dc4fdb8342dffe729c502657d26239632636fcf",
+    "implementation_commit": "5a55b08"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/mem-gallery-data-materialization-20260904-v1-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-data-materialization-20260904-v1-control.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-data-materialization-20260904-v1-control",
+    "bytes": 190178,
+    "sha256": "67845fd6b3dfbd1781c491a9036f2ea571c63422935c9abef7da64cb7c6f544f",
+    "transport": "OpenSSH SFTP, resumable partial bound to archive SHA-256, limited to 4096 Kbit/s",
+    "fresh_before_extraction": true
+  },
+  "package_inventory": {
+    "path": "PACKAGE_SHA256SUMS",
+    "sha256": "bdbd798efc7e4a18ed7b3f29face18bb7090b79631cd8211800b4568d1c518a2",
+    "signed_regular_files": 11,
+    "regular_files_including_inventory": 12,
+    "regular_file_bytes_including_inventory": 636248,
+    "symlinks": 0,
+    "python_bytecode_files": 0,
+    "all_signed_files_verified": true,
+    "inventory_excludes_itself": true
+  },
+  "validation_attempts": [
+    {
+      "attempt": 1,
+      "status": "REJECTED_TEST_INVOCATION",
+      "command_shape": "python3.11 -m unittest tests.test_hf_dataset_materializer -v",
+      "failure": "ModuleNotFoundError: No module named tests.test_hf_dataset_materializer",
+      "diagnosis": "The server interpreter did not treat the package tests directory as the intended import namespace.",
+      "package_hashes_passed_before_failure": true,
+      "dataset_download_started": false,
+      "package_files_changed": false
+    },
+    {
+      "attempt": 2,
+      "status": "ACCEPTED_VALIDATION_RECOVERY1",
+      "only_change": "Use unittest discover with exact test filename patterns; package contents, hashes, interpreter, environment and all scientific gates remain unchanged.",
+      "materializer_tests_passed": 5,
+      "tree_manifest_tests_passed": 3,
+      "tests_failed": 0,
+      "prefetch_manifest_validator": "PASS",
+      "materialization_prefreeze_validator": "PASS",
+      "materializer_help_entrypoint": "PASS",
+      "package_hashes_reverified": true
+    }
+  ],
+  "accepted_dataset_identity": {
+    "repository": "Ethan-Bei/Mem-Gallery",
+    "revision": "af912daba984e896e253016b7c7e334ef92c2a6f",
+    "manifest_sha256": "58ebfee481bca010910705271ae992ee42b425d267cd2354a0d9982d35f5d045",
+    "files": 1515,
+    "bytes": 545845389,
+    "dialog_files": 20,
+    "image_files": 1490
+  },
+  "runtime_observation_after_acceptance": {
+    "wave1_controller": "RUNNING",
+    "active_method_seed": "wma-mmfu-single seed 0 recovery2",
+    "accepted_units": 22,
+    "rejected_units": 0,
+    "dataset_target_present": false,
+    "dataset_downloaded_bytes": 0,
+    "numeric_result_rows_added": 0
+  },
+  "execution_authorization": "The control package is accepted but inert. The materializer remains prohibited until the exact Wave1 recovery2 TERMINAL_ACCEPTED marker exists, its rejection marker is absent, all agentenhance-wma tmux sessions have exited, and all six frozen project ports are closed.",
+  "failure_history_rule": "Attempt 1 remains part of the audit trail. It was an invocation-only failure before materializer execution; recovery changed only test discovery and did not reuse, alter or delete evidence.",
+  "mutation_summary": {
+    "control_package_extracted": true,
+    "dataset_files_downloaded": 0,
+    "dataset_target_created": false,
+    "model_files_downloaded": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0,
+    "files_deleted": 0
+  }
+}
