@@ -1,0 +1,107 @@
+{
+  "schema_version": "agentenhance.postwave_release_sequence_prefreeze.v1",
+  "sequence_id": "wma-postwave1-release-20260904-v1",
+  "status": "FROZEN_WHILE_WAVE1_RUNNING",
+  "frozen_at": "2026-09-04T04:55:00+08:00",
+  "purpose": "Maximize the number of accepted recent same-track comparators while preserving Wave1 evidence first and preventing heavy I/O, model services, and numerical jobs from perturbing one another.",
+  "evidence_observed_before_freeze": {
+    "accepted_wave1_seeds": 0,
+    "accepted_three_seed_summaries": 0,
+    "accepted_local_numeric_rows": 0,
+    "agentenhance_numeric_rows": 0,
+    "selection_by_observed_metric": false
+  },
+  "global_release_gate": [
+    "the Wave1 recovery controller is TERMINAL_ACCEPTED without TERMINAL_REJECTED",
+    "all Wave1 answer, embedding, evaluator, and controller processes have exited",
+    "no process references a fresh target of the next stage",
+    "fresh-root, storage-headroom, and source-identity checks pass"
+  ],
+  "resource_exclusion": {
+    "heavy_network_or_disk_stages": 1,
+    "active_model_service_stacks": 1,
+    "active_numerical_methods": 1,
+    "archive_during_model_download_or_numerical_run": false,
+    "parallel_dependency_resolutions_or_wheelhouses": 1,
+    "cross_method_environment_reuse": false
+  },
+  "phases": [
+    {
+      "order": 1,
+      "id": "close_and_retain_wave1",
+      "reason": "Raw comparison evidence must be accepted and archived before any new high-I/O acquisition.",
+      "stages": [
+        {"path": "comparisons/wma-r1-wave1-postprocess-prefreeze.v1.json", "sha256": "8ad90ea0de1888d4f5f3abc22183a32b3d304c06da0e35e143d063969ca6a4e4"},
+        {"path": "comparisons/wma-r1-wave1-table-projection-prefreeze.v2.json", "sha256": "bcae8764f742b92e48a2f0cfdd21654a30ed0c6fdee20853789ad1b85dbe7d48"},
+        {"path": "comparisons/wma-r1-wave1-archive-prefreeze.v1.json", "sha256": "24c09025e28636e90b3ea72a2ff97c08f6438fec402315f462e9a145b651cbea"},
+        {"path": "comparisons/wma-r1-wave1-table-projection-archive-prefreeze.v2.json", "sha256": "47b0d27a2a59d836561ba9474894f2e4a47d84b41cdf2512de7f80c4e8b324e8"}
+      ],
+      "exit_gate": "All four stages are independently TERMINAL_ACCEPTED and both archive inventories validate."
+    },
+    {
+      "order": 2,
+      "id": "wave2_high_yield_comparators",
+      "reason": "The frozen lifecycle covers eight methods and therefore has the highest comparator yield per setup transition.",
+      "stages": [
+        {"path": "comparisons/wma-wave2-model-materialization-prefreeze.v2.json", "sha256": "10a2bf4c516e43444036779a97ad09a1912d35403d0d2f94109accf4e6c8acff"},
+        {"path": "comparisons/wma-r1-wave2-lifecycle-execution-prefreeze.v1.json", "sha256": "112fa7a07bcf469017547fa6cfbbb22ed209fe23fbfef1e439ce357074104463"}
+      ],
+      "method_order": ["wma-mgmemory", "wma-a-mem", "wma-omni-simplemem", "wma-mirix", "wma-ngmemory", "wma-augustus", "wma-universalrag", "wma-qwen3-vl-embedding-8b"],
+      "exit_gate": "Every eligible lifecycle root is audited; only then freeze its three-seed numerical successor."
+    },
+    {
+      "order": 3,
+      "id": "wave3_official_adapters",
+      "reason": "MemoryOS and MemGAS add two recent official-code comparators with moderate model footprint.",
+      "stages": [
+        {"path": "comparisons/wma-r1-wave3-model-materialization-prefreeze.v2.json", "sha256": "6b4e77dc942d002879f17e59a97727fd04050913a7a71d00ec266ef36d66a692"},
+        {"path": "comparisons/wma-r1-wave3-environment-materialization-prefreeze.v2.json", "sha256": "0450033ce3eea8822c9131c310ea7d12c68925b40af0098dd67f36b70c58e1ea"},
+        {"path": "comparisons/wma-r1-wave3-lifecycle-design-prefreeze.v2.json", "sha256": "186f47a4c2164e288c7e9e47e63551bd4ef38c7c8b75e1c510833c67f9cf0acf"}
+      ],
+      "method_order": ["wma-memoryos", "wma-memgas"],
+      "exit_gate": "Both lifecycle roots are audited; only then freeze their three-seed numerical successors."
+    },
+    {
+      "order": 4,
+      "id": "wave4_hindsight",
+      "reason": "Hindsight is a recent official-code comparator but requires a larger isolated dependency surface and embedded service.",
+      "stages": [
+        {"path": "comparisons/wma-r1-wave4-hindsight-model-materialization-prefreeze.v2.json", "sha256": "98cf2d006cb4c5d58f22313ef80c75a794ad962066e8692ee6893ecf4171afac"},
+        {"path": "comparisons/wma-r1-wave4-hindsight-wheelhouse-prefreeze.v1.json", "sha256": "833393206cc7d7346a70684d8466f2c2508389c50dc27176f142a2edc566eab8"},
+        {"path": "comparisons/wma-r1-wave4-hindsight-environment-design-prefreeze.v1.json", "sha256": "36f0d06898b69ed1a62b05dddcb1d00df7923d22433baaf2736c3c9da704b4ed"},
+        {"path": "comparisons/wma-r1-wave4-hindsight-lifecycle-design-prefreeze.v1.json", "sha256": "283249b1bc156b09c1842b16c52a1883386b2c9c8b738ff6b4cafc595a113260"}
+      ],
+      "method_order": ["wma-hindsight"],
+      "exit_gate": "The embedded-service lifecycle is audited; only then freeze its three-seed numerical successor."
+    },
+    {
+      "order": 5,
+      "id": "wave5_structmem",
+      "reason": "StructMem is retained as an ACL 2026 comparator with exact source and model identity, but its dependency chain still requires post-lock successor freezes.",
+      "stages": [
+        {"path": "comparisons/wma-r1-wave5-structmem-dependency-lock-prefreeze.v1.json", "sha256": "4f21b639718c0150580ab90f9cb7b9e90eb9eeabb4c2d090bbd5b0220bdba03b"},
+        {"path": "comparisons/wma-r1-wave5-structmem-model-materialization-prefreeze.v1.json", "sha256": "7bd8d242bb176895eb26d5905bc2393d7d9026db60ed1b9f28efbe4248b8d48b"}
+      ],
+      "method_order": ["wma-structmem"],
+      "exit_gate": "Freeze and accept lock export, wheelhouse, isolated environment, lifecycle, and then the three-seed numerical successor."
+    }
+  ],
+  "numeric_admission": {
+    "minimum_seeds": [0, 1, 2],
+    "samples_per_seed": 150,
+    "questions_per_seed": 7906,
+    "failed_units_allowed": 0,
+    "official_values_allowed_in_local_cells": false,
+    "projection": "scripts/project_wma_method_summaries_v2.py",
+    "agentenhance_gate": "AgentEnhance remains locked until all runnable required public baselines have accepted local summaries or an immutable external blocker is audited."
+  },
+  "failure_semantics": "A rejected stage is preserved and audited. Only a new frozen recovery may change a technical mechanism; method, seed, sample, metric, and slice selection never change after values are observed.",
+  "cleanup": "No stage in this sequence authorizes deletion. Only project-owned run-specific model targets may later enter the separate ownership, dependency, archive, quarantine, and deletion policy; shared or pre-existing models never do.",
+  "prohibited": [
+    "starting any post-Wave1 stage before global release",
+    "running a heavy archive, model acquisition, wheelhouse, or numerical job concurrently",
+    "skipping an unfavorable accepted method, seed, sample, metric, or slice",
+    "starting AgentEnhance early to choose favorable baseline coverage",
+    "claiming overall SOTA from a lifecycle, archive, partial comparison, or favorable slice alone"
+  ]
+}
