@@ -1,0 +1,56 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "wma-r1-wave2-runner-implementation-20260904-v1-control-recovery1-audit",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T06:53:00+08:00",
+  "parent_failure": {
+    "root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave2-runner-implementation-20260904-v1-control",
+    "status": "TERMINAL_REJECTED_EVIDENCE_INVENTORY",
+    "code_validation_passed": true,
+    "invalid_inventory_sha256": "920b8a4bf755333215acf87bed63cff2ecd0b6bb76c0e0a901e982a5065bb1a8",
+    "failure": "PACKAGE_SHA256SUMS contained a self-entry created by shell redirection before find enumeration.",
+    "retained": true,
+    "reused_as_evidence": false
+  },
+  "recovery": {
+    "prefreeze": "comparisons/wma-r1-wave2-runner-control-package-recovery1-prefreeze.v1.json",
+    "root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave2-runner-implementation-20260904-v1-control-recovery1",
+    "archive_sha256": "abfa7977dab25d8238fd18dcecda0a48755001b1fc7d11060bf7d7e4641706c4",
+    "archive_bytes": 23729,
+    "regular_files": 16,
+    "directories": 3,
+    "inventory_entries": 16,
+    "inventory_sha256": "50595d39ca3fbeaba6da5aca302470d3d9a4e934f8234b103d995ff6adef9e31",
+    "inventory_self_entries": 0,
+    "inventory_terminal_marker_entries": 0,
+    "inventory_validation": "PASS"
+  },
+  "validation": {
+    "implementation_validator": "PASS: 8 methods, 5 service profiles, 55 fields per method, 53 slices, no execution authorization",
+    "runtime_guard_tests": {"passed": 6, "failed": 0},
+    "shell_syntax": {"scripts": 5, "status": "PASS"},
+    "unsafe_archive_members": 0,
+    "wave2_model_targets_created": 0,
+    "wave2_tmux_sessions_created": 0,
+    "wave2_ports_listening_after_validation": 0,
+    "gpu_services_started": 0,
+    "numeric_rows_added": 0
+  },
+  "concurrent_wave1_observation": {
+    "controller": "RUNNING",
+    "active_method_seed": "MMFU_Single seed 0 recovery2",
+    "accepted_units": 15,
+    "rejected_units": 0,
+    "interpretation": "Wave1 continued progressing during the inert validation; no Wave2 resource action was taken."
+  },
+  "execution_authorization": "None. This audit accepts only the inert control package. Wave2 model acquisition still requires Wave1 terminal acceptance and service release; numerical execution additionally requires accepted guarded lifecycle evidence and a new frozen numerical authorization.",
+  "claim_eligibility": "none",
+  "next_gate": "Continue monitoring Wave1. After its accepted closure sequence releases all services, execute the exact Wave2 model materialization v2 gate, then build a guarded lifecycle execution package from this accepted runner control.",
+  "prohibited": [
+    "using the rejected parent inventory",
+    "starting Wave2 services or downloads while Wave1 is active",
+    "using this audit as a lifecycle or numerical authorization",
+    "populating comparison-table numeric cells",
+    "deleting any model or evidence"
+  ]
+}
