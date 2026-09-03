@@ -1,0 +1,20 @@
+{
+  "schema_version": "agentenhance.prospective_stage_audit.v1",
+  "stage_id": "cmi-r1-official-smoke-recovery1-20260903-v1",
+  "parent_stage_id": "cmi-r1-official-smoke-20260903-v1",
+  "audited_at": "2026-09-03T16:20:00+08:00",
+  "outcome": "REJECT_TECHNICAL",
+  "launcher_exit_code": 2,
+  "failure_stage": "pytest collection",
+  "diagnosis": "The official requirements.txt declares seaborn, but the frozen base container does not provide it. Test collection imported src.analysis.make_figures and failed with ModuleNotFoundError before any test ran.",
+  "pytest_started": true,
+  "pytest_items_executed": 0,
+  "dataset_validation_started": false,
+  "smoke_attempts_started": 0,
+  "numeric_results_produced": false,
+  "active_matching_containers_after_audit": 0,
+  "residual_tmux_session": false,
+  "run_root_preserved": true,
+  "scientific_interpretation_allowed": false,
+  "authorized_recovery_change": "Inject the single declared missing import seaborn==0.13.2 from an offline SHA-256-verified wheel into each disposable tmpfs workspace. Preserve source, dataset, base image, commands, denominator, network isolation, GPU isolation, API isolation, and acceptance rules."
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": "agentenhance.prospective_stage.v1",
+  "stage_id": "cmi-r1-official-smoke-recovery2-20260903-v1",
+  "parent_stage_id": "cmi-r1-official-smoke-recovery1-20260903-v1",
+  "state": "FROZEN",
+  "frozen_at": "2026-09-03T16:22:00+08:00",
+  "recovery_reason": "Official pytest collection failed before test execution because the base image omitted the declared seaborn dependency.",
+  "only_authorized_change": "Install seaborn==0.13.2 without dependencies or network from the exact offline wheel into each disposable tmpfs workspace and prepend that target to PYTHONPATH.",
+  "wheel": {
+    "filename": "seaborn-0.13.2-py3-none-any.whl",
+    "bytes": 294914,
+    "sha256": "636f8336facf092165e27924f223d3c62ca560b1f2bb5dff7ab7fad265361987",
+    "resolver_evidence": "The official requirements.txt names seaborn without a version. A read-only import audit found seaborn absent, and PyPI resolution on 2026-09-03 selected 0.13.2. All of seaborn's runtime dependencies needed by this test path already exist in the base image."
+  },
+  "unchanged": [
+    "CMI source commit 65a66cb4347aeeb62a870132269e8a983211e036",
+    "base container image ID sha256:9ff159797e3da92a9e47362033f2761633b8de374c095fbdf5cf1b9f157d9d54",
+    "Python 3.10.12",
+    "complete official pytest suite",
+    "87-record dataset validation",
+    "two five-example by seven-method deterministic dry runs",
+    "byte-identical scores.jsonl requirement",
+    "network disabled, GPU disabled, API key empty",
+    "zero automatic retries and fresh output root"
+  ],
+  "acceptance_rule": "Dependency check prints seaborn 0.13.2, pytest passes, dataset validation is 87/87 with zero errors, both attempts emit 35 predictions and 35 scores with zero failures, score files are byte-identical, evidence hashes pass, and no named container or tmux session remains.",
+  "resources": {
+    "max_wall_minutes": 20,
+    "max_disk_gib": 5,
+    "tmpfs_per_container_gib": 1,
+    "max_gpu_hours": 0,
+    "max_api_cost_usd": 0
+  }
+}
