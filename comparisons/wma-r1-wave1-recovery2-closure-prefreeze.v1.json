@@ -1,0 +1,124 @@
+{
+  "schema_version": "agentenhance.wma_wave1_recovery2_closure_prefreeze.v1",
+  "stage_id": "wma-r1-wave1-recovery2-closure-20260904-v1",
+  "status": "FROZEN_BEFORE_WAVE1_RECOVERY2_TERMINAL",
+  "frozen_at": "2026-09-04T05:50:00+08:00",
+  "purpose": "Close, summarize, project, and archive the complete fresh Wave1 recovery2 evidence without changing any metric, statistical rule, comparator, or official-value policy inherited from the pre-result Wave1 controls.",
+  "runtime_state_at_freeze": {
+    "controller_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1",
+    "controller_terminal": false,
+    "current_method": "wma-mmfu-single",
+    "current_seed": 0,
+    "accepted_units": 1,
+    "rejected_units": 0,
+    "complete_seed_results": 0,
+    "numeric_rows_admitted": 0,
+    "chat_cuda_oom_count": 0,
+    "chat_http_500_count": 0
+  },
+  "recovery_identity": {
+    "full_recovery_prefreeze": {
+      "path": "comparisons/wma-r1-wave1-full-recovery2-prefreeze.v1.json",
+      "sha256": "8861cf34367ce4fe82a3601c8f3d673a29b966e274cb648c65054b958452f49e"
+    },
+    "capability_acceptance": {
+      "path": "comparisons/wma-r1-wave1-recovery2-capability-recovery1-audit.v1.json",
+      "sha256": "d142d08eff56c5b15693d19e80044186228abd40244832cffc9fbfd18f6acf90"
+    },
+    "chat_gpu_memory_utilization": 0.90,
+    "parent_numeric_evidence_reused": false
+  },
+  "successor_renderer": {
+    "path": "scripts/frozen_source_successor.py",
+    "sha256": "1be797476706ff9a3194ffe2c936b981058217dd279fc2e0aa57412795d955e2",
+    "rule": "Verify the immutable parent byte hash, require each predeclared replacement count exactly, verify the complete rendered successor hash, then execute only the temporary rendered script."
+  },
+  "stages": [
+    {
+      "order": 1,
+      "name": "three_seed_postprocess",
+      "parent": {
+        "path": "scripts/remote_wma_wave1_postprocess.py",
+        "sha256": "538c9b7f658a02534b4c432d43157ced9645707ad8f7022e444cf13586e5036b"
+      },
+      "wrapper": {
+        "path": "scripts/remote_wma_wave1_postprocess_recovery2.py",
+        "sha256": "b98c880f6fac2bb57ff199f47c5b63b5dc7677ed8e30b7d9155530b7e19c31cf",
+        "rendered_sha256": "e1abc88cfecdee725ca0e6bc9d17e8ae18836cac260312f8d1a8858f2b66446e"
+      },
+      "input_roots": "12 fresh wma-r1-full-{slug}-seed{0,1,2}-recovery2-20260904-v1-aggregate roots",
+      "output_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-three-seed-summaries-recovery2-20260904-v1"
+    },
+    {
+      "order": 2,
+      "name": "complete_table_projection",
+      "parent": {
+        "path": "scripts/remote_wma_wave1_project_v2.py",
+        "sha256": "241b43ec80615c1a7579c61a2f28eaf4144f2311f17d72eee1a373b14ddd68f2"
+      },
+      "wrapper": {
+        "path": "scripts/remote_wma_wave1_project_recovery2.py",
+        "sha256": "c60488d33f276ca9542fe319c5d0a0ea273b18aac07d41c7eea14037f15eb2a6",
+        "rendered_sha256": "1197cef004d4e67494b926bbc1be5f75b843c38a4a2abd80750ee3a7fce73d8d"
+      },
+      "output_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-table-projection-recovery2-20260904-v3",
+      "expected_panel_rows": [30, 30, 30, 1590]
+    },
+    {
+      "order": 3,
+      "name": "five_part_raw_evidence_archive",
+      "parent": {
+        "path": "scripts/remote_archive_wma_wave1.py",
+        "sha256": "03e0ac1348c7dbc3b7e9cfda8afd1432311b158c1a564f6dec117e3e7a284a93"
+      },
+      "wrapper": {
+        "path": "scripts/remote_archive_wma_wave1_recovery2.py",
+        "sha256": "39eb84e85b0e4114a3ee56c2dcac4a1f4a2706568a52e8197447a9817f76d3d3",
+        "rendered_sha256": "20e0da782ea7b751626328bc9985570c0f5d235f1adc063dacacdbe3c2e4df18"
+      },
+      "output_root": "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-recovery2-20260904-v1",
+      "archive_count": 5
+    },
+    {
+      "order": 4,
+      "name": "projection_overlay_archive",
+      "parent": {
+        "path": "scripts/remote_archive_wma_wave1_projection_v2.py",
+        "sha256": "483a7db27227e95263f1c742584d5d517f88616fcc482058c966df29e0f24331"
+      },
+      "wrapper": {
+        "path": "scripts/remote_archive_wma_wave1_projection_recovery2.py",
+        "sha256": "ca150f524aead4613aa406a082efb8b68f75199b5ad4eacd3d36fa4bd9770613",
+        "rendered_sha256": "d842eedadcd482c6ff8b12f9f9fddcafa51ebdb983681c956bc77b54c719dbc1"
+      },
+      "output_root": "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-table-projection-recovery2-20260904-v3",
+      "archive_count": 1
+    }
+  ],
+  "test": {
+    "path": "tests/test_wma_wave1_recovery2_closure.py",
+    "sha256": "4847a47e407ccbe65e8e008b875e82b2fc7b7df6345f445cec4a8ab292c71f13",
+    "checks": 4
+  },
+  "inherited_scientific_contract": {
+    "methods": ["wma-mmfu-single", "wma-simplemem", "wma-m2a", "wma-vilomem"],
+    "seeds": [0, 1, 2],
+    "samples_per_seed": 150,
+    "qa_per_seed": 7906,
+    "failed_samples_per_seed": 0,
+    "metric_selection": "none",
+    "slice_selection": "none; all 53 frozen slice values",
+    "official_values_used": false,
+    "claim_authorized_by_closure_alone": false
+  },
+  "start_and_failure_rules": {
+    "postprocess_start": "Only after the recovery2 controller is TERMINAL_ACCEPTED, every recovery2 model service and worker has exited, and all 12 scheduler and aggregate inventories validate.",
+    "sequential_execution": "Run stages 1 through 4 in order. A stage must be independently TERMINAL_ACCEPTED before the next begins.",
+    "failure": "Preserve every failed fresh root, diagnose read-only, and freeze a successor. Never overwrite, resume in place, drop a method/seed/metric/slice, or import an official value."
+  },
+  "retention_and_cleanup": {
+    "accepted_recovery2_evidence": "Retain source roots and all six accepted archives; this closure authorizes no deletion.",
+    "rejected_parent_evidence": "The recovery1 OOM roots and both capability attempt roots remain retained and require a separate failure-evidence archive before any source cleanup.",
+    "wave1_models": "Both Qwen snapshots are protected shared/pre-existing assets and are never cleanup candidates."
+  }
+}
