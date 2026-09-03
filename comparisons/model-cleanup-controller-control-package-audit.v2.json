@@ -1,0 +1,76 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v2",
+  "audit_id": "baseline-model-cleanup-controller-20260904-v2-control",
+  "status": "TERMINAL_ACCEPTED_INERT",
+  "accepted_at": "2026-09-04T08:25:00+08:00",
+  "supersedes": {
+    "path": "comparisons/model-cleanup-controller-control-package-audit.v1.json",
+    "reason": "The v1 control package does not enforce completion of the Mem-Gallery and Causal-LoCoMo surfaces."
+  },
+  "bound_stage": {
+    "path": "comparisons/model-cleanup-controller-prefreeze.v2.json",
+    "sha256": "69df5362e514e8c52af2c2496fc4f26075a20d839672760c62ae38631aa5a547",
+    "implementation_commit": "5d88565"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/baseline-model-cleanup-controller-20260904-v2-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v2-control.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v2-control",
+    "bytes": 15531,
+    "sha256": "4197e3fd60bf45916e2549cb9126dce9bd1fd455656d65d9a7184b0037d80567",
+    "transport": "OpenSSH SFTP with SHA-bound resumable partial, limited to 4096 Kbit/s",
+    "fresh_before_extraction": true
+  },
+  "package_inventory": {
+    "path": "PACKAGE_SHA256SUMS",
+    "sha256": "469f547f8e78502310f0f18d048a405f891c0954c2d6e39fd7a59a748cc455f5",
+    "signed_regular_files": 8,
+    "regular_files_including_inventory": 9,
+    "regular_file_bytes_including_inventory": 56881,
+    "symlinks": 0,
+    "python_bytecode_files": 0,
+    "all_signed_files_verified_locally": true,
+    "all_signed_files_verified_remotely": true,
+    "inventory_excludes_itself": true
+  },
+  "remote_validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "environment_mutated": false,
+    "controller_validator": "PASS",
+    "tests_passed": 3,
+    "tests_failed": 0,
+    "negative_global_gate": {
+      "global_completion_record_present": false,
+      "eligibility_record_present": false,
+      "observed_exit_code": 1,
+      "observed_error": "cross-track completion is not terminal-accepted",
+      "inner_v1_controller_reached": false,
+      "model_mutation_performed": false,
+      "status": "ACCEPTED_FAIL_CLOSED"
+    }
+  },
+  "effective_execution_entry": {
+    "control_root": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v2-control",
+    "script": "scripts/model_cleanup_controller_v2.py",
+    "phases": ["preflight", "quarantine", "delete"],
+    "prerequisite": "/data1/2026/ldh/AgentEnhance/runs/baseline-cross-track-completion-20260904-v1/cross-track-completion.json must be terminal-accepted and hash-inventoried before every phase",
+    "direct_v1_invocation_prohibited": true
+  },
+  "current_state": {
+    "registered_method_surface": 50,
+    "tracks_required": 3,
+    "global_completion_present": false,
+    "cleanup_eligible_models": 0,
+    "models_quarantined": 0,
+    "models_deleted": 0
+  },
+  "scientific_boundary": "This package adds a cleanup safety gate only. It accepts no reproduction result, metric, comparison, model eligibility, quarantine, deletion, or SOTA claim.",
+  "mutation_summary": {
+    "control_package_uploaded_and_extracted": true,
+    "model_files_downloaded": 0,
+    "model_files_quarantined": 0,
+    "model_files_deleted": 0,
+    "dataset_files_modified": 0,
+    "numeric_result_rows_added": 0
+  }
+}
