@@ -1,0 +1,81 @@
+{
+  "schema_version": "agentenhance.uv_tool_materialization_recovery_prefreeze.v2",
+  "stage_id": "wma-r1-wave4-hindsight-uv-tool-20260904-v1-recovery1-transfer-v2",
+  "status": "FROZEN_BEFORE_RECOVERY_TRANSFER",
+  "frozen_at": "2026-09-04T01:45:03+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v1.json",
+    "sha256": "e56e1d2bdb8d5cb30494a64c4d9a6ce42b55b3aa5467e8009229ef4714d668ab",
+    "reason": "The initial put -a command cannot create a fresh remote target."
+  },
+  "transfer_failure_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-recovery1-transfer-failure-audit.v1.json",
+    "sha256": "7435f2d6c7132c3da9ab76df4e966a1ac70ab492093061679fbfd7567f3bf323",
+    "required_status": "TERMINAL_REJECTED_PREFLIGHT_COMMAND_SEMANTICS"
+  },
+  "active_authority": "This v2 file is the only authorized recovery1 transfer contract. The v1 file is retained as rejected history and must not be executed.",
+  "diagnosed_change_only": {
+    "from": "put -a for an absent remote file",
+    "to": "plain put for initial creation; put -a only after an interrupted transfer leaves a non-empty remote file whose complete prefix equals the local source prefix",
+    "unchanged": "all official release identities, accepted Mac files, server paths, target, evidence root, materializers, rate limit, Hindsight inputs, and downstream gates"
+  },
+  "release_identity": {
+    "version": "0.12.9",
+    "target_triple": "x86_64-unknown-linux-gnu",
+    "archive_bytes": 19423276,
+    "archive_sha256": "ec7a99cd05e0cd7f80243f135ce1361c76835cb0ee60055d14d20eba8eba1460",
+    "checksum_bytes": 101,
+    "checksum_sha256": "18f88ae6a13764973e76d72c1a4ade28c70b53d8279f5b4715e48b2291c264a5"
+  },
+  "materializers": [
+    {"path": "scripts/materialize_uv_tool.py", "sha256": "24053659cf59436e9aa05607f6ce306cdb93eee5a391fcb42db8d5e581e9bed8"},
+    {"path": "scripts/materialize_uv_tool_from_staged_assets.py", "sha256": "019ebd36e521335638c90eaeac8e2dceac9dd24da52d9bf4d150dd7961b33eea"}
+  ],
+  "paths": {
+    "local_archive": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz",
+    "local_checksum": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz.sha256",
+    "server_archive": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz",
+    "server_checksum": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz.sha256",
+    "server_control_package": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-tool-20260904-v1-recovery1-transfer-v2-control.tar.gz",
+    "target": "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery1",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1-recovery1"
+  },
+  "transfer_contract": {
+    "local_files_already_accepted": true,
+    "initial_mode_when_remote_absent": "put",
+    "resume_mode_when_remote_partial": "put -a",
+    "resume_precondition": "Before append, record remote byte count r with 0 < r < local bytes and verify SHA-256(remote file) equals SHA-256(first r bytes of the immutable local file).",
+    "post_transfer_acceptance": "Independently verify full server bytes and SHA-256 for archive, checksum, and the v2 control package before materialization.",
+    "sftp_rate_limit_kbit_per_second": 4096,
+    "connection_budget_total": 3,
+    "connections_consumed_by_v1_preflight": 1,
+    "connections_remaining": 2,
+    "parallel_transfers": 1
+  },
+  "execution_contract": {
+    "command": "python scripts/materialize_uv_tool_from_staged_assets.py --archive ${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz --checksum-sidecar ${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz.sha256 --target ${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery1 --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1-recovery1",
+    "retry_count_after_verified_transfer": 0,
+    "wall_time_ceiling_minutes": 10,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 1,
+    "fresh_target_and_evidence_required": true
+  },
+  "acceptance": [
+    "The transfer uses plain put only while each remote destination is absent.",
+    "Any resume uses put -a only after prefix identity verification and within the remaining connection budget.",
+    "All complete server files match frozen bytes and SHA-256 before materialization.",
+    "The materializer validates sidecar content and safe archive membership, retains accepted assets, and extracts exactly uv and uvx.",
+    "uv reports exactly uv 0.12.9.",
+    "The recovery evidence root is TERMINAL_ACCEPTED and not TERMINAL_REJECTED."
+  ],
+  "failure": "Any identity mismatch, non-prefix partial, exhausted connection budget, collision, unsafe archive member, extraction error, or version mismatch seals recovery1 as TERMINAL_REJECTED and preserves all artifacts.",
+  "next_gate_after_acceptance": "Independently audit recovery1, then export the frozen official uv.lock without changing or installing it.",
+  "prohibited_actions": [
+    "executing the superseded v1 transfer contract",
+    "using append mode for an absent remote file or without prefix verification",
+    "exceeding two remaining SFTP connections or 4096 Kbit/s",
+    "changing release identity, paths, Hindsight source, or uv.lock",
+    "installing dependencies, downloading models, or starting pg0/service/lifecycle/numerical work",
+    "populating a comparison-table numeric cell from this transfer"
+  ]
+}

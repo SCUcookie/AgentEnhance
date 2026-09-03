@@ -1,0 +1,34 @@
+{
+  "schema_version": "agentenhance.sftp_transfer_failure_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-uv-tool-recovery1-transfer-failure-20260904-v1",
+  "status": "TERMINAL_REJECTED_PREFLIGHT_COMMAND_SEMANTICS",
+  "audited_at": "2026-09-04T01:44:59+08:00",
+  "superseded_prefreeze": {
+    "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v1.json",
+    "sha256": "e56e1d2bdb8d5cb30494a64c4d9a6ce42b55b3aa5467e8009229ef4714d668ab"
+  },
+  "attempt": {
+    "connection_index": 1,
+    "command_mode": "OpenSSH sftp put -a",
+    "client_exit_code": 1,
+    "message": "stat remote: No such file or directory",
+    "failure_point": "remote stat before transfer",
+    "transferred_bytes": 0,
+    "remote_archive_absent": true,
+    "remote_checksum_absent": true,
+    "remote_control_package_absent": true,
+    "tool_target_absent": true,
+    "evidence_root_absent": true
+  },
+  "diagnosis": "OpenSSH sftp put -a resumes an existing remote file but does not create a fresh remote target. The v1 transfer contract incorrectly required append mode for the initial transfer.",
+  "scientific_impact": "none; no remote byte, tool execution, dependency resolution, model access, dataset access, or numerical evidence was produced",
+  "decision": "Reject v1 transfer command semantics. Retain the same recovery identity and fresh paths under a superseding v2 contract that uses put for initial creation and put -a only for a verified partial prefix after interruption.",
+  "remaining_connection_budget": 2,
+  "prohibited_actions": [
+    "editing or relabeling the v1 prefreeze",
+    "claiming that any asset reached the server",
+    "using append mode when the remote target is absent",
+    "changing the official release identity or local accepted assets",
+    "installing dependencies or starting any downstream stage"
+  ]
+}

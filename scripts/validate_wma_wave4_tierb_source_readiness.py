@@ -20,6 +20,8 @@ EXECUTION_SOURCE_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-exe
 UV_TOOL_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-prefreeze.v1.json"
 UV_TOOL_FAILURE_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-failure-audit.v1.json"
 UV_TOOL_RECOVERY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v1.json"
+UV_TOOL_TRANSFER_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-transfer-failure-audit.v1.json"
+UV_TOOL_RECOVERY_PREFREEZE_V2_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v2.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -47,6 +49,12 @@ uv_tool_failure_audit = json.loads(
 )
 uv_tool_recovery_prefreeze = json.loads(
     UV_TOOL_RECOVERY_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+uv_tool_transfer_failure = json.loads(
+    UV_TOOL_TRANSFER_FAILURE_PATH.read_text(encoding="utf-8")
+)
+uv_tool_recovery_prefreeze_v2 = json.loads(
+    UV_TOOL_RECOVERY_PREFREEZE_V2_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -248,6 +256,47 @@ assert transfer["parallel_transfers"] == 1
 assert uv_tool_recovery_prefreeze["execution_contract"]["retry_count_after_verified_transfer"] == 0
 assert uv_tool_recovery_prefreeze["execution_contract"]["gpu_count"] == 0
 for path in (UV_TOOL_FAILURE_AUDIT_PATH, UV_TOOL_RECOVERY_PREFREEZE_PATH):
+    serialized = path.read_text(encoding="utf-8")
+    assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert (
+    uv_tool_transfer_failure["status"]
+    == "TERMINAL_REJECTED_PREFLIGHT_COMMAND_SEMANTICS"
+)
+assert uv_tool_transfer_failure["superseded_prefreeze"]["sha256"] == sha256_file(
+    ROOT / uv_tool_transfer_failure["superseded_prefreeze"]["path"]
+)
+attempt = uv_tool_transfer_failure["attempt"]
+assert attempt["connection_index"] == 1
+assert attempt["transferred_bytes"] == 0
+assert all(
+    attempt[key] is True
+    for key in (
+        "remote_archive_absent",
+        "remote_checksum_absent",
+        "remote_control_package_absent",
+        "tool_target_absent",
+        "evidence_root_absent",
+    )
+)
+
+assert uv_tool_recovery_prefreeze_v2["status"] == "FROZEN_BEFORE_RECOVERY_TRANSFER"
+assert uv_tool_recovery_prefreeze_v2["supersedes"]["sha256"] == sha256_file(
+    ROOT / uv_tool_recovery_prefreeze_v2["supersedes"]["path"]
+)
+assert uv_tool_recovery_prefreeze_v2["transfer_failure_gate"]["sha256"] == sha256_file(
+    ROOT / uv_tool_recovery_prefreeze_v2["transfer_failure_gate"]["path"]
+)
+for row in uv_tool_recovery_prefreeze_v2["materializers"]:
+    assert row["sha256"] == sha256_file(ROOT / row["path"])
+transfer_v2 = uv_tool_recovery_prefreeze_v2["transfer_contract"]
+assert transfer_v2["initial_mode_when_remote_absent"] == "put"
+assert transfer_v2["resume_mode_when_remote_partial"] == "put -a"
+assert transfer_v2["sftp_rate_limit_kbit_per_second"] == 4096
+assert transfer_v2["connections_consumed_by_v1_preflight"] == 1
+assert transfer_v2["connections_remaining"] == 2
+assert uv_tool_recovery_prefreeze_v2["execution_contract"]["gpu_count"] == 0
+for path in (UV_TOOL_TRANSFER_FAILURE_PATH, UV_TOOL_RECOVERY_PREFREEZE_V2_PATH):
     serialized = path.read_text(encoding="utf-8")
     assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
