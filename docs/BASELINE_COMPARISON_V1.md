@@ -42,6 +42,53 @@ method-development evidence and cannot establish public-benchmark superiority.
 | Robustness | MMA | arXiv 2026 | Multimodal | Credibility+decay+consensus | No | No | No | Secondary | Pending |
 | Proposed | AgentEnhance-CEU | This work | Multimodal | Amortized DROP/COMPRESS/RETAIN | Gumbel | Yes | Yes | Required | Not started |
 
+## Source-reported reference values
+
+These values are immutable transcription targets, not same-protocol comparison
+results. The complete long-form table, including protocol IDs, sample counts,
+source commits, and eligibility flags, is stored in
+`comparisons/source-reported-results.v1.csv`.
+
+Mem-Gallery Table 4 uses Qwen2.5-VL-7B, K=10, temperature 0, and the paper's
+evaluation stack over 1,711 questions.
+
+| Method | F1 | Judge |
+|---|---:|---:|
+| Full Text | .3625 | .4331 |
+| FIFO | .2724 | .3369 |
+| NaiveRAG | .5974 | .7241 |
+| Generative Agent | .3825 | .4643 |
+| MemGPT | .5282 | .7306 |
+| A-Mem | .6228 | .7431 |
+| MemoryOS | .6109 | .7613 |
+| Full Multimodal | .3354 | .4129 |
+| MuRAG | .6966 | .8229 |
+| UniversalRAG | .6827 | .8016 |
+| NGM | .6691 | .7861 |
+| AUGUSTUS | .6610 | .7797 |
+
+V-Mem's released README reports a different GPT-4o-mini judge protocol. Its
+Mem-Gallery values are Omni-SimpleMem .561, M2A .314, A-Mem .460, and V-Mem
+.825; its 1,540-question non-adversarial LoCoMo values are .583, .422, .512,
+and .690 respectively. The A-Mem discrepancy (.7431 versus .460) is retained
+as direct evidence that source-reported values from different stacks cannot be
+mixed into one ranking.
+
+The released CMI 87-example Causal-LoCoMo run reports the following values.
+The run contains 609 predictions and zero recorded failures, but its config
+stores `git_commit: HEAD` and reports zero cost despite using a custom live API;
+therefore the cost field is excluded from comparison.
+
+| Method | Task score | Success | Useful F1 | Harmful reject | Poison adopt ↓ |
+|---|---:|---:|---:|---:|---:|
+| CMI | .8458 | .8161 | .8755 | .9902 | .0000 |
+| Full history | .5147 | .2184 | .3076 | .0000 | .6207 |
+| Graph memory | .8244 | .7586 | .4690 | .5500 | .5862 |
+| No memory | .4293 | .0345 | .0000 | 1.0000 | .0000 |
+| Reflection memory | .8449 | .7931 | .4862 | .5569 | .5402 |
+| Summary memory | .7234 | .5862 | .3076 | .0000 | .6207 |
+| Vector memory | .8391 | .7816 | .5011 | .5655 | .6092 |
+
 ## Fixed metric surface
 
 The main results will cover four non-substitutable groups.
@@ -74,3 +121,8 @@ R0 may inspect and execute only official non-final smoke or development paths.
 AgentEnhance must not be run on the public benchmarks until the baseline code,
 data, evaluator, denominator, backbone, evidence budget, and failure semantics
 are accepted and a separate controlled-comparison stage is frozen.
+
+The read-only entrypoint audit is recorded in
+`comparisons/r1-static-entry-audit.v1.json`. It requires denominator,
+empty-answer, failure-count, and resolved-configuration guards around the
+official runners; process exit zero alone is not an acceptance condition.

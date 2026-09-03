@@ -1,0 +1,89 @@
+{
+  "schema_version": "agentenhance.baseline_static_audit.v1",
+  "audit_id": "baseline-static-entry-audit-20260903-v1",
+  "status": "PROVISIONAL",
+  "observed_at": "2026-09-03T14:52:00+08:00",
+  "scope": "Read-only audit of four frozen upstream checkouts before dependency installation or public-benchmark execution.",
+  "public_agentenhance_results_observed": false,
+  "repositories": [
+    {
+      "repo_id": "mem-gallery",
+      "commit": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+      "syntax_compile": "PASS",
+      "entrypoint": "benchmark/run/run_bench.py",
+      "findings": [
+        "The repository declares minimum versions in README but ships no requirements lockfile.",
+        "Backbone, API base, API key, and encoder paths are empty source placeholders.",
+        "The default output directory is result_debug rather than the documented result directory.",
+        "Per-dataset exceptions are caught and the outer loop continues, so process exit zero is insufficient evidence of completeness.",
+        "A-Mem and MemoryOS are not executable through the main harness without adapting their official examples."
+      ],
+      "required_external_guards": [
+        "expected versus observed dataset and QA denominators",
+        "nonempty prediction count",
+        "per-sample failure count",
+        "resolved model and evaluator configuration snapshot"
+      ]
+    },
+    {
+      "repo_id": "v-mem",
+      "commit": "36916b14dc5241e04acbf5cd0f3c40799bc09550",
+      "entrypoint_help": "PASS",
+      "entrypoints": [
+        "build.py",
+        "run_memgallery_final.py",
+        "run_locomo.py",
+        "eval/score_memgallery.py"
+      ],
+      "findings": [
+        "Core requirements are unpinned.",
+        "The token-free retrieve-only switch is implemented for LoCoMo, not for the final Mem-Gallery entrypoint.",
+        "The Mem-Gallery final runner requires an OpenAI-compatible LLM and catches per-question exceptions as empty answers.",
+        "MAX limits total questions and DATASETS limits named datasets; both can support a frozen smoke subset.",
+        "The metric-only scorer can disable the LLM judge and reuse the Mem-Gallery evaluator."
+      ],
+      "required_external_guards": [
+        "fixed DATASETS list and MAX value",
+        "expected versus emitted qid set",
+        "empty-answer and exception count",
+        "cache and model identity"
+      ]
+    },
+    {
+      "repo_id": "worldmemarena",
+      "commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+      "entrypoint": "python -m eval_framework.cli",
+      "findings": [
+        "The official framework exposes 11 memory baselines plus harness and answer-only baselines.",
+        "The small split contains 150 samples and --sample-index supports one-sample execution.",
+        "The --dry-run branch prints resolved path-level configuration and returns before dataset existence, adapter construction, or API validation.",
+        "Requirements specify lower bounds rather than an exact lock."
+      ],
+      "required_external_guards": [
+        "dependency import audit separate from --dry-run",
+        "dataset manifest and sample-id hash",
+        "adapter construction test",
+        "pipeline and evaluator record-count reconciliation"
+      ]
+    },
+    {
+      "repo_id": "cmi",
+      "commit": "65a66cb4347aeeb62a870132269e8a983211e036",
+      "entrypoint": "src/experiments/run_experiment.py",
+      "findings": [
+        "The official dry-run executes at most five examples with deterministic local fallbacks and can avoid API calls.",
+        "The repository ships pytest tests and a 87-example validated Causal-LoCoMo-with-history artifact.",
+        "The released 87-example run contains 609 predictions and 0 recorded failures, corresponding to seven methods over all examples.",
+        "The released run config records git_commit as the literal HEAD rather than an immutable hash.",
+        "The released run uses a custom OpenAI-compatible endpoint while reporting zero cost; its cost_usd field is therefore not comparison-eligible."
+      ],
+      "required_external_guards": [
+        "fresh environment and full pytest pass",
+        "byte-stable deterministic smoke",
+        "dataset validation and 87 by 7 denominator check",
+        "exclude released cost_usd from cost claims"
+      ]
+    }
+  ],
+  "decision": "Proceed to isolated dependency environments and official non-final smoke runs. No baseline is accepted for same-protocol comparison by this static audit alone."
+}

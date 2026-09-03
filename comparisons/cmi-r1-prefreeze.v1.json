@@ -1,0 +1,63 @@
+{
+  "schema_version": "agentenhance.prospective_stage.v1",
+  "stage_id": "cmi-r1-official-smoke-20260903-v1",
+  "state": "FROZEN",
+  "frozen_at": "2026-09-03T15:01:00+08:00",
+  "scientific_question": "Does the frozen CMI repository pass its official unit/integration tests and produce complete byte-stable deterministic smoke scores on its released validated Causal-LoCoMo-with-history artifact without API or GPU access?",
+  "estimand": "Technical reproducibility and deterministic score stability; no performance claim is estimated at this stage.",
+  "source": {
+    "repo_id": "cmi",
+    "commit": "65a66cb4347aeeb62a870132269e8a983211e036",
+    "source_acquisition_stage": "baseline-reproduction-r0-recovery1-20260903-v1"
+  },
+  "runtime": {
+    "container_image": "nvcr.io/nvidia/pytorch:23.08-py3",
+    "image_id": "sha256:9ff159797e3da92a9e47362033f2761633b8de374c095fbdf5cf1b9f157d9d54",
+    "repo_digest": "nvcr.io/nvidia/pytorch@sha256:12a39f22d6e3a3cfcb285a238b6219475181672ff41a557a75bdeeef6d630740",
+    "python": "3.10.12",
+    "network": "none",
+    "gpu": "none",
+    "source_mount": "read-only",
+    "openai_api_key": "empty"
+  },
+  "data": {
+    "artifact": "causal_locomo_final_with_history.jsonl",
+    "expected_records": 87,
+    "validation_artifact": "causal_locomo_final_with_history.validation.json",
+    "expected_validation_errors": 0
+  },
+  "procedures": [
+    "Run the complete official pytest suite once.",
+    "Run the official dataset validator on all 87 released records.",
+    "Run src.experiments.run_experiment twice with config/default.yaml, --dry_run, --max_examples 5, --skip_llm_judge, --deterministic_only, and --no_cache.",
+    "Each smoke attempt must emit 35 predictions and 35 scores: five examples by seven methods, with zero failed rows.",
+    "The two scores.jsonl files must be byte-identical. Timing-bearing prediction and aggregate artifacts are retained but are not required to be byte-identical."
+  ],
+  "allowed_surfaces": [
+    "official tests",
+    "official released Causal-LoCoMo-with-history artifact",
+    "five-example deterministic dry-run prefix",
+    "local deterministic scorers and generated paper artifacts exercised by tests"
+  ],
+  "prohibited_surfaces": [
+    "live API calls",
+    "network access from the container",
+    "GPU access",
+    "AgentEnhance execution",
+    "numeric comparison or SOTA claim",
+    "editing the frozen upstream source"
+  ],
+  "acceptance_rule": "ACCEPT only if pytest exits zero, dataset validation reports 87 valid and 0 errors, each attempt emits exactly 35 predictions and 35 scores with 0 failures, scores.jsonl is byte-identical across attempts, all evidence hashes verify, and no container remains.",
+  "retry_policy": {
+    "automatic_retry": false,
+    "max_attempts": 1,
+    "fresh_output_required": true,
+    "failed_root_preserved": true
+  },
+  "resources": {
+    "max_wall_minutes": 20,
+    "max_disk_gib": 5,
+    "max_gpu_hours": 0,
+    "max_api_cost_usd": 0
+  }
+}
