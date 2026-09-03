@@ -28,6 +28,7 @@ UV_TOOL_RECOVERY2_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv
 LOCK_EXPORT_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-prefreeze.v1.json"
 LOCK_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-failure-audit.v1.json"
 LOCK_EXPORT_RECOVERY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-recovery1-prefreeze.v1.json"
+LOCK_EXPORT_RECOVERY_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-recovery1-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -77,6 +78,9 @@ lock_export_prefreeze = json.loads(
 lock_export_failure = json.loads(LOCK_EXPORT_FAILURE_PATH.read_text(encoding="utf-8"))
 lock_export_recovery_prefreeze = json.loads(
     LOCK_EXPORT_RECOVERY_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+lock_export_recovery_audit = json.loads(
+    LOCK_EXPORT_RECOVERY_AUDIT_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -420,6 +424,25 @@ assert recovery_export["gpu_count"] == 0
 for path in (LOCK_EXPORT_FAILURE_PATH, LOCK_EXPORT_RECOVERY_PREFREEZE_PATH):
     serialized = path.read_text(encoding="utf-8")
     assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert lock_export_recovery_audit["status"] == "TERMINAL_ACCEPTED"
+assert lock_export_recovery_audit["prefreeze_gate"]["sha256"] == sha256_file(
+    ROOT / lock_export_recovery_audit["prefreeze_gate"]["path"]
+)
+audit_execution = lock_export_recovery_audit["execution"]
+assert audit_execution["network_enabled"] is False
+assert audit_execution["dependency_install_performed"] is False
+assert audit_execution["gpu_count"] == 0
+assert audit_execution["active_process_references_after_exit"] == 0
+audit_export = lock_export_recovery_audit["canonical_export"]
+assert audit_export["bytes"] == normalization["expected_body_bytes"]
+assert audit_export["sha256"] == normalization["expected_body_sha256"]
+assert audit_export["requirement_head_count"] == normalization["expected_requirement_head_count"]
+assert audit_export["normalized_bodies_byte_identical"] is True
+assert lock_export_recovery_audit["evidence"]["inventory_entries_verified"] == 8
+assert lock_export_recovery_audit["evidence"]["traceback_exception_panic_nonfinite_matches"] == 0
+serialized = LOCK_EXPORT_RECOVERY_AUDIT_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {

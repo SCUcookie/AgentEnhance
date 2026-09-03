@@ -1,0 +1,77 @@
+{
+  "schema_version": "agentenhance.hindsight_lock_export_recovery_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-lock-export-recovery1-audit-20260904-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T02:10:43+08:00",
+  "prefreeze_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-lock-export-recovery1-prefreeze.v1.json",
+    "sha256": "7806ea43077b3879a4811898b2c781f69d110f30e4615917c49e4d9fc4eed248",
+    "required_status": "FROZEN_BEFORE_OFFLINE_EXPORT"
+  },
+  "execution": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lock-export-20260904-v1-recovery1",
+    "started_at": "2026-09-03T18:07:53.512976+00:00",
+    "finished_at": "2026-09-03T18:07:54.098689+00:00",
+    "launcher": "/usr/bin/python3.9",
+    "cpu_affinity": [0],
+    "gpu_count": 0,
+    "network_enabled": false,
+    "dependency_install_performed": false,
+    "terminal_accepted_present": true,
+    "terminal_rejected_absent": true,
+    "failure_record_absent": true,
+    "active_process_references_after_exit": 0
+  },
+  "verified_identities": {
+    "source_revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "source_clean_after": true,
+    "uv_lock_bytes": 1037159,
+    "uv_lock_sha256_before": "ce0966c58ac9018c77b8aa1d7d93fe9f405deb6c0fadb54e52608fe10a992063",
+    "uv_lock_sha256_after": "ce0966c58ac9018c77b8aa1d7d93fe9f405deb6c0fadb54e52608fe10a992063",
+    "uv_sha256": "671793498fe0a545432e2524b6691ffb9eea4540d9fda43ca2f978df2dbf8426",
+    "uv_version_output": "uv 0.12.9 (x86_64-unknown-linux-gnu)",
+    "python_sha256": "db8630b1dda55498c4d254878d144e04d3c6fd82115b700c00a13c9029fdbd02",
+    "python_version_prefix": "3.11.0 | packaged by conda-forge"
+  },
+  "canonical_export": {
+    "path": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lock-export-20260904-v1-recovery1/hindsight-all-requirements.txt",
+    "bytes": 256006,
+    "sha256": "6f0836431e1a0ba74bdc92732ffb0a81a1c72691bdab2bc3fba43c4a1e3716c6",
+    "requirement_head_count": 208,
+    "normalized_bodies_byte_identical": true,
+    "local_workspace_references": 0
+  },
+  "raw_exports": [
+    {"label": "a", "bytes": 256413, "sha256": "1bce6f63f87208352dad744ee12b05f2c72b369f236e709da2cdba4a4e8d1b5d"},
+    {"label": "b", "bytes": 256413, "sha256": "cdfe294dc9cbf46fadebe7ea080ebabbbc9872c3ce795fa362f82a893fd342fe"}
+  ],
+  "evidence": {
+    "record_bytes": 9063,
+    "record_sha256": "3b9669d525f92032edbf5b24a0bdd422329686b41c7f335fe3910c4318ce0fde",
+    "inventory_bytes": 1458,
+    "inventory_sha256": "8d34085dbeae41dbed3497fb00c2336315d263d462f8d58ad8a6e53b8daa9e36",
+    "inventory_entries_verified": 8,
+    "stderr_logs_empty": true,
+    "traceback_exception_panic_nonfinite_matches": 0
+  },
+  "wave1_non_interference_observation": {
+    "accepted_units": 47,
+    "rejected_units": 0,
+    "current_unaccepted_unit": "048_minecraft_08",
+    "controller_sessions": 1,
+    "full_method_shell_processes": 2,
+    "method_timeout_supervisors": 1,
+    "one_shot_unit_shell_processes": 2,
+    "unit_evaluator_python_processes": 1,
+    "model_service_processes": 3
+  },
+  "decision": "Accept the exact offline dependency-body export as operational evidence. It authorizes only design and prefreeze of wheelhouse acquisition; it does not authorize dependency download, installation, model acquisition, lifecycle execution, numerical comparison, or a paper claim.",
+  "scientific_evidence_role": "No numeric result and no SOTA evidence. This audit establishes only a reproducible Hindsight dependency specification.",
+  "next_gate": "Freeze and validate a platform-specific, hash-complete wheelhouse acquisition stage while Wave1 remains the sole numerical workload.",
+  "prohibited_actions": [
+    "editing, deleting, or relabeling either the rejected v1 root or accepted recovery1 root",
+    "changing dependency versions, markers, URLs, hashes, ordering, source revision, uv, or Python identity",
+    "downloading wheels, installing packages, downloading models, or starting Hindsight services before a separately frozen and authorized gate",
+    "populating any comparison-table numeric cell or claiming superiority from this operational audit"
+  ]
+}
