@@ -16,6 +16,7 @@ FEASIBILITY = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-feasibility
 FEASIBILITY_V2 = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-feasibility-audit.v2.json"
 ADAPTER_DESIGN = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-design-prefreeze.v1.json"
 EXECUTION_SOURCE_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-execution-source-prefreeze.v1.json"
+EXECUTION_SOURCE_AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-execution-source-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -133,4 +134,28 @@ assert execution_prefreeze["execution_contract"]["gpu_count"] == 0
 assert execution_prefreeze["execution_contract"]["retry_count"] == 0
 serialized = EXECUTION_SOURCE_PREFREEZE.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
-print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": copy_scope["expected_file_count"], "numeric_rows_added": 0}, sort_keys=True))
+execution_audit = json.loads(EXECUTION_SOURCE_AUDIT.read_text(encoding="utf-8"))
+assert execution_audit["status"] == "TERMINAL_ACCEPTED"
+assert execution_audit["prefreeze"]["sha256"] == sha256_file(ROOT / execution_audit["prefreeze"]["path"])
+copy = execution_audit["execution_copy"]
+checks = execution_audit["independent_checks"]
+assert copy["file_count"] == checks["record_file_count"] == checks["observed_file_count"] == 66
+assert copy["total_bytes"] == checks["record_total_bytes"] == checks["observed_total_bytes"] == 344766
+assert checks["record_paths_sizes_hashes_equal_observed_copy"] is True
+assert checks["terminal_accepted_present"] is True
+assert checks["terminal_rejected_absent"] is True
+assert checks["evidence_inventory_verified"] is True
+assert checks["symlink_count"] == checks["bytecode_file_count"] == 0
+assert checks["em2mem_path_count"] == checks["fluxmem_path_count"] == 0
+assert checks["search_locomo_present"] is False
+assert checks["active_destination_process_references"] == 0
+preservation = execution_audit["preservation"]
+assert preservation["transport"] == "resumable-sftp-4096-kbit"
+assert preservation["local_hashes_equal_remote_hashes"] is True
+wave1 = execution_audit["wave1_non_interference_observation"]
+assert wave1["after_audit_accepted_units"] >= wave1["before_copy_accepted_units"]
+assert wave1["before_copy_rejected_units"] == wave1["after_audit_rejected_units"] == 0
+assert execution_audit["numeric_result_rows_added"] == 0
+serialized = EXECUTION_SOURCE_AUDIT.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "numeric_rows_added": 0}, sort_keys=True))
