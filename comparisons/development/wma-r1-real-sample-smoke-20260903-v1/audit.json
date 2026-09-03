@@ -62,5 +62,7 @@
   "schema_version": "agentenhance.wma_development_summary.v1",
   "status": "ACCEPTED_DEVELOPMENT",
   "summary_csv_sha256": "f8f57eeb541b60ef56a23fcf2abaa735674f69e0bb933347c5f313cd2ae626b8",
+  "summary_csv_sha256_scope": "server-generated CSV with CRLF records, preserved in the full evidence archive",
+  "repository_normalized_summary_csv_sha256": "c3c43aba7f2bea185429f4c47cf67f41d16b2123eedbe0f2cf99ed93171dc16d",
   "track_id": "wma-lifecycle-matched-v1"
 }
