@@ -1,0 +1,67 @@
+{
+  "schema_version": "agentenhance.control_package_prefreeze.v2",
+  "package_id": "wma-r1-wave1-table-projection-control-20260904-v2",
+  "status": "FROZEN_BEFORE_TRANSFER",
+  "frozen_at": "2026-09-04T04:25:49+08:00",
+  "implementation_commit": "23d78f7945b5d5980a9a0d4322cbfbfb5022ee4d",
+  "purpose": "Stage the exact result-free Wave1 v2 table projector and small projection-archive overlay on the server before Wave1 reaches terminal state.",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave1-table-projection-control-20260904-v2.tar.gz",
+    "bytes": 24378,
+    "sha256": "0360fd84dba60eb4c0a07ceb7f4a1942b312c19d5217c62b9722a85c264b0c1c",
+    "format": "git archive tar.gz",
+    "source_revision": "23d78f7945b5d5980a9a0d4322cbfbfb5022ee4d"
+  },
+  "members": {
+    "regular_files": 12,
+    "directories": 2,
+    "allowed_top_levels": ["comparisons", "scripts"],
+    "required": [
+      "comparisons/wma-bibliographic-corrections.v1.json",
+      "comparisons/wma-efficiency-reliability-table-template.v3.csv",
+      "comparisons/wma-execution-matrix.v3.csv",
+      "comparisons/wma-main-table-spec.v4.json",
+      "comparisons/wma-main-table-template.v4.csv",
+      "comparisons/wma-retrieval-memory-table-template.v3.csv",
+      "comparisons/wma-slice-table-template.v3.csv",
+      "comparisons/wma-table-bundle-manifest.v3.json",
+      "scripts/project_wma_method_summaries.py",
+      "scripts/project_wma_method_summaries_v2.py",
+      "scripts/remote_archive_wma_wave1_projection_v2.py",
+      "scripts/remote_wma_wave1_project_v2.py"
+    ],
+    "symlinks": 0,
+    "hardlinks": 0,
+    "devices": 0,
+    "absolute_or_parent_paths": 0
+  },
+  "remote": {
+    "host_alias": "agent-enhance-gpu",
+    "archive_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-table-projection-control-20260904-v2.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-table-projection-control-20260904-v2",
+    "both_targets_must_be_absent": true
+  },
+  "transfer": {
+    "protocol": "OpenSSH SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "connections": 1,
+    "retries": 0,
+    "ordinary_put_exception": "Permitted only for this exact 24378-byte result-free control archive; resumable SFTP remains mandatory for large payloads."
+  },
+  "validation": [
+    "verify both remote byte count and whole-archive SHA-256 before extraction",
+    "reject any archive member outside comparisons/ or scripts/, any non-regular nondirectory member, absolute path, or parent traversal",
+    "extract only into the fresh frozen extraction root",
+    "verify all 12 extracted regular-file hashes against the local source identities",
+    "do not execute either controller before its frozen terminal-state preconditions hold"
+  ],
+  "resource_noninterference": "Transfer, hashing, and extraction are bounded CPU and storage operations with no model, dataset, environment, API, pg0, or GPU access.",
+  "failure": "Any collision, interrupted transfer, size mismatch, hash mismatch, unsafe member, extraction failure, or extracted-file mismatch rejects this package and preserves all received artifacts for audit.",
+  "prohibited": [
+    "executing the projector while Wave1 or the v1 postprocess is incomplete",
+    "executing the projection archiver before both the raw archive and projection are accepted",
+    "editing extracted files",
+    "using this control package as numeric evidence",
+    "deleting any source, result, model, dataset, log, manifest, archive, or partial"
+  ]
+}
