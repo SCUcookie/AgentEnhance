@@ -1,0 +1,27 @@
+{
+  "schema_version": "agentenhance.prospective_stage.v1",
+  "stage_id": "baseline-reproduction-r0-recovery1-20260903-v1",
+  "parent_stage_id": "baseline-reproduction-r0-20260903-v1",
+  "state": "FROZEN",
+  "recovery_class": "technical-only",
+  "diagnosed_cause": "The checksum manifest included its own path and therefore could never validate after writing completed.",
+  "only_allowed_change": "Exclude evidence/SHA256SUMS from the file set used to generate evidence/SHA256SUMS.",
+  "preserved_contract": {
+    "scientific_question": "unchanged",
+    "upstream_commits": "byte-identical to r0-prefreeze.v1.json",
+    "repository_count": 12,
+    "resource_ceiling": "unchanged",
+    "automatic_retry": false,
+    "fresh_source_root": true,
+    "fresh_run_root": true,
+    "reuse_parent_outputs": false
+  },
+  "acceptance_rule": "Launcher exit is zero; 12 clean repositories exist at the frozen commits; no fatal/error log signals or residual processes exist; every entry in the non-self-referential SHA256SUMS passes; timing and disk evidence exist.",
+  "prohibited_surfaces": [
+    "parent source or run root mutation",
+    "dataset download",
+    "model/API execution",
+    "AgentEnhance public-benchmark evaluation",
+    "upstream commit changes"
+  ]
+}

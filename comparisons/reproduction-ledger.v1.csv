@@ -1,0 +1,24 @@
+method_id,benchmark,source_commit,source_reported_status,reproduction_status,controlled_comparison_status,backbone,embedding_or_retriever,k_or_budget,seeds,result_artifact,notes
+no-memory,mem-gallery-acl2026,benchmark-native,not_applicable,pending,pending,pending,pending,pending,pending,pending,Required lower bound
+full-memory-text,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,pending,context limit,deterministic_or_3,pending,Official Table 4 source value kept separate
+full-memory-mm,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,pending,context limit,deterministic_or_3,pending,Official Table 4 source value kept separate
+fifo-recent,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,recency,K=10,deterministic_or_3,pending,Recent-only control
+bm25,mem-gallery-acl2026,benchmark-native,not_reported,pending,pending,frozen_shared,BM25,K=10,deterministic_or_3,pending,Lexical control
+naive-rag,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,GME-Qwen2-VL-2B,K=10,deterministic_or_3,pending,Dense control
+hybrid-rag,mem-gallery-acl2026,benchmark-native,not_reported,pending,pending,frozen_shared,BM25+dense,K=10,deterministic_or_3,pending,Strong generic retrieval control
+generative-agent,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,official_harness,K=10,deterministic_or_3,pending,Legacy anchor
+memgpt,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,official_harness,K=10,deterministic_or_3,pending,Legacy hierarchical anchor
+murag,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,GME-Qwen2-VL-2B,K=10,deterministic_or_3,pending,Official multimodal retrieval anchor
+a-mem,mem-gallery-acl2026,ceffb860f0712bbae97b184d440df62bc910ca8d,verified_from_source,pending,pending,Qwen2.5-VL-7B,official_harness,K=10,deterministic_or_3,pending,NeurIPS 2025
+memoryos,mem-gallery-acl2026,587ed7755c7aed179965792830ff1b5ad9a6fa92,verified_from_source,pending,pending,Qwen2.5-VL-7B,official_harness,K=10,deterministic_or_3,pending,EMNLP 2025
+universalrag,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,GME-Qwen2-VL-2B,K=10,deterministic_or_3,pending,2025 modality and granularity router
+ngm,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,GME-Qwen2-VL-2B,K=10,deterministic_or_3,pending,2025 graph memory
+augustus,mem-gallery-acl2026,a93959e1e978a6a7d77798ae92c2ffe41c538c62,verified_from_source,pending,pending,Qwen2.5-VL-7B,official_harness,K=10,deterministic_or_3,pending,2025 contextual memory
+mirix,worldmemarena-2026,8cb06a62bbb7c478beb33dd4f2815696a72df482,source_pending,pending,pending,frozen_shared,official_adapter,frozen_shared,deterministic_or_3,pending,2025 multimodal multi-memory
+m2a,mem-gallery-acl2026,edd8c3b75bae8b2c9c1a0ac8ed67e38c2c2723f8,source_pending,pending,pending,frozen_shared,official_adapter,K=10,deterministic_or_3,pending,2026 dual-layer memory
+v-mem,mem-gallery-acl2026,36916b14dc5241e04acbf5cd0f3c40799bc09550,verified_from_source,pending,pending,GPT-4o-mini+local-Qwen-track,MiniLM+BM25+SigLIP,unit-K=12 and official final,deterministic_or_3,pending,Reported score belongs to its own stack
+cmi,causal-locomo-2026,65a66cb4347aeeb62a870132269e8a983211e036,verified_from_source,pending,pending,official_then_frozen_shared,hybrid proposal,official budget,deterministic_or_3,pending,Direct causal baseline; multimodal port is separately labeled
+m3-agent,m3-bench-iclr2026,0e3e41939bd8a0b66d756e7b7eb8d5fe9992da5c,verified_from_source,pending,pending,official M3-Agent-Control,multimodal graph,official budget,deterministic_or_3,pending,ICLR 2026 secondary-domain baseline
+mm-mem,video-mme+mlvu+hd-epic+vstream-qa,7a5e214c14dd5d9c4bb9e2fca7ae12948d49b4e8,verified_from_source,pending,pending,Qwen3-VL-8B,SIB-GRPO,official budget,3,pending,ACL 2026 secondary-domain baseline
+mma,mma-bench-2026,5398392340b5ff856ad3cf6ed13f9e7b05a524dd,source_pending,pending,pending,official,confidence-aware,official budget,3,pending,Robustness-focused secondary baseline
+agentenhance-ceu,mem-gallery-acl2026+worldmemarena-2026,agentenhance_frozen_commit_pending,not_applicable,not_started,not_started,frozen_shared,frozen_shared,frozen_shared,3,pending,Must run only after baseline reproduction gates

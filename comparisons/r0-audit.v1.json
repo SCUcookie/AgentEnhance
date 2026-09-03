@@ -1,0 +1,24 @@
+{
+  "schema_version": "agentenhance.independent_audit.v1",
+  "run_id": "baseline-reproduction-r0-20260903-v1",
+  "audited_at": "2026-09-03T14:38:00+08:00",
+  "decision": "REJECT_TECHNICAL",
+  "operational_findings": {
+    "launcher_exit_code": 0,
+    "terminal_sentinel_present": true,
+    "expected_repository_count": 12,
+    "observed_repository_count": 12,
+    "all_frozen_commits_match": true,
+    "all_repository_worktrees_clean": true,
+    "error_log_matches": 0,
+    "residual_processes": 0,
+    "source_disk_mib_approx": 348
+  },
+  "blocking_failure": {
+    "check": "sha256sum -c evidence/SHA256SUMS",
+    "result": "FAILED",
+    "cause": "The generated checksum manifest included itself, so its recorded digest could not match its terminal bytes."
+  },
+  "interpretation": "No scientific or reproduction result was produced. The frozen source commits appear correct, but the evidence package is technically invalid.",
+  "recovery_authorization": "A fresh successor may change only the checksum inventory exclusion and must re-clone all repositories into fresh source and run roots."
+}

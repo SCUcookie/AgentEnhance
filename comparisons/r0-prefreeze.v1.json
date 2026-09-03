@@ -1,0 +1,70 @@
+{
+  "schema_version": "agentenhance.prospective_stage.v1",
+  "stage_id": "baseline-reproduction-r0-20260903-v1",
+  "state": "FROZEN",
+  "scientific_question": "Can the selected recent multimodal-agent-memory baselines be reproduced under their official non-final protocols closely enough to support a later matched AgentEnhance comparison?",
+  "estimand": "For each baseline, the absolute reproduction gap between an official-source metric and the same metric produced by the frozen upstream code and declared stack.",
+  "unit_of_analysis": "Official benchmark episode or conversation.",
+  "evidence_already_observed": [
+    "AgentEnhance has only internal SpaceNet7-derived mechanism evidence.",
+    "No public benchmark result from AgentEnhance has been observed.",
+    "Source-reported values from Mem-Gallery, V-Mem, CMI, M3-Agent, and MM-Mem were inspected before this freeze."
+  ],
+  "allowed_surfaces": [
+    "upstream repository metadata and code",
+    "official benchmark development or documented smoke subsets",
+    "official intermediate artifacts explicitly released for reproduction",
+    "environment and dependency preflight",
+    "retrieval-only or dry-run execution"
+  ],
+  "prohibited_surfaces": [
+    "AgentEnhance evaluation on any public benchmark",
+    "public benchmark final or hidden-test submission",
+    "changing the frozen baseline inclusion list after seeing AgentEnhance results",
+    "removing failed baselines from the ledger",
+    "claiming SOTA from source-reported unmatched numbers"
+  ],
+  "upstream_commits": {
+    "mem-gallery": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+    "v-mem": "36916b14dc5241e04acbf5cd0f3c40799bc09550",
+    "worldmemarena": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "m2a": "edd8c3b75bae8b2c9c1a0ac8ed67e38c2c2723f8",
+    "cmi": "65a66cb4347aeeb62a870132269e8a983211e036",
+    "mm-mem": "7a5e214c14dd5d9c4bb9e2fca7ae12948d49b4e8",
+    "m3-agent": "0e3e41939bd8a0b66d756e7b7eb8d5fe9992da5c",
+    "mirix": "8cb06a62bbb7c478beb33dd4f2815696a72df482",
+    "a-mem": "ceffb860f0712bbae97b184d440df62bc910ca8d",
+    "memoryos": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+    "memengine": "67e779ee97599304815a0a820ca7e2e7c8ac18ea",
+    "mma": "5398392340b5ff856ad3cf6ed13f9e7b05a524dd"
+  },
+  "initial_reproduction_order": [
+    "mem-gallery official harness static validation",
+    "v-mem retrieve-only smoke on Mem-Gallery non-final subset",
+    "worldmemarena dry-run and adapter inventory",
+    "cmi official smoke on Causal-LoCoMo",
+    "mem-gallery MuRAG/UniversalRAG/A-Mem/MemoryOS baseline smoke",
+    "secondary video baselines only after the primary harness is accepted"
+  ],
+  "acceptance_rule": "ACCEPT a baseline implementation only if the frozen commit is present, the official evaluator runs without schema loss, all expected smoke units are retained, and any numeric reproduction gap is reported rather than hidden. A source-score tolerance is frozen separately only after the exact official artifact and denominator are verified without running AgentEnhance.",
+  "outcomes": {
+    "ACCEPT": "The implementation enters the controlled-comparison prefreeze.",
+    "REJECT_TECHNICAL": "Preserve logs and keep the row in the table as reproduction failed; a separately frozen repair may follow.",
+    "REJECT_SCIENTIFIC": "The implementation runs but cannot reproduce the source behavior under its declared protocol; it remains visible and cannot support a superiority claim.",
+    "INCONCLUSIVE": "Required data, model, API, or exact source artifact is unavailable; keep the row and report the missing dependency."
+  },
+  "resources": {
+    "remote_storage_root_class": "project-scoped directory on a capacity-approved data volume",
+    "max_disk_gib": 500,
+    "max_gpu_hours": 8,
+    "max_wall_hours": 24,
+    "max_api_cost_usd": 0,
+    "network_rule": "Large local-to-server files use resumable rate-limited SFTP; upstream git clones and dataset-native download tools are recorded separately."
+  },
+  "retry_policy": {
+    "automatic_retry": false,
+    "max_attempts_per_baseline": 1,
+    "fresh_output_required": true,
+    "failed_root_preserved": true
+  }
+}
