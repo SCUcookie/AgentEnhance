@@ -1,0 +1,69 @@
+{
+  "schema_version": "agentenhance.wma_wave3_execution_source_prefreeze.v1",
+  "stage_id": "wma-r1-wave3-execution-source-20260904-v1",
+  "status": "FROZEN_BEFORE_EXTERNAL_EXECUTION_SOURCE_COPY",
+  "frozen_at": "2026-09-04T00:31:00+08:00",
+  "scientific_question": "Can MemoryOS and MemGAS be exposed through source-authoritative, project-owned execution copies without modifying their accepted official checkouts?",
+  "decision_informed": "Whether the two methods can proceed to isolated dependency and lifecycle gates.",
+  "scientific_evidence_role": "engineering source-copy and adapter-code gate only; no lifecycle or numerical claim is permitted",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave3-adapter-feasibility-audit.v1.json",
+    "sha256": "cb167f0d3f0ec4296d0c259a70b1b696c53e2992c617747b4bb8b0348fe2de55"
+  },
+  "materializer": {
+    "path": "scripts/materialize_wma_wave3_execution_source.py",
+    "sha256": "c1491414f3e892af79713222ae2a643f6544426dc460db6614bcebfb78240195"
+  },
+  "adapter_overlay": [
+    {"path": "scripts/wma_wave3_overlay/sitecustomize.py", "sha256": "0c50912aad443a55308c1203226059f6301ad4a8aade116bc723fb1824f0a26b"},
+    {"path": "scripts/wma_wave3_overlay/memoryos_wma_adapter.py", "sha256": "2211e7bb1c526276733d2305ebe4b01e06422db244e901764767bdaaf06037c6"},
+    {"path": "scripts/wma_wave3_overlay/memgas_wma_adapter.py", "sha256": "f1852395be38c094efea68551bf487e70d5a1f22808f186dac110d5ea2f826a6"}
+  ],
+  "methods": [
+    {
+      "method_id": "memoryos",
+      "source_revision": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+      "source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/baseline-reproduction-r0-recovery1-20260903-v1/memoryos",
+      "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-execution-source-20260904-v1/memoryos",
+      "import_root": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-execution-source-20260904-v1/memoryos/memoryos_pkg",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memoryos-execution-source-20260904-v1",
+      "copy_scope": "tracked files beneath memoryos-pypi only, renamed to the importable package memoryos_pkg"
+    },
+    {
+      "method_id": "memgas",
+      "source_revision": "c2d4e9fdc331074802a711baf4371197f9194399",
+      "source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-source-20260904-v1/memgas",
+      "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-execution-source-20260904-v1/memgas",
+      "import_root": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-execution-source-20260904-v1/memgas/memgas_source",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memgas-execution-source-20260904-v1",
+      "copy_scope": "all tracked files except every __pycache__ component and .pyc file"
+    }
+  ],
+  "execution_contract": {
+    "command_template": "python scripts/materialize_wma_wave3_execution_source.py --method <method> --source <frozen-source> --destination <fresh-destination> --evidence-root <fresh-evidence-root>",
+    "execution_order": ["memoryos", "memgas"],
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes_per_method": 10,
+    "parallel_copies": 1,
+    "retry_count": 0,
+    "wave1_non_interference": "The copy stage may run while Wave-1 is active because it performs no model download, dependency installation, model load, API call, or GPU operation."
+  },
+  "acceptance": [
+    "The source checkout resolves to the exact method revision and is clean.",
+    "Only Git-tracked regular files are copied.",
+    "The destination and evidence roots were absent before execution.",
+    "No copied relative path contains __pycache__ and no copied file ends in .pyc.",
+    "Every copied file has a retained relative path, byte size, and SHA-256.",
+    "The evidence root has TERMINAL_ACCEPTED, no TERMINAL_REJECTED, and a verified evidence inventory."
+  ],
+  "failure": "Any collision, source identity mismatch, dirty source, non-regular tracked file, copy error, bytecode inclusion, or timeout seals a fresh TERMINAL_REJECTED evidence root and retains the partial destination.",
+  "next_gate_after_acceptance": "Independently audit both execution copies and overlay hashes, then freeze isolated dependency environments. No model or lifecycle execution is authorized by this stage.",
+  "prohibited_actions": [
+    "editing either accepted official source checkout",
+    "copying untracked files or tracked bytecode into the execution source",
+    "installing dependencies, downloading models, calling an LLM, or using a GPU",
+    "starting a lifecycle or numerical run",
+    "deleting or repairing a rejected destination in place"
+  ]
+}

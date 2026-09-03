@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave3-adapter-feasibility-audit.v1.json"
 MANIFEST_PATH = ROOT / "comparisons" / "wma-r1-wave3-model-prefetch-manifest.v1.json"
 PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave3-model-materialization-prefreeze.v1.json"
+SOURCE_COPY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave3-execution-source-prefreeze.v1.json"
 
 
 def load(path: Path) -> dict:
@@ -30,6 +31,7 @@ def sha256_file(path: Path) -> str:
 audit = load(AUDIT_PATH)
 manifest = load(MANIFEST_PATH)
 prefreeze = load(PREFREEZE_PATH)
+source_copy_prefreeze = load(SOURCE_COPY_PREFREEZE_PATH)
 
 assert audit["status"] == "TERMINAL_ACCEPTED_FOR_ADAPTER_PREFREEZE"
 source_gate = ROOT / audit["source_identity_gate"]["path"]
@@ -91,6 +93,24 @@ assert prefreeze["execution_contract"]["retry_count"] == 0
 for path in (AUDIT_PATH, MANIFEST_PATH, PREFREEZE_PATH):
     serialized = path.read_text(encoding="utf-8")
     assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert source_copy_prefreeze["status"] == "FROZEN_BEFORE_EXTERNAL_EXECUTION_SOURCE_COPY"
+assert source_copy_prefreeze["prior_gate"]["sha256"] == sha256_file(
+    ROOT / source_copy_prefreeze["prior_gate"]["path"]
+)
+assert source_copy_prefreeze["materializer"]["sha256"] == sha256_file(
+    ROOT / source_copy_prefreeze["materializer"]["path"]
+)
+for row in source_copy_prefreeze["adapter_overlay"]:
+    assert row["sha256"] == sha256_file(ROOT / row["path"])
+assert [row["method_id"] for row in source_copy_prefreeze["methods"]] == [
+    "memoryos",
+    "memgas",
+]
+assert source_copy_prefreeze["execution_contract"]["gpu_count"] == 0
+assert source_copy_prefreeze["execution_contract"]["retry_count"] == 0
+serialized = SOURCE_COPY_PREFREEZE_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
 
 print(
     json.dumps(
