@@ -1,0 +1,94 @@
+{
+  "schema_version": "agentenhance.wma_sample_smoke_prefreeze.v1",
+  "run_id": "wma-r1-real-sample-smoke-20260903-v1",
+  "status": "FROZEN_BEFORE_NUMERIC_RUN",
+  "frozen_at": "2026-09-03T18:38:00+08:00",
+  "evidence_role": "development-foundation",
+  "main_comparison_eligible": false,
+  "benchmark": {
+    "name": "WorldMemArena",
+    "source_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "config_sha256": "74cc054fd3a262571d67deb61f929bca68610b67320f8ea13c6b922e0257a184",
+    "dataset_revision": "e2148757921fc7e2d66d8ed899823b763227c341",
+    "dataset_manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+    "split": "small"
+  },
+  "sample_selection": {
+    "record": "comparisons/wma-development-sample-selection.v1.json",
+    "inventory_sha256": "3b0a191d7a5afa2d9d73e10a706e3a9aa5d600599b8297df50bf94f23ba2625f",
+    "rule": "cost-only; no answer text, model output, or evaluation result",
+    "sample_id": "mobile_05",
+    "sample_index": 100,
+    "sessions_expected": 11,
+    "qa_expected": 13,
+    "attachments": 21
+  },
+  "methods_in_order": [
+    {
+      "implementation_id": "wma-mmfu-single",
+      "cli_baseline": "MMFU_Single",
+      "embedding_endpoint": null
+    },
+    {
+      "implementation_id": "wma-simplemem",
+      "cli_baseline": "SimpleMem",
+      "embedding_endpoint": "embed1024"
+    },
+    {
+      "implementation_id": "wma-m2a",
+      "cli_baseline": "M2A",
+      "embedding_endpoint": "embed384"
+    },
+    {
+      "implementation_id": "wma-vilomem",
+      "cli_baseline": "ViLoMem",
+      "embedding_endpoint": "embed1024"
+    }
+  ],
+  "frozen_models": {
+    "answer_and_judge": {
+      "model": "Qwen/Qwen3-VL-8B-Instruct",
+      "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+      "served_name": "Qwen3-VL-8B-Instruct",
+      "tensor_parallel_size": 2,
+      "gpu_ids": [3, 4],
+      "max_model_len": 32768,
+      "temperature": 0
+    },
+    "embedding": {
+      "model": "Qwen/Qwen3-VL-Embedding-2B",
+      "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "served_name": "text-embedding-3-small",
+      "embed1024_gpu": 1,
+      "embed384_gpu": 5,
+      "normalize": true
+    }
+  },
+  "runtime": {
+    "environment": "/data1/2026/ldh/AgentEnhance/environments/worldmemarena-py311-r1",
+    "pip_freeze_sha256": "8cf96ec2e711fe0bccdacfd8de676b704018a53d884e932af1753a5c0f8d2936",
+    "retrieval_top_k": 10,
+    "answer_evidence_mode": "memory",
+    "memory_accuracy_itemwise": true,
+    "max_eval_workers": 1,
+    "seed_policy": "single deterministic development smoke only",
+    "service_policy": "start only project-owned tmux sessions after a fresh GPU and port audit; stop those exact sessions after the run"
+  },
+  "acceptance": {
+    "required_outputs": [
+      "aggregate_metrics.json",
+      "session_records.jsonl",
+      "qa_records.jsonl",
+      "run.log",
+      "timing.tsv",
+      "SHA256SUMS"
+    ],
+    "sample_id_must_match": "mobile_05",
+    "n_sessions_must_equal": 11,
+    "n_qa_must_equal": 13,
+    "simplemem_fts_must_succeed": true,
+    "nonzero_exit_or_missing_record": "reject the method run and preserve it; use a new recovery run ID",
+    "numeric_result_destination": "comparisons/foundation-results.v1.csv only",
+    "prohibited_destination": "comparisons/reproduced-results.v1.csv"
+  }
+}

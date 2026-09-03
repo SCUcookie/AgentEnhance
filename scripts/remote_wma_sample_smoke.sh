@@ -9,6 +9,8 @@ set -euo pipefail
 : "${BASELINE:?set BASELINE}"
 : "${SAMPLE_INDEX:?set SAMPLE_INDEX to a 1-based frozen index}"
 : "${SAMPLE_ID_EXPECTED:?set SAMPLE_ID_EXPECTED for the frozen index}"
+: "${SESSION_COUNT_EXPECTED:?set SESSION_COUNT_EXPECTED for the frozen sample}"
+: "${QA_COUNT_EXPECTED:?set QA_COUNT_EXPECTED for the frozen sample}"
 : "${SIMPLEMEM_OVERLAY:?set SIMPLEMEM_OVERLAY}"
 : "${VILOMEM_OVERLAY:?set VILOMEM_OVERLAY}"
 
@@ -29,6 +31,8 @@ case "${BASELINE}" in
   *) echo "unsupported baseline: ${BASELINE}" >&2; exit 2 ;;
 esac
 [[ "${SAMPLE_INDEX}" =~ ^[1-9][0-9]*$ ]] || { echo "invalid sample index" >&2; exit 2; }
+[[ "${SESSION_COUNT_EXPECTED}" =~ ^[1-9][0-9]*$ ]] || { echo "invalid expected session count" >&2; exit 2; }
+[[ "${QA_COUNT_EXPECTED}" =~ ^[1-9][0-9]*$ ]] || { echo "invalid expected QA count" >&2; exit 2; }
 
 [[ "$(git -C "${WMA_REPO}" rev-parse HEAD)" == "15ea25b723d9c4fb35e8062037aec6a5601e4442" ]] || {
   echo "WorldMemArena source commit mismatch" >&2; exit 3;
@@ -97,6 +101,12 @@ test -s "${method_root}/output/qa_records.jsonl"
 }
 [[ "$(jq -r '.sample_id' "${method_root}/output/qa_records.jsonl" | sort -u)" == "${SAMPLE_ID_EXPECTED}" ]] || {
   echo "QA-record sample ID mismatch" >&2; exit 5;
+}
+[[ "$(wc -l <"${method_root}/output/session_records.jsonl" | tr -d '[:space:]')" == "${SESSION_COUNT_EXPECTED}" ]] || {
+  echo "session-record count mismatch" >&2; exit 5;
+}
+[[ "$(wc -l <"${method_root}/output/qa_records.jsonl" | tr -d '[:space:]')" == "${QA_COUNT_EXPECTED}" ]] || {
+  echo "QA-record count mismatch" >&2; exit 5;
 }
 if [[ "${BASELINE}" == "SimpleMem" ]]; then
   grep -q 'FTS index created' "${method_root}/run.log"
