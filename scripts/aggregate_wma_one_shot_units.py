@@ -7,6 +7,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import re
 import sys
 from collections import defaultdict
@@ -25,6 +26,17 @@ def sha256_file(path: Path) -> str:
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def assert_finite(value: Any, path: str = "root") -> None:
+    if isinstance(value, dict):
+        for key, child in value.items():
+            assert_finite(child, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            assert_finite(child, f"{path}[{index}]")
+    elif isinstance(value, float) and not math.isfinite(value):
+        raise SystemExit(f"non-finite numeric value at {path}: {value}")
 
 
 def verify_inventory(unit_root: Path) -> str:
@@ -189,6 +201,8 @@ def main() -> int:
     slice_denominator = sum(v["n_total"] for v in slices["question_type"].values())
     if slice_denominator != 7906:
         raise SystemExit(f"slice denominator mismatch: {slice_denominator}")
+    assert_finite(aggregate, "aggregate")
+    assert_finite(slices, "slices")
 
     args.output_root.mkdir(parents=True)
     (args.output_root / "aggregate_metrics.json").write_text(
