@@ -1,0 +1,42 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "baseline-model-cleanup-controller-20260904-v1-control",
+  "status": "CONTROL_PACKAGE_ACCEPTED",
+  "accepted_at": "2026-09-04T06:27:53+08:00",
+  "prefreeze": {
+    "path": "comparisons/model-cleanup-controller-prefreeze.v1.json",
+    "sha256": "f87e4cacfdefc0f0763fca185963eced1c26fae86b24dee6f9e436b7bbfc1aa3"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/baseline-model-cleanup-controller-20260904-v1-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v1-control.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v1-control",
+    "bytes": 12570,
+    "sha256": "eb2a5f60941ad7ed22e4645e9847e19db2f85614ef1ce673366aac96c9ef98b1",
+    "regular_files": 6,
+    "symlinks": 0,
+    "local_and_remote_identity_matched": true,
+    "transfer_rate_limit_kbit_per_second": 4096
+  },
+  "server_validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "python_bytecode_writes_disabled": true,
+    "contract_validator_status": "PASS",
+    "tests_passed": 4,
+    "tests_failed": 0,
+    "regular_files_after_validation": 6,
+    "lsof_available": "/usr/bin/lsof",
+    "tested_mutation_scope": "temporary synthetic directories only"
+  },
+  "coverage": {
+    "project_owned_candidates": 7,
+    "candidate_bytes": 26623841724,
+    "protected_shared_models": 2,
+    "currently_cleanup_eligible": 0,
+    "real_model_roots_renamed": 0,
+    "real_model_roots_deleted": 0
+  },
+  "execution_authorization": "The inert controller is staged. It cannot act on any real model until a later per-model DRY_RUN_ELIGIBLE record proves all dependent lifecycle, three-seed result, archive, repository-access, live hash, path, reference, and no-process gates.",
+  "protected_boundary": "The shared Qwen3-VL-8B-Instruct and Qwen3-VL-Embedding-2B snapshots remain permanently ineligible, as do datasets, sources, environments, runs, results, logs, manifests, and archives.",
+  "scientific_claim_boundary": "Model cleanup has no bearing on method quality and cannot create or strengthen a SOTA claim."
+}
