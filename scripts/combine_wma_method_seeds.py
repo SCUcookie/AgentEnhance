@@ -69,6 +69,7 @@ def combine_numeric(seed_payloads: dict[int, dict[str, float]]) -> dict[str, dic
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--run-id", required=True)
     parser.add_argument("--implementation-id", required=True)
     parser.add_argument("--baseline", required=True)
     parser.add_argument("--aggregate-root", type=Path, action="append", required=True)
@@ -116,7 +117,9 @@ def main() -> int:
         "schema_version": "agentenhance.wma_method_seed_summary.v1",
         "status": "TERMINAL_ACCEPTED",
         "main_comparison_eligible": True,
+        "run_id": args.run_id,
         "implementation_id": args.implementation_id,
+        "run_id": args.run_id,
         "baseline": args.baseline,
         "seed_count": 3,
         "seeds": [0, 1, 2],
@@ -128,6 +131,7 @@ def main() -> int:
     slice_summary = {
         "schema_version": "agentenhance.wma_slice_seed_summary.v1",
         "implementation_id": args.implementation_id,
+        "run_id": args.run_id,
         "baseline": args.baseline,
         "seed_count": 3,
         "metrics": combine_numeric(slices_by_seed),
