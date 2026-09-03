@@ -31,6 +31,7 @@ baseline-check:
 	python3 scripts/validate_wma_postwave_release_sequence_v3.py
 	python3 scripts/validate_post_wma_cross_track_completion.py
 	python3 scripts/validate_memgallery_data_prefetch_manifest.py
+	python3 scripts/validate_memgallery_data_materialization_prefreeze.py
 	python3 scripts/validate_wma_local_result_admission.py
 	python3 scripts/validate_wma_wave1_recovery2.py
 	python3 scripts/validate_wma_wave1_recovery2_closure.py

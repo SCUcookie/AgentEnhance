@@ -1,0 +1,96 @@
+{
+  "schema_version": "agentenhance.dataset_materialization_prefreeze.v1",
+  "stage_id": "mem-gallery-data-materialization-af912dab-20260904-v1",
+  "status": "FROZEN_AWAITING_WAVE1_RESOURCE_GATE",
+  "frozen_at": "2026-09-04T07:25:00+08:00",
+  "purpose": "Materialize the exact Mem-Gallery dataset directly on the server only after Wave1 releases all project resources, retaining a complete per-file identity and failure record.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-data-prefetch-manifest.v1.json",
+      "sha256": "58ebfee481bca010910705271ae992ee42b425d267cd2354a0d9982d35f5d045"
+    },
+    {
+      "path": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json",
+      "sha256": "f32a8803fc1448e9e6adbaf7a9ba6747dce47b80cde9dcd30eb75007db7ef1f4"
+    },
+    {
+      "path": "scripts/materialize_hf_dataset_snapshot.py",
+      "sha256": "4fe9ed3c46da1d5e830ae1d94645ef0dd0c901cbc9fdce76a283f6160cc636c3"
+    }
+  ],
+  "dataset_identity": {
+    "repository": "Ethan-Bei/Mem-Gallery",
+    "revision": "af912daba984e896e253016b7c7e334ef92c2a6f",
+    "license": "mit",
+    "files": 1515,
+    "bytes": 545845389,
+    "lfs_files": 1491,
+    "lfs_bytes": 542950920,
+    "dialog_files": 20,
+    "image_files": 1490,
+    "questions_expected_later": 1711
+  },
+  "resource_gate": {
+    "required_marker": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1/TERMINAL_ACCEPTED",
+    "forbidden_marker": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1/TERMINAL_REJECTED",
+    "required_absent_tmux_prefix": "agentenhance-wma",
+    "required_closed_ports": [18113, 18114, 18120, 18220, 18221, 18222],
+    "minimum_free_margin_bytes_after_dataset_reservation": 1073741824,
+    "current_observation": {
+      "wave1_controller": "RUNNING",
+      "active_method_seed": "wma-mmfu-single seed 0 recovery2",
+      "accepted_units": 21,
+      "rejected_units": 0,
+      "dataset_downloaded_bytes": 0
+    }
+  },
+  "paths": {
+    "target": "/data1/2026/ldh/AgentEnhance/datasets/raw/mem-gallery-af912dab",
+    "stage_root": "/data1/2026/ldh/AgentEnhance/datasets/raw/mem-gallery-af912dab.partial-materialization-v1",
+    "evidence_root": "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-materialization-af912dab-20260904-v1",
+    "freshness": "All three paths must be absent before execution. A failed stage is retained and any recovery uses new explicit paths."
+  },
+  "execution": {
+    "working_directory": "the independently accepted control-package extraction root",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "argv": [
+      "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+      "scripts/materialize_hf_dataset_snapshot.py",
+      "--manifest",
+      "comparisons/memgallery-data-prefetch-manifest.v1.json",
+      "--target",
+      "/data1/2026/ldh/AgentEnhance/datasets/raw/mem-gallery-af912dab",
+      "--stage-root",
+      "/data1/2026/ldh/AgentEnhance/datasets/raw/mem-gallery-af912dab.partial-materialization-v1",
+      "--evidence-root",
+      "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-materialization-af912dab-20260904-v1",
+      "--required-marker",
+      "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1/TERMINAL_ACCEPTED",
+      "--forbidden-marker",
+      "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1/TERMINAL_REJECTED",
+      "--tmux-prefix",
+      "agentenhance-wma",
+      "--timeout-seconds",
+      "600",
+      "--minimum-free-margin-bytes",
+      "1073741824"
+    ],
+    "logical_requests_per_file": 1,
+    "network_retry_count": 0,
+    "concurrency": 1,
+    "transport": "Direct HTTPS from the server after the resource gate. If a Mac-to-server transfer is ever used instead, it must be resumable SFTP limited to 4096 Kbit/s."
+  },
+  "acceptance_rule": "The exact target is atomically renamed from its fresh same-filesystem stage only after all 1515 paths and 545845389 bytes match the manifest, all 1491 LFS files match frozen SHA-256 values, every non-LFS file matches its Git blob SHA-1, the complete DATA_SHA256SUMS and evidence hashes exist, and exactly one TERMINAL_ACCEPTED marker is present with no rejection marker.",
+  "failure_rule": "Any missing prerequisite marker, rejection marker, active project tmux, listening project port, existing path, insufficient disk, HTTP failure, byte mismatch, content mismatch, extra or missing path, or interrupted transfer rejects the stage. Partial data and evidence remain immutable; no automatic retry and no deletion are authorized.",
+  "scientific_boundary": "This stage produces dataset identity evidence only. It authorizes no memory-method lifecycle, numerical run, result row, comparison claim, or model cleanup.",
+  "explicitly_prohibited": [
+    "executing while Wave1 or any project model service is active",
+    "using a mutable branch name instead of the frozen dataset revision",
+    "accepting file size without the frozen LFS SHA-256 or Git blob identity",
+    "resuming a failed partial stage in place without a frozen successor",
+    "deleting datasets through the model-cleanup workflow",
+    "using dataset acquisition as evidence of method quality or SOTA"
+  ]
+}
