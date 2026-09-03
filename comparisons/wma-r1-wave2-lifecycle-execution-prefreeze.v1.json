@@ -1,0 +1,54 @@
+{
+  "schema_version": "agentenhance.wma_wave2_lifecycle_execution_prefreeze.v1",
+  "execution_id": "wma-r1-wave2-lifecycle-execution-20260903-v1",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "frozen_at": "2026-09-03T22:55:00+08:00",
+  "parent_gate": "wma-r1-wave2-lifecycle-20260903-v1",
+  "parent_gate_path": "comparisons/wma-r1-wave2-lifecycle-prefreeze.v1.json",
+  "frozen_implementation": {
+    "checker": "scripts/check_wma_wave2_adapter.py",
+    "checker_sha256": "9acaa05e11c736f757b39e53f522a285be484e33690db1fbd38f633224af1749",
+    "remote_wrapper": "scripts/remote_wma_wave2_adapter_lifecycle.sh",
+    "remote_wrapper_sha256": "f6d3cca6e1469f93a000ea40e276268cc00683b014fada9a92e98ca71723a61e",
+    "worldmemarena_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "environment_lock_sha256": "8cf96ec2e711fe0bccdacfd8de676b704018a53d884e932af1753a5c0f8d2936"
+  },
+  "fixed_visual_evidence": {
+    "dataset_revision": "e2148757921fc7e2d66d8ed899823b763227c341",
+    "relative_path": "agent/embodied/eb_alfred_base/images/eb_alfred_base_01/eb_alfred_base_01_img_001.png",
+    "image_id": "eb_alfred_base_01_img_001",
+    "sha256": "ca01bcdd40ce5d38d9fe28c1411cd61ac6d7490da787a9a174b4e11d585973fa",
+    "caption_source": "agent/embodied/eb_alfred_base/eb_alfred_base_01.json"
+  },
+  "endpoint_contracts": {
+    "chat": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "shared_embedding_1024": "Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+    "shared_embedding_384": "Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+    "mirix_embedding": "A dedicated 1536-dimensional endpoint is mandatory; wrong dimensions reject before adapter construction.",
+    "gme_embedding": "gme-Qwen2-VL-2B-Instruct@9cfa6413f704a7c1cf5064d240748e10c876b286 with exactly 1536 output dimensions",
+    "qwen_vl_embedding_control": "Qwen3-VL-Embedding-8B@2c4565515e0f265c6511776e7193b22c0968ddc7 with exactly 4096 output dimensions"
+  },
+  "machine_checks": [
+    "checker and image SHA-256 match before construction",
+    "frozen source checkout is clean and source commit is recorded",
+    "required endpoint dimensions match before adapter construction",
+    "adapter reset, two-turn ingestion, end_session, snapshot, fact retrieval, and visual retrieval all execute",
+    "snapshot and both retrievals are non-empty",
+    "image-required methods expose the fixed image through a visual snapshot or retrieved image path",
+    "A-Mem exposes non-default extracted metadata",
+    "MIRIX exposes at least one real memory partition",
+    "every root is sealed terminal-accepted or terminal-rejected with a SHA-256 inventory"
+  ],
+  "execution_order": [
+    "MGMemory",
+    "A-Mem",
+    "Omni-SimpleMem",
+    "MIRIX",
+    "NGMemory",
+    "AUGUSTUSMemory",
+    "UniversalRAGMemory",
+    "Qwen3-VL-Embedding-8B"
+  ],
+  "scheduling": "Execute sequentially only after the Wave-1 controller and its services have released the GPU stack.",
+  "result_boundary": "This gate produces engineering evidence only and never populates a comparison-table numeric cell."
+}
