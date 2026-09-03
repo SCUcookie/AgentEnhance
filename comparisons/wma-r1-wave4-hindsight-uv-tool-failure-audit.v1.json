@@ -1,0 +1,51 @@
+{
+  "schema_version": "agentenhance.uv_tool_materialization_failure_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-uv-tool-failure-audit-20260904-v1",
+  "status": "TERMINAL_REJECTED",
+  "audited_at": "2026-09-04T01:39:42+08:00",
+  "scientific_evidence_role": "technical transport-failure evidence only; it does not reject Hindsight, its source, the uv release identity, or any scientific hypothesis",
+  "prefreeze_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-prefreeze.v1.json",
+    "sha256": "8032c5674bb60126e490018a46d1e34f4dfc2d37b519a39c3c2ef84ff76fc258",
+    "required_status": "FROZEN_BEFORE_TOOL_DOWNLOAD"
+  },
+  "rejected_evidence": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1",
+    "failure_record": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1/uv-tool-materialization-failure.json",
+    "failure_record_bytes": 909,
+    "failure_record_sha256": "42b719bacfc6ac1ac0a4f200cccbcdf74e3cc9b7cc8c1620d7493da73a6df627",
+    "evidence_inventory_bytes": 196,
+    "evidence_inventory_sha256": "ece832ed17cbb00964e14793a258d7fe4792d0efd08c715ba5f397f6cb193f2b",
+    "terminal_rejected_present": true,
+    "terminal_accepted_absent": true,
+    "evidence_inventory_verified": true,
+    "active_process_references_after_exit": 0
+  },
+  "diagnosis": {
+    "stage": "official checksum-sidecar download before archive download",
+    "curl_exit_code": 52,
+    "observed_duration_seconds": 90,
+    "transferred_bytes": 0,
+    "message": "Empty reply from server",
+    "partial_archive_retained": false,
+    "partial_target_retained": false,
+    "classification": "REJECT_TECHNICAL_SERVER_TO_GITHUB_RELEASE_TRANSPORT",
+    "unchanged_identites": "uv version, target triple, archive byte count, archive SHA-256, checksum-sidecar identity, Hindsight source revision, dependency lock, interpreter, and all scientific roles remain unchanged"
+  },
+  "wave1_non_interference_observation": {
+    "accepted_units_at_prior_source_audit": 42,
+    "accepted_units_after_failure_audit": 44,
+    "rejected_units_after_failure_audit": 0,
+    "current_unit_after_failure_audit": "045_minecraft_05"
+  },
+  "decision": "REJECT the direct server-to-GitHub transport route and preserve the complete rejected evidence root.",
+  "next_allowed_gate": "Freeze recovery1 with the identical official assets downloaded and verified on the Mac, then transferred to a fresh server staging path by resumable SFTP capped at 4096 Kbit/s. The server must re-verify all hashes before extraction.",
+  "prohibited_actions": [
+    "reusing, editing, deleting, or relabeling the v1 rejected evidence root",
+    "reusing the v1 target path",
+    "retrying the same direct server GitHub download route",
+    "changing the uv version, release asset, hashes, or Hindsight lock",
+    "installing dependencies, downloading models, or starting a service/lifecycle/numerical run",
+    "populating any comparison-table numeric cell from this failure"
+  ]
+}

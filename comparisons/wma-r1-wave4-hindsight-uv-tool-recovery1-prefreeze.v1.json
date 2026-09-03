@@ -1,0 +1,84 @@
+{
+  "schema_version": "agentenhance.uv_tool_materialization_recovery_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-uv-tool-20260904-v1-recovery1",
+  "status": "FROZEN_BEFORE_RECOVERY_TRANSFER",
+  "frozen_at": "2026-09-04T01:41:01+08:00",
+  "failure_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-failure-audit.v1.json",
+    "sha256": "f5e49f25b8e72cc7c4c2386bf0a1c2596386f69c729aecb6e5efde8b7b313c5a",
+    "required_status": "TERMINAL_REJECTED"
+  },
+  "diagnosed_change_only": {
+    "from": "direct server-to-GitHub Release download",
+    "to": "official assets downloaded and hash-verified on the Mac, then transferred to fresh server staging files with resumable SFTP capped at 4096 Kbit/s",
+    "unchanged": "uv 0.12.9, x86_64-unknown-linux-gnu asset, official URLs, bytes, hashes, archive member policy, Hindsight source and lock identities, scientific roles, and all downstream gates"
+  },
+  "release_identity": {
+    "version": "0.12.9",
+    "target_triple": "x86_64-unknown-linux-gnu",
+    "archive_url": "https://github.com/astral-sh/uv/releases/download/0.12.9/uv-x86_64-unknown-linux-gnu.tar.gz",
+    "archive_bytes": 19423276,
+    "archive_sha256": "ec7a99cd05e0cd7f80243f135ce1361c76835cb0ee60055d14d20eba8eba1460",
+    "checksum_url": "https://github.com/astral-sh/uv/releases/download/0.12.9/uv-x86_64-unknown-linux-gnu.tar.gz.sha256",
+    "checksum_bytes": 101,
+    "checksum_sha256": "18f88ae6a13764973e76d72c1a4ade28c70b53d8279f5b4715e48b2291c264a5"
+  },
+  "materializers": [
+    {
+      "path": "scripts/materialize_uv_tool.py",
+      "sha256": "24053659cf59436e9aa05607f6ce306cdb93eee5a391fcb42db8d5e581e9bed8",
+      "role": "shared frozen release constants and safe archive extraction"
+    },
+    {
+      "path": "scripts/materialize_uv_tool_from_staged_assets.py",
+      "sha256": "019ebd36e521335638c90eaeac8e2dceac9dd24da52d9bf4d150dd7961b33eea",
+      "role": "server-side staged-asset verification, extraction, and evidence"
+    }
+  ],
+  "paths": {
+    "local_archive": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz",
+    "local_checksum": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz.sha256",
+    "server_archive": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz",
+    "server_checksum": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz.sha256",
+    "target": "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery1",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1-recovery1"
+  },
+  "transfer_contract": {
+    "local_download_retries": 0,
+    "local_download_wall_time_ceiling_minutes_per_file": 15,
+    "local_acceptance": "Both files must match frozen bytes and SHA-256 before any SFTP connection.",
+    "sftp_rate_limit_kbit_per_second": 4096,
+    "sftp_resume_mode": "OpenSSH sftp put -a to the same fresh staging path; append-resume is permitted only after an interrupted connection and before any server-side materialization.",
+    "maximum_sftp_connections": 3,
+    "post_transfer_acceptance": "The server must independently match bytes and SHA-256 for both staged files before extraction.",
+    "parallel_transfers": 1
+  },
+  "execution_contract": {
+    "command": "python scripts/materialize_uv_tool_from_staged_assets.py --archive ${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz --checksum-sidecar ${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-0.12.9-recovery1.tar.gz.sha256 --target ${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery1 --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1-recovery1",
+    "retry_count_after_verified_transfer": 0,
+    "wall_time_ceiling_minutes": 10,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 1,
+    "fresh_target_and_evidence_required": true,
+    "wave1_non_interference": "Only bounded download, rate-limited transfer, hashing, extraction, and uv --version are permitted; models, datasets, Python environments, pg0, APIs, and GPUs are inaccessible to this stage."
+  },
+  "acceptance": [
+    "Mac and server copies of both assets independently match the same frozen bytes and hashes.",
+    "The recovery materializer revalidates the checksum sidecar content and safe archive membership.",
+    "The extracted target contains exactly regular uv and uvx binaries.",
+    "uv reports exactly uv 0.12.9.",
+    "The accepted evidence retains its own archive and checksum copy plus all hashes.",
+    "The fresh recovery evidence root is TERMINAL_ACCEPTED and not TERMINAL_REJECTED."
+  ],
+  "failure": "Any local or remote identity mismatch, exhausted transfer connection budget, collision, unsafe archive member, extraction error, or version mismatch seals the fresh recovery evidence root as TERMINAL_REJECTED and preserves all artifacts.",
+  "next_gate_after_acceptance": "Independently audit recovery1, then export the frozen official uv.lock without changing it. No dependency installation or model acquisition is authorized.",
+  "prohibited_actions": [
+    "editing or deleting the original rejected root",
+    "reusing the original target or evidence root",
+    "changing release identity or using an installer script",
+    "materializing before server-side byte and hash verification",
+    "more than three SFTP connections or any non-SFTP Mac-to-server transfer",
+    "installing dependencies, downloading models, starting pg0, a service, lifecycle, or numerical run",
+    "populating any comparison-table numeric cell from this recovery"
+  ]
+}

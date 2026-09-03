@@ -18,6 +18,8 @@ MODEL_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-model-mate
 EXECUTION_SOURCE_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-execution-source-prefreeze.v1.json"
 EXECUTION_SOURCE_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-execution-source-audit.v1.json"
 UV_TOOL_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-prefreeze.v1.json"
+UV_TOOL_FAILURE_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-failure-audit.v1.json"
+UV_TOOL_RECOVERY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -40,6 +42,12 @@ execution_source_audit = json.loads(
     EXECUTION_SOURCE_AUDIT_PATH.read_text(encoding="utf-8")
 )
 uv_tool_prefreeze = json.loads(UV_TOOL_PREFREEZE_PATH.read_text(encoding="utf-8"))
+uv_tool_failure_audit = json.loads(
+    UV_TOOL_FAILURE_AUDIT_PATH.read_text(encoding="utf-8")
+)
+uv_tool_recovery_prefreeze = json.loads(
+    UV_TOOL_RECOVERY_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
 candidates = {row["method_id"]: row for row in payload["candidates"]}
@@ -212,6 +220,36 @@ assert uv_tool_prefreeze["execution_contract"]["gpu_count"] == 0
 assert uv_tool_prefreeze["execution_contract"]["download_rate_ceiling"] == "512 KiB/s"
 serialized = UV_TOOL_PREFREEZE_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert uv_tool_failure_audit["status"] == "TERMINAL_REJECTED"
+assert uv_tool_failure_audit["prefreeze_gate"]["sha256"] == sha256_file(
+    ROOT / uv_tool_failure_audit["prefreeze_gate"]["path"]
+)
+diagnosis = uv_tool_failure_audit["diagnosis"]
+assert diagnosis["curl_exit_code"] == 52
+assert diagnosis["transferred_bytes"] == 0
+assert diagnosis["partial_archive_retained"] is False
+assert diagnosis["partial_target_retained"] is False
+assert uv_tool_failure_audit["rejected_evidence"]["terminal_rejected_present"] is True
+assert uv_tool_failure_audit["rejected_evidence"]["terminal_accepted_absent"] is True
+
+assert uv_tool_recovery_prefreeze["status"] == "FROZEN_BEFORE_RECOVERY_TRANSFER"
+assert uv_tool_recovery_prefreeze["failure_gate"]["sha256"] == sha256_file(
+    ROOT / uv_tool_recovery_prefreeze["failure_gate"]["path"]
+)
+for row in uv_tool_recovery_prefreeze["materializers"]:
+    assert row["sha256"] == sha256_file(ROOT / row["path"])
+assert uv_tool_recovery_prefreeze["release_identity"]["archive_sha256"] == release["archive_sha256"]
+assert uv_tool_recovery_prefreeze["release_identity"]["archive_bytes"] == release["archive_bytes"]
+transfer = uv_tool_recovery_prefreeze["transfer_contract"]
+assert transfer["sftp_rate_limit_kbit_per_second"] == 4096
+assert transfer["maximum_sftp_connections"] == 3
+assert transfer["parallel_transfers"] == 1
+assert uv_tool_recovery_prefreeze["execution_contract"]["retry_count_after_verified_transfer"] == 0
+assert uv_tool_recovery_prefreeze["execution_contract"]["gpu_count"] == 0
+for path in (UV_TOOL_FAILURE_AUDIT_PATH, UV_TOOL_RECOVERY_PREFREEZE_PATH):
+    serialized = path.read_text(encoding="utf-8")
+    assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {
@@ -225,6 +263,7 @@ print(
             "hindsight_execution_source_files": execution_source_prefreeze["copy_scope"]["expected_file_count"],
             "accepted_hindsight_execution_source_files": copy["file_count"],
             "frozen_uv_tool_version": release["version"],
+            "uv_tool_recovery_transport": "resumable-sftp-4096-kbit",
             "numeric_result_rows_added": 0,
         },
         sort_keys=True,
