@@ -1,0 +1,27 @@
+{
+  "schema_version": "agentenhance.engineering_negative_test_audit.v1",
+  "test_id": "wma-r1-wave2-lifecycle-wrapper-negative-20260903-v1",
+  "audited_at": "2026-09-03T23:00:00+08:00",
+  "outcome": "PASS_FAIL_CLOSED",
+  "scientific_evidence_role": "none",
+  "test_design": {
+    "baseline": "MGMemory",
+    "fault": "The chat base URL was deliberately set to the closed local port 9.",
+    "expected": "The wrapper exits nonzero before adapter construction, seals the fresh root TERMINAL_REJECTED, emits no TERMINAL_ACCEPTED marker, and inventories retained failure evidence."
+  },
+  "observed": {
+    "wrapper_exit_code": 7,
+    "terminal_rejected": true,
+    "terminal_accepted": false,
+    "adapter_constructed": false,
+    "failure_stage": "chat endpoint preflight",
+    "chat_models_response_bytes": 0,
+    "failure_exit_code_bytes": 2,
+    "sha256_inventory_verified": true
+  },
+  "server_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave2-lifecycle-wrapper-negative-20260903-v1",
+  "server_sha256_inventory_sha256": "dab40f044423710db167818404044349dc672fef2ab5d9c0a11295d8755323f5",
+  "control_package": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave2-lifecycle-20260903-v1-control",
+  "control_package_manifest_sha256": "2df42dae1ce72548c7751bf4ea7420275f5f549ef558f76e572c7b2bcaf8bfa5",
+  "conclusion": "A service-preflight failure is retained as an immutable rejected root and cannot be mistaken for an admitted lifecycle or numerical result."
+}
