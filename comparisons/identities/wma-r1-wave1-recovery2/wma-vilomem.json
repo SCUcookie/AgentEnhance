@@ -1,0 +1,17 @@
+{
+  "schema_version": "agentenhance.wma_method_identity.v2",
+  "status": "FROZEN_BEFORE_COMPLETE_SEED_RESULTS",
+  "frozen_at": "2026-09-04T06:00:33+08:00",
+  "implementation_id": "wma-vilomem",
+  "run_id": "wma-r1-three-seed-vilomem-recovery2-20260904-v1",
+  "benchmark_id": "worldmemarena-2026",
+  "track_id": "wma-lifecycle-matched-v1",
+  "split": "small",
+  "dataset_digest": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+  "code_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+  "adapter_code_identity": "worldmemarena@15ea25b723d9c4fb35e8062037aec6a5601e4442:ViLoMem+common-overlay@8a10ebb4366735fe1512f773d15d227887fbc97d519cd9b91963591612aef9e7+agent-overlay@07251e95e0ce330b33d0e59047a2140479a246b351cc99255901e3956dea4dd3+wma-config@74cc054fd3a262571d67deb61f929bca68610b67320f8ea13c6b922e0257a184",
+  "backbone_id": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+  "retriever_id": "ViLoMem-Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313-d1024",
+  "evaluator_id": "worldmemarena@15ea25b723d9c4fb35e8062037aec6a5601e4442:answer-and-judge=Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915:temperature=0",
+  "derivation": "All fields derive from frozen Wave1 contracts and accepted pre-main development identities; no complete seed, method summary, score, or source-reported result was inspected."
+}

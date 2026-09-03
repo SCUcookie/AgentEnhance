@@ -1,0 +1,99 @@
+{
+  "schema_version": "agentenhance.wma_wave1_result_admission_prefreeze.v1",
+  "contract_id": "wma-r1-wave1-recovery2-result-admission-20260904-v1",
+  "status": "FROZEN_BEFORE_COMPLETE_SEED_RESULTS",
+  "frozen_at": "2026-09-04T06:00:33+08:00",
+  "timing_disclosure": {
+    "controller_started": true,
+    "active_method_seed": "wma-mmfu-single seed 0",
+    "accepted_units": 4,
+    "rejected_units": 0,
+    "complete_seed_aggregates": 0,
+    "three_seed_method_summaries": 0,
+    "admitted_result_rows": 0,
+    "scores_inspected_to_define_identity": false,
+    "reason_v1_generic_status_is_not_reused": "The generic promoter requires FROZEN_BEFORE_NUMERIC_RUN, which would falsely backdate these identities after individual units had begun."
+  },
+  "purpose": "Bind the four Wave1 recovery2 method identities before any complete seed or method-level result exists, while retaining every numeric and denominator gate from the generic local-result admission contract.",
+  "parents": {
+    "generic_admission_contract": {
+      "path": "comparisons/wma-local-result-admission-prefreeze.v1.json",
+      "sha256": "309977810d5f76388970d112d6866594e8f3d7510f17b9c9d554079a86a9e7cf"
+    },
+    "wave1_recovery2_contract": {
+      "path": "comparisons/wma-r1-wave1-full-recovery2-prefreeze.v1.json",
+      "sha256": "8861cf34367ce4fe82a3601c8f3d673a29b966e274cb648c65054b958452f49e"
+    },
+    "closure_contract": {
+      "path": "comparisons/wma-r1-wave1-recovery2-closure-prefreeze.v1.json",
+      "sha256": "b52b6e50cc400eaa0d1e9b4d1b7ca161e31ce4fc6f75b78f6ea74e6aab367b05"
+    },
+    "closure_control_package_audit": {
+      "path": "comparisons/wma-r1-wave1-recovery2-closure-control-package-audit.v1.json",
+      "sha256": "5db8181927f45380e6b44b63150850a874faf3958f3332b643cebc96c029cbdb"
+    }
+  },
+  "implementation": {
+    "parent_promoter": {
+      "path": "scripts/promote_wma_local_results_v2.py",
+      "sha256": "90aeda29acbfb26fa422d9472dbe56b99cd47c6ffe6f99f44ab73a9da3de3293"
+    },
+    "successor_promoter": {
+      "path": "scripts/promote_wma_local_results_v3.py",
+      "sha256": "1f1e575574af3f55a3340ff0c153543486e14502c6d25e7c5cd76fb8acc848cd",
+      "rendered_sha256": "309cee5fb468d7c2cb6b8cd4bd676591d696af05046bf18e5cdbae60ebedc697"
+    },
+    "only_code_changes": [
+      "required identity status FROZEN_BEFORE_NUMERIC_RUN becomes the truthful FROZEN_BEFORE_COMPLETE_SEED_RESULTS",
+      "output schema version changes from agentenhance.wma_local_result_admission.v2 to agentenhance.wma_local_result_admission.v3"
+    ],
+    "unchanged_numeric_gates": [
+      "exactly seeds 0, 1, and 2",
+      "150 observed of 150 expected samples with zero failures per seed",
+      "7906 QA per seed",
+      "55 predeclared metrics per seed",
+      "every value exactly matches both raw aggregate and combined summary",
+      "terminal-accepted inventories for summary and every seed aggregate",
+      "no official or source-reported numeric values"
+    ]
+  },
+  "shared_identity": {
+    "benchmark_id": "worldmemarena-2026",
+    "track_id": "wma-lifecycle-matched-v1",
+    "split": "small",
+    "dataset_digest": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+    "code_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "backbone_id": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "evaluator_id": "worldmemarena@15ea25b723d9c4fb35e8062037aec6a5601e4442:answer-and-judge=Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915:temperature=0"
+  },
+  "identities": {
+    "wma-mmfu-single": {
+      "path": "comparisons/identities/wma-r1-wave1-recovery2/wma-mmfu-single.json",
+      "sha256": "523760ac18ee50aaa23695e5e31f1d5face1e20caa7e325dd8ce3a5d43d62a1d",
+      "retriever_id": "MMFU_Single-long-context"
+    },
+    "wma-simplemem": {
+      "path": "comparisons/identities/wma-r1-wave1-recovery2/wma-simplemem.json",
+      "sha256": "4b3b4efc264c1662cd5b88788fdbc1050070e7e5aa7e9ab38928d816fe9a9928",
+      "retriever_id": "SimpleMem-Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313-d1024"
+    },
+    "wma-m2a": {
+      "path": "comparisons/identities/wma-r1-wave1-recovery2/wma-m2a.json",
+      "sha256": "939344ceecab599ca2ef6a0a7a7b22c58d4d8e23757d2bbf2943aaa10c6c03a7",
+      "retriever_id": "M2A-Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313-d384"
+    },
+    "wma-vilomem": {
+      "path": "comparisons/identities/wma-r1-wave1-recovery2/wma-vilomem.json",
+      "sha256": "07dc545d36a69e2d8823c314dec63460a31f3bff1629842a613cf952f91b5ff2",
+      "retriever_id": "ViLoMem-Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313-d1024"
+    }
+  },
+  "output": {
+    "fresh_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-local-result-admission-recovery2-20260904-v1",
+    "expected_rows_after_all_four_methods_are_accepted": 660,
+    "execution_condition": "All four recovery2 method summaries, the complete table projection, and the raw accepted-evidence archive are terminal-accepted and independently verified.",
+    "archive_condition": "Archive the accepted admission bundle as a small immutable evidence overlay before any project-owned model cleanup."
+  },
+  "failure_rule": "Any identity, inventory, denominator, raw-value, summary-value, method-registration, or terminal-state mismatch rejects the fresh admission root; never patch an output or omit a failed method after seeing results.",
+  "claim_boundary": "This freeze admits no result. Later accepted rows support only local matched-protocol comparisons; SOTA wording requires a separately audited comparison claim with an explicit metric and comparator scope."
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "wma-r1-wave1-recovery2-closure-20260904-v1-control",
+  "status": "CONTROL_PACKAGE_ACCEPTED",
+  "accepted_at": "2026-09-04T05:58:34+08:00",
+  "purpose": "Record the immutable, result-free control package for the already frozen Wave1 recovery2 postprocess, table projection, raw archive, and projection-overlay archive sequence.",
+  "scientific_evidence_role": "control-package transport and identity evidence only; this audit contains and accepts no benchmark result, superiority claim, or SOTA claim",
+  "bound_closure_contract": {
+    "path": "comparisons/wma-r1-wave1-recovery2-closure-prefreeze.v1.json",
+    "sha256": "b52b6e50cc400eaa0d1e9b4d1b7ca161e31ce4fc6f75b78f6ea74e6aab367b05",
+    "implementation_commit": "b98759edd89bfc78edaa32d040c6bbd5e9a0052e"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave1-recovery2-closure-20260904-v1-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-recovery2-closure-20260904-v1-control.tar.gz",
+    "bytes": 34535,
+    "sha256": "596c16107de4731b0864cdfe0ae424c35ffcdb5e91d8cb1365198895b53eedf7",
+    "format": "git archive tar.gz",
+    "source_revision": "b98759edd89bfc78edaa32d040c6bbd5e9a0052e",
+    "local_and_remote_identity_matched": true
+  },
+  "transfer": {
+    "protocol": "OpenSSH SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "connections": 1,
+    "resumable_partial_name_bound_to_archive_sha256": true
+  },
+  "extraction": {
+    "root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-recovery2-closure-20260904-v1-control",
+    "fresh_before_extraction": true,
+    "regular_files": 23,
+    "directories": 2,
+    "symlinks": 0,
+    "archive_members_were_locally_listed_before_transfer": true,
+    "whole_archive_sha256_was_verified_before_extraction": true,
+    "key_successor_script_hashes_matched": {
+      "scripts/frozen_source_successor.py": "1be797476706ff9a3194ffe2c936b981058217dd279fc2e0aa57412795d955e2",
+      "scripts/remote_wma_wave1_postprocess_recovery2.py": "b98c880f6fac2bb57ff199f47c5b63b5dc7677ed8e30b7d9155530b7e19c31cf",
+      "scripts/remote_wma_wave1_project_recovery2.py": "c60488d33f276ca9542fe319c5d0a0ea273b18aac07d41c7eea14037f15eb2a6",
+      "scripts/remote_archive_wma_wave1_recovery2.py": "39eb84e85b0e4114a3ee56c2dcac4a1f4a2706568a52e8197447a9817f76d3d3",
+      "scripts/remote_archive_wma_wave1_projection_recovery2.py": "ca150f524aead4613aa406a082efb8b68f75199b5ad4eacd3d36fa4bd9770613"
+    }
+  },
+  "runtime_observation_after_acceptance": {
+    "wave1_controller_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1",
+    "active_method_seed": "wma-mmfu-single seed 0",
+    "accepted_units": 3,
+    "rejected_units": 0,
+    "complete_seeds": 0,
+    "cuda_oom_signals": 0,
+    "http_500_signals": 0,
+    "numeric_result_rows_admitted": 0
+  },
+  "execution_authorization": "The package is inert. Postprocessing remains locked until the recovery2 controller is terminal-accepted and all project services have exited; each later stage remains locked behind the predecessor gates in the bound closure contract.",
+  "mutation_summary": {
+    "models_downloaded": 0,
+    "dependencies_installed": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0,
+    "source_runs_deleted": 0,
+    "models_deleted": 0
+  }
+}
