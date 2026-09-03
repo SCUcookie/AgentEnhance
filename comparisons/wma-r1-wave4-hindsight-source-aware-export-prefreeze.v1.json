@@ -1,0 +1,76 @@
+{
+  "schema_version": "agentenhance.hindsight_source_aware_export_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-source-aware-export-20260904-v1",
+  "status": "FROZEN_BEFORE_OFFLINE_EXPORT",
+  "frozen_at": "2026-09-04T02:18:00+08:00",
+  "scientific_question": "Can the accepted Hindsight dependency body be supplemented with its exact public registry sources without changing any dependency byte?",
+  "decision_informed": "Whether a subsequent hash-enforced Linux wheelhouse acquisition can preserve the official uv.lock source semantics.",
+  "scientific_evidence_role": "Dependency-source metadata evidence only; no download, installation, model, lifecycle, numerical, superiority, or SOTA claim is eligible.",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-lock-export-recovery1-audit.v1.json",
+    "sha256": "1af6b8118c1e2a8bbca87d47fd271cbda276c0f716cd2f6a8fcc8a92a91a7be5",
+    "required_status": "TERMINAL_ACCEPTED"
+  },
+  "diagnosed_need": {
+    "accepted_body_has_index_directives": false,
+    "uv_lock_routes_torch_to": "https://download.pytorch.org/whl/cpu",
+    "risk_if_omitted": "torch==2.10.0+cpu cannot be reproduced from the default PyPI index alone and substituting torch sources would change the dependency evidence identity."
+  },
+  "frozen_identities": {
+    "hindsight_revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "uv_lock_bytes": 1037159,
+    "uv_lock_sha256": "ce0966c58ac9018c77b8aa1d7d93fe9f405deb6c0fadb54e52608fe10a992063",
+    "uv_sha256": "671793498fe0a545432e2524b6691ffb9eea4540d9fda43ca2f978df2dbf8426",
+    "python_sha256": "db8630b1dda55498c4d254878d144e04d3c6fd82115b700c00a13c9029fdbd02",
+    "body_reference_bytes": 256006,
+    "body_reference_sha256": "6f0836431e1a0ba74bdc92732ffb0a81a1c72691bdab2bc3fba43c4a1e3716c6",
+    "requirement_head_count": 208,
+    "exporter": "scripts/export_hindsight_uv_lock_v3.py",
+    "exporter_sha256": "c7653f48f453781773d9c05dedfcd92b4938d3a5d97785216a1690441c9e50e2"
+  },
+  "source_contract": {
+    "required_public_urls": [
+      "https://pypi.org/simple",
+      "https://download.pytorch.org/whl/cpu"
+    ],
+    "allowed_directives": ["--index-url", "--extra-index-url", "--find-links"],
+    "https_only": true,
+    "credentials_forbidden": true,
+    "unexpected_sources_forbidden": true
+  },
+  "paths": {
+    "uv": "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery2/uv",
+    "python": "${AGENT_ENHANCE_PYTHON311}",
+    "source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight",
+    "body_reference": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lock-export-20260904-v1-recovery1/hindsight-all-requirements.txt",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-source-aware-export-20260904-v1"
+  },
+  "execution_contract": {
+    "command": "python scripts/export_hindsight_uv_lock_v3.py --uv ${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery2/uv --python ${AGENT_ENHANCE_PYTHON311} --source ${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight --body-reference ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lock-export-20260904-v1-recovery1/hindsight-all-requirements.txt --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-source-aware-export-20260904-v1",
+    "uv_export_flags_added_to_accepted_export": ["--no-header", "--emit-index-url", "--emit-find-links"],
+    "unchanged_flags": ["--frozen", "--offline", "--no-cache", "--no-dev", "--package hindsight-all", "--no-emit-workspace", "--format requirements.txt", "--no-python-downloads"],
+    "independent_export_passes": 2,
+    "network_connections": 0,
+    "dependency_installations": 0,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 1,
+    "wall_time_ceiling_minutes": 10,
+    "retry_count": 0,
+    "fresh_evidence_root_required": true
+  },
+  "acceptance": [
+    "All frozen source, uv.lock, uv, Python, and accepted dependency-body identities match.",
+    "Two source-aware exports are byte-identical and source and lock remain unchanged.",
+    "The export contains exactly the two required credential-free HTTPS public source URLs and no other source.",
+    "After removing only the source-directive prefix, every dependency-body byte equals the accepted 256006-byte reference with SHA-256 6f0836431e1a0ba74bdc92732ffb0a81a1c72691bdab2bc3fba43c4a1e3716c6.",
+    "The export retains exactly 208 requirement heads, no workspace reference, and mutually consistent terminal evidence."
+  ],
+  "failure": "Any collision, identity mismatch, missing or unexpected source, credential, non-HTTPS URL, dependency-body change, cardinality change, source mutation, lock mutation, command failure, or timeout seals the fresh root TERMINAL_REJECTED and preserves it.",
+  "next_gate_after_acceptance": "Independently audit the source-aware requirements artifact, then freeze but do not start its platform-specific hash-enforced wheelhouse acquisition until the Wave1 resource gate is terminally accepted.",
+  "prohibited_actions": [
+    "editing or deleting any prior rejected or accepted export evidence",
+    "adding a mirror, private index, credential, alternate torch build, or changed dependency byte",
+    "downloading wheels, installing packages, downloading models, or starting a Hindsight service",
+    "using this engineering stage to populate a numerical comparison cell or claim SOTA"
+  ]
+}

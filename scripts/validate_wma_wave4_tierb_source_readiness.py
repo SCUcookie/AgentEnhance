@@ -29,6 +29,7 @@ LOCK_EXPORT_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock
 LOCK_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-failure-audit.v1.json"
 LOCK_EXPORT_RECOVERY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-recovery1-prefreeze.v1.json"
 LOCK_EXPORT_RECOVERY_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-recovery1-audit.v1.json"
+SOURCE_AWARE_EXPORT_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-aware-export-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -81,6 +82,9 @@ lock_export_recovery_prefreeze = json.loads(
 )
 lock_export_recovery_audit = json.loads(
     LOCK_EXPORT_RECOVERY_AUDIT_PATH.read_text(encoding="utf-8")
+)
+source_aware_export_prefreeze = json.loads(
+    SOURCE_AWARE_EXPORT_PREFREEZE_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -442,6 +446,30 @@ assert audit_export["normalized_bodies_byte_identical"] is True
 assert lock_export_recovery_audit["evidence"]["inventory_entries_verified"] == 8
 assert lock_export_recovery_audit["evidence"]["traceback_exception_panic_nonfinite_matches"] == 0
 serialized = LOCK_EXPORT_RECOVERY_AUDIT_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert source_aware_export_prefreeze["status"] == "FROZEN_BEFORE_OFFLINE_EXPORT"
+assert source_aware_export_prefreeze["prior_gate"]["sha256"] == sha256_file(
+    ROOT / source_aware_export_prefreeze["prior_gate"]["path"]
+)
+source_identities = source_aware_export_prefreeze["frozen_identities"]
+assert source_identities["exporter_sha256"] == sha256_file(ROOT / source_identities["exporter"])
+assert source_identities["body_reference_bytes"] == audit_export["bytes"]
+assert source_identities["body_reference_sha256"] == audit_export["sha256"]
+assert source_identities["requirement_head_count"] == audit_export["requirement_head_count"]
+source_contract = source_aware_export_prefreeze["source_contract"]
+assert set(source_contract["required_public_urls"]) == {
+    "https://pypi.org/simple",
+    "https://download.pytorch.org/whl/cpu",
+}
+assert source_contract["https_only"] is True
+assert source_contract["credentials_forbidden"] is True
+source_execution = source_aware_export_prefreeze["execution_contract"]
+assert source_execution["independent_export_passes"] == 2
+assert source_execution["network_connections"] == 0
+assert source_execution["dependency_installations"] == 0
+assert source_execution["retry_count"] == 0
+serialized = SOURCE_AWARE_EXPORT_PREFREEZE_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
