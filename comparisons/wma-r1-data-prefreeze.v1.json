@@ -1,0 +1,43 @@
+{
+  "schema_version": "agentenhance.dataset_acquisition_prefreeze.v1",
+  "contract_id": "wma-r1-small-data-20260903-v1",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-03T17:05:00+08:00",
+  "benchmark_id": "worldmemarena-2026",
+  "track_id": "wma-lifecycle-matched-v1",
+  "source": {
+    "repository": "LCZZZZ/WorldMemArena",
+    "repository_type": "dataset",
+    "revision": "e2148757921fc7e2d66d8ed899823b763227c341",
+    "license": "CC-BY-NC-4.0"
+  },
+  "selection": {
+    "split": "small",
+    "selector_file": "small_ids.json",
+    "expected_sample_ids": 150,
+    "expected_selected_files_including_readme_and_selector": 5557,
+    "expected_selected_bytes": 3855814942,
+    "missing_sample_ids_allowed": 0
+  },
+  "local_destination": "artifacts/datasets/worldmemarena-small/rev-e2148757921fc7e2d66d8ed899823b763227c341",
+  "server_destination": "/data1/2026/ldh/AgentEnhance/datasets/raw/worldmemarena/rev-e2148757921fc7e2d66d8ed899823b763227c341",
+  "transport": {
+    "route": "Mac download, deterministic uncompressed tar archive, rate-limited SFTP, server extraction",
+    "sftp_rate_limit_kbit_per_second": 8192,
+    "resume_policy": "snapshot download and SFTP may resume; never promote a partial tree",
+    "integrity": [
+      "source revision",
+      "selected path set",
+      "per-file SHA-256 manifest",
+      "archive SHA-256 before and after transfer",
+      "server extracted-tree manifest digest"
+    ]
+  },
+  "admission": {
+    "required_sample_count": 150,
+    "required_missing_images": 0,
+    "required_invalid_json": 0,
+    "answer_fields_may_be_loaded_for_evaluation_but_must_not_be_used_for_method selection": true,
+    "paper_result_status_after_acquisition": "NOT_STARTED"
+  }
+}
