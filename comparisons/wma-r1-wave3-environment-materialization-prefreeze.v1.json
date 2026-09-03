@@ -1,0 +1,127 @@
+{
+  "schema_version": "agentenhance.wma_wave3_environment_materialization_prefreeze.v1",
+  "stage_id": "wma-r1-wave3-environment-materialization-20260904-v1",
+  "status": "FROZEN_BEFORE_ENVIRONMENT_MATERIALIZATION",
+  "frozen_at": "2026-09-04T00:52:00+08:00",
+  "scientific_question": "Can the accepted MemoryOS and MemGAS execution sources be imported in isolated, replayable Python 3.9 environments without changing either method's algorithm?",
+  "decision_informed": "Whether each method may advance to its persistence-aware lifecycle gate.",
+  "scientific_evidence_role": "dependency and imported-runtime engineering evidence only; no lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "prior_gates": [
+    {
+      "path": "comparisons/wma-r1-wave3-execution-source-audit.v1.json",
+      "sha256": "8efad8f49861794e0e12b9d7ef7a93655315c328fc0154233ba5067488990f26",
+      "required_status": "TERMINAL_ACCEPTED"
+    },
+    {
+      "path": "comparisons/wma-r1-wave3-model-materialization-prefreeze.v1.json",
+      "sha256": "c9005c4b194a08144de18ce4e402a5fe1f1bf2126b9a8e6bf716d60cf76b425f",
+      "required_status": "FROZEN_BEFORE_DOWNLOAD"
+    }
+  ],
+  "materializer": {
+    "path": "scripts/materialize_wma_wave3_environment.py",
+    "sha256": "09cca86b2f323020b0354ccd26f180f92f2ede53e3f0f4c4937b03b266902571"
+  },
+  "python": {
+    "executable": "${AGENT_ENHANCE_PYTHON39}",
+    "required_major_minor": "3.9",
+    "observed_preflight_version": "3.9.20",
+    "observed_preflight_pip": "24.3.1"
+  },
+  "resolution_policy": {
+    "top_level_versions": "Every direct runtime dependency is exactly pinned before execution.",
+    "transitive_versions": "Resolve once during the frozen pip-wheel command, retain every resulting wheel with byte size and SHA-256, record the complete installed pip freeze, then install only from that immutable wheelhouse.",
+    "indexes": [
+      "https://pypi.org/simple",
+      "https://download.pytorch.org/whl/cpu"
+    ],
+    "network_retry_count": 0,
+    "pip_cache": false,
+    "offline_install": true,
+    "parallel_materializations": 1
+  },
+  "methods": [
+    {
+      "method_id": "memoryos",
+      "requirements": "requirements/wave3/memoryos-py39-top-level.txt",
+      "requirements_sha256": "70bff7a1d966ef3888af41e06b58bbea7e8e59376806a91005a9a8c6ef352455",
+      "environment_root": "${AGENT_ENHANCE_REMOTE_ROOT}/environments/wma-r1-wave3-memoryos-py39-20260904-v1",
+      "wheelhouse_root": "${AGENT_ENHANCE_REMOTE_ROOT}/wheelhouses/wma-r1-wave3-memoryos-py39-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memoryos-environment-20260904-v1",
+      "official_pins_preserved": [
+        "numpy==1.24.4",
+        "sentence-transformers==5.0.0",
+        "transformers==4.51.0"
+      ],
+      "operational_substitution": {
+        "official_requirement": "faiss-gpu>=1.7.0,<2.0.0",
+        "frozen_requirement": "faiss-cpu==1.8.0.post1",
+        "reason": "The lifecycle and numerical adapters use CPU embeddings and the imported MemoryOS code requires the faiss Python API, not GPU-specific kernels.",
+        "required_parity_check": "Construct IndexFlatIP, add a fixed float32 vector, retrieve it at inner-product score 1.0, and reject on any mismatch."
+      },
+      "omitted_official_extras": [
+        "FlagEmbedding>=1.2.9 because the frozen all-MiniLM-L6-v2 path uses SentenceTransformer only",
+        "Flask because no demo web server is imported or launched"
+      ]
+    },
+    {
+      "method_id": "memgas",
+      "requirements": "requirements/wave3/memgas-py39-top-level.txt",
+      "requirements_sha256": "b11ec084a1ff0466e2edf8a5c71d184c9a3f6cf8740605933556af55e4f3d9a0",
+      "environment_root": "${AGENT_ENHANCE_REMOTE_ROOT}/environments/wma-r1-wave3-memgas-py39-20260904-v1",
+      "wheelhouse_root": "${AGENT_ENHANCE_REMOTE_ROOT}/wheelhouses/wma-r1-wave3-memgas-py39-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memgas-environment-20260904-v1",
+      "official_pins_preserved": [
+        "sentence-transformers==2.2.2",
+        "transformers==4.43.3",
+        "huggingface-hub==0.23.4",
+        "scikit-learn==1.6.1",
+        "openai==1.35.1",
+        "python-igraph==0.11.8",
+        "igraph==0.11.8"
+      ],
+      "omitted_official_extras": [
+        "vllm==0.5.3.post1 because this client calls the shared external answer service",
+        "flash-attn==2.6.3 because this CPU embedding client does not host the answer model",
+        "vllm-flash-attn==2.5.9.post1 because this CPU embedding client does not host the answer model",
+        "dataset-only packages not imported by the accepted quickstart execution source"
+      ]
+    }
+  ],
+  "execution_contract": {
+    "command_template": "${AGENT_ENHANCE_PYTHON39} scripts/materialize_wma_wave3_environment.py --method <method> --project-root ${AGENT_ENHANCE_REMOTE_ROOT} --python ${AGENT_ENHANCE_PYTHON39} --requirements <frozen-requirements> --environment-root <fresh-environment-root> --wheelhouse-root <fresh-wheelhouse-root> --evidence-root <fresh-evidence-root>",
+    "execution_order": [
+      "memoryos",
+      "memgas"
+    ],
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes_per_method": 90,
+    "retry_count": 0,
+    "fresh_roots_required": true
+  },
+  "scheduler": {
+    "start_condition": "Wave-1 controller is terminal, all Wave-1 model services have stopped, both frozen embedding snapshots are independently TERMINAL_ACCEPTED, and no process references any environment, wheelhouse, or evidence target.",
+    "large_mac_to_server_transfer": "If the control package cannot be fetched from the repository, transfer only by resumable sftp -l 4096 and verify its SHA-256 before execution.",
+    "no_model_load": true
+  },
+  "acceptance": [
+    "The source interpreter is Python 3.9.x and every target root was absent before launch.",
+    "pip wheel exits zero once with network retries disabled and produces only wheel files.",
+    "Every retained wheel has a path, byte size, and SHA-256 in environment-record.json.",
+    "Installation uses --no-index and only the retained wheelhouse.",
+    "pip check, the method-specific import check, and the MemoryOS IndexFlatIP parity check exit zero.",
+    "The full pip freeze is retained and the evidence root is TERMINAL_ACCEPTED without TERMINAL_REJECTED."
+  ],
+  "failure": "Any collision, interpreter mismatch, dependency-resolution failure, network failure, non-wheel artifact, offline-install failure, import failure, semantic parity failure, or timeout seals TERMINAL_REJECTED and preserves the partial environment and wheelhouse. A recovery requires new roots and a separately frozen technical change.",
+  "next_gate_after_acceptance": "Independently audit both environment records and wheel inventories, then bind their exact hashes into a new lifecycle-execution prefreeze. This stage itself never authorizes lifecycle or numerical execution.",
+  "prohibited_actions": [
+    "materializing either environment while Wave-1 or its model services are active",
+    "installing any package into the Wave-1 environment",
+    "allowing resolver or network retries",
+    "installing from the network after wheelhouse creation",
+    "loading either embedding model or the shared answer model",
+    "repairing, deleting, or reusing a rejected root",
+    "populating a numerical comparison-table cell from this stage"
+  ]
+}

@@ -1,0 +1,22 @@
+# Frozen top-level requirements for the MemoryOS WMA reproduction environment.
+# Transitive wheels are resolved once, hashed, retained, and installed offline.
+pip==24.3.1
+setuptools==75.3.0
+wheel==0.45.1
+numpy==1.24.4
+torch==2.3.1+cpu
+sentence-transformers==5.0.0
+transformers==4.51.0
+huggingface-hub==0.30.2
+tokenizers==0.21.1
+safetensors==0.5.3
+scikit-learn==1.6.1
+scipy==1.13.1
+faiss-cpu==1.8.0.post1
+openai==1.35.1
+httpx[socks]==0.27.0
+python-dotenv==1.0.1
+typing-extensions==4.12.2
+regex==2024.5.15
+tqdm==4.66.4
+pillow==10.2.0
