@@ -1,0 +1,66 @@
+{
+  "schema_version": "agentenhance.prospective_artifact_archive_prefreeze.v1",
+  "stage_id": "wma-r1-wave1-archive-20260903-v1",
+  "status": "FROZEN_BEFORE_WAVE1_TERMINAL",
+  "frozen_at": "2026-09-03T23:18:00+08:00",
+  "purpose": "Retain every Wave-1 scheduler unit, prediction, raw metric record, log, resolved input, aggregate, three-seed summary, controller record, and SHA-256 inventory in independently resumable archives before any model cleanup decision.",
+  "evidence_observed_before_freeze": {
+    "last_verified_runtime_status": "MMFU_Single seed 0 had 7 of 150 accepted samples and 0 failed samples",
+    "complete_seed_results_observed": 0,
+    "numeric_results_selected": false
+  },
+  "source_root": "/data1/2026/ldh/AgentEnhance/runs",
+  "destination_root": "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-20260903-v1",
+  "partition": {
+    "archive_count": 5,
+    "method_archives": 4,
+    "method_archive_contents": "one method's three scheduler roots, three aggregate roots, and three-seed summary child",
+    "controller_archive_contents": "recovery controller root plus the complete top-level three-seed summary tree and index",
+    "reason": "A failed large-file transfer can resume or retry one bounded archive instead of the complete experiment."
+  },
+  "implementation": {
+    "archiver": "scripts/remote_archive_wma_wave1.py",
+    "archiver_sha256": "03e0ac1348c7dbc3b7e9cfda8afd1432311b158c1a564f6dec117e3e7a284a93",
+    "static_test": "scripts/test_remote_archive_wma_wave1.py",
+    "static_test_sha256": "de6c364f24978d2a9f92bea17a6a841137c89572b08375cadfde4b5543c4c299",
+    "downloader": "scripts/sftp_download_limited.sh",
+    "downloader_sha256": "cca069f6c6bcedee6f21c70d32004567631aac97e06c76b4799ad4fba83dbca1"
+  },
+  "archive_format": {
+    "container": "GNU tar pax",
+    "compression": "zstd level 3, one thread",
+    "metadata_normalization": "sorted paths, mtime zero, numeric owner/group zero, atime/ctime omitted",
+    "server_io_priority": "nice 10 and ionice best-effort priority 7",
+    "validation": "source inventories first, archive SHA-256, complete tar listing, allowed-root membership, and a final archive manifest"
+  },
+  "resources": {
+    "wall_time_ceiling": "24 hours",
+    "archive_storage_ceiling": "300 GiB",
+    "precondition": "data2 free bytes must be at least min(300 GiB, unique source bytes + 20 GiB)",
+    "compression_threads": 1
+  },
+  "transfer": {
+    "protocol": "SFTP only for archive payloads",
+    "default_rate_limit_kbit_per_second": 4096,
+    "resume": "get -p for a new partial file; reget -p when the SHA-derived partial file already exists",
+    "acceptance": "the completed local file SHA-256 must equal the remote SHA-256 before the partial name is promoted"
+  },
+  "start_condition": [
+    "the Wave-1 recovery controller is TERMINAL_ACCEPTED",
+    "the four-method three-seed postprocess root is TERMINAL_ACCEPTED",
+    "all 12 schedulers contain exactly 150 accepted units and no rejected unit",
+    "all scheduler, aggregate, summary, and controller inventories validate"
+  ],
+  "failure_semantics": "Preserve the fresh archive root and TERMINAL_REJECTED marker. Never treat a partial archive as retained evidence and never delete a source because archive creation or transfer failed.",
+  "cleanup_boundary": {
+    "wave1_models": "Both Wave-1 Qwen snapshots are shared pre-existing assets and are never deletion targets.",
+    "source_runs": "Scheduler, aggregate, summary, and controller roots remain retained after archiving; this stage authorizes no source deletion.",
+    "future_ephemeral_models": "A separate per-model ownership/reference audit and cleanup record is required after its reproduction and archive are accepted."
+  },
+  "prohibited": [
+    "excluding failed or unfavorable accepted records based on metric values",
+    "using SCP, rsync, HTTP, or an unthrottled transfer for archive payloads",
+    "deleting any source run, dataset, shared model, archive partial, log, raw record, or manifest",
+    "claiming SOTA from archive or transfer acceptance"
+  ]
+}

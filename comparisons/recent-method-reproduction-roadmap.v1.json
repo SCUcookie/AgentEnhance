@@ -1,0 +1,103 @@
+{
+  "schema_version": "agentenhance.recent_method_reproduction_roadmap.v1",
+  "roadmap_id": "recent-memory-methods-2025-2026-20260903-v1",
+  "status": "FROZEN_BEFORE_ANY_ACCEPTED_WMA_MAIN_RESULT",
+  "frozen_at": "2026-09-03T23:35:00+08:00",
+  "scope": "Every public 2025-2026 method in baseline-register.v2.csv, excluding the proposed AgentEnhance method.",
+  "source_identities": {
+    "baseline_register": "comparisons/baseline-register.v2.csv",
+    "baseline_register_sha256": "8513ae3481e4329063c6eebd45ea03ae43a7888530960292f1eff4cf5aed9316",
+    "wma_execution_matrix": "comparisons/wma-execution-matrix.v1.csv",
+    "wma_execution_matrix_sha256": "cab992e42b45d83714bebdd962b222252cf7051ff72f87afd01f40651cb78c44",
+    "evidence_policy": "comparisons/baseline-evidence-policy.v2.json",
+    "evidence_policy_sha256": "c9d3697c917c82bc939078cf47922403f20332b62bc4d07f6561fc6355541453",
+    "retention_policy": "comparisons/model-retention-policy.v1.json",
+    "retention_policy_sha256": "4b12891432032cbf33fe0c25f51f37c49b74b66539bdf49904ea873aa059ba48"
+  },
+  "coverage": {
+    "recent_public_methods": 27,
+    "with_repository_recorded": 13,
+    "wma_track_candidates": 15,
+    "note": "Repository availability is the state frozen in the local register. A live release recheck was attempted on 2026-09-03 but the web backend returned HTTP 404, so no missing-repository claim is treated as current verification."
+  },
+  "groups": [
+    {
+      "group_id": "wave1_active_same_protocol",
+      "order": 1,
+      "methods": ["m2a", "simplemem", "vilomem"],
+      "track": "wma-lifecycle-matched-v1",
+      "next_gate": "Complete and independently audit all three frozen seeds.",
+      "numeric_policy": "Admit only complete local same-protocol results."
+    },
+    {
+      "group_id": "wave2_registered_wma",
+      "order": 2,
+      "methods": ["a-mem", "universalrag", "mgmemory", "augustus", "mirix", "omni-simplemem"],
+      "track": "wma-lifecycle-matched-v1",
+      "next_gate": "Pass the already frozen method-specific model and lifecycle gates before full runs.",
+      "numeric_policy": "Keep cells empty until complete local runs are accepted."
+    },
+    {
+      "group_id": "memgallery_repo_track",
+      "order": 3,
+      "methods": ["ngm", "v-mem"],
+      "track": "memgallery-static-matched-v1",
+      "next_gate": "Freeze immutable source revisions and complete static adapter audits.",
+      "numeric_policy": "Report in the matched MemGallery table, never mix with WMA values."
+    },
+    {
+      "group_id": "wave3_official_repo_adapter",
+      "order": 4,
+      "methods": ["memoryos", "omnimem-agent", "memgas"],
+      "track": "wma-lifecycle-matched-v1",
+      "next_gate": "Resolve and freeze official repository commits, then design fail-closed WMA adapters.",
+      "numeric_policy": "No official-paper score substitution; failed adapters remain in the appendix."
+    },
+    {
+      "group_id": "causal_safety_track",
+      "order": 5,
+      "methods": ["cmi"],
+      "track": "causal-locomo-safety-v1",
+      "next_gate": "Finish the separately frozen causal-memory reproduction.",
+      "numeric_policy": "Keep causal-safety evidence separate from WMA ranking."
+    },
+    {
+      "group_id": "release_watch_same_track",
+      "order": 6,
+      "methods": ["memory-r1", "apex-mem", "lightmem", "hindsight"],
+      "track": "wma-lifecycle-matched-v1",
+      "next_gate": "Recheck author or official repositories; freeze a commit only if runnable method code is publicly available.",
+      "numeric_policy": "Until code is verified, retain source-reported values only as separated reproduction targets."
+    },
+    {
+      "group_id": "secondary_multimodal_benchmarks",
+      "order": 7,
+      "methods": ["m3-agent", "mm-mem", "mma"],
+      "track": "different-benchmark",
+      "next_gate": "Reproduce only after primary matched tracks have sufficient accepted baselines.",
+      "numeric_policy": "Never use different-benchmark numbers for an overall SOTA claim on WMA."
+    },
+    {
+      "group_id": "different_task_context",
+      "order": 8,
+      "methods": ["reme", "mem2evolve"],
+      "track": "different-task",
+      "next_gate": "Use only for scoped transfer or discussion experiments.",
+      "numeric_policy": "No direct ranking against the WMA primary estimand."
+    },
+    {
+      "group_id": "literature_only_context",
+      "order": 9,
+      "methods": ["leanmem", "pmmc", "ns-mem"],
+      "track": "literature-only",
+      "next_gate": "Monitor for public runnable artifacts; otherwise retain bibliographic context only.",
+      "numeric_policy": "No numeric cells in local-reproduction tables."
+    }
+  ],
+  "selection_rule": "Execute groups in order subject to each method's frozen gate. Within an executable group, retain every registered result including null, reversed, failed, and inconclusive outcomes; do not prioritize from observed benchmark values.",
+  "model_cleanup_rule": "Only a project-owned, run-specific, immutable-revision model cache may be deleted after that reproduction and its evidence archive are terminal-accepted. Shared or pre-existing models are never cleanup targets.",
+  "validator": {
+    "path": "scripts/validate_recent_method_reproduction_roadmap.py",
+    "sha256": "5be643cd1908bc57658e830a8ab5bd1e552bd0e4d08a443c372783ab991ded1b"
+  }
+}

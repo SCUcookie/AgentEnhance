@@ -1,0 +1,65 @@
+{
+  "schema_version": "agentenhance.prospective_experiment_prefreeze.v1",
+  "stage_id": "wma-r1-wave1-postprocess-20260903-v1",
+  "status": "FROZEN_BEFORE_WAVE1_TERMINAL",
+  "frozen_at": "2026-09-03T23:10:28+08:00",
+  "scientific_question": "What are the fixed three-seed WorldMemArena estimates for every registered metric and slice for all four Wave-1 methods under the same local protocol?",
+  "estimand": "For each of MMFU_Single, SimpleMem, M2A, and ViLoMem, the arithmetic mean and sample standard deviation across predeclared seeds 0, 1, and 2; no method, seed, metric, or slice selection is permitted.",
+  "evidence_observed_before_freeze": {
+    "last_verified_runtime_status": "MMFU_Single seed 0 had 7 of 150 accepted samples and 0 failed samples",
+    "complete_seed_results_observed": 0,
+    "three_seed_summaries_observed": 0,
+    "numeric_rows_admitted": 0
+  },
+  "inputs": {
+    "controller_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery1-20260903-v1",
+    "controller_script_sha256": "cb657cdd1a5d18c23b095532397f0072b8e31b8c0327ef4e620d69cd07d339ad",
+    "run_base": "/data1/2026/ldh/AgentEnhance/runs",
+    "source_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "dataset_manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+    "methods": [
+      "wma-mmfu-single",
+      "wma-simplemem",
+      "wma-m2a",
+      "wma-vilomem"
+    ],
+    "seeds": [0, 1, 2],
+    "aggregate_roots": 12
+  },
+  "implementation": {
+    "postprocessor": "scripts/remote_wma_wave1_postprocess.py",
+    "postprocessor_sha256": "538c9b7f658a02534b4c432d43157ced9645707ad8f7022e444cf13586e5036b",
+    "combine_script": "scripts/combine_wma_method_seeds.py",
+    "combine_script_sha256": "2030a7dfa9673e3a9d865ceabfec67c80ce9e40b44a27ab51f961e66c2d92d23",
+    "static_test": "scripts/test_remote_wma_wave1_postprocess.py",
+    "static_test_sha256": "6167776ac9225ff0ccf1e6f3e8cc77884a7e7a98a36f3059f73c31a285526c17"
+  },
+  "fresh_output_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-three-seed-summaries-20260903-v1",
+  "start_condition": [
+    "the recovery controller has TERMINAL_ACCEPTED and no TERMINAL_REJECTED marker",
+    "controller progress contains exactly the frozen 4 methods x 3 seeds with scheduler and aggregate status ACCEPTED",
+    "all 12 aggregate inventories validate and each audit reports 150 observed, 0 failed, and 7906 QA",
+    "Wave-1 answer and embedding services and their controller tmux session have exited"
+  ],
+  "acceptance": [
+    "all four summary children are TERMINAL_ACCEPTED",
+    "each child contains exactly seeds 0, 1, and 2 and an independently valid SHA256SUMS",
+    "the top-level manifest binds the controller, all 12 aggregate inventories, and all four summary inventories",
+    "the top-level recursive SHA256SUMS validates with no non-finite or schema failure"
+  ],
+  "resources": {
+    "accelerators": "none",
+    "wall_time_ceiling": "4 hours",
+    "new_output_storage_ceiling": "2 GiB",
+    "network": "none"
+  },
+  "failure_semantics": "Any mismatch or child failure preserves the fresh output root with TERMINAL_REJECTED. Do not repair or reuse that root; diagnose read-only and prefreeze a successor.",
+  "prohibited": [
+    "dropping a method, seed, metric, slice, failed unit, or aggregate after observing values",
+    "editing any Wave-1 scheduler, unit, aggregate, or controller root",
+    "using an official paper result to fill a local-reproduction cell",
+    "running AgentEnhance or making a superiority claim from this postprocess stage",
+    "deleting any model, dataset, run, raw record, prediction, log, or manifest"
+  ],
+  "next_gate_after_acceptance": "Project all four accepted summaries into the already frozen method and slice statistical tables, then archive the complete retained evidence before any cleanup decision."
+}

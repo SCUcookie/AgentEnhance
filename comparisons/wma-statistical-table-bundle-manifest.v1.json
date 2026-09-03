@@ -1,0 +1,98 @@
+{
+  "schema_version": "agentenhance.wma_statistical_table_bundle_manifest.v1",
+  "bundle_id": "wma-statistical-comparison-tables-20260903-v1",
+  "status": "FROZEN_BEFORE_ANY_ACCEPTED_MAIN_RESULT",
+  "frozen_at": "2026-09-03T23:25:00+08:00",
+  "design_provenance": "This bundle materializes statistical columns already declared in wma-main-table-spec.v2. It was frozen while Wave-1 had no complete seed, no three-seed summary, and zero admitted numeric result rows; no score was inspected to choose a metric or comparator.",
+  "source_identities": {
+    "execution_matrix": "comparisons/wma-execution-matrix.v1.csv",
+    "execution_matrix_sha256": "cab992e42b45d83714bebdd962b222252cf7051ff72f87afd01f40651cb78c44",
+    "slice_template": "comparisons/wma-slice-table-template.v1.csv",
+    "slice_template_sha256": "1f0dd02cf6ed17e12ccb11b6332e04f1f961c232d0154a0431e8aa9626954c1e",
+    "metric_mapping_source": "scripts/project_wma_method_summaries.py",
+    "metric_mapping_source_sha256": "4a61222b980c008e9588bf135828c51529c385dbf4f2b12e9730ad4d0a86eb73"
+  },
+  "generator": {
+    "path": "scripts/materialize_wma_statistical_templates.py",
+    "sha256": "8e34db00b868ffda2904868a33391d5198df8952777981f8bf12bba510adffdf"
+  },
+  "projection_and_validation": {
+    "projector": "scripts/project_wma_statistical_tables.py",
+    "projector_sha256": "43208cfbd7c2953bf8e1ce637e457145c74b9ffec22efde099e23f855fe25ce7",
+    "validator": "scripts/validate_wma_statistical_table_bundle.py",
+    "validator_sha256": "4f3d6fd5784fce4760b3fc1f8a9abb291d17dd3b76e03a0064a9aa6a5f3da2f5",
+    "synthetic_test": "scripts/test_project_wma_statistical_tables.py",
+    "synthetic_test_sha256": "7b67c7e9d7586951478b689c262ddb8c292290bedeb89a77dbe7ca5b86d27829"
+  },
+  "metric_surface": {
+    "method_level_numeric_metrics": 55,
+    "paired_cluster_inference_metrics": 23,
+    "seed_level_descriptive_metrics": 32,
+    "slice_metrics": 8,
+    "directions": ["higher", "lower", "descriptive"],
+    "seed_set": [0, 1, 2],
+    "analysis_unit": "original sample cluster with all QA inside the sample retained together"
+  },
+  "tables": [
+    {
+      "name": "method_seed_statistics",
+      "path": "comparisons/wma-method-seed-statistics-template.v1.csv",
+      "sha256": "b3856a438153150d619454992b5a7c2527a6b1e2f1b4fc617a07cdce4346d968",
+      "rows": 1210,
+      "columns": 17,
+      "content": "All 22 methods by all 55 fixed method-level metrics, with mean, sample SD, and each seed value."
+    },
+    {
+      "name": "agentenhance_pairwise",
+      "path": "comparisons/wma-agentenhance-pairwise-template.v1.csv",
+      "sha256": "ab2382c99a5d05b4ca906c6b3c54c9e66a9a52a73ce9f0ae1ec39273e3554f61",
+      "rows": 1155,
+      "columns": 21,
+      "content": "AgentEnhance against each of 21 public implementations for every fixed metric; 23 decomposable metrics receive paired cluster inference and 32 run-level/count metrics remain seed-level descriptive."
+    },
+    {
+      "name": "slice_seed_statistics",
+      "path": "comparisons/wma-slice-seed-statistics-template.v1.csv",
+      "sha256": "9a96adcb4d7cdc00442a29b0b6171e1cf0d5941d5b910df4f5f24c14b7a49d8b",
+      "rows": 9328,
+      "columns": 17,
+      "content": "All 22 methods by all 53 frozen slices by all 8 slice metrics, retaining three-seed variability."
+    }
+  ],
+  "paired_inference": {
+    "scope": "Only rows whose analysis_unit is paired_original_sample_cluster. Run-level resources, timing summaries, token totals, and count fields remain seed_level_descriptive with blank confidence intervals.",
+    "difference": "AgentEnhance minus comparator",
+    "bootstrap": "two-sided percentile paired cluster bootstrap",
+    "resamples": 10000,
+    "seed": 20260903,
+    "cluster": "original sample index",
+    "seed_aggregation": "Within each bootstrap draw, recompute each ratio from the selected original-sample clusters separately for seeds 0, 1, and 2; average the three seed-level ratios; then take AgentEnhance minus comparator.",
+    "superiority_rule_higher": "ci95_low > 0",
+    "superiority_rule_lower": "ci95_high < 0",
+    "descriptive_metrics": "No superiority decision is made."
+  },
+  "paired_sufficient_statistics": {
+    "implementation": "scripts/wma_pairwise_sufficient_stats.py",
+    "implementation_sha256": "0dacb5e1b1632bbdb6259422d3c6d4a9fbda1a6de24b1251ae1609ba58fca39f",
+    "validation": "scripts/test_wma_pairwise_sufficient_stats.py",
+    "validation_sha256": "ae568b01b91820c4e96f1a7714744e3faa1525daf19c46a41c591e36bc9f0051",
+    "validation_evidence": "All 23 paired metric formulas exactly reproduced the frozen aggregate_metrics.json values for each of MMFU_Single, SimpleMem, M2A, and ViLoMem on the retained real-sample smoke artifact: 92 checks at rel_tol=abs_tol=1e-12.",
+    "record_sources": ["qa_records.jsonl", "session_records.jsonl"]
+  },
+  "pairwise_computation": {
+    "implementation": "scripts/compute_wma_pairwise_bootstrap.py",
+    "implementation_sha256": "040889d411d8ba2303f7e19d2f68635699715f1d7ab8174210838aa74b988cf7",
+    "synthetic_test": "scripts/test_compute_wma_pairwise_bootstrap.py",
+    "synthetic_test_sha256": "e2050a9be5035cc17d856f564bb5bd048d9822f9ef25e1f55c030a3e289f96f1",
+    "rng": "numpy.random.Generator(PCG64)",
+    "raw_to_aggregate_gate_per_pair": "138 exact checks: 2 methods x 3 seeds x 23 metrics, rel_tol=abs_tol=1e-12",
+    "synthetic_test_evidence": "All 23 metrics passed deterministic repeatability, exact three-seed point-estimate, positive-orientation, interval-ordering, and identical-input zero-difference checks."
+  },
+  "admission": "Numeric cells remain empty until their source methods are independently terminal-accepted. The pairwise table remains locked until both AgentEnhance and the named comparator are accepted under the same protocol.",
+  "prohibited": [
+    "dropping a metric, comparator, seed, slice, or failed sample after observing results",
+    "using an unmatched official number in any numeric cell",
+    "interpreting a confidence interval as paired when sample identities or denominators differ",
+    "calling a descriptive count metric superior"
+  ]
+}

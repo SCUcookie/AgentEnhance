@@ -11,7 +11,7 @@ usage() {
 ssh_target=$1
 remote_file=$2
 local_file=$3
-rate_limit=${4:-8192}
+rate_limit=${4:-4096}
 
 [[ "$ssh_target" =~ ^[A-Za-z0-9._-]+$ ]] || { echo "unsafe SSH alias" >&2; exit 65; }
 [[ "$remote_file" =~ ^/data[12]/[A-Za-z0-9._/-]+$ ]] || {
