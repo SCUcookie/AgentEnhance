@@ -1,0 +1,73 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v2",
+  "audit_id": "wma-r1-wave2-exact-model-control-20260904-v2",
+  "status": "CONTROL_PACKAGE_ACCEPTED",
+  "accepted_at": "2026-09-04T04:50:12+08:00",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave2-exact-model-control-package-prefreeze.v2.json",
+    "sha256": "71d0c9e054494e9fc71a28a0d7ccb14ecf5f9ba94a5809f3eeba640f011795a4"
+  },
+  "implementation_commit": "45bc62367da71af7e5bd0720ce7342b61ce70a8f",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave2-exact-model-control-20260904-v2.tar.gz",
+    "remote_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave2-exact-model-control-20260904-v2.tar.gz",
+    "bytes": 13375,
+    "sha256": "1c6d929bb1e82dd13485d94596e015342004a0a4eae35fe35d34d49444da36e6",
+    "local_and_remote_identity_matched": true
+  },
+  "transfer": {
+    "protocol": "OpenSSH SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "connections": 1,
+    "retries": 0,
+    "ordinary_put_size_scoped_exception_used": true
+  },
+  "extraction": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave2-exact-model-control-20260904-v2",
+    "fresh_before_extraction": true,
+    "regular_files": 6,
+    "directories": 3,
+    "unexpected_or_unsafe_members": 0,
+    "all_extracted_file_hashes_matched": true
+  },
+  "raw_official_metadata": [
+    {
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "bytes": 23629,
+      "sha256": "f7c499c2a1892eae93468926d55dd386f09ff91d95d3a9ac8c9299b81b333a7e",
+      "retained_locally_and_remotely": true
+    },
+    {
+      "repository": "Qwen/Qwen3-VL-Embedding-8B",
+      "revision": "2c4565515e0f265c6511776e7193b22c0968ddc7",
+      "bytes": 22913,
+      "sha256": "846e099825f635fc7ef2eaea2ab45b8ef89c2e98260db38acc048011dd675dc7",
+      "retained_locally_and_remotely": true
+    }
+  ],
+  "frozen_model_surface": {
+    "models": 2,
+    "files": 46,
+    "bytes": 25153920691,
+    "lfs_sha256_files": 8,
+    "git_blob_sha1_files": 38,
+    "network_retry_count": 0
+  },
+  "runtime_observation_after_acceptance": {
+    "both_model_targets_absent": true,
+    "both_evidence_targets_absent": true,
+    "wave1_first_method_seed": "wma-mmfu-single seed 0",
+    "accepted_units": 69,
+    "rejected_units": 0
+  },
+  "execution_authorization": "Only the inert control and source-metadata package is accepted. Both large model downloads remain locked until Wave1 is terminal-accepted and every Wave1 service and evaluator has stopped.",
+  "scientific_claim_boundary": "No model payload byte, model acceptance, lifecycle result, numeric comparison row, AgentEnhance result, or SOTA claim is accepted by this package audit.",
+  "mutation_summary": {
+    "model_payload_bytes_downloaded": 0,
+    "dependencies_installed": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0,
+    "models_deleted": 0
+  }
+}
