@@ -1,0 +1,85 @@
+{
+  "schema_version": "agentenhance.model_materialization_prefreeze.v2",
+  "materialization_id": "wma-r1-wave3-model-materialization-20260904-v2",
+  "status": "FROZEN_AWAITING_WAVE1_RESOURCE_GATE",
+  "frozen_at": "2026-09-04T04:40:00+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-r1-wave3-model-materialization-prefreeze.v1.json",
+    "sha256": "c9005c4b194a08144de18ce4e402a5fe1f1bf2126b9a8e6bf716d60cf76b425f",
+    "prior_execution_performed": false,
+    "reason": "The v1 downloader delegated transfer to snapshot_download and therefore could not enforce the frozen zero-application-retry contract."
+  },
+  "scientific_evidence_role": "prospective acquisition contract only; no model, import, lifecycle, numerical, superiority, or SOTA claim",
+  "source_manifest": {
+    "path": "comparisons/wma-r1-wave3-model-prefetch-manifest.v1.json",
+    "sha256": "5854b9db9b33752127585726f1dc4aad199b9ec40e0f916a8087f13e30af7f67",
+    "models": 2,
+    "exact_expected_files": 19,
+    "expected_total_bytes": 530287170
+  },
+  "implementation": {
+    "downloader": "scripts/materialize_hf_model_snapshot_v3.py",
+    "downloader_sha256": "6bf3cd9b1458920d9a4e9accf11e9d3e3c1c9d710d627e88272810fa73d4dde9",
+    "unit_test": "tests/test_hf_model_materializer_v3.py",
+    "unit_test_sha256": "fa7f50cfaa7631111cff6ce2dcd77d6859c1425a613b635cef9aca7158e671f6",
+    "unit_tests": 6,
+    "network_client": "Python urllib.request, one sequential logical request per expected file, no application retry loop",
+    "nested_path_policy": "Safe sorted relative POSIX paths are permitted; absolute paths, empty components, dot components, and parent traversal are rejected."
+  },
+  "execution_order": [
+    {
+      "method_id": "memoryos",
+      "repository": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-all-minilm-l6-v2-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-all-minilm-l6-v2-model-materialization-20260904-v1",
+      "expected_files": 11,
+      "expected_bytes": 91578415
+    },
+    {
+      "method_id": "memgas",
+      "repository": "facebook/contriever",
+      "revision": "2bd46a25019aeea091fd42d1f0fd4801675cf699",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-contriever-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-contriever-model-materialization-20260904-v1",
+      "expected_files": 8,
+      "expected_bytes": 438708755
+    }
+  ],
+  "scheduler": {
+    "start_condition": "Wave1 controller is independently TERMINAL_ACCEPTED, all Wave1 services and evaluators have stopped, both target and evidence roots remain absent, and no process references either target.",
+    "parallel_materializations": 1,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "direct_server_download": true,
+    "mac_to_server_transfer": "If direct server download is unavailable, use only resumable SFTP limited to 4096 Kbit/s and preserve fresh recovery identities."
+  },
+  "execution_contract": {
+    "server_root_injection": "Set AGENT_ENHANCE_REMOTE_ROOT to the approved high-capacity server project root named AgentEnhance immediately before execution.",
+    "command_template": "python scripts/materialize_hf_model_snapshot_v3.py --prefetch-manifest comparisons/wma-r1-wave3-model-prefetch-manifest.v1.json --repository <frozen-repository> --evidence-root <frozen-fresh-evidence-root> --timeout-seconds 120",
+    "wall_time_ceiling_minutes_per_model": 90,
+    "network_retry_count": 0,
+    "logical_requests_per_file": 1,
+    "redirects_allowed": true,
+    "fresh_target_and_evidence_roots_required": true,
+    "partial_files_retained_on_failure": true
+  },
+  "acceptance": [
+    "The scheduler start condition is independently observed before either command starts.",
+    "Only the exact sorted expected_files from each immutable-revision manifest are requested and materialized.",
+    "Every response is HTTPS status 200; redirect occurrence and final hostname are recorded without retaining signed URLs.",
+    "Every file matches its frozen byte size; file count and total bytes match each model row.",
+    "Every observed SHA-256 is retained in the model record and MODEL_SHA256SUMS.",
+    "Both evidence roots report zero retries, one logical request per file, TERMINAL_ACCEPTED, and no TERMINAL_REJECTED."
+  ],
+  "failure": "Any premature start, collision, unsafe path, timeout, HTTP error, non-HTTPS response, byte mismatch, file-set mismatch, or evidence mismatch seals the fresh evidence root as TERMINAL_REJECTED and retains the partial target. A recovery requires new roots and a separately frozen contract.",
+  "next_gate_after_acceptance": "Independently audit both model records and inventories, then execute the frozen isolated-environment gate. Model acceptance does not authorize lifecycle or numerical execution.",
+  "prohibited_actions": [
+    "executing the superseded v1 materialization contract",
+    "starting while Wave1 or any Wave1 service remains active",
+    "using snapshot_download, a moving revision, an implicit cache, or an application retry",
+    "loading a model or installing dependencies during acquisition",
+    "repairing, resuming, overwriting, or deleting a rejected target in place",
+    "populating a comparison-table numeric cell from model acquisition"
+  ]
+}

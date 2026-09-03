@@ -23,5 +23,6 @@ baseline-check:
 	python3 scripts/validate_wma_wave3_environment_and_lifecycle.py
 	python3 scripts/validate_wma_wave4_tierb_source_readiness.py
 	python3 scripts/validate_wma_wave5_structmem_source_readiness.py
+	python3 scripts/validate_hf_model_materialization_successors.py
 
 check: validate test baseline-check

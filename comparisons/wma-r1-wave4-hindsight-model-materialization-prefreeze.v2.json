@@ -1,0 +1,85 @@
+{
+  "schema_version": "agentenhance.model_materialization_prefreeze.v2",
+  "materialization_id": "wma-r1-wave4-hindsight-model-materialization-20260904-v2",
+  "status": "FROZEN_AWAITING_WAVE1_RESOURCE_GATE",
+  "frozen_at": "2026-09-04T04:40:00+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-r1-wave4-hindsight-model-materialization-prefreeze.v1.json",
+    "sha256": "7054a67cc8e853308700fc86e1d4a4d63171da0be2adf626cec91896f67197af",
+    "prior_execution_performed": false,
+    "reason": "The v1 downloader delegated transfer to snapshot_download and therefore could not enforce the frozen zero-application-retry contract."
+  },
+  "scientific_evidence_role": "prospective acquisition contract only; no model, environment, service, lifecycle, numerical, superiority, or SOTA claim",
+  "source_manifest": {
+    "path": "comparisons/wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json",
+    "sha256": "d44d8bb74affc574cafd44a682457d13411e314f3b7219f56b876e4a679933a5",
+    "models": 2,
+    "exact_expected_files": 18,
+    "expected_total_bytes": 226325371
+  },
+  "implementation": {
+    "downloader": "scripts/materialize_hf_model_snapshot_v3.py",
+    "downloader_sha256": "6bf3cd9b1458920d9a4e9accf11e9d3e3c1c9d710d627e88272810fa73d4dde9",
+    "unit_test": "tests/test_hf_model_materializer_v3.py",
+    "unit_test_sha256": "fa7f50cfaa7631111cff6ce2dcd77d6859c1425a613b635cef9aca7158e671f6",
+    "unit_tests": 6,
+    "network_client": "Python urllib.request, one sequential logical request per expected file, no application retry loop",
+    "nested_path_policy": "Safe sorted relative POSIX paths are permitted; absolute paths, empty components, dot components, and parent traversal are rejected."
+  },
+  "execution_order": [
+    {
+      "component": "embedding",
+      "repository": "BAAI/bge-small-en-v1.5",
+      "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave4-hindsight-bge-small-en-v1.5-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-bge-model-materialization-20260904-v1",
+      "expected_files": 11,
+      "expected_bytes": 134505940
+    },
+    {
+      "component": "reranker",
+      "repository": "cross-encoder/ms-marco-MiniLM-L6-v2",
+      "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave4-hindsight-ms-marco-minilm-l6-v2-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-reranker-model-materialization-20260904-v1",
+      "expected_files": 7,
+      "expected_bytes": 91819431
+    }
+  ],
+  "scheduler": {
+    "start_condition": "Wave1 controller is independently TERMINAL_ACCEPTED, all Wave1 services and evaluators have stopped, both target and evidence roots remain absent, and no process references either target.",
+    "parallel_materializations": 1,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "direct_server_download": true,
+    "mac_to_server_transfer": "If direct server download is unavailable, use only resumable SFTP limited to 4096 Kbit/s and preserve fresh recovery identities."
+  },
+  "execution_contract": {
+    "server_root_injection": "Set AGENT_ENHANCE_REMOTE_ROOT to the approved high-capacity server project root named AgentEnhance immediately before execution.",
+    "command_template": "python3.11 scripts/materialize_hf_model_snapshot_v3.py --prefetch-manifest comparisons/wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json --repository <frozen-repository> --evidence-root <frozen-fresh-evidence-root> --timeout-seconds 120",
+    "wall_time_ceiling_minutes_per_model": 90,
+    "network_retry_count": 0,
+    "logical_requests_per_file": 1,
+    "redirects_allowed": true,
+    "fresh_target_and_evidence_roots_required": true,
+    "partial_files_retained_on_failure": true
+  },
+  "acceptance": [
+    "The scheduler start condition is independently observed before either command starts.",
+    "Only the exact sorted expected_files from each immutable-revision manifest are requested and materialized.",
+    "Every response is HTTPS status 200; redirect occurrence and final hostname are recorded without retaining signed URLs.",
+    "Every file matches its frozen byte size; file count and total bytes match each model row.",
+    "Every observed SHA-256 is retained in the model record and MODEL_SHA256SUMS.",
+    "Both evidence roots report zero retries, one logical request per file, TERMINAL_ACCEPTED, and no TERMINAL_REJECTED."
+  ],
+  "failure": "Any premature start, collision, unsafe path, timeout, HTTP error, non-HTTPS response, byte mismatch, file-set mismatch, or evidence mismatch seals the fresh evidence root as TERMINAL_REJECTED and retains the partial target. A recovery requires new roots and a separately frozen contract.",
+  "next_gate_after_acceptance": "Independently audit both model records and inventories, then complete the frozen Hindsight wheelhouse and isolated-environment gates. Model acceptance does not authorize lifecycle or numerical execution.",
+  "prohibited_actions": [
+    "executing the superseded v1 materialization contract",
+    "starting while Wave1 or any Wave1 service remains active",
+    "using snapshot_download, a moving revision, an implicit cache, or an application retry",
+    "loading a model or installing dependencies during acquisition",
+    "repairing, resuming, overwriting, or deleting a rejected target in place",
+    "populating a comparison-table numeric cell from model acquisition"
+  ]
+}
