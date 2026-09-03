@@ -1,0 +1,86 @@
+{
+  "schema_version": "agentenhance.wma_wave5_structmem_execution_source_prefreeze.v1",
+  "stage_id": "wma-r1-wave5-structmem-execution-source-20260904-v1",
+  "status": "FROZEN_BEFORE_EXTERNAL_EXECUTION_SOURCE_COPY",
+  "frozen_at": "2026-09-04T10:50:00+08:00",
+  "scientific_question": "Can the accepted StructMem revision be reduced to the exact LightMemory runtime chain and official event prompts without copying unrelated methods, experiments, tests, or results?",
+  "decision_informed": "Whether StructMem can enter isolated dependency and lifecycle gates from a minimal source-authoritative copy.",
+  "scientific_evidence_role": "engineering source-copy gate only; no import, dependency, model, lifecycle, numerical, superiority, or SOTA claim",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave5-structmem-adapter-design-prefreeze.v1.json",
+    "sha256": "12a2d442277cbd3771485312f77169ad4858e56deebf8a21b01d507765b43b2c",
+    "required_status": "FROZEN_DESIGN_AWAITING_DEPENDENCY_MODEL_GATES"
+  },
+  "materializer": {
+    "path": "scripts/materialize_wma_wave5_structmem_execution_source.py",
+    "sha256": "8aee7e727637066f7b942497cd6446c31b07efdb1a175f0afc487ea2fac1f6f3"
+  },
+  "unit_test": {
+    "path": "tests/test_wma_wave5_structmem_execution_source.py",
+    "sha256": "2c2859ce5f3601f6f7703ffcd0d0d8c0ea9695291259b7e8176d35882a5a10f3",
+    "tests": 3
+  },
+  "source": {
+    "repository": "https://github.com/zjunlp/LightMem.git",
+    "revision": "aa1c484cc6fd964c8ea1af897e36a0c3ba06d7db",
+    "path": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave5-source-20260904-v1/structmem-lightmem",
+    "required_clean": true
+  },
+  "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave5-execution-source-20260904-v1/structmem",
+  "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-execution-source-20260904-v1",
+  "copy_scope": {
+    "authority": "Git-tracked files at the frozen source revision only",
+    "exact_files": [
+      "LICENSE",
+      "README.md",
+      "StructMem.md",
+      "pyproject.toml",
+      "experiments/locomo/prompts.py",
+      "src/lightmem/__init__.py",
+      "src/lightmem/factory/__init__.py"
+    ],
+    "runtime_directories": [
+      "src/lightmem/configs",
+      "src/lightmem/factory/memory_buffer",
+      "src/lightmem/factory/memory_manager",
+      "src/lightmem/factory/pre_compressor",
+      "src/lightmem/factory/retriever",
+      "src/lightmem/factory/text_embedder",
+      "src/lightmem/factory/topic_segmenter",
+      "src/lightmem/memory"
+    ],
+    "excluded": "EM2Mem, FluxMem, memory_toolkits, evaluation scripts, published results, figures, notebooks, web and MCP code, tests, Git metadata, untracked files, bytecode, symlinks, model files, and all other repository paths",
+    "expected_file_count": 66,
+    "expected_total_bytes": 344766,
+    "root_license_retained": true
+  },
+  "execution_contract": {
+    "command": "python scripts/materialize_wma_wave5_structmem_execution_source.py --source ${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave5-source-20260904-v1/structmem-lightmem --destination ${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave5-execution-source-20260904-v1/structmem --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-execution-source-20260904-v1",
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 10,
+    "retry_count": 0,
+    "fresh_roots_required": true,
+    "wave1_non_interference": "This small source-only copy may run while Wave1 is active because it performs no network access, dependency installation, model download, model load, API call, service start, or GPU operation."
+  },
+  "acceptance": [
+    "The accepted source checkout resolves to the exact frozen revision and is clean.",
+    "Only selected Git-tracked regular files are copied.",
+    "The destination and evidence roots were absent before execution.",
+    "The result contains exactly 66 files and 344766 bytes.",
+    "The root MIT LICENSE is retained while the pyproject metadata discrepancy remains disclosed.",
+    "No copied relative path contains __pycache__ and no copied file ends in .pyc.",
+    "Every copied file has a retained relative path, byte size, and SHA-256.",
+    "The evidence root has TERMINAL_ACCEPTED, no TERMINAL_REJECTED, and a verified evidence inventory."
+  ],
+  "failure": "Any collision, source identity mismatch, dirty source, non-regular selected file, cardinality mismatch, copy error, license omission, bytecode inclusion, or timeout seals a fresh TERMINAL_REJECTED root and retains the partial destination.",
+  "next_gate_after_acceptance": "Independently audit and locally archive the execution copy, then freeze exact dependencies and LLMLingua model files. This stage never authorizes import or lifecycle execution.",
+  "prohibited_actions": [
+    "editing the accepted official source checkout",
+    "copying other method families, published results, tests, bytecode, symlinks, or model files",
+    "installing dependencies, downloading models, calling an LLM, opening Qdrant, or using a GPU",
+    "starting a lifecycle or numerical run",
+    "deleting or repairing a rejected destination in place",
+    "populating any comparison-table numeric cell from this gate"
+  ]
+}

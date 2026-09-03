@@ -15,6 +15,7 @@ AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-source-materialization-au
 FEASIBILITY = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-feasibility-audit.v1.json"
 FEASIBILITY_V2 = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-feasibility-audit.v2.json"
 ADAPTER_DESIGN = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-design-prefreeze.v1.json"
+EXECUTION_SOURCE_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-execution-source-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -118,4 +119,18 @@ assert "assistant utterances" in adapter_design["static_acceptance"][0]
 assert adapter_design["model_and_backbone_contract"]["native_multimodal"] is False
 serialized = ADAPTER_DESIGN.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
-print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "numeric_rows_added": 0}, sort_keys=True))
+execution_prefreeze = json.loads(EXECUTION_SOURCE_PREFREEZE.read_text(encoding="utf-8"))
+assert execution_prefreeze["status"] == "FROZEN_BEFORE_EXTERNAL_EXECUTION_SOURCE_COPY"
+assert execution_prefreeze["prior_gate"]["sha256"] == sha256_file(ROOT / execution_prefreeze["prior_gate"]["path"])
+assert execution_prefreeze["materializer"]["sha256"] == sha256_file(ROOT / execution_prefreeze["materializer"]["path"])
+assert execution_prefreeze["unit_test"]["sha256"] == sha256_file(ROOT / execution_prefreeze["unit_test"]["path"])
+copy_scope = execution_prefreeze["copy_scope"]
+assert copy_scope["expected_file_count"] == 66
+assert copy_scope["expected_total_bytes"] == 344766
+assert copy_scope["root_license_retained"] is True
+assert len(copy_scope["runtime_directories"]) == 8
+assert execution_prefreeze["execution_contract"]["gpu_count"] == 0
+assert execution_prefreeze["execution_contract"]["retry_count"] == 0
+serialized = EXECUTION_SOURCE_PREFREEZE.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": copy_scope["expected_file_count"], "numeric_rows_added": 0}, sort_keys=True))
