@@ -1,0 +1,104 @@
+{
+  "schema_version": "agentenhance.postwave_release_sequence_prefreeze.v3",
+  "sequence_id": "wma-postwave1-release-recovery2-20260904-v3",
+  "status": "FROZEN_WHILE_WAVE1_RECOVERY2_RUNNING",
+  "frozen_at": "2026-09-04T06:58:00+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-postwave1-release-sequence-prefreeze.v2.json",
+    "sha256": "2500966b86d14d274d473d28f7627a8616662ea8276ca6f89f7768105982d19f",
+    "reason": "V2 phase 2 still points to the pre-execution-rejected Wave2 lifecycle route. V3 replaces only phase 2 with the guarded runner and retains v2 phases 1, 3, 4, and 5 plus all numeric, archive, cleanup, and failure rules."
+  },
+  "inherited_without_change": {
+    "effective_phase_orders": [1, 3, 4, 5],
+    "global_release_gate": true,
+    "recovery2_failure_branch": true,
+    "resource_exclusion": true,
+    "numeric_admission": true,
+    "failure_semantics": true,
+    "cleanup": true,
+    "prohibited_actions": true
+  },
+  "replacement_phase": {
+    "order": 2,
+    "id": "wave2_guarded_high_yield_comparators",
+    "scientific_role": "Eight same-protocol local comparator reproductions; lifecycle results remain engineering evidence and official numbers remain excluded from local cells.",
+    "inputs": [
+      {
+        "path": "comparisons/wma-wave2-model-materialization-prefreeze.v2.json",
+        "sha256": "10a2bf4c516e43444036779a97ad09a1912d35403d0d2f94109accf4e6c8acff",
+        "gate": "Materialize and independently accept both exact project-owned model revisions only after phase 1 releases all services."
+      },
+      {
+        "path": "comparisons/wma-r1-wave2-lifecycle-preexecution-defect-audit.v1.json",
+        "sha256": "62012d2ab118b6a11e347992e13f452478b9d795feaceabe5f96c9f7a5e6db3f",
+        "gate": "The old lifecycle execution route is SUPERSEDED_BEFORE_EXECUTION and cannot be used."
+      },
+      {
+        "path": "comparisons/wma-r1-wave2-runner-implementation-prefreeze.v1.json",
+        "sha256": "1deb70963abb25fd20f0851c09ae1cbfea584a5ba74bf8990944fa9c9ab97dfd",
+        "gate": "Exact guarded implementation hashes; this prefreeze is inert and is not numerical authorization."
+      },
+      {
+        "path": "comparisons/wma-r1-wave2-runner-control-package-recovery1-prefreeze.v1.json",
+        "sha256": "76d649ad0b54a2184277104ac6694612924565391094d0c3063530e80ab502d9",
+        "gate": "Only the fresh recovery1 package root may be used."
+      },
+      {
+        "path": "comparisons/wma-r1-wave2-runner-control-package-recovery1-audit.v1.json",
+        "sha256": "c6a925635e60de411667b2290cce368eb1964ce4e1e45d415e5548030a22c262",
+        "gate": "The recovery1 control package is TERMINAL_ACCEPTED with a valid 16-entry inventory."
+      }
+    ],
+    "accepted_control_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave2-runner-implementation-20260904-v1-control-recovery1",
+    "accepted_control_inventory_sha256": "50595d39ca3fbeaba6da5aca302470d3d9a4e934f8234b103d995ff6adef9e31",
+    "method_order": [
+      "wma-mgmemory",
+      "wma-a-mem",
+      "wma-omni-simplemem",
+      "wma-mirix",
+      "wma-ngmemory",
+      "wma-augustus",
+      "wma-universalrag",
+      "wma-qwen3-vl-embedding-8b"
+    ],
+    "execution_order": [
+      "independently accept exact GME and Qwen3-VL-Embedding-8B model materialization records and full MODEL_SHA256SUMS",
+      "freeze a fresh guarded lifecycle execution package that binds the accepted model records and runner recovery1 inventory",
+      "for each method in fixed order, start only its declared service profile, execute scripts/remote_wma_wave2_adapter_lifecycle_v2.sh once in a fresh root, stop owned services, and independently audit terminal evidence",
+      "after a method lifecycle is TERMINAL_ACCEPTED, freeze a method-specific FROZEN_BEFORE_EXECUTION numerical authorization binding exactly three fresh seed roots and all runner hashes",
+      "execute seeds 0, 1, and 2 sequentially with 150 samples and 7906 QA each, independently aggregate every metric and frozen slice, then combine all three seeds without selection",
+      "archive accepted raw outputs, rejected roots, service logs, run logs, model identities, aggregate inventories, and three-seed summaries before any model cleanup eligibility review"
+    ],
+    "matched_protocol": {
+      "seeds": [0, 1, 2],
+      "samples_per_seed": 150,
+      "questions_per_seed": 7906,
+      "failed_units_allowed": 0,
+      "method_seed_numeric_fields": 55,
+      "frozen_slices": 53,
+      "retrieval_top_k": 10,
+      "answer_model": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+      "official_values_allowed_in_local_cells": false
+    },
+    "method_failure_branch": "Preserve every rejected model, lifecycle, service, unit, scheduler, or aggregate root. A technical successor changes only the diagnosed cause and uses a fresh root; an unfavorable accepted scientific result remains in the comparison.",
+    "exit_gate": "All eight methods are either represented by accepted complete three-seed local summaries and accepted evidence archives, or by immutable externally blocked audits that do not conceal an observed unfavorable score."
+  },
+  "explicitly_prohibited": [
+    "using comparisons/wma-r1-wave2-lifecycle-execution-prefreeze.v1.json as an active execution entry",
+    "using scripts/remote_wma_wave2_adapter_lifecycle.sh instead of its v2 guarded successor",
+    "using the rejected non-recovery control extraction root",
+    "starting model acquisition or services before effective phase 1 is accepted",
+    "using the inert runner implementation prefreeze as numerical authorization",
+    "starting more than one method, service stack, model acquisition, archive, or dependency materialization at a time",
+    "dropping unfavorable methods, seeds, samples, metrics, slices, or technical failures",
+    "claiming SOTA before accepted same-protocol AgentEnhance evidence and comparator audits exist"
+  ],
+  "current_observation": {
+    "wave1_controller": "RUNNING",
+    "active_method_seed": "MMFU_Single seed 0 recovery2",
+    "accepted_units": 16,
+    "rejected_units": 0,
+    "wave2_numeric_rows": 0,
+    "agentenhance_numeric_rows": 0
+  }
+}
