@@ -1,0 +1,83 @@
+{
+  "schema_version": "agentenhance.wma_wave2_readiness_audit.v1",
+  "audit_id": "wma-r1-wave2-readiness-20260903-v1",
+  "audited_at": "2026-09-03T23:46:23+08:00",
+  "state": "READY_WAITING_FOR_WAVE1_RELEASE",
+  "scientific_evidence_role": "none; this is a pre-execution readiness audit and contains no lifecycle or numerical result",
+  "wave1_gate": {
+    "state": "RUNNING",
+    "active_run": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-full-mmfu_single-seed0-20260903-v1",
+    "accepted_units_at_audit": 21,
+    "expected_units_for_active_seed": 150,
+    "rejected_units_at_audit": 0,
+    "progress_updated_at": "2026-09-03T23:43:35+08:00",
+    "controller_tmux_present": true,
+    "service_tmux_count": 3,
+    "consequence": "Wave-2 model materialization and GPU lifecycle execution remain prohibited until the Wave-1 controller is terminal and all Wave-1 services have stopped."
+  },
+  "validated_local_controls": {
+    "recent_method_roadmap": {
+      "validator": "scripts/validate_recent_method_reproduction_roadmap.py",
+      "status": "PASS",
+      "groups": 9,
+      "recent_public_methods": 27,
+      "repositories_recorded": 13,
+      "wma_track_candidates": 15
+    },
+    "python_syntax": [
+      "scripts/check_wma_wave2_adapter.py",
+      "scripts/materialize_hf_model_snapshot.py"
+    ],
+    "shell_syntax": [
+      "scripts/remote_wma_wave2_adapter_lifecycle.sh"
+    ]
+  },
+  "validated_remote_controls": {
+    "worldmemarena": {
+      "path": "/data1/2026/ldh/AgentEnhance/third_party/baseline-reproduction-r0-recovery1-20260903-v1/worldmemarena",
+      "commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+      "clean": true
+    },
+    "lifecycle_control_package": {
+      "path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave2-lifecycle-20260903-v1-control",
+      "package_sha256s_sha256": "2df42dae1ce72548c7751bf4ea7420275f5f549ef558f76e572c7b2bcaf8bfa5",
+      "all_internal_hashes_verified": true
+    },
+    "model_materialization_control_package": {
+      "path": "/data1/2026/ldh/AgentEnhance/incoming/wma-wave2-model-materialization-20260903-v1-control",
+      "package_sha256s_sha256": "efcac002e364f242f98b5fa2d116461b0d11c40be18f11436238dbfc72412fc5",
+      "all_internal_hashes_verified": true
+    },
+    "fail_closed_negative_test": {
+      "record": "comparisons/wma-r1-wave2-lifecycle-wrapper-negative-audit.v1.json",
+      "status": "PASS_FAIL_CLOSED"
+    }
+  },
+  "frozen_source_checkouts_observed": {
+    "A-Mem": "ceffb860f0712bbae97b184d440df62bc910ca8d",
+    "MIRIX": "8cb06a62bbb7c478beb33dd4f2815696a72df482",
+    "Mem-Gallery": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+    "MemoryOS": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+    "M2A": "edd8c3b75bae8b2c9c1a0ac8ed67e38c2c2723f8",
+    "V-Mem": "36916b14dc5241e04acbf5cd0f3c40799bc09550"
+  },
+  "missing_prerequisites": [
+    {
+      "artifact": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct@9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "expected_path": "/data1/2026/ldh/AgentEnhance/cache/models/wma-r1-wave2-gme-20260903-v1",
+      "observed": "ABSENT_AS_EXPECTED_BEFORE_GATE"
+    },
+    {
+      "artifact": "Qwen/Qwen3-VL-Embedding-8B@2c4565515e0f265c6511776e7193b22c0968ddc7",
+      "expected_path": "/data1/2026/ldh/AgentEnhance/cache/models/wma-r1-wave2-qwen3-vl-embedding-8b-20260903-v1",
+      "observed": "ABSENT_AS_EXPECTED_BEFORE_GATE"
+    }
+  ],
+  "next_allowed_gate": "After independent terminal acceptance of all Wave-1 runs and confirmation that its three model services are stopped, execute the already frozen model materialization sequence. Do not run any Wave-2 lifecycle or numerical method before its exact model and adapter gate is terminal-accepted.",
+  "prohibited_actions": [
+    "Do not download or load Wave-2 models while Wave-1 is active.",
+    "Do not populate comparison-table numeric cells from this readiness audit.",
+    "Do not treat an available source checkout as implementation fidelity evidence.",
+    "Do not delete shared or project-owned model files before the retention-policy gate."
+  ]
+}
