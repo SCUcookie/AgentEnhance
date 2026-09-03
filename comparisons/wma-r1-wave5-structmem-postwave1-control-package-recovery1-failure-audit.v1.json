@@ -1,0 +1,40 @@
+{
+  "schema_version": "agentenhance.control_package_transfer_failure_audit.v1",
+  "audit_id": "wma-r1-wave5-structmem-postwave1-control-transfer-20260904-v1-recovery1",
+  "status": "TERMINAL_REJECTED",
+  "audited_at": "2026-09-04T14:05:00+08:00",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave5-structmem-postwave1-control-package-recovery1-prefreeze.v1.json",
+    "sha256": "8a310ac117eb5f88ae551c16644c3f06c9cec1785662722a934749b90c08fe40"
+  },
+  "attempt": {
+    "protocol": "sftp",
+    "rate_limit_kbit_per_second": 4096,
+    "command": "put -a",
+    "attempt_count": 1,
+    "retry_count": 0,
+    "client_observation": "stat remote: No such file or directory",
+    "cause": "The available OpenSSH sftp client implements put -a by requiring a stat-able remote partial target; it does not initialize an absent target."
+  },
+  "independent_post_failure_check": {
+    "recovery1_remote_archive_absent": true,
+    "remote_bytes_written": 0,
+    "local_archive_retained": true,
+    "local_archive_bytes": 13372,
+    "local_archive_sha256": "afe4839f96c4bc9138948ce6886f2530278992f63e2a3f1ec762e26832343736"
+  },
+  "scientific_effect": {
+    "scripts_executed": 0,
+    "network_dependency_resolutions": 0,
+    "model_payload_bytes_downloaded": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0
+  },
+  "decision": "Reject recovery1 without editing it. Because the immutable control archive is only 13372 bytes, freeze a fresh recovery2 using one rate-limited ordinary SFTP put. Continue to require resumable SFTP for any large Mac-to-server artifact.",
+  "prohibited_actions": [
+    "editing or deleting the v1 or recovery1 failure history",
+    "claiming a remote archive exists",
+    "using either rejected remote logical path",
+    "generalizing ordinary put authorization to model weights or other large artifacts"
+  ]
+}

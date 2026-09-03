@@ -1,0 +1,57 @@
+{
+  "schema_version": "agentenhance.control_package_recovery_prefreeze.v1",
+  "package_id": "wma-r1-wave5-structmem-postwave1-control-20260904-v1-recovery2",
+  "status": "FROZEN_BEFORE_TRANSFER",
+  "frozen_at": "2026-09-04T14:10:00+08:00",
+  "supersedes_failed_transport": {
+    "path": "comparisons/wma-r1-wave5-structmem-postwave1-control-package-recovery1-failure-audit.v1.json",
+    "sha256": "a855e4a5e104cf83957cf3149bd5a871ba1ee0ea259b5bd1566dfb6df5ebc4e8",
+    "required_status": "TERMINAL_REJECTED"
+  },
+  "recovery_change": "Use one ordinary OpenSSH sftp put for this 13372-byte control archive because both resume commands fail on an absent target in the available client. This exception is size-scoped and does not apply to large artifacts.",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave5-structmem-postwave1-control-20260904-v1.tar.gz",
+    "remote_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave5-structmem-postwave1-control-20260904-v1-recovery2.tar.gz",
+    "bytes": 13372,
+    "sha256": "afe4839f96c4bc9138948ce6886f2530278992f63e2a3f1ec762e26832343736",
+    "member_count": 9,
+    "member_total_bytes": 44512,
+    "large_artifact": false
+  },
+  "transfer_contract": {
+    "client": "OpenSSH sftp",
+    "protocol": "sftp",
+    "command": "put",
+    "rate_limit_kbit_per_second": 4096,
+    "parallel_transfers": 1,
+    "attempt_count": 1,
+    "retry_count": 0,
+    "remote_target_must_be_absent": true,
+    "post_transfer_bytes_and_sha256_required": true,
+    "ordinary_put_scope": "this exact 13372-byte archive only",
+    "large_artifact_policy": "Large Mac-to-server artifacts remain restricted to a separately validated resumable and rate-limited SFTP procedure."
+  },
+  "extraction_contract": {
+    "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave5-structmem-postwave1-control-20260904-v1-recovery2",
+    "fresh_destination_required": true,
+    "safe_relative_regular_members_only": true,
+    "paths_sizes_hashes_must_equal_v1_manifest": "comparisons/wma-r1-wave5-structmem-postwave1-control-package-prefreeze.v1.json",
+    "execution_after_extraction": false
+  },
+  "acceptance": [
+    "The fresh recovery2 archive and extraction targets are absent before transfer.",
+    "One ordinary OpenSSH sftp put runs at 4096 Kbit/s with no retry or parallel transfer.",
+    "The remote archive is exactly 13372 bytes and matches the frozen SHA-256.",
+    "The archive and fresh extraction contain exactly the nine frozen safe regular members with matching sizes and hashes.",
+    "No packaged stage is executed and no model, dependency, environment, benchmark, service, or GPU is touched."
+  ],
+  "failure": "Any collision, interruption, command error, archive mismatch, unsafe member, or extraction mismatch rejects recovery2 and retains its target unchanged.",
+  "next_gate_after_acceptance": "Record terminal transport acceptance. Model and dependency execution remain blocked until Wave1 is terminal and all its services are stopped.",
+  "prohibited_actions": [
+    "reusing either rejected remote path",
+    "using ordinary put for model weights or another large artifact",
+    "using unbounded transfer, scp, rsync, retry, parallel transfer, or overwrite",
+    "executing packaged stages before their independent resource gates",
+    "treating transport evidence as scientific evidence"
+  ]
+}
