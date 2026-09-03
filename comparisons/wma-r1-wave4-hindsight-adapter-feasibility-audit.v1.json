@@ -1,0 +1,93 @@
+{
+  "schema_version": "agentenhance.wma_wave4_hindsight_adapter_feasibility_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-adapter-feasibility-20260904-v1",
+  "status": "TERMINAL_ACCEPTED_FOR_ADAPTER_DESIGN",
+  "audited_at": "2026-09-04T01:22:00+08:00",
+  "scientific_evidence_role": "read-only API and deployment feasibility evidence only; no adapter lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "source_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-source-audit.v1.json",
+    "sha256": "b0ec7bdb639fbc4e32bd8b1d4eb41f94cd19dedf90fee4fa2ac3370c749e7065",
+    "required_status": "TERMINAL_ACCEPTED"
+  },
+  "source_identity": {
+    "repository": "https://github.com/vectorize-io/hindsight.git",
+    "revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "git_tree": "cf75ad9d89e7b229429e56a067ccde617b379af7",
+    "version": "0.9.2",
+    "license": "MIT",
+    "requires_python": ">=3.11"
+  },
+  "audited_files": [
+    {"path": "LICENSE", "sha256": "01fde0bedf83bdc185065d7af524a61690efe576a67f922eaff3a1280c17b63a"},
+    {"path": "README.md", "sha256": "40033e92c4ea7a6e6cfa7c9fecd58b49bc45cbfd43eb56c7cf6b6d48f9e86e53"},
+    {"path": "hindsight-all/pyproject.toml", "sha256": "c8efe135d4adcd0843166ae2fadd36d9d4a6173eaf2d53758eb1912c2feb76dd"},
+    {"path": "hindsight-api-slim/pyproject.toml", "sha256": "cef5eafbef852d59af45c2760ec08a2418a1bea4fcd15819e5960c96f2536ae2"},
+    {"path": "hindsight-api-slim/hindsight_api/config.py", "sha256": "c4ce37315d1bab8c719447b95e68d18c26f8646d7e3c1ce47f2b10afffcc7ece"},
+    {"path": "hindsight-clients/python/pyproject.toml", "sha256": "4e2e555ec5ec2e33d7308dac31f2f49d312aa85036aaaea84eabb4d3a4b2efb3"},
+    {"path": "hindsight-clients/python/hindsight_client/hindsight_client.py", "sha256": "d7d3e4fdefcec06a135e3ba7c7748bb76b17b3015074499256360daa29b7af8f"},
+    {"path": "hindsight-clients/python/hindsight_client_api/models/recall_result.py", "sha256": "9e3d0a1637d49198f0044830c6f0b81fd278a803f7b881c06d029a8119966fb7"},
+    {"path": "hindsight-clients/python/hindsight_client_api/models/recall_scores.py", "sha256": "025be5088506a60ff13f1117c69df75cc19d1292214aac5a83b360ae9fcc8692"},
+    {"path": "hindsight-clients/python/hindsight_client_api/models/recall_response.py", "sha256": "a0207eb326e32e85df75a7a9cdbb13783090dfb0e949317d47b5b7725c1adf2a"}
+  ],
+  "official_api_boundary": {
+    "retain": "Hindsight.retain and retain_batch synchronously store memory content with timestamp, context, document_id, metadata, entities, tags, and official fact extraction.",
+    "recall": "Hindsight.recall returns ranked RecallResult rows with stable id, text, type, provenance fields, and RecallScores.final plus semantic, keyword, and reranker diagnostics.",
+    "snapshot": "Hindsight.list_memories exposes paginated memory units and total count, allowing complete snapshots without database queries.",
+    "reflect": "Hindsight.reflect generates an answer and is excluded from the common WMA scoring path.",
+    "bank": "create_bank exposes the official toggles for observations, text search, temporal retrieval, graph retrieval, and reranking. Defaults must remain enabled unless a frozen compatibility issue requires a separately named control."
+  },
+  "official_defaults": {
+    "llm_provider": "openai",
+    "llm_model": "gpt-4o-mini",
+    "retain_temperature": 0.1,
+    "consolidation_temperature": 0.0,
+    "llm_max_retries": 3,
+    "embedding_provider": "local",
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "embedding_max_retries": 4,
+    "reranker_provider": "local",
+    "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "recall_budget": "mid",
+    "max_recall_tokens": 4096,
+    "text_search": true,
+    "temporal_retrieval": true,
+    "graph_retrieval": true,
+    "reranking": true,
+    "observations": true,
+    "auto_consolidation": true
+  },
+  "deployment_boundary": {
+    "selected_candidate": "hindsight-all embedded Python server with project-local pg0 storage",
+    "reason": "The official package supports Linux embedded PostgreSQL/pgvector-compatible storage without a separately managed shared database, enabling a fresh per-run state root and restart test.",
+    "not_yet_authorized": "No package installation, pg0 binary acquisition, database start, model download, model load, API call, or port allocation is authorized by this audit.",
+    "shared_service_isolation": "Any future embedded service must use a fresh project-owned data root and a preflight-selected loopback port, and must stop before terminal acceptance."
+  },
+  "proposed_wma_mapping": {
+    "reset": "Start one isolated embedded Hindsight server on a fresh pg0 root, create one fresh bank, and record exact version/config health before ingest.",
+    "ingest_turn": "Buffer ordered normalized turns; append attachment captions with image_id and source provenance. No image byte is encoded.",
+    "end_session": "Call retain_batch synchronously once per completed WMA session with one item per user/assistant pair, original timestamp and metadata, and document_id equal to session_id.",
+    "snapshot_memories": "Page through list_memories until total is exhausted; normalize every returned unit and stable backend id.",
+    "retrieve": "Call recall with official budget=mid, max_tokens=4096, trace=true, and all default retrieval arms; truncate only the returned ordered list to frozen WMA top_k and preserve RecallScores.final.",
+    "export_memory_delta": "Diff complete list_memories snapshots by backend id without reading PostgreSQL internals.",
+    "reload_from_disk": "Stop the embedded server cleanly, restart it against the same project-owned pg0 root, reconnect the client, and verify bank, snapshot, and retrieval identities.",
+    "final_answer": "Never call reflect. The common frozen WMA answer generator consumes normalized recall results."
+  },
+  "fairness_and_claim_boundaries": {
+    "llm_substitution": "For same-protocol WMA reproduction, retain/consolidation must use the shared frozen Qwen3-VL-8B-Instruct endpoint rather than the official gpt-4o-mini default; this is a disclosed matched-backbone evaluation substitution, not the paper's reported setup.",
+    "embedding_and_reranker": "Preserve the official local BGE embedding and cross-encoder reranker families at immutable model revisions unless a separately frozen ablation tests shared embeddings.",
+    "multimodality": "Hindsight is evaluated as caption-mediated text memory only. It cannot receive a native multimodal-memory label or image-path retrieval credit.",
+    "retry_semantics": "Official internal LLM and embedding retries are method semantics and must be counted separately from prohibited lifecycle or WMA unit reruns.",
+    "official_scores": "ACL paper scores remain source-reported context and cannot populate the same-protocol local WMA table."
+  },
+  "decision": "ACCEPT Hindsight for separate execution-source, model, environment, embedded-service, adapter, and lifecycle prefreezes.",
+  "next_allowed_gate": "Freeze the minimal Git-tracked execution-source subset and exact default embedding/reranker model revisions. Do not install or run the service until Wave-1 releases the shared model stack.",
+  "prohibited_actions": [
+    "calling reflect in the WMA scoring path",
+    "querying PostgreSQL internals to fabricate a snapshot when list_memories is available",
+    "disabling official retrieval arms or observations without a separately frozen control",
+    "claiming native multimodal memory from caption-mediated ingestion",
+    "conflating internal provider retries with unit reruns",
+    "starting dependencies, pg0, models, ports, lifecycle, or numerical evaluation from this audit",
+    "populating a numerical comparison-table cell from this audit"
+  ]
+}

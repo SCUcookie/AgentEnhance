@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-tierb-source-readiness-prefreeze.v1.json"
 AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-audit.v1.json"
+FEASIBILITY_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-adapter-feasibility-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -24,6 +25,7 @@ def sha256_file(path: Path) -> str:
 
 payload = json.loads(PREFREEZE_PATH.read_text(encoding="utf-8"))
 audit = json.loads(AUDIT_PATH.read_text(encoding="utf-8"))
+feasibility = json.loads(FEASIBILITY_PATH.read_text(encoding="utf-8"))
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
 candidates = {row["method_id"]: row for row in payload["candidates"]}
@@ -74,6 +76,26 @@ assert after["accepted_units"] >= before["accepted_units"]
 assert before["rejected_units"] == after["rejected_units"] == 0
 serialized = AUDIT_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert feasibility["status"] == "TERMINAL_ACCEPTED_FOR_ADAPTER_DESIGN"
+assert feasibility["source_gate"]["sha256"] == sha256_file(
+    ROOT / feasibility["source_gate"]["path"]
+)
+assert feasibility["source_identity"]["requires_python"] == ">=3.11"
+assert feasibility["source_identity"]["version"] == "0.9.2"
+assert len(feasibility["audited_files"]) == 10
+assert all(re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) for row in feasibility["audited_files"])
+defaults = feasibility["official_defaults"]
+assert defaults["embedding_model"] == "BAAI/bge-small-en-v1.5"
+assert defaults["reranker_model"] == "cross-encoder/ms-marco-MiniLM-L-6-v2"
+assert defaults["text_search"] is True
+assert defaults["temporal_retrieval"] is True
+assert defaults["graph_retrieval"] is True
+assert defaults["reranking"] is True
+assert feasibility["proposed_wma_mapping"]["final_answer"].startswith("Never call reflect")
+assert "caption-mediated" in feasibility["fairness_and_claim_boundaries"]["multimodality"]
+serialized = FEASIBILITY_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {
@@ -81,6 +103,7 @@ print(
             "tierb_candidates": len(candidates),
             "source_materialization_eligible": ["hindsight"],
             "accepted_hindsight_source_files": source["tracked_file_count"],
+            "hindsight_adapter_design_eligible": True,
             "numeric_result_rows_added": 0,
         },
         sort_keys=True,
