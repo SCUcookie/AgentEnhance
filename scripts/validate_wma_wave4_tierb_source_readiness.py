@@ -35,6 +35,7 @@ REGISTRY_ROUTING_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight
 REGISTRY_ROUTING_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-audit.v1.json"
 WHEELHOUSE_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-wheelhouse-prefreeze.v1.json"
 HINDSIGHT_ADAPTER_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-adapter-design-prefreeze.v1.json"
+HINDSIGHT_LIFECYCLE_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lifecycle-design-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -105,6 +106,9 @@ wheelhouse_prefreeze = json.loads(
 )
 hindsight_adapter_design = json.loads(
     HINDSIGHT_ADAPTER_DESIGN_PATH.read_text(encoding="utf-8")
+)
+hindsight_lifecycle_design = json.loads(
+    HINDSIGHT_LIFECYCLE_DESIGN_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -603,6 +607,28 @@ assert hindsight_adapter_design["frozen_defaults"]["reflect_called"] is False
 assert hindsight_adapter_design["model_and_backbone_contract"]["native_multimodal"] is False
 assert hindsight_adapter_design["model_and_backbone_contract"]["caption_mediated"] is True
 serialized = HINDSIGHT_ADAPTER_DESIGN_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert hindsight_lifecycle_design["status"] == (
+    "FROZEN_DESIGN_NOT_AUTHORIZED_FOR_EXECUTION"
+)
+for gate in hindsight_lifecycle_design["prior_gates"]:
+    assert gate["sha256"] == sha256_file(ROOT / gate["path"])
+implementation = hindsight_lifecycle_design["frozen_implementation"]
+for path_key, hash_key in (
+    ("checker", "checker_sha256"),
+    ("remote_wrapper", "remote_wrapper_sha256"),
+    ("sitecustomize", "sitecustomize_sha256"),
+    ("adapter", "adapter_sha256"),
+    ("unit_test", "unit_test_sha256"),
+):
+    assert implementation[hash_key] == sha256_file(ROOT / implementation[path_key])
+assert implementation["mock_boundary_tests"] == 3
+assert hindsight_lifecycle_design["fixed_inputs"]["total_pairs"] == 12
+assert hindsight_lifecycle_design["execution_contract"]["unit_rerun_count"] == 0
+assert hindsight_lifecycle_design["execution_contract"]["home_equals_fresh_storage_root"] is True
+assert "not executable" in hindsight_lifecycle_design["authorization_gate"]
+serialized = HINDSIGHT_LIFECYCLE_DESIGN_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(

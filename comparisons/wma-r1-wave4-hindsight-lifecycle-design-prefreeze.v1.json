@@ -1,0 +1,113 @@
+{
+  "schema_version": "agentenhance.wma_wave4_hindsight_lifecycle_design_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-lifecycle-design-20260904-v1",
+  "status": "FROZEN_DESIGN_NOT_AUTHORIZED_FOR_EXECUTION",
+  "frozen_at": "2026-09-04T03:07:00+08:00",
+  "scientific_question": "Does the frozen caption-mediated Hindsight 0.9.2 adapter preserve official retain, recall, scoring, memory browsing, and embedded-pg0 persistence semantics before full WorldMemArena scoring?",
+  "decision_informed": "Whether Hindsight is technically eligible for a separately frozen full numerical WMA reproduction.",
+  "scientific_evidence_role": "Persistence-aware engineering lifecycle evidence only; no benchmark, superiority, comparison-table number, or SOTA claim is eligible.",
+  "prior_gates": [
+    {
+      "path": "comparisons/wma-r1-wave4-hindsight-execution-source-audit.v1.json",
+      "sha256": "d2da9f895227a55f25859578e273421baed3e91336b2d322af7e0ddbf50bd69c",
+      "required_status": "TERMINAL_ACCEPTED"
+    },
+    {
+      "path": "comparisons/wma-r1-wave4-hindsight-adapter-design-prefreeze.v1.json",
+      "sha256": "6d1d5936363d497f8ad4204154dd3a1b8a4db9b2b08c80aba263c81fcf32436b",
+      "required_status": "FROZEN_DESIGN_AWAITING_DEPENDENCY_MODEL_GATES"
+    },
+    {
+      "path": "comparisons/wma-r1-wave4-hindsight-wheelhouse-prefreeze.v1.json",
+      "sha256": "833393206cc7d7346a70684d8466f2c2508389c50dc27176f142a2edc566eab8",
+      "required_successor_evidence": "The wheelhouse, its independent audit, and an offline-installed isolated environment must each be TERMINAL_ACCEPTED."
+    },
+    {
+      "path": "comparisons/wma-r1-wave4-hindsight-model-materialization-prefreeze.v1.json",
+      "sha256": "7054a67cc8e853308700fc86e1d4a4d63171da0be2adf626cec91896f67197af",
+      "required_successor_evidence": "Both exact model snapshots, file inventories, and independent audits must be TERMINAL_ACCEPTED."
+    }
+  ],
+  "frozen_implementation": {
+    "worldmemarena_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "checker": "scripts/check_wma_wave4_hindsight_adapter.py",
+    "checker_sha256": "dff0e026b3196a626ffe08169917ab6c3d8ec94e602d146d474cd86c0c4792db",
+    "remote_wrapper": "scripts/remote_wma_wave4_hindsight_lifecycle.sh",
+    "remote_wrapper_sha256": "85194ef835b7eff70681cd71f4b519f4bdacdc448d5a3f3fdc4ddf31a7e8f451",
+    "sitecustomize": "scripts/wma_wave4_overlay/sitecustomize.py",
+    "sitecustomize_sha256": "1691d2a379641324d9a239809ff68f802763050e24398f65391db5df1b52e832",
+    "adapter": "scripts/wma_wave4_overlay/hindsight_wma_adapter.py",
+    "adapter_sha256": "cef5a79bb4ce847686888e8379ea0695e75753e0d10fa1bae6d86d260ce9c2ab",
+    "unit_test": "tests/test_wma_wave4_hindsight_lifecycle.py",
+    "unit_test_sha256": "31417e66eb16f7bcf2b7a02ced8155b552d3d3fe7b2992dc1176491571d86960",
+    "mock_boundary_tests": 3
+  },
+  "fixed_inputs": {
+    "dataset_revision": "e2148757921fc7e2d66d8ed899823b763227c341",
+    "image_relative_path": "agent/embodied/eb_alfred_base/images/eb_alfred_base_01/eb_alfred_base_01_img_001.png",
+    "image_id": "eb_alfred_base_01_img_001",
+    "image_sha256": "ca01bcdd40ce5d38d9fe28c1411cd61ac6d7490da787a9a174b4e11d585973fa",
+    "caption": "A top-down wooden desk scene with a lit lamp, chairs, a gray bowl, a CD, and a small rectangular object.",
+    "sessions": 3,
+    "user_assistant_pairs_per_session": 4,
+    "total_pairs": 12,
+    "total_turns": 24,
+    "earliest_session_fact": "blue-orchid-739",
+    "query": "What is the private project code from the earliest session?",
+    "query_order": "once before embedded-server reconstruction and once after reconstruction"
+  },
+  "frozen_paths": {
+    "execution_source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-execution-source-20260904-v1/hindsight",
+    "execution_source_record": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-execution-source-20260904-v1/execution-source.json",
+    "execution_source_record_sha256": "62b82cd371798bdf2b239455e4c087bdaa138dffccedb91584c70aed0558016d",
+    "environment_root": "${AGENT_ENHANCE_REMOTE_ROOT}/environments/wma-r1-wave4-hindsight-py311-20260904-v1",
+    "embedding_model_root": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave4-hindsight-bge-small-en-v1.5-20260904-v1",
+    "reranker_model_root": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave4-hindsight-ms-marco-minilm-l6-v2-20260904-v1",
+    "run_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lifecycle-20260904-v1"
+  },
+  "shared_invariants": [
+    "adapter construction occurs through the WMA external-adapter registry",
+    "caption_mediated is true, native_multimodal is false, and reflect is excluded",
+    "the accepted 563-file, 9417481-byte execution source exactly matches its retained per-file record immediately before import",
+    "exactly three synchronous retain_batch calls ingest the three sessions",
+    "complete paginated snapshots and official recall results are non-empty before and after reconstruction",
+    "snapshot backend IDs are stable across a clean server and pg0 restart",
+    "the first complete memory delta exactly equals the pre-restart snapshot ID set",
+    "every retrieval score is finite and backed by an official RecallScores.final trace entry",
+    "the earliest-session fact is retrieved before and after reconstruction",
+    "the fixed image_id survives in text or metadata provenance and no RetrievalItem claims a native image path",
+    "the named pg0 instance contains persistent regular files after clean shutdown"
+  ],
+  "endpoint_contract": {
+    "retain_and_consolidation_service": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "usage": "Only official Hindsight retain extraction and observation consolidation calls are allowed. The lifecycle checker never calls reflect and never scores a final answer.",
+    "matched_backbone_disclosure": "This local reproduction substitutes the common frozen Qwen3-VL backbone for upstream hosted-provider defaults and must be reported as a matched-backbone reproduction."
+  },
+  "execution_contract": {
+    "parallel_runs": 1,
+    "adapter_gpu_count": 0,
+    "embedding_device": "cpu",
+    "reranker_device": "cpu",
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 60,
+    "unit_rerun_count": 0,
+    "fresh_storage_and_evidence_roots": true,
+    "home_equals_fresh_storage_root": true,
+    "offline_model_load": true,
+    "loopback_service_port": "one auto-selected port inside the lifecycle process"
+  },
+  "authorization_gate": "This design is not executable. After Wave 1 is independently accepted and released, accept and audit the Hindsight wheelhouse, isolated environment, both model snapshots, and the exact LLM endpoint. Then create a separate lifecycle-execution prefreeze binding every accepted record/hash plus fresh-root, process, port, GPU, CPU, and storage observations.",
+  "acceptance": "Every shared invariant passes, wrapper and checker exit zero, source/model/environment hashes verify, resource use stays within bounds, all services stop, and the fresh root contains TERMINAL_ACCEPTED without TERMINAL_REJECTED.",
+  "failure": "Any failed invariant, source/model/environment drift, collision, unexpected network model access, reflect call, non-finite score, timeout, stale service, or nonzero exit seals TERMINAL_REJECTED. Preserve the full root and never repair or rerun it in place.",
+  "next_gate_after_acceptance": "Independently audit the lifecycle root, then freeze the full Hindsight numerical WMA reproduction with the same samples, answer model, evaluator, sample order, top_k, and three registered seeds as matched baselines.",
+  "prohibited_actions": [
+    "executing this design before the separate lifecycle-execution prefreeze is accepted",
+    "starting while Wave 1 or any of its model services remains active",
+    "calling reflect or using a Hindsight-generated final answer in the scoring path",
+    "using image bytes as native visual memory input or crediting caption mediation as native multimodality",
+    "changing official retain, observation, retrieval-arm, reranker, recall-budget, prompt, or retry semantics",
+    "using a shared HOME, database, Python environment, mutable source, or moving model revision",
+    "accessing PostgreSQL internals instead of the official list_memories API",
+    "populating a numerical comparison-table cell or making a superiority/SOTA claim"
+  ]
+}
