@@ -1,0 +1,27 @@
+{
+  "schema_version": "agentenhance.wma_wave1_recovery2_capability_recovery_prefreeze.v1",
+  "capability_id": "wma-r1-oom-capability-css03-recovery2-recovery1-20260904-v1",
+  "status": "FROZEN_BEFORE_CAPABILITY_RECOVERY",
+  "frozen_at": "2026-09-04T05:20:00+08:00",
+  "parent": "wma-r1-oom-capability-css03-recovery2-20260904-v1",
+  "parent_status": "TERMINAL_REJECTED_BEFORE_NUMERIC_EXECUTION",
+  "diagnosis": {
+    "path": "comparisons/wma-r1-wave1-recovery2-capability-path-audit.v1.json",
+    "sha256": "9cf8244417673c81172e785c51444b499f372f04c48fee266d2f7733f989ff73"
+  },
+  "single_change": {
+    "field": "launch_environment.WMA_REPO",
+    "old": "/data1/2026/ldh/AgentEnhance/third_party/LCZZZZ/worldmemarena",
+    "new": "/data1/2026/ldh/AgentEnhance/third_party/baseline-reproduction-r0-recovery1-20260903-v1/worldmemarena",
+    "scientific_change": false
+  },
+  "capability_script": {
+    "path": "scripts/remote_wma_oom_capability_recovery2.sh",
+    "sha256": "5a06bd2255d37b4171ce5e6adde8cada6869571b339dd921ac19623784e59cc7",
+    "changed_from_parent_attempt": false
+  },
+  "new_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-oom-capability-css03-recovery2-recovery1-20260904-v1",
+  "unchanged": "All recovery2 scientific fields, including css_03, seed 0, model revisions, evaluator, context, max model length, max sequences, and CHAT_GPU_MEMORY_UTILIZATION=0.90.",
+  "acceptance": "The original recovery2 capability acceptance rules apply. Only a terminal-accepted new capability root may release the full recovery2 controller.",
+  "failure_rule": "Preserve any failed fresh root; do not reuse or overwrite the parent capability directory."
+}

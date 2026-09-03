@@ -1,0 +1,37 @@
+{
+  "schema_version": "agentenhance.wma_wave1_recovery2_capability_path_audit.v1",
+  "capability_id": "wma-r1-oom-capability-css03-recovery2-20260904-v1",
+  "status": "TERMINAL_REJECTED_BEFORE_NUMERIC_EXECUTION",
+  "failed_at": "2026-09-04T05:15:33+08:00",
+  "exit_code": 3,
+  "root_cause": "The launch command supplied a nonexistent WorldMemArena checkout path. The unit runner created its fresh directory, then failed its immutable source commit check before loading a sample or producing output records.",
+  "rejected_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-oom-capability-css03-recovery2-20260904-v1",
+  "evidence": {
+    "root_terminal_sha256": "3a786cff014a98ed77432b6baf274cbcf03fab202ec792a6f9ec8b6344bda6e7",
+    "unit_terminal_sha256": "3a786cff014a98ed77432b6baf274cbcf03fab202ec792a6f9ec8b6344bda6e7",
+    "capability_log_sha256": "d461619d20885a66813dfc5b00a9966097ff59c109b67efef84ffb7952e3c627",
+    "capability_script_sha256": "5a06bd2255d37b4171ce5e6adde8cada6869571b339dd921ac19623784e59cc7"
+  },
+  "observed_state": {
+    "unit_files": ["TERMINAL_REJECTED"],
+    "aggregate_metrics_created": false,
+    "session_records_created": false,
+    "qa_records_created": false,
+    "numeric_results_admitted": false,
+    "services_stopped": true,
+    "project_tmux_sessions_after_exit": 0,
+    "allocated_gpu_memory_mib_after_exit": {
+      "1": 14,
+      "3": 14,
+      "4": 14,
+      "5": 14
+    }
+  },
+  "verified_checkout": {
+    "path": "/data1/2026/ldh/AgentEnhance/third_party/baseline-reproduction-r0-recovery1-20260903-v1/worldmemarena",
+    "source_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "config_sha256": "74cc054fd3a262571d67deb61f929bca68610b67320f8ea13c6b922e0257a184",
+    "git_status": "clean"
+  },
+  "authorized_recovery": "Use a new capability root and replace only the launch-time WMA_REPO path with the verified frozen checkout. The capability script, sample, model stack, 0.90 memory utilization, evaluator, and all scientific settings remain byte-identical."
+}

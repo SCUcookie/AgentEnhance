@@ -10,6 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PREFREEZE = ROOT / "comparisons/wma-r1-wave1-full-recovery2-prefreeze.v1.json"
+CAPABILITY_RECOVERY = (
+    ROOT / "comparisons/wma-r1-wave1-recovery2-capability-recovery1-prefreeze.v1.json"
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -47,6 +50,22 @@ def main() -> int:
         raise SystemExit("parent partial evidence must not be reused")
     if contract["full_recovery"]["fresh_full_runs"] != 12:
         raise SystemExit("full recovery cardinality mismatch")
+    capability_recovery = json.loads(CAPABILITY_RECOVERY.read_text(encoding="utf-8"))
+    if capability_recovery.get("status") != "FROZEN_BEFORE_CAPABILITY_RECOVERY":
+        raise SystemExit("capability path recovery is not frozen")
+    path_audit = ROOT / capability_recovery["diagnosis"]["path"]
+    if sha256_file(path_audit) != capability_recovery["diagnosis"]["sha256"]:
+        raise SystemExit("capability path audit digest mismatch")
+    path_payload = json.loads(path_audit.read_text(encoding="utf-8"))
+    if (
+        path_payload.get("status") != "TERMINAL_REJECTED_BEFORE_NUMERIC_EXECUTION"
+        or path_payload["observed_state"]["numeric_results_admitted"] is not False
+        or path_payload["observed_state"]["services_stopped"] is not True
+        or capability_recovery["single_change"]["scientific_change"] is not False
+        or capability_recovery["capability_script"]["sha256"]
+        != expected["capability_script"]
+    ):
+        raise SystemExit("capability path recovery state mismatch")
     print(
         json.dumps(
             {
@@ -57,6 +76,7 @@ def main() -> int:
                 "gpu_memory_utilization": 0.90,
                 "fresh_full_runs": 12,
                 "parent_numeric_evidence_reused": False,
+                "capability_path_recovery_numeric_rows": 0,
                 "numeric_rows_added": 0,
             },
             sort_keys=True,
