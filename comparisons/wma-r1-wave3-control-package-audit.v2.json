@@ -1,0 +1,58 @@
+{
+  "schema_version": "agentenhance.wma_wave3_control_package_audit.v2",
+  "audit_id": "wma-r1-wave3-environment-lifecycle-control-package-20260904-v2",
+  "status": "TERMINAL_ACCEPTED_FOR_PREREQUISITE_EXECUTION_ONLY",
+  "audited_at": "2026-09-04T01:04:21+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-r1-wave3-control-package-audit.v1.json",
+    "sha256": "18784b024c5699a4c28bd4bda819f6769c986263ed0a088b84fe1317946b8951",
+    "execution_authorized": false,
+    "reason": "The v1 control package contains the superseded dependency and lifecycle contracts. It remains retained as transport evidence but is not eligible for execution."
+  },
+  "scientific_evidence_role": "control-package transport and identity evidence only; no environment, lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "source_commit": "c3e5fa4304464510cfce668b1f9748fbe77a9a88",
+  "archive": {
+    "logical_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave3-environment-lifecycle-design-20260904-v2-control.tar.gz",
+    "bytes": 22791,
+    "sha256": "b68005726b9a224a1e59a11d7b84ac3219307647011d025cb60c936b5db8a42d",
+    "format": "git archive tar.gz",
+    "sftp_rate_limit_kbit_per_second": 4096
+  },
+  "unpacked_root": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave3-environment-lifecycle-design-20260904-v2-control",
+  "file_count": 16,
+  "file_inventory": [
+    {"path": "Makefile", "sha256": "5ec828426bf8a7de5594442486f32a64c9f2eeb799f5658b5f51f10a86ecbc77"},
+    {"path": "comparisons/wma-r1-wave3-environment-materialization-prefreeze.v1.json", "sha256": "038a1c5c81f973d0abae632547cfd94faf59be53066e870cf9d95c5f6c0c0bcf"},
+    {"path": "comparisons/wma-r1-wave3-environment-materialization-prefreeze.v2.json", "sha256": "0450033ce3eea8822c9131c310ea7d12c68925b40af0098dd67f36b70c58e1ea"},
+    {"path": "comparisons/wma-r1-wave3-lifecycle-design-prefreeze.v1.json", "sha256": "0e728970048457b7017cbbdf94d7e0aa2d63bee88ec31e46d0ffb22c4fa61943"},
+    {"path": "comparisons/wma-r1-wave3-lifecycle-design-prefreeze.v2.json", "sha256": "186f47a4c2164e288c7e9e47e63551bd4ef38c7c8b75e1c510833c67f9cf0acf"},
+    {"path": "requirements/wave3/memgas-py39-top-level.txt", "sha256": "b11ec084a1ff0466e2edf8a5c71d184c9a3f6cf8740605933556af55e4f3d9a0"},
+    {"path": "requirements/wave3/memgas-py39-top-level.v2.txt", "sha256": "6a3b908dca8f5599e0867d9f99b2257fdf74385ac3fd2a91c5e77a83b3d75bae"},
+    {"path": "requirements/wave3/memoryos-py39-top-level.txt", "sha256": "70bff7a1d966ef3888af41e06b58bbea7e8e59376806a91005a9a8c6ef352455"},
+    {"path": "scripts/check_wma_wave3_adapter.py", "sha256": "c2863a22cc61f2326edc7249116e312bca32d8ef64d8b5964e3bc823b79fd163"},
+    {"path": "scripts/materialize_wma_wave3_environment.py", "sha256": "09cca86b2f323020b0354ccd26f180f92f2ede53e3f0f4c4937b03b266902571"},
+    {"path": "scripts/remote_wma_wave3_adapter_lifecycle.sh", "sha256": "17be69713f88a55e95d9fd5daf5ef279cc116f820d714b3a3350ba87c65ee34d"},
+    {"path": "scripts/validate_wma_wave3_environment_and_lifecycle.py", "sha256": "c13224d3a40dd5ec6b7a648e09a7e3e5e0a72ac5d6cf841a94295bdfa6d24335"},
+    {"path": "scripts/wma_wave3_overlay/memgas_wma_adapter.py", "sha256": "f1852395be38c094efea68551bf487e70d5a1f22808f186dac110d5ea2f826a6"},
+    {"path": "scripts/wma_wave3_overlay/memoryos_wma_adapter.py", "sha256": "2211e7bb1c526276733d2305ebe4b01e06422db244e901764767bdaaf06037c6"},
+    {"path": "scripts/wma_wave3_overlay/sitecustomize.py", "sha256": "0c50912aad443a55308c1203226059f6301ad4a8aade116bc723fb1824f0a26b"},
+    {"path": "tests/test_wma_wave3_adapter_overlay.py", "sha256": "7987e4f70e0d37bc785905e66a5c7228435de93f5874c2fa7339f819857fe207"}
+  ],
+  "independent_checks": {
+    "archive_sha256_matched_after_upload": true,
+    "fresh_unpack_root_required_and_observed": true,
+    "all_unpacked_file_hashes_matched": true,
+    "memgas_torchvision_pin_present": "torchvision==0.18.1+cpu",
+    "memgas_nltk_pin_present": "nltk==3.9.1",
+    "wave3_environment_or_lifecycle_processes_at_audit": 0
+  },
+  "decision": "ACCEPT the v2 control package as the only eligible server-side implementation for the future Wave3 model/environment/lifecycle prerequisite sequence.",
+  "next_allowed_gate": "Wait for Wave-1 terminal acceptance and service release. Then execute the already frozen model materializations; this transport audit does not authorize environment or lifecycle execution by itself.",
+  "prohibited_actions": [
+    "executing the retained v1 control package",
+    "editing any file in the accepted v2 unpacked control root",
+    "treating a transport checksum as environment or lifecycle evidence",
+    "starting model, environment, or lifecycle materialization while Wave-1 is active",
+    "populating a numerical comparison-table cell from this audit"
+  ]
+}

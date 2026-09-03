@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 ENV_PATH = ROOT / "comparisons" / "wma-r1-wave3-environment-materialization-prefreeze.v2.json"
 LIFECYCLE_PATH = ROOT / "comparisons" / "wma-r1-wave3-lifecycle-design-prefreeze.v2.json"
-CONTROL_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave3-control-package-audit.v1.json"
+CONTROL_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave3-control-package-audit.v2.json"
 
 
 def load(path: Path) -> dict:
@@ -112,11 +112,16 @@ for path in (ENV_PATH, LIFECYCLE_PATH):
     assert "/data1/" not in serialized and "/data2/" not in serialized
 
 assert control_audit["status"] == "TERMINAL_ACCEPTED_FOR_PREREQUISITE_EXECUTION_ONLY"
+assert control_audit["supersedes"]["execution_authorized"] is False
+assert control_audit["supersedes"]["sha256"] == sha256_file(
+    ROOT / control_audit["supersedes"]["path"]
+)
 assert control_audit["archive"]["sftp_rate_limit_kbit_per_second"] == 4096
-assert control_audit["file_count"] == len(control_audit["file_inventory"]) == 13
-assert len({row["path"] for row in control_audit["file_inventory"]}) == 13
+assert control_audit["file_count"] == len(control_audit["file_inventory"]) == 16
+assert len({row["path"] for row in control_audit["file_inventory"]}) == 16
 assert all(re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) for row in control_audit["file_inventory"])
-assert control_audit["transport_incident"]["partial_remote_created"] is False
+assert control_audit["independent_checks"]["memgas_torchvision_pin_present"] == "torchvision==0.18.1+cpu"
+assert control_audit["independent_checks"]["memgas_nltk_pin_present"] == "nltk==3.9.1"
 assert control_audit["independent_checks"]["wave3_environment_or_lifecycle_processes_at_audit"] == 0
 serialized = CONTROL_AUDIT_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
