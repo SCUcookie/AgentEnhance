@@ -1,0 +1,65 @@
+{
+  "schema_version": "agentenhance.model_materialization_prefreeze.v1",
+  "materialization_id": "wma-r1-wave4-hindsight-model-materialization-20260904-v1",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-04T01:23:03+08:00",
+  "adapter_feasibility_audit": {
+    "path": "comparisons/wma-r1-wave4-hindsight-adapter-feasibility-audit.v1.json",
+    "sha256": "ff4eca4c2729227e11bf6f5b0e94032548bf8ff617b0a05233a15bc64d1211b3"
+  },
+  "source_manifest": "comparisons/wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json",
+  "source_manifest_sha256": "d44d8bb74affc574cafd44a682457d13411e314f3b7219f56b876e4a679933a5",
+  "downloader": "scripts/materialize_hf_model_snapshot.py",
+  "downloader_sha256": "6c9ab401d954a19a0e0783ea95031a1760462b62ebeaea09311e1dd5f1856ec1",
+  "execution_order": [
+    {
+      "component": "embedding",
+      "repository": "BAAI/bge-small-en-v1.5",
+      "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave4-hindsight-bge-small-en-v1.5-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-bge-model-materialization-20260904-v1"
+    },
+    {
+      "component": "reranker",
+      "repository": "cross-encoder/ms-marco-MiniLM-L6-v2",
+      "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave4-hindsight-ms-marco-minilm-l6-v2-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-reranker-model-materialization-20260904-v1"
+    }
+  ],
+  "scheduler": {
+    "start_condition": "Wave-1 controller is terminal, all Wave-1 model services have stopped, and an independent read-only audit confirms no process references either target.",
+    "parallel_downloads": 1,
+    "direct_server_download": true,
+    "mac_to_server_transfer": "If direct download is unavailable, transfer only with resumable sftp -l 4096 and preserve the same target/evidence identities.",
+    "gpu_loading_during_download": false
+  },
+  "execution_contract": {
+    "server_root_injection": "Set AGENT_ENHANCE_REMOTE_ROOT immediately before execution; it must resolve to a writable project root named AgentEnhance under an approved high-capacity volume.",
+    "command_template": "python scripts/materialize_hf_model_snapshot.py --prefetch-manifest comparisons/wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json --repository <frozen-repository> --evidence-root <fresh-logical-evidence-root>",
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes_per_model": 90,
+    "parallel_materializations": 1,
+    "retry_count": 0
+  },
+  "acceptance": [
+    "Hugging Face resolves the exact immutable revision.",
+    "The selected repository file names exactly match allow_patterns.",
+    "Selected per-file bytes, file count, and byte total match the official expanded tree.",
+    "Every selected local file has a retained path, byte size, and SHA-256.",
+    "The evidence manifest and model SHA list have their own retained SHA-256 inventory.",
+    "Both evidence roots are TERMINAL_ACCEPTED and neither is TERMINAL_REJECTED."
+  ],
+  "failure": "Any collision, unresolved environment variable, network error, identity mismatch, path mismatch, byte mismatch, or hash error seals a fresh TERMINAL_REJECTED evidence root, retains the partial target, and requires a separately frozen recovery target.",
+  "next_gate_after_acceptance": "Independently audit both model snapshots, then freeze a dedicated Python 3.11 environment and embedded-service lifecycle. Model acceptance never authorizes a numerical run.",
+  "prohibited_actions": [
+    "starting while Wave-1 or any of its model services is active",
+    "using a moving branch or model name instead of the frozen revision",
+    "downloading alternate PyTorch, Flax, ONNX, or OpenVINO weight variants",
+    "loading a model during this download-only stage",
+    "installing Hindsight into a shared or Wave-1 environment",
+    "repairing or deleting a rejected target in place",
+    "populating any comparison-table numeric cell from this gate"
+  ]
+}

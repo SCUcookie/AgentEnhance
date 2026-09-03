@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-tierb-source-readiness-prefreeze.v1.json"
 AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-audit.v1.json"
 FEASIBILITY_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-adapter-feasibility-audit.v1.json"
+MODEL_MANIFEST_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json"
+MODEL_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-model-materialization-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -26,6 +28,8 @@ def sha256_file(path: Path) -> str:
 payload = json.loads(PREFREEZE_PATH.read_text(encoding="utf-8"))
 audit = json.loads(AUDIT_PATH.read_text(encoding="utf-8"))
 feasibility = json.loads(FEASIBILITY_PATH.read_text(encoding="utf-8"))
+model_manifest = json.loads(MODEL_MANIFEST_PATH.read_text(encoding="utf-8"))
+model_prefreeze = json.loads(MODEL_PREFREEZE_PATH.read_text(encoding="utf-8"))
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
 candidates = {row["method_id"]: row for row in payload["candidates"]}
@@ -96,6 +100,51 @@ assert feasibility["proposed_wma_mapping"]["final_answer"].startswith("Never cal
 assert "caption-mediated" in feasibility["fairness_and_claim_boundaries"]["multimodality"]
 serialized = FEASIBILITY_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert model_manifest["status"] == "FROZEN_BEFORE_DOWNLOAD"
+models = {row["component"]: row for row in model_manifest["models"]}
+assert set(models) == {"embedding", "reranker"}
+assert models["embedding"]["repository"] == "BAAI/bge-small-en-v1.5"
+assert models["embedding"]["revision"] == "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+assert models["embedding"]["expected_file_count"] == 11
+assert models["embedding"]["expected_total_bytes"] == 134505940
+assert models["reranker"]["configured_upstream_alias"].endswith("MiniLM-L-6-v2")
+assert models["reranker"]["repository"] == "cross-encoder/ms-marco-MiniLM-L6-v2"
+assert models["reranker"]["revision"] == "233902d25c440f23af6f7d6e94d2946bac0bee0a"
+assert models["reranker"]["expected_file_count"] == 7
+assert models["reranker"]["expected_total_bytes"] == 91819431
+for model in models.values():
+    assert len(model["allow_patterns"]) == model["expected_file_count"]
+    assert len(model["expected_files"]) == model["expected_file_count"]
+    assert len({row["path"] for row in model["expected_files"]}) == model["expected_file_count"]
+    assert sum(row["bytes"] for row in model["expected_files"]) == model["expected_total_bytes"]
+    assert model["expected_local_path"].startswith("${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/")
+assert model_manifest["download_policy"]["parallel_downloads"] == 1
+assert model_manifest["download_policy"]["network_retries"] == 0
+assert model_manifest["download_policy"]["transport"].endswith("4096 Kbit/s.")
+
+assert model_prefreeze["status"] == "FROZEN_BEFORE_DOWNLOAD"
+assert model_prefreeze["adapter_feasibility_audit"]["sha256"] == sha256_file(
+    ROOT / model_prefreeze["adapter_feasibility_audit"]["path"]
+)
+assert model_prefreeze["source_manifest"] == str(MODEL_MANIFEST_PATH.relative_to(ROOT))
+assert model_prefreeze["source_manifest_sha256"] == sha256_file(MODEL_MANIFEST_PATH)
+assert model_prefreeze["downloader_sha256"] == sha256_file(ROOT / model_prefreeze["downloader"])
+assert [row["component"] for row in model_prefreeze["execution_order"]] == [
+    "embedding",
+    "reranker",
+]
+for row in model_prefreeze["execution_order"]:
+    model = models[row["component"]]
+    assert row["repository"] == model["repository"]
+    assert row["revision"] == model["revision"]
+    assert row["target"] == model["expected_local_path"]
+    assert row["evidence_root"].startswith("${AGENT_ENHANCE_REMOTE_ROOT}/runs/")
+assert model_prefreeze["execution_contract"]["gpu_count"] == 0
+assert model_prefreeze["execution_contract"]["retry_count"] == 0
+for path in (MODEL_MANIFEST_PATH, MODEL_PREFREEZE_PATH):
+    serialized = path.read_text(encoding="utf-8")
+    assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {
@@ -104,6 +153,8 @@ print(
             "source_materialization_eligible": ["hindsight"],
             "accepted_hindsight_source_files": source["tracked_file_count"],
             "hindsight_adapter_design_eligible": True,
+            "frozen_hindsight_models": sorted(row["repository"] for row in models.values()),
+            "frozen_hindsight_model_bytes": sum(row["expected_total_bytes"] for row in models.values()),
             "numeric_result_rows_added": 0,
         },
         sort_keys=True,
