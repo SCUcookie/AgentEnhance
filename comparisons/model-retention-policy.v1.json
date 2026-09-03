@@ -1,0 +1,55 @@
+{
+  "schema_version": "agentenhance.model_retention_policy.v1",
+  "policy_id": "baseline-model-retention-20260903-v1",
+  "status": "FROZEN",
+  "purpose": "Permit reproducible cleanup of project-owned baseline model weights after accepted reproduction while retaining all evidence needed to rerun and compare the experiment.",
+  "ephemeral_model_scope": [
+    "/data1/2026/ldh/AgentEnhance/cache/models/<run_id>",
+    "/data2/2026/ldh/AgentEnhance/cache/models/<run_id>"
+  ],
+  "never_delete_by_this_policy": [
+    "pre-existing server models",
+    "shared caches",
+    "datasets",
+    "predictions",
+    "raw metric records",
+    "logs and stderr",
+    "resolved configs",
+    "environment locks and container digests",
+    "source commits and patches",
+    "run manifests and SHA-256 inventories"
+  ],
+  "pre_download_manifest_required": [
+    "model repository identifier",
+    "immutable revision",
+    "allow-patterns or exact file list",
+    "license or access condition",
+    "expected local project-owned path"
+  ],
+  "post_download_manifest_required": [
+    "resolved revision",
+    "relative file paths",
+    "byte sizes",
+    "SHA-256 per file",
+    "total bytes"
+  ],
+  "cleanup_preconditions": [
+    "the reproduction run has TERMINAL_ACCEPTED status",
+    "the run artifact inventory and result rows pass validation",
+    "the model path is inside an ephemeral_model_scope path for that exact run",
+    "a read-only ownership and reference audit finds no other run or process using the path",
+    "the retained manifest is sufficient to download the same immutable revision again",
+    "the deletion target is an explicit resolved path without globs or environment expansion"
+  ],
+  "cleanup_record_required": [
+    "cleanup timestamp",
+    "exact deleted path",
+    "deleted byte count",
+    "model manifest SHA-256",
+    "run id",
+    "operator",
+    "post-delete absence check"
+  ],
+  "failure_rule": "Rejected, incomplete, or unaudited runs do not authorize model deletion unless a separate abandoned-run cleanup record preserves the same provenance and proves the path is project-owned and unshared.",
+  "shared_model_rule": "Existing Qwen, embedding, reranker, and CLIP assets on the server are treated as shared or pre-existing until provenance proves otherwise and therefore are not cleanup targets."
+}

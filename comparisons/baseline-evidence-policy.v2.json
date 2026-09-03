@@ -1,0 +1,75 @@
+{
+  "schema_version": "agentenhance.baseline_evidence_policy.v2",
+  "policy_id": "baseline-evidence-20260903-v2",
+  "status": "FROZEN",
+  "frozen_at": "2026-09-03T16:00:00+08:00",
+  "scope": "All paper-facing baseline comparisons created after this policy is frozen.",
+  "primary_evidence_rule": "A numeric value may enter a main comparison or support a SOTA claim only when produced locally from an audited run under the same frozen track contract as AgentEnhance.",
+  "source_reported_policy": {
+    "storage": "comparisons/source-reported-results.v1.csv",
+    "allowed_uses": [
+      "reproduction target",
+      "implementation fidelity diagnostic",
+      "literature context in a clearly separated appendix"
+    ],
+    "prohibited_uses": [
+      "filling a missing locally reproduced cell",
+      "ranking against locally reproduced AgentEnhance values",
+      "supporting a best or SOTA claim",
+      "mixing values across evaluator, backbone, data split, budget, or denominator"
+    ]
+  },
+  "comparison_tracks": [
+    {
+      "track_id": "wma-lifecycle-matched-v1",
+      "benchmark_id": "worldmemarena-2026",
+      "role": "primary lifecycle comparison",
+      "backbone_rule": "same frozen local answer backbone and revision for every method",
+      "evaluator_rule": "same frozen evaluator, prompt, decoding, sample IDs, denominator, and failure semantics",
+      "budget_rule": "same memory and retrieved-context budget",
+      "seed_rule": "three seeds for stochastic methods; one explicitly deterministic run otherwise"
+    },
+    {
+      "track_id": "memgallery-static-matched-v1",
+      "benchmark_id": "mem-gallery-acl2026",
+      "role": "primary static multimodal comparison",
+      "backbone_rule": "same frozen local answer backbone and revision for every method",
+      "evaluator_rule": "same frozen evaluator, prompt, decoding, 1711-question denominator, and failure semantics",
+      "budget_rule": "K=10 or a frozen token-equivalent budget reported alongside K",
+      "seed_rule": "three seeds for stochastic methods; one explicitly deterministic run otherwise"
+    },
+    {
+      "track_id": "causal-locomo-safety-v1",
+      "benchmark_id": "causal-locomo-2026",
+      "role": "secondary counterfactual and harmful-memory comparison",
+      "backbone_rule": "same frozen local answer backbone and revision for every method",
+      "evaluator_rule": "same deterministic scorer and complete frozen denominator",
+      "budget_rule": "same proposal and context budget",
+      "seed_rule": "three seeds for stochastic methods; one explicitly deterministic run otherwise"
+    }
+  ],
+  "result_admission": {
+    "required_status": "ACCEPTED",
+    "required_fields": [
+      "run_id",
+      "method_id",
+      "track_id",
+      "dataset_digest",
+      "code_commit",
+      "backbone_id",
+      "evaluator_id",
+      "seed",
+      "n_expected",
+      "n_observed",
+      "n_failed",
+      "metric",
+      "value",
+      "artifact_sha256"
+    ],
+    "denominator_rule": "n_observed plus n_failed must equal n_expected; failures remain in the denominator.",
+    "no_result_rule": "A missing, rejected, or failed reproduction is shown as such and is never replaced by an official number."
+  },
+  "sota_rule": "SOTA may be claimed only for an audited best same-track value, or a Pareto-nondominated point under predeclared quality, safety, and efficiency axes. A favorable slice may be shown only when the full aggregate and all frozen slices are also reported.",
+  "method_inclusion_rule": "The machine-readable register remains broad. The paper main table is a curated subset containing only methods with accepted same-track local reproductions; adapter failures stay in the reproduction appendix.",
+  "agentenhance_gate": "Do not run AgentEnhance on a public comparison track until at least two recent 2025-2026 non-control methods on that track have accepted local reproductions."
+}

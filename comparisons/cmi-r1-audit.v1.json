@@ -1,0 +1,18 @@
+{
+  "schema_version": "agentenhance.prospective_stage_audit.v1",
+  "stage_id": "cmi-r1-official-smoke-20260903-v1",
+  "audited_at": "2026-09-03T15:30:00+08:00",
+  "outcome": "REJECT_TECHNICAL",
+  "launcher_exit_code": 125,
+  "failure_stage": "first pytest container initialization",
+  "diagnosis": "The frozen source was mounted read-only at /workspace while a writable cache bind was mounted below it at /workspace/.cache. The OCI runtime could not create the nested mount point on the read-only parent filesystem.",
+  "pytest_started": false,
+  "dataset_validation_started": false,
+  "smoke_attempts_started": 0,
+  "numeric_results_produced": false,
+  "active_matching_containers_after_audit": 0,
+  "residual_tmux_session": false,
+  "run_root_preserved": true,
+  "scientific_interpretation_allowed": false,
+  "authorized_recovery_change": "Replace the nested bind-mount layout with an isolated tmpfs workspace populated from the same read-only source mount. Keep code, dataset, procedures, counts, runtime image, network, GPU, API, and acceptance rule unchanged."
+}

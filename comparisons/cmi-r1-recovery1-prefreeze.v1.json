@@ -1,0 +1,28 @@
+{
+  "schema_version": "agentenhance.prospective_stage.v1",
+  "stage_id": "cmi-r1-official-smoke-recovery1-20260903-v1",
+  "parent_stage_id": "cmi-r1-official-smoke-20260903-v1",
+  "state": "FROZEN",
+  "frozen_at": "2026-09-03T15:31:00+08:00",
+  "recovery_reason": "OCI nested mount initialization failure before pytest or numeric execution.",
+  "only_authorized_change": "Mount the frozen upstream checkout read-only at /source and copy it inside each container to a fresh 1 GiB tmpfs at /workspace; mount the evidence root separately at /evidence.",
+  "unchanged": [
+    "CMI source commit 65a66cb4347aeeb62a870132269e8a983211e036",
+    "container image and digest",
+    "Python 3.10.12",
+    "complete official pytest suite",
+    "87-record dataset validation",
+    "two five-example by seven-method deterministic dry runs",
+    "byte-identical scores.jsonl requirement",
+    "network disabled, GPU disabled, API key empty",
+    "zero automatic retries and fresh output root"
+  ],
+  "acceptance_rule": "Identical to cmi-r1-official-smoke-20260903-v1: pytest passes, dataset validation is 87/87 with zero errors, both attempts emit 35 predictions and 35 scores with zero failures, score files are byte-identical, evidence hashes pass, and no named container or tmux session remains.",
+  "resources": {
+    "max_wall_minutes": 20,
+    "max_disk_gib": 5,
+    "tmpfs_per_container_gib": 1,
+    "max_gpu_hours": 0,
+    "max_api_cost_usd": 0
+  }
+}

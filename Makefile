@@ -9,5 +9,6 @@ test:
 baseline-check:
 	python3 scripts/validate_baseline_matrix.py
 	python3 scripts/validate_source_results.py
+	python3 scripts/validate_baseline_evidence_v2.py
 
 check: validate test baseline-check
