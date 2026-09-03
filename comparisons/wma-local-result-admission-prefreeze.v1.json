@@ -1,0 +1,93 @@
+{
+  "schema_version": "agentenhance.wma_local_result_admission_prefreeze.v1",
+  "contract_id": "wma-local-result-admission-20260904-v1",
+  "status": "FROZEN_BEFORE_ANY_LOCAL_RESULT_ADMISSION",
+  "frozen_at": "2026-09-04T21:35:00+08:00",
+  "purpose": "Create the canonical long-form local result ledger only from independently accepted three-seed WorldMemArena evidence, without manual score transcription or source-reported values.",
+  "supersession": {
+    "historical_result_file": "comparisons/reproduced-results.v1.csv",
+    "historical_result_file_sha256": "050e9149d286ce3ecd1819ccbf7fab41fd5441043233e0d2b0ed649f924d297e",
+    "historical_file_rule": "Keep v1 unchanged because prior registry and table freezes bind its zero-row state.",
+    "successor_template": "comparisons/reproduced-results.v2.csv",
+    "successor_template_sha256": "772d82088f65ba51acc0bc2d1cf15a63c152d612930a5b48da38b83299e9d4d7",
+    "successor_template_rows_at_freeze": 0
+  },
+  "frozen_sources": {
+    "baseline_evidence_policy": {
+      "path": "comparisons/baseline-evidence-policy.v2.json",
+      "sha256": "c9d3697c917c82bc939078cf47922403f20332b62bc4d07f6561fc6355541453"
+    },
+    "execution_matrix": {
+      "path": "comparisons/wma-execution-matrix.v3.csv",
+      "sha256": "244759bf0eb55418fbdae0f840e913f4361d49ba9ba036ced99df84f20ce4331",
+      "rows": 30
+    },
+    "metric_catalog": {
+      "path": "comparisons/wma-method-seed-statistics-template.v1.csv",
+      "sha256": "b3856a438153150d619454992b5a7c2527a6b1e2f1b4fc617a07cdce4346d968",
+      "unique_metrics": 55,
+      "use": "metric keys and predeclared directions only; all numeric cells were empty at freeze"
+    }
+  },
+  "implementation": {
+    "promoter": {
+      "path": "scripts/promote_wma_local_results_v2.py",
+      "sha256": "90aeda29acbfb26fa422d9472dbe56b99cd47c6ffe6f99f44ab73a9da3de3293"
+    },
+    "synthetic_test": {
+      "path": "tests/test_promote_wma_local_results_v2.py",
+      "sha256": "92ec4f407318d811e416a21ed3a2dbd8beaa0af68ae39a5cf3828a1187afbe87",
+      "accepted_rows_per_method": 165,
+      "negative_controls": [
+        "dataset identity mismatch",
+        "raw aggregate versus combined summary value mismatch"
+      ]
+    }
+  },
+  "identity_manifest_required_fields": [
+    "implementation_id",
+    "run_id",
+    "benchmark_id",
+    "track_id",
+    "split",
+    "dataset_digest",
+    "code_commit",
+    "adapter_code_identity",
+    "backbone_id",
+    "retriever_id",
+    "evaluator_id"
+  ],
+  "identity_manifest_status": "FROZEN_BEFORE_NUMERIC_RUN",
+  "admission": {
+    "summary": "TERMINAL_ACCEPTED complete three-seed method summary with seeds 0, 1, and 2",
+    "seed_roots": "three independently inventoried TERMINAL_ACCEPTED aggregate roots",
+    "denominators": {
+      "samples_expected": 150,
+      "samples_observed": 150,
+      "samples_failed": 0,
+      "qa": 7906
+    },
+    "raw_value_check": "Every promoted value must exactly equal both the corresponding seed aggregate metric and the same seed value in the combined summary.",
+    "identity_check": "Dataset digest and benchmark code commit must match every seed audit; method identity must exist and be executable in the frozen 30-row matrix.",
+    "result_granularity": "one row per implementation, model seed, and each of 55 predeclared method-level metrics",
+    "official_values_used": false,
+    "source_reported_results_read": false
+  },
+  "retention": {
+    "canonical_csv": "reproduced-results.v2.csv inside a fresh immutable admission bundle",
+    "required_companions": [
+      "admission-manifest.json",
+      "SHA256SUMS",
+      "TERMINAL_ACCEPTED"
+    ],
+    "raw_aggregate_and_slice_artifacts": "retain in the independently archived method evidence; the 55-row-per-seed ledger is an index, not a replacement"
+  },
+  "prohibited": [
+    "editing reproduced-results.v1.csv",
+    "manually copying a paper or README value into the local ledger",
+    "admitting fewer than all three registered seeds",
+    "admitting a partial denominator, failed sample, blocked method, or proposed method",
+    "changing a metric direction or excluding a frozen metric after seeing results",
+    "treating three seeds as 450 independent benchmark samples"
+  ]
+}
