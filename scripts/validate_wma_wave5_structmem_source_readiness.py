@@ -21,6 +21,7 @@ MODEL_METADATA_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-llmlin
 MODEL_METADATA_AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-llmlingua-metadata-audit.v1.json"
 MODEL_MANIFEST = ROOT / "comparisons" / "wma-r1-wave5-structmem-model-prefetch-manifest.v1.json"
 MODEL_MATERIALIZATION_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-model-materialization-prefreeze.v1.json"
+DEPENDENCY_LOCK_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-dependency-lock-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -214,4 +215,21 @@ assert model_materialization["execution_contract"]["network_retry_count"] == 0
 assert model_materialization["execution_contract"]["logical_requests_per_file"] == 1
 serialized = MODEL_MATERIALIZATION_PREFREEZE.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
-print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "model_files": frozen_model["expected_file_count"], "model_bytes": frozen_model["expected_total_bytes"], "model_materialization_gate": model_materialization["status"], "model_materializer_tests": model_materializer["unit_tests"], "numeric_rows_added": 0}, sort_keys=True))
+dependency_lock = json.loads(DEPENDENCY_LOCK_PREFREEZE.read_text(encoding="utf-8"))
+assert dependency_lock["status"] == "FROZEN_AWAITING_WAVE1_RESOURCE_GATE"
+for gate in dependency_lock["prior_gates"]:
+    assert gate["sha256"] == sha256_file(ROOT / gate["path"])
+workspace = dependency_lock["frozen_workspace"]
+assert workspace["sha256"] == sha256_file(ROOT / workspace["path"])
+assert workspace["bytes"] == (ROOT / workspace["path"]).stat().st_size == 1616
+assert workspace["direct_dependency_count"] == 58
+lock_impl = dependency_lock["implementation"]
+assert lock_impl["materializer_sha256"] == sha256_file(ROOT / lock_impl["materializer"])
+assert lock_impl["unit_test_sha256"] == sha256_file(ROOT / lock_impl["unit_test"])
+assert lock_impl["unit_tests"] == 3
+assert dependency_lock["execution_contract"]["network_retry_count"] == 0
+assert dependency_lock["execution_contract"]["dependency_installations"] == 0
+assert dependency_lock["outputs"]["independent_lock_passes"] == 2
+serialized = DEPENDENCY_LOCK_PREFREEZE.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "model_files": frozen_model["expected_file_count"], "model_bytes": frozen_model["expected_total_bytes"], "model_materialization_gate": model_materialization["status"], "model_materializer_tests": model_materializer["unit_tests"], "dependency_lock_gate": dependency_lock["status"], "direct_dependencies": workspace["direct_dependency_count"], "lock_materializer_tests": lock_impl["unit_tests"], "numeric_rows_added": 0}, sort_keys=True))

@@ -1,0 +1,112 @@
+{
+  "schema_version": "agentenhance.structmem_dependency_lock_prefreeze.v1",
+  "stage_id": "wma-r1-wave5-structmem-dependency-lock-20260904-v1",
+  "status": "FROZEN_AWAITING_WAVE1_RESOURCE_GATE",
+  "frozen_at": "2026-09-04T13:10:00+08:00",
+  "scientific_question": "Can the official StructMem runtime dependencies be resolved twice into one byte-identical Linux x86_64 Python 3.11 uv lock under exclusive PyPI and PyTorch CPU routes?",
+  "decision_informed": "Whether a hash-complete, route-separated, project-owned offline wheelhouse can be frozen for StructMem without modifying a shared environment.",
+  "scientific_evidence_role": "dependency-resolution evidence only; no wheel acquisition, installation, model import, lifecycle, numerical result, superiority, or SOTA claim",
+  "prior_gates": [
+    {
+      "path": "comparisons/wma-r1-wave5-structmem-execution-source-audit.v1.json",
+      "sha256": "5ec9071d88a07454e29fd64824159120c43483b48c3abf7ae76cb3ad167fd1e3",
+      "required_status": "TERMINAL_ACCEPTED"
+    },
+    {
+      "path": "comparisons/wma-r1-wave5-structmem-adapter-design-prefreeze.v1.json",
+      "sha256": "12a2d442277cbd3771485312f77169ad4858e56deebf8a21b01d507765b43b2c",
+      "required_status": "FROZEN_DESIGN_AWAITING_DEPENDENCY_MODEL_GATES"
+    },
+    {
+      "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-recovery2-audit.v1.json",
+      "sha256": "a2a107aff2caacedffad5432ae12171edf229f0463523a8938896f0533d67be2",
+      "required_status": "TERMINAL_ACCEPTED"
+    }
+  ],
+  "upstream_dependency_identity": {
+    "source_revision": "aa1c484cc6fd964c8ea1af897e36a0c3ba06d7db",
+    "pyproject_path": "pyproject.toml",
+    "pyproject_bytes": 2698,
+    "pyproject_sha256": "632334023335283070abb2eebfc5bece3eea11387724eaccb7aeda40732b97bb",
+    "requires_python": ">=3.10,<3.12",
+    "declared_dependency_rows": 59,
+    "duplicate_rows": ["httpx==0.28.1"],
+    "unique_declared_dependencies": 58,
+    "only_non_exact_upstream_requirement": "rank-bm25>=0.2.2"
+  },
+  "prospective_specialization": {
+    "python_version": "3.11.0",
+    "platform": "linux-x86_64",
+    "rank_bm25": "Freeze rank-bm25==0.2.2, the upstream lower bound, before any import or result is observed.",
+    "torch": "Preserve upstream torch==2.8.0 semantics while exclusively routing its Linux wheel to the official PyTorch CPU index because StructMem's LLMLingua component is CPU-bound in the frozen lifecycle.",
+    "optional_groups": "Exclude llms, mcp, fluxmem, and dev groups because the frozen adapter uses the OpenAI-compatible manager, OpenAI-compatible embedder, Qdrant local mode, and LLMLingua-2 only.",
+    "deduplication": "Represent the duplicated upstream httpx==0.28.1 declaration once without changing its constraint."
+  },
+  "frozen_workspace": {
+    "path": "requirements/inputs/structmem-py311-lock-workspace.v1.toml",
+    "bytes": 1616,
+    "sha256": "aaadfad3524aad6b6659b8ac5d2f6e8a1c1dcb54d898fd73d3ee66f083b04e0b",
+    "direct_dependency_count": 58,
+    "all_direct_dependencies_exact_pinned": true,
+    "torch_exclusive_index": "https://download.pytorch.org/whl/cpu",
+    "default_index": "https://pypi.org/simple"
+  },
+  "toolchain": {
+    "uv": "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery2/uv",
+    "uv_sha256": "671793498fe0a545432e2524b6691ffb9eea4540d9fda43ca2f978df2dbf8426",
+    "uv_version_output": "uv 0.12.9 (x86_64-unknown-linux-gnu)",
+    "python": "${AGENT_ENHANCE_PYTHON311}",
+    "python_sha256": "db8630b1dda55498c4d254878d144e04d3c6fd82115b700c00a13c9029fdbd02",
+    "python_version_prefix": "3.11.0 | packaged by conda-forge |",
+    "shared_prefix_access": "read-only interpreter selection; no package is installed into its prefix"
+  },
+  "implementation": {
+    "materializer": "scripts/materialize_structmem_uv_lock.py",
+    "materializer_sha256": "88a1a40092c6686864da6567b30c74f632477bc24410b3d76bbdd33fd0a86459",
+    "unit_test": "tests/test_structmem_uv_lock_materializer.py",
+    "unit_test_sha256": "1e28ea96bfd5b7aec581ad8e6667fc1ce9a9d35bc1fbe89cb7b06a6ebb4a8083",
+    "unit_tests": 3
+  },
+  "outputs": {
+    "lock_root": "${AGENT_ENHANCE_REMOTE_ROOT}/locks/wma-r1-wave5-structmem-py311-linux-x86_64-20260904-v1",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-dependency-lock-20260904-v1",
+    "independent_lock_passes": 2,
+    "required_byte_identical_locks": true
+  },
+  "execution_contract": {
+    "command": "${AGENT_ENHANCE_PYTHON311} scripts/materialize_structmem_uv_lock.py --project-root ${AGENT_ENHANCE_REMOTE_ROOT} --uv ${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery2/uv --python ${AGENT_ENHANCE_PYTHON311} --workspace-manifest requirements/inputs/structmem-py311-lock-workspace.v1.toml --output-root ${AGENT_ENHANCE_REMOTE_ROOT}/locks/wma-r1-wave5-structmem-py311-linux-x86_64-20260904-v1 --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-dependency-lock-20260904-v1",
+    "network_routes": ["https://pypi.org/simple", "https://download.pytorch.org/whl/cpu"],
+    "network_retry_count": 0,
+    "parallel_downloads": 1,
+    "parallel_builds": 1,
+    "dependency_installations": 0,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 20,
+    "fresh_output_roots_required": true
+  },
+  "resource_gate": {
+    "start_condition": "Wave1 controller is independently TERMINAL_ACCEPTED, all Wave1 services and evaluators have stopped, and no process references either fresh output root.",
+    "current_authorization": "NOT_AUTHORIZED_WHILE_WAVE1_IS_RUNNING",
+    "why": "The stage performs repeated online dependency resolution and must not perturb the active numerical comparison workload."
+  },
+  "acceptance": [
+    "All source, workspace, uv, and Python identities match their frozen bytes and hashes.",
+    "The workspace contains exactly 58 unique exact-pinned direct dependencies and routes Torch exclusively to the official CPU index.",
+    "Both fresh uv lock passes complete under Python 3.11 with zero retries, no cache, one concurrent download, and no Python download.",
+    "The two uv.lock outputs are non-empty and byte-identical.",
+    "No dependency or model is installed or loaded, and the shared Python prefix is unchanged.",
+    "The evidence root is TERMINAL_ACCEPTED without TERMINAL_REJECTED and all evidence files have retained SHA-256 values."
+  ],
+  "failure": "Any premature start, collision, identity mismatch, dependency conflict, registry error, network error, timeout, lock disagreement, implicit Python acquisition, or evidence mismatch seals the fresh evidence root as TERMINAL_REJECTED and retains both partial workspaces.",
+  "next_gate_after_acceptance": "Independently audit and archive the canonical lock, export a hash-complete route-separated requirements set, then freeze an offline wheelhouse. Lock acceptance does not authorize wheel download, installation, model import, lifecycle, or numerical execution.",
+  "prohibited_actions": [
+    "starting before Wave1 terminal acceptance and complete service release",
+    "changing an upstream exact dependency after observing import or benchmark outcomes",
+    "routing Torch through an implicit mirror or the default PyPI index",
+    "using retries, cache, concurrent resolution, a different uv/Python, or Python auto-download",
+    "installing into or modifying the shared Python 3.11 environment",
+    "deleting or repairing a rejected output root in place",
+    "populating a comparison-table numeric cell from dependency resolution"
+  ]
+}
