@@ -1,0 +1,83 @@
+{
+  "schema_version": "agentenhance.git_source_materialization_audit.v1",
+  "audit_id": "wma-r1-wave3-source-materialization-audit-20260904-v1",
+  "audited_at": "2026-09-04T00:06:13+08:00",
+  "status": "TERMINAL_ACCEPTED",
+  "prefreeze": "comparisons/wma-r1-wave3-source-materialization-prefreeze.v1.json",
+  "prefreeze_sha256": "f9db161abc4cde3ebe2b66e18a8a5cbff16fadcf6fa865ed903e216f5cd1eac7",
+  "source_commit": "d5ad3f8adfcaa11590b5d4334e980936cc0464c0",
+  "scientific_evidence_role": "engineering source-identity acceptance only; no lifecycle, benchmark, superiority, or SOTA claim is eligible",
+  "control_package": {
+    "logical_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave3-source-materialization-20260904-v1-control.tar.gz",
+    "sha256": "3327111b95531cde77f54a1f8d32478f4159a5b084caa9e59cc0d5129d424695",
+    "internal_hashes_verified": true,
+    "source_commit_verified": true,
+    "sftp_rate_limit_kbit_per_second": 4096
+  },
+  "methods": [
+    {
+      "method_id": "memoryos",
+      "status": "TERMINAL_ACCEPTED_SOURCE_IDENTITY",
+      "repository": "https://github.com/BAI-LAB/MemoryOS.git",
+      "revision": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+      "git_tree": "b18609dd5bf77c304dd6f5d6a1afbcd64b643572",
+      "source_mode": "verified existing official checkout without mutation",
+      "source_logical_path": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/baseline-reproduction-r0-recovery1-20260903-v1/memoryos",
+      "worktree_clean": true,
+      "tracked_file_count": 73,
+      "tracked_total_bytes": 4833518,
+      "submodule_count": 0,
+      "git_lfs_pointer_count": 0,
+      "model_like_weight_file_count": 0,
+      "inventory": "comparisons/source-inventories/memoryos-587ed7755c7aed179965792830ff1b5ad9a6fa92.sha256.tsv",
+      "inventory_sha256": "197c61e0c873f60967626417755525ecdb4ad412b78e81bc1f8c78a179ab8487"
+    },
+    {
+      "method_id": "memgas",
+      "status": "TERMINAL_ACCEPTED_SOURCE_IDENTITY",
+      "repository": "https://github.com/Applied-Machine-Learning-Lab/ICLR2026_MemGAS.git",
+      "revision": "c2d4e9fdc331074802a711baf4371197f9194399",
+      "git_tree": "0ee5cebc3ca83cacd96cea3eec4622c5ab0c6683",
+      "source_mode": "single exact detached clone into a fresh project-owned root",
+      "source_logical_path": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-source-20260904-v1/memgas",
+      "evidence_logical_path": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memgas-source-materialization-20260904-v1",
+      "started_at": "2026-09-03T16:05:45.733698+00:00",
+      "finished_at": "2026-09-03T16:05:48.194970+00:00",
+      "worktree_clean": true,
+      "tracked_file_count": 35,
+      "tracked_total_bytes": 788954,
+      "submodule_count": 0,
+      "git_lfs_pointer_count": 0,
+      "model_like_weight_file_count": 0,
+      "active_process_references_at_audit": 0,
+      "source_hash_inventory_verified": true,
+      "evidence_hash_inventory_verified": true,
+      "source_materialization_record_sha256": "6e4174b096c954a79ad4956369f82157e3c764bf4cb98f9318e0477c58766d7f",
+      "source_sha256s_sha256": "e5e845dc7debd5b4635a25eaaecb331787fe89a45c658fa905530e90432a92c5",
+      "evidence_sha256s_sha256": "6060fedd71035e2c89b86aa0c3ae668f193083691ce5733f126037e217f72a33"
+    }
+  ],
+  "wave1_non_interference_observation": {
+    "before_source_execution": {
+      "accepted_units": 23,
+      "rejected_units": 0
+    },
+    "after_source_execution": {
+      "accepted_units": 24,
+      "rejected_units": 0,
+      "error_signals": 0,
+      "progress_updated_at": "2026-09-04T00:00:22+08:00"
+    },
+    "interpretation": "The active Wave-1 controller continued to advance and exposed no configured fatal signal during the CPU/network-only source operation; this scoped observation is not a general performance or interference benchmark."
+  },
+  "decision": "ACCEPT both immutable official source identities for adapter design only.",
+  "next_allowed_gate": "Perform read-only API, dependency, persistence, and fallback audits for MemoryOS and MemGAS, then freeze one separate lifecycle adapter stage per method. No model acquisition or numerical run is authorized by this audit.",
+  "retained_failures": [],
+  "prohibited_actions": [
+    "editing either accepted source checkout in place",
+    "installing dependencies into the active Wave-1 environment",
+    "starting lifecycle or numerical execution without a new frozen gate",
+    "using official paper scores as local reproduced evidence",
+    "deleting source or evidence because a future adapter fails"
+  ]
+}
