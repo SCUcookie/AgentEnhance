@@ -1,0 +1,60 @@
+{
+  "schema_version": "agentenhance.prospective_stage.v1",
+  "stage_id": "cmi-r2-deterministic-full-20260903-v1",
+  "parent_stage_id": "cmi-r1-official-smoke-recovery2-20260903-v1",
+  "state": "FROZEN",
+  "frozen_at": "2026-09-03T16:06:00+08:00",
+  "scientific_question": "Does the frozen official CMI implementation produce complete, deterministic, internally consistent foundation outputs for all 87 Causal-LoCoMo examples across its seven methods in no-API mode?",
+  "decision_informed": "Whether the implementation and dataset are ready for a later matched local-model comparison stage.",
+  "estimand": "Per-method deterministic task and memory-selection metrics over the fixed 87-example dataset; the unit is an example-method pair.",
+  "evidence_role": "development foundation only",
+  "claims_allowed": [
+    "the frozen implementation completed the registered deterministic dataset",
+    "the retained artifact can be rerun byte-identically at the score-record level"
+  ],
+  "claims_prohibited": [
+    "model quality",
+    "superiority over another paper",
+    "same-protocol comparison with a learned local backbone",
+    "SOTA"
+  ],
+  "identities": {
+    "source_commit": "65a66cb4347aeeb62a870132269e8a983211e036",
+    "base_image_id": "sha256:9ff159797e3da92a9e47362033f2761633b8de374c095fbdf5cf1b9f157d9d54",
+    "offline_wheel_sha256": "636f8336facf092165e27924f223d3c62ca560b1f2bb5dff7ab7fad265361987",
+    "dataset_path": "causal_locomo_final_with_history.jsonl",
+    "dataset_records": 87,
+    "methods": [
+      "no_memory",
+      "full_history",
+      "vector_memory",
+      "summary_memory",
+      "reflection_memory",
+      "graph_memory",
+      "cmi"
+    ]
+  },
+  "execution": {
+    "attempts": 2,
+    "examples_per_attempt": 87,
+    "expected_rows_per_attempt": 609,
+    "dry_run": true,
+    "deterministic_only": true,
+    "skip_llm_judge": true,
+    "no_cache": true,
+    "network": "none",
+    "gpu": "none",
+    "api_key": "empty",
+    "automatic_retries": 0,
+    "fresh_output_root_required": true
+  },
+  "acceptance_rule": "Dependency check reports seaborn 0.13.2; dataset validation is 87/87 with zero errors; both attempts emit 609 unique example-method predictions and scores with zero failures; each attempt covers 87 examples and the exact seven methods; all numeric values are finite; total API cost is zero; score JSONL files are byte-identical; hashes pass; wall time is at most 30 minutes; no matching container or tmux session remains.",
+  "failure_rule": "Any failed condition is REJECT_TECHNICAL. Preserve the root and do not copy its metrics into any result table.",
+  "resources": {
+    "max_wall_minutes": 30,
+    "max_disk_gib": 2,
+    "tmpfs_per_container_gib": 1,
+    "max_gpu_hours": 0,
+    "max_api_cost_usd": 0
+  }
+}
