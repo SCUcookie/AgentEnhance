@@ -1,0 +1,135 @@
+{
+  "schema_version": "agentenhance.wma_wave3_lifecycle_design_prefreeze.v2",
+  "stage_id": "wma-r1-wave3-lifecycle-design-20260904-v2",
+  "status": "FROZEN_DESIGN_NOT_AUTHORIZED_FOR_EXECUTION",
+  "frozen_at": "2026-09-04T01:03:00+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-r1-wave3-lifecycle-design-prefreeze.v1.json",
+    "sha256": "0e728970048457b7017cbbdf94d7e0aa2d63bee88ec31e46d0ffb22c4fa61943",
+    "execution_authorized": false,
+    "reason": "The v1 lifecycle referenced the superseded v1 environment contract. No v1 lifecycle root was created."
+  },
+  "scientific_question": "Do the accepted MemoryOS and MemGAS adapters preserve official lifecycle semantics, multimodal-caption provenance, cross-session retrieval, and on-disk reconstruction before full WMA scoring?",
+  "decision_informed": "Whether each method is technically eligible for a separately frozen full numerical WMA reproduction.",
+  "scientific_evidence_role": "persistence-aware engineering lifecycle evidence only; no benchmark, superiority, or SOTA claim is eligible",
+  "prior_gates": [
+    {
+      "path": "comparisons/wma-r1-wave3-execution-source-audit.v1.json",
+      "sha256": "8efad8f49861794e0e12b9d7ef7a93655315c328fc0154233ba5067488990f26",
+      "required_status": "TERMINAL_ACCEPTED"
+    },
+    {
+      "path": "comparisons/wma-r1-wave3-model-materialization-prefreeze.v1.json",
+      "sha256": "c9005c4b194a08144de18ce4e402a5fe1f1bf2126b9a8e6bf716d60cf76b425f",
+      "required_successor_evidence": "Both model materialization records and model file inventories must be independently TERMINAL_ACCEPTED."
+    },
+    {
+      "path": "comparisons/wma-r1-wave3-environment-materialization-prefreeze.v2.json",
+      "sha256": "0450033ce3eea8822c9131c310ea7d12c68925b40af0098dd67f36b70c58e1ea",
+      "required_successor_evidence": "Both v2 environment records, wheel inventories, pip checks, and method import checks must be independently TERMINAL_ACCEPTED."
+    }
+  ],
+  "frozen_implementation": {
+    "worldmemarena_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "checker": "scripts/check_wma_wave3_adapter.py",
+    "checker_sha256": "c2863a22cc61f2326edc7249116e312bca32d8ef64d8b5964e3bc823b79fd163",
+    "remote_wrapper": "scripts/remote_wma_wave3_adapter_lifecycle.sh",
+    "remote_wrapper_sha256": "17be69713f88a55e95d9fd5daf5ef279cc116f820d714b3a3350ba87c65ee34d",
+    "sitecustomize": "scripts/wma_wave3_overlay/sitecustomize.py",
+    "sitecustomize_sha256": "0c50912aad443a55308c1203226059f6301ad4a8aade116bc723fb1824f0a26b",
+    "memoryos_adapter": "scripts/wma_wave3_overlay/memoryos_wma_adapter.py",
+    "memoryos_adapter_sha256": "2211e7bb1c526276733d2305ebe4b01e06422db244e901764767bdaaf06037c6",
+    "memgas_adapter": "scripts/wma_wave3_overlay/memgas_wma_adapter.py",
+    "memgas_adapter_sha256": "f1852395be38c094efea68551bf487e70d5a1f22808f186dac110d5ea2f826a6"
+  },
+  "fixed_inputs": {
+    "dataset_revision": "e2148757921fc7e2d66d8ed899823b763227c341",
+    "image_relative_path": "agent/embodied/eb_alfred_base/images/eb_alfred_base_01/eb_alfred_base_01_img_001.png",
+    "image_id": "eb_alfred_base_01_img_001",
+    "image_sha256": "ca01bcdd40ce5d38d9fe28c1411cd61ac6d7490da787a9a174b4e11d585973fa",
+    "caption": "A top-down wooden desk scene with a lit lamp, chairs, a gray bowl, a CD, and a small rectangular object.",
+    "sessions": 3,
+    "user_assistant_pairs_per_session": 4,
+    "total_pairs": 12,
+    "total_turns": 24,
+    "earliest_session_fact": "blue-orchid-739",
+    "query": "What is the private project code from the earliest session?",
+    "query_order": "once before reconstruction and once after reconstruction"
+  },
+  "methods": [
+    {
+      "method_id": "memoryos",
+      "execution_source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-execution-source-20260904-v1/memoryos/memoryos_pkg",
+      "source_record_sha256": "f71792222ec3d173847079257ec0a9fb45e81193770168519168cd1cab543079",
+      "environment_root": "${AGENT_ENHANCE_REMOTE_ROOT}/environments/wma-r1-wave3-memoryos-py39-20260904-v2",
+      "model_root": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-all-minilm-l6-v2-20260904-v1",
+      "run_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memoryos-lifecycle-20260904-v2",
+      "method_specific_invariants": [
+        "exactly 10 short-term pairs remain after capacity crossing",
+        "at least one mid-term session exists",
+        "every persisted JSON file is parseable",
+        "retrieval exposes no swallowed MemoryOS branch error before or after reconstruction"
+      ]
+    },
+    {
+      "method_id": "memgas",
+      "execution_source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-execution-source-20260904-v1/memgas/memgas_source",
+      "source_record_sha256": "b169c72739597474d49a10acaa9d9ebab68d4b9d297a88d1a060bf0b26b52953",
+      "environment_root": "${AGENT_ENHANCE_REMOTE_ROOT}/environments/wma-r1-wave3-memgas-py39-20260904-v2",
+      "model_root": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-contriever-20260904-v1",
+      "run_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memgas-lifecycle-20260904-v2",
+      "method_specific_invariants": [
+        "exactly three backend session records exist",
+        "exactly one memory_state.pt is persisted",
+        "GMM fallback counters are explicit integers before and after reconstruction",
+        "official internal LLM attempts remain distinguishable from prohibited unit reruns"
+      ]
+    }
+  ],
+  "shared_invariants": [
+    "adapter construction occurs through the WMA external-adapter registry",
+    "caption_mediated is true and native_multimodal is false",
+    "snapshots and retrievals are non-empty before and after reconstruction",
+    "snapshot identities are stable across reconstruction",
+    "every retrieval score is finite",
+    "the earliest-session fact is retrieved before and after reconstruction",
+    "the fixed image_id survives in text or metadata provenance",
+    "no RetrievalItem claims a native image path"
+  ],
+  "endpoint_contract": {
+    "shared_answer_service": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "usage": "Only official method-internal summary, keyword, or migration calls are allowed. The lifecycle checker does not score a final answer.",
+    "temperature": {
+      "memoryos_internal": "official implementation default",
+      "memgas_internal": 0.0
+    }
+  },
+  "execution_contract": {
+    "execution_order": [
+      "memoryos",
+      "memgas"
+    ],
+    "parallel_runs": 1,
+    "gpu_count_for_adapter": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes_per_method": 30,
+    "unit_rerun_count": 0,
+    "fresh_storage_and_evidence_roots": true,
+    "offline_embedding_model_load": true
+  },
+  "authorization_gate": "This v2 design is not executable yet. After model and v2 environment audits, create a separate lifecycle-execution prefreeze that binds exact model records, MODEL_SHA256SUMS, environment records, pip freezes, v2 control-package SHA-256, resolved service endpoint identity, and fresh-root/process checks.",
+  "acceptance": "All shared and method-specific invariants pass, wrapper and checker exit zero, resource use stays within bounds, evidence hashes verify, and the root contains TERMINAL_ACCEPTED without TERMINAL_REJECTED.",
+  "failure": "Any failed invariant, swallowed backend error, collision, wrong hash, wrong model/service identity, non-finite value, timeout, or nonzero exit seals TERMINAL_REJECTED. Preserve the full root; do not repair or rerun it in place.",
+  "next_gate_after_acceptance": "Independently audit both v2 lifecycle roots, then design a full numerical WMA prefreeze with the same WMA samples, answer model, evaluator, sample order, top_k, and three registered seeds as the other baselines.",
+  "prohibited_actions": [
+    "executing the superseded v1 lifecycle design",
+    "executing this v2 design before the exact successor evidence is bound",
+    "calling Memoryos.get_response in the scoring path",
+    "forcing a MemoryOS migration or long-term analysis outside official capacity semantics",
+    "suppressing MemoryOS branch errors or MemGAS GMM fallbacks",
+    "using image bytes as native visual input for either text-only baseline",
+    "changing method graph, routing, retrieval, capacity, prompt, or retry semantics",
+    "using a shared or mutable Python environment",
+    "populating a numerical comparison-table cell from lifecycle evidence"
+  ]
+}

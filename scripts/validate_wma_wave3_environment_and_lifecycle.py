@@ -10,8 +10,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ENV_PATH = ROOT / "comparisons" / "wma-r1-wave3-environment-materialization-prefreeze.v1.json"
-LIFECYCLE_PATH = ROOT / "comparisons" / "wma-r1-wave3-lifecycle-design-prefreeze.v1.json"
+ENV_PATH = ROOT / "comparisons" / "wma-r1-wave3-environment-materialization-prefreeze.v2.json"
+LIFECYCLE_PATH = ROOT / "comparisons" / "wma-r1-wave3-lifecycle-design-prefreeze.v2.json"
 CONTROL_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave3-control-package-audit.v1.json"
 
 
@@ -43,6 +43,10 @@ lifecycle = load(LIFECYCLE_PATH)
 control_audit = load(CONTROL_AUDIT_PATH)
 
 assert environment["status"] == "FROZEN_BEFORE_ENVIRONMENT_MATERIALIZATION"
+assert environment["supersedes"]["execution_authorized"] is False
+assert environment["supersedes"]["sha256"] == sha256_file(
+    ROOT / environment["supersedes"]["path"]
+)
 assert "no lifecycle, numerical" in environment["scientific_evidence_role"]
 for gate in environment["prior_gates"]:
     assert gate["sha256"] == sha256_file(ROOT / gate["path"])
@@ -73,9 +77,17 @@ assert "torch==2.3.1+cpu" in exact_requirements(
 assert "sentence-transformers==2.2.2" in exact_requirements(
     ROOT / methods["memgas"]["requirements"]
 )
+assert "torchvision==0.18.1+cpu" in exact_requirements(
+    ROOT / methods["memgas"]["requirements"]
+)
+assert "nltk==3.9.1" in exact_requirements(ROOT / methods["memgas"]["requirements"])
 assert any("vllm==0.5.3.post1" in row for row in methods["memgas"]["omitted_official_extras"])
 
 assert lifecycle["status"] == "FROZEN_DESIGN_NOT_AUTHORIZED_FOR_EXECUTION"
+assert lifecycle["supersedes"]["execution_authorized"] is False
+assert lifecycle["supersedes"]["sha256"] == sha256_file(
+    ROOT / lifecycle["supersedes"]["path"]
+)
 assert "no benchmark, superiority, or SOTA" in lifecycle["scientific_evidence_role"]
 for gate in lifecycle["prior_gates"]:
     assert gate["sha256"] == sha256_file(ROOT / gate["path"])
