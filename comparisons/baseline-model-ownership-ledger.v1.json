@@ -1,0 +1,155 @@
+{
+  "schema_version": "agentenhance.baseline_model_ownership_ledger.v1",
+  "ledger_id": "baseline-model-ownership-20260904-v1",
+  "status": "FROZEN_BEFORE_PROJECT_OWNED_MODEL_MATERIALIZATION",
+  "frozen_at": "2026-09-04T05:10:00+08:00",
+  "purpose": "Identify every frozen baseline model target that may later be deleted after accepted local reproduction while permanently excluding shared or pre-existing assets.",
+  "retention_policy": {
+    "path": "comparisons/model-retention-policy.v2.json",
+    "sha256": "196c83d19320f406b5ca4a1d124ef025d8dbf6672d9e538dd3d2795464dbfec7"
+  },
+  "protected_shared_assets": [
+    {
+      "repository": "Qwen/Qwen3-VL-8B-Instruct",
+      "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+      "ownership": "SHARED_PREEXISTING",
+      "cleanup_eligible": false,
+      "reason": "Shared answer model used across the matched WMA stack; not created for one baseline reproduction."
+    },
+    {
+      "repository": "Qwen/Qwen3-VL-Embedding-2B",
+      "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "ownership": "SHARED_PREEXISTING",
+      "cleanup_eligible": false,
+      "reason": "Shared embedding model used across multiple matched baselines; not created for one reproduction."
+    }
+  ],
+  "project_owned_candidates": [
+    {
+      "model_id": "wave2-gme-qwen2-vl-2b",
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave2-gme-20260903-v1",
+      "prefetch_manifest": "comparisons/wma-wave2-model-prefetch-manifest.v2.json",
+      "prefetch_manifest_sha256": "b86b62467296f6df19daadbe88e83d40e54872152dae48b1774798f9fd342230",
+      "expected_files": 24,
+      "expected_bytes": 8848245026,
+      "required_dependents": ["wma-ngmemory", "wma-augustus", "wma-universalrag"],
+      "conservative_endpoint_dependents": ["wma-mirix"],
+      "ownership_state": "PROJECT_OWNED_CANDIDATE_IF_CREATED_BY_FROZEN_MATERIALIZER",
+      "current_state": "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE"
+    },
+    {
+      "model_id": "wave2-qwen3-vl-embedding-8b",
+      "repository": "Qwen/Qwen3-VL-Embedding-8B",
+      "revision": "2c4565515e0f265c6511776e7193b22c0968ddc7",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave2-qwen3-vl-embedding-8b-20260903-v1",
+      "prefetch_manifest": "comparisons/wma-wave2-model-prefetch-manifest.v2.json",
+      "prefetch_manifest_sha256": "b86b62467296f6df19daadbe88e83d40e54872152dae48b1774798f9fd342230",
+      "expected_files": 22,
+      "expected_bytes": 16305675665,
+      "required_dependents": ["wma-qwen3-vl-embedding-8b"],
+      "conservative_endpoint_dependents": [],
+      "ownership_state": "PROJECT_OWNED_CANDIDATE_IF_CREATED_BY_FROZEN_MATERIALIZER",
+      "current_state": "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE"
+    },
+    {
+      "model_id": "wave3-all-minilm-l6-v2",
+      "repository": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-all-minilm-l6-v2-20260904-v1",
+      "prefetch_manifest": "comparisons/wma-r1-wave3-model-prefetch-manifest.v1.json",
+      "prefetch_manifest_sha256": "5854b9db9b33752127585726f1dc4aad199b9ec40e0f916a8087f13e30af7f67",
+      "expected_files": 11,
+      "expected_bytes": 91578415,
+      "required_dependents": ["wma-memoryos"],
+      "conservative_endpoint_dependents": [],
+      "ownership_state": "PROJECT_OWNED_CANDIDATE_IF_CREATED_BY_FROZEN_MATERIALIZER",
+      "current_state": "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE"
+    },
+    {
+      "model_id": "wave3-contriever",
+      "repository": "facebook/contriever",
+      "revision": "2bd46a25019aeea091fd42d1f0fd4801675cf699",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-contriever-20260904-v1",
+      "prefetch_manifest": "comparisons/wma-r1-wave3-model-prefetch-manifest.v1.json",
+      "prefetch_manifest_sha256": "5854b9db9b33752127585726f1dc4aad199b9ec40e0f916a8087f13e30af7f67",
+      "expected_files": 8,
+      "expected_bytes": 438708755,
+      "required_dependents": ["wma-memgas"],
+      "conservative_endpoint_dependents": [],
+      "ownership_state": "PROJECT_OWNED_CANDIDATE_IF_CREATED_BY_FROZEN_MATERIALIZER",
+      "current_state": "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE"
+    },
+    {
+      "model_id": "wave4-hindsight-bge-small-en-v1.5",
+      "repository": "BAAI/bge-small-en-v1.5",
+      "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave4-hindsight-bge-small-en-v1.5-20260904-v1",
+      "prefetch_manifest": "comparisons/wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json",
+      "prefetch_manifest_sha256": "d44d8bb74affc574cafd44a682457d13411e314f3b7219f56b876e4a679933a5",
+      "expected_files": 11,
+      "expected_bytes": 134505940,
+      "required_dependents": ["wma-hindsight"],
+      "conservative_endpoint_dependents": [],
+      "ownership_state": "PROJECT_OWNED_CANDIDATE_IF_CREATED_BY_FROZEN_MATERIALIZER",
+      "current_state": "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE"
+    },
+    {
+      "model_id": "wave4-hindsight-ms-marco-minilm-l6-v2",
+      "repository": "cross-encoder/ms-marco-MiniLM-L6-v2",
+      "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave4-hindsight-ms-marco-minilm-l6-v2-20260904-v1",
+      "prefetch_manifest": "comparisons/wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json",
+      "prefetch_manifest_sha256": "d44d8bb74affc574cafd44a682457d13411e314f3b7219f56b876e4a679933a5",
+      "expected_files": 7,
+      "expected_bytes": 91819431,
+      "required_dependents": ["wma-hindsight"],
+      "conservative_endpoint_dependents": [],
+      "ownership_state": "PROJECT_OWNED_CANDIDATE_IF_CREATED_BY_FROZEN_MATERIALIZER",
+      "current_state": "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE"
+    },
+    {
+      "model_id": "wave5-structmem-llmlingua2-meetingbank",
+      "repository": "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank",
+      "revision": "5f0c82792b7ea14c6484e015b6a072009496b7f2",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave5-structmem-llmlingua2-meetingbank-20260904-v1",
+      "prefetch_manifest": "comparisons/wma-r1-wave5-structmem-model-prefetch-manifest.v1.json",
+      "prefetch_manifest_sha256": "5d67ff68a6baaf50d815abc8d978fea630b378ed63bba1eb8a18b78b84e51a36",
+      "expected_files": 7,
+      "expected_bytes": 713308492,
+      "required_dependents": ["wma-structmem"],
+      "conservative_endpoint_dependents": [],
+      "ownership_state": "PROJECT_OWNED_CANDIDATE_IF_CREATED_BY_FROZEN_MATERIALIZER",
+      "current_state": "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE"
+    }
+  ],
+  "aggregate": {
+    "project_owned_candidate_models": 7,
+    "project_owned_expected_files": 90,
+    "project_owned_expected_bytes": 26623841724,
+    "protected_shared_models": 2,
+    "currently_cleanup_eligible_models": 0
+  },
+  "state_transitions": [
+    "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE -> MATERIALIZED_PROTECTED only after accepted materialization and an exact creation/ownership record",
+    "MATERIALIZED_PROTECTED -> REPRODUCTION_ARCHIVED only after every required and conservative dependent has accepted lifecycle, complete three-seed numerical evidence, accepted projection, and independently verified archive",
+    "REPRODUCTION_ARCHIVED -> DRY_RUN_ELIGIBLE only after current model hashes, repository accessibility, process references, and project references are re-audited",
+    "DRY_RUN_ELIGIBLE -> QUARANTINED only through the policy's exact same-filesystem rename",
+    "QUARANTINED -> DELETED only after the phase-1 re-audit and explicit quarantine-path deletion",
+    "Any failed check leaves or returns the model to a protected non-deletable state"
+  ],
+  "retained_after_deletion": [
+    "all datasets, source checkouts, environments, configurations, prompts, seeds, predictions, raw records, summaries, logs, manifests, and archives",
+    "the complete post-download SHA-256 inventory and cleanup audit",
+    "the immutable public repository/revision and prefetch manifest needed to rematerialize the model"
+  ],
+  "deletion_boundary": "This ledger authorizes no deletion. Each model requires a later fully rendered DRY_RUN_ELIGIBLE record followed by the two-phase policy.",
+  "prohibited": [
+    "deleting either protected shared model",
+    "deleting a model after lifecycle but before complete numerical evidence and archive acceptance",
+    "deleting a model still used by any required or conservative dependent",
+    "deleting a partial, failed, ambiguous, symlinked, mounted, or unowned target under this ledger",
+    "deleting any dataset, result, log, environment, source checkout, manifest, archive, or evidence record"
+  ]
+}
