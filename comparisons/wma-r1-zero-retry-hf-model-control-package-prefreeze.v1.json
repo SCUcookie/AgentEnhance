@@ -1,0 +1,58 @@
+{
+  "schema_version": "agentenhance.control_package_prefreeze.v1",
+  "package_id": "wma-r1-zero-retry-hf-model-control-20260904-v1",
+  "status": "FROZEN_BEFORE_TRANSFER",
+  "frozen_at": "2026-09-04T04:50:00+08:00",
+  "implementation_commit": "d20fa88c07ef013118a2584eaa32af035edfaa8c",
+  "purpose": "Prestage the exact result-free zero-retry model acquisition controls for MemoryOS, MemGAS, and Hindsight without starting any download.",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-zero-retry-hf-model-control-20260904-v1.tar.gz",
+    "bytes": 8313,
+    "sha256": "a295c283041cce2af0d2c4e019148d905814d890a6c2fe01008c78537e29112d",
+    "format": "git archive tar.gz",
+    "source_revision": "d20fa88c07ef013118a2584eaa32af035edfaa8c"
+  },
+  "members": {
+    "regular_files": 5,
+    "directories": 2,
+    "files": [
+      {"path": "comparisons/wma-r1-wave3-model-materialization-prefreeze.v2.json", "sha256": "6b4e77dc942d002879f17e59a97727fd04050913a7a71d00ec266ef36d66a692"},
+      {"path": "comparisons/wma-r1-wave3-model-prefetch-manifest.v1.json", "sha256": "5854b9db9b33752127585726f1dc4aad199b9ec40e0f916a8087f13e30af7f67"},
+      {"path": "comparisons/wma-r1-wave4-hindsight-model-materialization-prefreeze.v2.json", "sha256": "98cf2d006cb4c5d58f22313ef80c75a794ad962066e8692ee6893ecf4171afac"},
+      {"path": "comparisons/wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json", "sha256": "d44d8bb74affc574cafd44a682457d13411e314f3b7219f56b876e4a679933a5"},
+      {"path": "scripts/materialize_hf_model_snapshot_v3.py", "sha256": "6bf3cd9b1458920d9a4e9accf11e9d3e3c1c9d710d627e88272810fa73d4dde9"}
+    ],
+    "symlinks": 0,
+    "hardlinks": 0,
+    "devices": 0,
+    "absolute_or_parent_paths": 0
+  },
+  "remote": {
+    "host_alias": "agent-enhance-gpu",
+    "archive_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-zero-retry-hf-model-control-20260904-v1.tar.gz",
+    "extraction_root": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-zero-retry-hf-model-control-20260904-v1",
+    "both_targets_must_be_absent": true
+  },
+  "transfer": {
+    "protocol": "OpenSSH SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "connections": 1,
+    "retries": 0,
+    "ordinary_put_exception": "Permitted only for this exact 8313-byte result-free control archive; resumable SFTP remains mandatory for large payloads."
+  },
+  "validation": [
+    "verify the remote byte count and whole-archive SHA-256 before extraction",
+    "reject unsafe paths and every member other than the exact five regular files and two directories",
+    "extract only into the fresh frozen extraction root",
+    "verify all five extracted file hashes",
+    "do not execute the materializer before Wave1 terminal acceptance and complete service release"
+  ],
+  "resource_noninterference": "Transfer, hashing, and extraction use bounded CPU and storage only; no model payload, dependency installation, API call, pg0, or GPU access occurs.",
+  "failure": "Any collision, transfer interruption, size mismatch, hash mismatch, unsafe member, extraction failure, or extracted-file mismatch rejects the package and preserves received artifacts.",
+  "prohibited": [
+    "starting any model download while Wave1 is active",
+    "editing an extracted manifest or script",
+    "using this control package as model or numeric evidence",
+    "deleting any source, result, model, dataset, log, manifest, archive, or partial"
+  ]
+}
