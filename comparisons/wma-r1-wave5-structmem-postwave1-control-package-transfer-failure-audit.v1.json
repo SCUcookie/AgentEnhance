@@ -1,0 +1,46 @@
+{
+  "schema_version": "agentenhance.control_package_transfer_failure_audit.v1",
+  "audit_id": "wma-r1-wave5-structmem-postwave1-control-transfer-20260904-v1",
+  "status": "TERMINAL_REJECTED",
+  "audited_at": "2026-09-04T13:50:00+08:00",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave5-structmem-postwave1-control-package-prefreeze.v1.json",
+    "sha256": "d8f4336d322399d67379bf111ebf8f5fb1e57c5db16b11b594270d9928adda34"
+  },
+  "attempt": {
+    "protocol": "sftp",
+    "rate_limit_kbit_per_second": 4096,
+    "command": "reput",
+    "attempt_count": 1,
+    "retry_count": 0,
+    "client_observation": "stat remote: No such file or directory",
+    "cause": "OpenSSH sftp reput requires an existing remote partial file and cannot initialize an absent target."
+  },
+  "independent_post_failure_check": {
+    "remote_archive_absent": true,
+    "remote_bytes_written": 0,
+    "remote_destination_absent": true,
+    "local_archive_retained": true,
+    "local_archive_bytes": 13372,
+    "local_archive_sha256": "afe4839f96c4bc9138948ce6886f2530278992f63e2a3f1ec762e26832343736"
+  },
+  "scientific_effect": {
+    "scripts_executed": 0,
+    "network_dependency_resolutions": 0,
+    "model_payload_bytes_downloaded": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0
+  },
+  "wave1_non_interference_observation": {
+    "accepted_units_before_attempt": 62,
+    "rejected_units_before_attempt": 0,
+    "controller_remained_active": true
+  },
+  "decision": "Reject the v1 transport command without modifying historical evidence. Freeze a fresh recovery target that uses OpenSSH sftp put -a, which initializes an absent target and resumes a partial target while preserving the same 4096 Kbit/s limit.",
+  "prohibited_actions": [
+    "editing the rejected v1 prefreeze in place",
+    "claiming successful transfer or extraction",
+    "using the rejected remote logical target for recovery",
+    "executing model, dependency, lifecycle, or numerical stages from this failure"
+  ]
+}
