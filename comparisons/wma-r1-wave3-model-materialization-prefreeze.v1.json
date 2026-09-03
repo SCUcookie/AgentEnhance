@@ -1,0 +1,64 @@
+{
+  "schema_version": "agentenhance.model_materialization_prefreeze.v1",
+  "materialization_id": "wma-r1-wave3-model-materialization-20260904-v1",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-04T00:20:09+08:00",
+  "adapter_feasibility_audit": {
+    "path": "comparisons/wma-r1-wave3-adapter-feasibility-audit.v1.json",
+    "sha256": "cb167f0d3f0ec4296d0c259a70b1b696c53e2992c617747b4bb8b0348fe2de55"
+  },
+  "source_manifest": "comparisons/wma-r1-wave3-model-prefetch-manifest.v1.json",
+  "source_manifest_sha256": "5854b9db9b33752127585726f1dc4aad199b9ec40e0f916a8087f13e30af7f67",
+  "downloader": "scripts/materialize_hf_model_snapshot.py",
+  "downloader_sha256": "6c9ab401d954a19a0e0783ea95031a1760462b62ebeaea09311e1dd5f1856ec1",
+  "execution_order": [
+    {
+      "method_id": "memoryos",
+      "repository": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-all-minilm-l6-v2-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-all-minilm-l6-v2-model-materialization-20260904-v1"
+    },
+    {
+      "method_id": "memgas",
+      "repository": "facebook/contriever",
+      "revision": "2bd46a25019aeea091fd42d1f0fd4801675cf699",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-contriever-20260904-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-contriever-model-materialization-20260904-v1"
+    }
+  ],
+  "scheduler": {
+    "start_condition": "Wave-1 controller is terminal, all Wave-1 model services have stopped, and an independent read-only audit confirms no process references either target.",
+    "parallel_downloads": 1,
+    "direct_server_download": true,
+    "mac_to_server_transfer": "If direct download is unavailable, transfer only with resumable sftp -l 4096 and preserve the same target/evidence identities.",
+    "gpu_loading_during_download": false
+  },
+  "execution_contract": {
+    "server_root_injection": "Set AGENT_ENHANCE_REMOTE_ROOT immediately before execution; it must resolve to a writable project root named AgentEnhance under /data1 or /data2.",
+    "command_template": "python scripts/materialize_hf_model_snapshot.py --prefetch-manifest comparisons/wma-r1-wave3-model-prefetch-manifest.v1.json --repository <frozen-repository> --evidence-root <fresh-logical-evidence-root>",
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes_per_model": 90,
+    "parallel_materializations": 1,
+    "retry_count": 0
+  },
+  "acceptance": [
+    "Hugging Face resolves the exact immutable revision.",
+    "The selected repository file names exactly match allow_patterns.",
+    "Selected file count and byte total match the official expanded tree.",
+    "Every selected local file has a retained path, byte size, and SHA-256.",
+    "The evidence manifest and model SHA list have their own retained SHA-256 inventory.",
+    "The evidence root is TERMINAL_ACCEPTED and not TERMINAL_REJECTED."
+  ],
+  "failure": "Any collision, unresolved environment variable, network error, identity mismatch, file-set mismatch, byte mismatch, or hash error seals a fresh TERMINAL_REJECTED evidence root, retains the partial target, and requires a separately frozen recovery target.",
+  "next_gate_after_acceptance": "Independently audit both model snapshots, then freeze isolated environment materialization and one lifecycle execution per method. Model acceptance never authorizes a numerical run.",
+  "prohibited_actions": [
+    "starting while Wave-1 or any of its model services is active",
+    "using a moving branch or model name instead of the frozen revision",
+    "loading a model during this download-only stage",
+    "installing method dependencies into the Wave-1 environment",
+    "repairing or deleting a rejected target in place",
+    "populating any comparison-table numeric cell from this gate"
+  ]
+}

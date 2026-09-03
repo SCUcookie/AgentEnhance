@@ -1,0 +1,128 @@
+{
+  "schema_version": "agentenhance.wma_wave3_adapter_feasibility_audit.v1",
+  "audit_id": "wma-r1-wave3-adapter-feasibility-20260904-v1",
+  "audited_at": "2026-09-04T00:20:09+08:00",
+  "status": "TERMINAL_ACCEPTED_FOR_ADAPTER_PREFREEZE",
+  "scientific_evidence_role": "engineering API and feasibility evidence only; no lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "source_identity_gate": {
+    "path": "comparisons/wma-r1-wave3-source-materialization-audit.v1.json",
+    "sha256": "7ff36ebd24f5aa65a99a98dd3ba709c716e49e10cb45284ff00e85008b4fd5dc"
+  },
+  "worldmemarena_interface": {
+    "repository": "https://github.com/UCSB-AI/WorldMemArena",
+    "commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "required_operations": [
+      "reset",
+      "ingest_turn",
+      "end_session",
+      "snapshot_memories",
+      "export_memory_delta",
+      "retrieve",
+      "get_capabilities"
+    ],
+    "attachment_boundary": "Text-only methods ingest the frozen attachment caption with image_id and source provenance in text/metadata; they never receive credit for native image-memory support."
+  },
+  "methods": [
+    {
+      "method_id": "memoryos",
+      "source_revision": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+      "source_tree": "b18609dd5bf77c304dd6f5d6a1afbcd64b643572",
+      "implementation_root": "memoryos-pypi",
+      "audited_files": [
+        {"path": "memoryos-pypi/memoryos.py", "sha256": "f4779d6b9d4dd68732282b82421824e37372a6a5259d345a026977971249c344"},
+        {"path": "memoryos-pypi/retriever.py", "sha256": "79a7080f954a5e6b74488ccb451c792afd8b8154c3db52ca31735a6498dc50a9"},
+        {"path": "memoryos-pypi/short_term.py", "sha256": "d8d01bdc67edb77bee0003ffc23114d93d1348d4019a6f7aa92212253a7f011e"},
+        {"path": "memoryos-pypi/updater.py", "sha256": "17c34d45db6ba7c95d4f11122b6ae0e37cccb5b60d5dc4fa3434930f59f7dde3"},
+        {"path": "memoryos-pypi/utils.py", "sha256": "419c4f0907dd795c703339573eb34888040822e2d3f2c60b0d045ba5d4f9a0b8"},
+        {"path": "memoryos-pypi/requirements.txt", "sha256": "3c7ae69a3b701afac009185fd7d0f6997b1f6112f27f8cb1b3b146a1b6021e52"}
+      ],
+      "official_defaults": {
+        "short_term_capacity": 10,
+        "mid_term_capacity": 2000,
+        "long_term_knowledge_capacity": 100,
+        "retrieval_queue_capacity": 7,
+        "embedding_repository": "sentence-transformers/all-MiniLM-L6-v2",
+        "llm_model_default": "gpt-4o-mini"
+      },
+      "adapter_mapping": {
+        "reset": "Construct a new Memoryos instance against a fresh per-run storage directory; no backend reset API exists.",
+        "ingest_turn": "Preserve ordered turns and pair one user turn with the next assistant turn before calling add_memory. Append attachment captions plus image_id provenance to the turn text because meta_data is accepted but discarded by the official implementation.",
+        "end_session": "Flush only a complete pending user/assistant pair. Do not call force_mid_term_analysis because it changes the official heat-trigger lifecycle.",
+        "snapshot_memories": "Normalize all persisted short-term, mid-term, user-long-term, and assistant-long-term records without altering the source files.",
+        "retrieve": "Combine current short-term history with retriever.retrieve_context mid/long-term outputs, preserve backend ordering, and let the common WMA answer generator consume the normalized context. Do not call Memoryos.get_response.",
+        "export_memory_delta": "Diff normalized backend identities against the previous per-session snapshot; never infer an update from generated answer text."
+      },
+      "observed_semantics": [
+        "add_memory migrates short-term content before deque insertion when capacity is full.",
+        "Memoryos.get_response uses temperature 0.7, generates the final answer, and writes the query/answer back into memory, so it is excluded from the common-answer evaluation path.",
+        "retrieve_context searches mid-term and two long-term stores but omits short-term history; the official response path adds short-term separately.",
+        "mid-term retrieval increments visit/access state and saves it, so query order is stateful and must remain frozen.",
+        "retrieve_context converts any task exception into an empty list; the adapter must expose per-branch errors in raw_trace and reject lifecycle evidence when any branch falls back.",
+        "short-, mid-, and long-term persistence catches some write/load errors after printing; the wrapper must verify expected files and parseability independently."
+      ],
+      "environment_boundary": "Use a dedicated Python 3.9 environment. Preserve sentence-transformers==5.0.0 and numpy==1.24.*; resolve and hash all transitive versions. A faiss-cpu substitution for unavailable faiss-gpu packaging is permitted only if frozen before execution and verified to retain IndexFlatIP behavior.",
+      "lifecycle_minimum": "At least 12 ordered user/assistant pairs are required so the test crosses the default short-term capacity, exercises LLM-backed migration, persists short and mid term, reconstructs from disk, and retrieves before and after reconstruction."
+    },
+    {
+      "method_id": "memgas",
+      "source_revision": "c2d4e9fdc331074802a711baf4371197f9194399",
+      "source_tree": "0ee5cebc3ca83cacd96cea3eec4622c5ab0c6683",
+      "implementation_root": "quickstart",
+      "audited_files": [
+        {"path": "quickstart/config.py", "sha256": "0128ec3ca2162f3297011438bfbb18de0ca5e76312297b717671160f9fe2590e"},
+        {"path": "quickstart/embedder.py", "sha256": "32dcb7f00754b36c240a1f71677d8de8db0ba374e5d87b74494ca33adec9bc3b"},
+        {"path": "quickstart/memory.py", "sha256": "b24787570897293c11410ebb018777b6fd60a7c1f409dbc8453eb7d45a30b726"},
+        {"path": "quickstart/retriever.py", "sha256": "e727c679464c3c6b542fc7657c68d959415a3711c89495804deb9ecd12cc4924"},
+        {"path": "quickstart/store.py", "sha256": "d2f5af299b064b39e2ec5dcd094a6dfd13e6bb7ade50d4c9cdd75ffbf229c952"},
+        {"path": "quickstart/llm_client.py", "sha256": "aab0ce2d090c6fdac2609f9a2dc9ef4bf7a6936a1ca93aecc4eecdd782229d0c"},
+        {"path": "requirements.txt", "sha256": "6e8020ff491830f3e96552da4d287fc0aada1c1f32d7da801963e822deb3682f"}
+      ],
+      "official_defaults": {
+        "embedder": "contriever",
+        "embedding_repository": "facebook/contriever",
+        "batch_size": 64,
+        "default_mode": "memgas",
+        "mem_threshold": 30,
+        "n_components": 2,
+        "num_seednodes": 15,
+        "damping": 0.1,
+        "router_temp": 0.2,
+        "llm_temperature": 0.0,
+        "llm_max_retries": 3,
+        "auto_save": true
+      },
+      "adapter_mapping": {
+        "reset": "Construct MemGASMemory with a fresh per-run storage directory and no pre-existing memory_state.pt.",
+        "ingest_turn": "Buffer normalized turn text and attachment-caption provenance by session; do not create a memory record per turn.",
+        "end_session": "Call add once with the complete ordered session and conversation_id equal to the WMA session_id, retaining WMA source identities in metadata.",
+        "snapshot_memories": "Normalize MemoryStore.records and include all five stored embedding granularities only as metadata counts/dimensions, not raw vectors.",
+        "retrieve": "Call retrieve with conversation_id unset so questions may search all completed sessions, default mode memgas, and the frozen top_k.",
+        "export_memory_delta": "Emit one add for each new backend memory_id and no synthetic updates."
+      },
+      "observed_semantics": [
+        "Each completed session triggers two internal LLM calls for summary and keywords and five Contriever encoding passes.",
+        "The official LLM client makes up to three attempts per internal request; these attempts are method semantics and must be logged separately from prohibited unit reruns.",
+        "Retrieval uses entropy routing, a similarity graph, and personalized PageRank over session, turn, summary, and keyword nodes.",
+        "GaussianMixture edge selection catches every exception and silently falls back to the highest-similarity edge; the execution overlay must count and disclose this fallback without changing its returned edge.",
+        "MemoryStore persists records and embeddings with torch.save and loads with torch.load.",
+        "The repository tracks eight quickstart/__pycache__/*.cpython-39.pyc files. An immutable execution copy must exclude them and run with PYTHONDONTWRITEBYTECODE=1 so audited source text is authoritative."
+      ],
+      "reproducibility_overlay": "A minimal hashed overlay may replace only the hard-coded facebook/contriever identifier with the frozen local model path and wrap _select_edges to count exceptions while preserving the same top-1 fallback. Any other algorithm change is prohibited.",
+      "environment_boundary": "Use a dedicated Python 3.9 quickstart environment. Install only imported runtime dependencies, retain official pins where compatible, and freeze the resolved lock. Do not require vLLM or flash-attn inside this client environment because the LLM is an external OpenAI-compatible service.",
+      "lifecycle_minimum": "Use at least three completed sessions, persist and reconstruct memory_state.pt, exercise default memgas retrieval with enough candidate nodes to invoke GMM selection, verify finite scores, and require an explicit fallback counter."
+    }
+  ],
+  "shared_answer_boundary": "Neither method may generate the scored final answer. The same frozen WMA answer model, prompt, decoding settings, sample order, and evaluator used by other baselines consume the normalized retrieved context.",
+  "multimodal_claim_boundary": "Both implementations are caption-mediated text-memory baselines. Image bytes are retained for provenance but are not encoded by these methods; results must be labeled caption-mediated and cannot support a native multimodal-memory claim.",
+  "decision": "ACCEPT both methods for separate model, environment, overlay, and lifecycle prefreezes.",
+  "next_allowed_gate": "Freeze and materialize exact embedding snapshots only after Wave-1 releases its service stack; then construct isolated environments and execute one lifecycle gate per method before any full numerical run.",
+  "prohibited_actions": [
+    "calling Memoryos.get_response in the WMA scoring path",
+    "forcing MemoryOS long-term analysis at session end",
+    "silently ignoring MemoryOS retrieval branch errors or persistence failures",
+    "loading MemGAS tracked bytecode instead of audited source text",
+    "changing MemGAS graph, routing, GMM, PageRank, embedding, or retry semantics in the reproducibility overlay",
+    "claiming native image-memory support for either method",
+    "starting model download, GPU lifecycle, or numerical execution while Wave-1 is active"
+  ]
+}

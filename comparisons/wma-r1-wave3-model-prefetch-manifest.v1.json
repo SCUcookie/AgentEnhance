@@ -1,0 +1,86 @@
+{
+  "schema_version": "agentenhance.model_prefetch_manifest.v1",
+  "manifest_id": "wma-r1-wave3-model-prefetch-20260904-v1",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-04T00:20:09+08:00",
+  "source": "Hugging Face official repository API and immutable Git HEAD",
+  "models": [
+    {
+      "purpose": "MemoryOS official default SentenceTransformer embedding model",
+      "method_id": "memoryos",
+      "repository": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "license": "apache-2.0",
+      "private": false,
+      "gated": false,
+      "allow_patterns": [
+        "1_Pooling/config.json",
+        "README.md",
+        "config.json",
+        "config_sentence_transformers.json",
+        "model.safetensors",
+        "modules.json",
+        "sentence_bert_config.json",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "vocab.txt"
+      ],
+      "expected_files": [
+        {"path": "1_Pooling/config.json", "bytes": 190},
+        {"path": "README.md", "bytes": 10502},
+        {"path": "config.json", "bytes": 612},
+        {"path": "config_sentence_transformers.json", "bytes": 116},
+        {"path": "model.safetensors", "bytes": 90868376},
+        {"path": "modules.json", "bytes": 349},
+        {"path": "sentence_bert_config.json", "bytes": 53},
+        {"path": "special_tokens_map.json", "bytes": 112},
+        {"path": "tokenizer.json", "bytes": 466247},
+        {"path": "tokenizer_config.json", "bytes": 350},
+        {"path": "vocab.txt", "bytes": 231508}
+      ],
+      "expected_file_count": 11,
+      "expected_total_bytes": 91578415,
+      "expected_local_path": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-all-minilm-l6-v2-20260904-v1",
+      "tree_api": "https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/1110a243fdf4706b3f48f1d95db1a4f5529b4d41?recursive=true&expand=true",
+      "load_policy": "Pass the immutable local snapshot path through Memoryos.embedding_model_name and require HF_HUB_OFFLINE=1 and TRANSFORMERS_OFFLINE=1."
+    },
+    {
+      "purpose": "MemGAS official default Contriever embedding model",
+      "method_id": "memgas",
+      "repository": "facebook/contriever",
+      "revision": "2bd46a25019aeea091fd42d1f0fd4801675cf699",
+      "license": {
+        "huggingface_model_card": "NOT_DECLARED",
+        "associated_upstream_source_repository": "CC-BY-NC-4.0",
+        "policy": "Project-local non-commercial research reproduction only; do not redistribute weights without a separate rights review."
+      },
+      "private": false,
+      "gated": false,
+      "allow_patterns": ["*"],
+      "expected_files": [
+        {"path": ".gitattributes", "bytes": 1175},
+        {"path": "README.md", "bytes": 1402},
+        {"path": "config.json", "bytes": 619},
+        {"path": "pytorch_model.bin", "bytes": 438007537},
+        {"path": "special_tokens_map.json", "bytes": 112},
+        {"path": "tokenizer.json", "bytes": 466081},
+        {"path": "tokenizer_config.json", "bytes": 321},
+        {"path": "vocab.txt", "bytes": 231508}
+      ],
+      "expected_file_count": 8,
+      "expected_total_bytes": 438708755,
+      "expected_local_path": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-contriever-20260904-v1",
+      "tree_api": "https://huggingface.co/api/models/facebook/contriever/tree/2bd46a25019aeea091fd42d1f0fd4801675cf699?recursive=true&expand=true",
+      "security_note": "The only available model weight is pytorch_model.bin. The official Hugging Face expanded tree reported safe scanning and four innocuous pickle imports; retain the exact file hash after download.",
+      "load_policy": "The hashed MemGAS execution overlay substitutes only the hard-coded repository string with this immutable local path and requires HF_HUB_OFFLINE=1 and TRANSFORMERS_OFFLINE=1."
+    }
+  ],
+  "download_policy": {
+    "scheduler_gate": "Do not download either snapshot until the Wave-1 controller is terminal and its model services are stopped.",
+    "transport": "Download directly on the server into the exact project-owned path; if transferred from the Mac, use resumable sftp limited to 4096 Kbit/s.",
+    "post_download": "Verify resolved revision, selected file names, file count, byte count, and SHA-256 for every local file before lifecycle execution.",
+    "offline_execution": "Lifecycle and numerical runs must deny network model resolution and load only these local snapshots.",
+    "cleanup": "comparisons/model-retention-policy.v2.json governs cleanup; source checkouts, environments, datasets, evidence, archives, shared models, and failed partial targets are not cleanup candidates."
+  }
+}

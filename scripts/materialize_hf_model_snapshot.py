@@ -35,6 +35,14 @@ def validate_project_path(path: Path, leaf: tuple[str, ...]) -> None:
     raise ValueError(f"path is outside the required project scope {leaf}: {path}")
 
 
+def resolve_manifest_path(raw_path: str) -> Path:
+    """Resolve an environment-backed contract path and reject unresolved variables."""
+    expanded = os.path.expandvars(raw_path)
+    if "$" in expanded:
+        raise ValueError(f"unresolved environment variable in manifest path: {raw_path}")
+    return Path(expanded)
+
+
 def repository_files(root: Path) -> list[Path]:
     rows = []
     for path in root.rglob("*"):
@@ -63,7 +71,7 @@ def main() -> int:
         raise SystemExit(f"expected exactly one model manifest row: {args.repository}")
     model: dict[str, Any] = matches[0]
 
-    target = Path(model["expected_local_path"])
+    target = resolve_manifest_path(model["expected_local_path"])
     evidence_root = args.evidence_root.resolve()
     validate_project_path(target, ("AgentEnhance", "cache", "models"))
     validate_project_path(evidence_root, ("AgentEnhance", "runs"))
@@ -95,6 +103,16 @@ def main() -> int:
 
         files = repository_files(target)
         total_bytes = sum(path.stat().st_size for path in files)
+        expected_files = model.get("expected_files")
+        if expected_files is not None:
+            expected_by_path = {
+                str(row["path"]): int(row["bytes"]) for row in expected_files
+            }
+            observed_by_path = {
+                path.relative_to(target).as_posix(): path.stat().st_size for path in files
+            }
+            if observed_by_path != expected_by_path:
+                raise RuntimeError("selected model file paths or per-file byte sizes mismatch")
         if len(files) != int(model["expected_file_count"]):
             raise RuntimeError(
                 f"file count mismatch: expected {model['expected_file_count']}, got {len(files)}"
