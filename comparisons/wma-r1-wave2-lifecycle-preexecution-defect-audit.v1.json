@@ -1,0 +1,51 @@
+{
+  "schema_version": "agentenhance.wma_wave2_lifecycle_preexecution_defect_audit.v1",
+  "audit_id": "wma-r1-wave2-lifecycle-preexecution-defect-20260904-v1",
+  "status": "ACCEPTED_PREEXECUTION_DEFECT_AUDIT",
+  "audited_at": "2026-09-04T06:44:00+08:00",
+  "scientific_evidence_role": "implementation audit only; no lifecycle or numerical result",
+  "audited_frozen_route": {
+    "contract": "comparisons/wma-r1-wave2-lifecycle-execution-prefreeze.v1.json",
+    "contract_sha256": "112fa7a07bcf469017547fa6cfbbb22ed209fe23fbfef1e439ce357074104463",
+    "wrapper": "scripts/remote_wma_wave2_adapter_lifecycle.sh",
+    "wrapper_sha256": "f6d3cca6e1469f93a000ea40e276268cc00683b014fada9a92e98ca71723a61e",
+    "execution_performed": false,
+    "disposition": "SUPERSEDED_BEFORE_EXECUTION"
+  },
+  "findings": [
+    {
+      "baseline": "MIRIX",
+      "severity": "blocking",
+      "evidence": [
+        "eval_framework/memory_adapters/mirix_adapter.py calls EmbeddingConfig.default_config(resolve_embedding_model())",
+        "MIRIX EmbeddingConfig.default_config('text-embedding-3-small') fixes embedding_endpoint to https://api.openai.com/v1",
+        "MIRIX mirix.embeddings.embedding_model constructs OpenAIEmbedding without forwarding config.embedding_model",
+        "the original wrapper checks a separate 1536-dimensional endpoint but does not bind MIRIX's internal agent states to it"
+      ],
+      "risk": "The lifecycle can contact a prohibited external endpoint, use a different embedding model identity, or fail for the wrong reason while the health check still passes."
+    },
+    {
+      "baseline": "Qwen3-VL-Embedding-8B",
+      "severity": "blocking",
+      "evidence": [
+        "eval_framework/memory_adapters/qwen_embed_adapter.py sends remote image bytes only when QWEN_VL_EMBED_REMOTE_IMAGES=1",
+        "the source default is 0 and the original wrapper does not set the variable",
+        "the lifecycle image-reference invariant can be satisfied by retained image metadata even if the embedding request encoded the file path as text"
+      ],
+      "risk": "A false multimodal lifecycle acceptance is possible without any pixel-level image embedding."
+    }
+  ],
+  "successor_requirements": [
+    "route MIRIX's pre-construction embedding config and client factory to the exact local 1536-dimensional endpoint and model name",
+    "set and validate QWEN_VL_EMBED_REMOTE_IMAGES=1 before adapter construction",
+    "capture per-lifecycle chat and embedding service-log deltas",
+    "reject any observed HTTP 4xx/5xx, OOM, traceback, A-Mem metadata-extraction error, or Omni-SimpleMem add failure",
+    "retain the frozen source checkout unmodified and record the runtime guard hash"
+  ],
+  "prohibited": [
+    "executing the superseded lifecycle wrapper",
+    "editing the frozen WorldMemArena checkout",
+    "treating this audit as evidence that either corrected lifecycle passes",
+    "starting Wave2 services while Wave1 is active"
+  ]
+}

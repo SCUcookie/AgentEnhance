@@ -1,0 +1,94 @@
+{
+  "schema_version": "agentenhance.wma_wave2_runner_implementation_prefreeze.v1",
+  "implementation_id": "wma-r1-wave2-runner-implementation-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_NO_EXECUTION_AUTHORIZATION",
+  "frozen_at": "2026-09-04T06:44:00+08:00",
+  "scientific_question": "Under one matched local WorldMemArena protocol, what complete three-seed estimates do eight recent multimodal or agent-memory implementations achieve without importing official result numbers or silently falling back across modality or endpoint boundaries?",
+  "estimand": "For each method and every frozen metric or slice, the mean and seed-level variability over seeds 0, 1, and 2 on the same 150 sample clusters and 7906 QA records per seed.",
+  "decision_informed": "Whether each method is eligible to populate the fixed local baseline table and serve as a comparator for a later, independently frozen AgentEnhance experiment.",
+  "evidence_roles": {
+    "source_and_config": "frozen implementation identity",
+    "lifecycle": "implementation-fidelity gate only",
+    "full_small_split": "same-protocol comparator evidence after a separate post-lifecycle authorization",
+    "official_numbers": "excluded from local result admission",
+    "AgentEnhance_results": "unobserved and prohibited during baseline execution"
+  },
+  "fixed_inputs": {
+    "worldmemarena_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "worldmemarena_config_sha256": "74cc054fd3a262571d67deb61f929bca68610b67320f8ea13c6b922e0257a184",
+    "dataset_manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+    "sample_inventory": "comparisons/wma-small-run-units.v1.csv",
+    "sample_inventory_sha256": "027f2c3f757d99cb098a6e1887ac7bc837f726031368a4c758970ee90db33f39",
+    "samples_per_seed": 150,
+    "sessions_per_seed": 2761,
+    "qa_per_seed": 7906,
+    "seeds": [0, 1, 2],
+    "retrieval_top_k": 10,
+    "answer_model": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "answer_temperature": 0,
+    "answer_evidence_mode": "memory",
+    "max_eval_workers": 1
+  },
+  "methods": [
+    {"baseline": "MGMemory", "slug": "mgmemory", "service_profile": "text384", "embedding_model": "text-embedding-3-small", "embedding_dimension": 384},
+    {"baseline": "A-Mem", "slug": "a_mem", "service_profile": "text384", "embedding_model": "text-embedding-3-small", "embedding_dimension": 384},
+    {"baseline": "Omni-SimpleMem", "slug": "omni_simplemem", "service_profile": "text1024", "embedding_model": "text-embedding-3-small", "embedding_dimension": 1024},
+    {"baseline": "MIRIX", "slug": "mirix", "service_profile": "text1536", "embedding_model": "text-embedding-3-small", "embedding_dimension": 1536, "runtime_guard": "local endpoint and explicit model forwarding before agent construction"},
+    {"baseline": "NGMemory", "slug": "ngmemory", "service_profile": "gme1536", "embedding_model": "gme-Qwen2-VL-2B-Instruct", "embedding_dimension": 1536},
+    {"baseline": "AUGUSTUSMemory", "slug": "augustus", "service_profile": "gme1536", "embedding_model": "gme-Qwen2-VL-2B-Instruct", "embedding_dimension": 1536},
+    {"baseline": "UniversalRAGMemory", "slug": "universalrag", "service_profile": "gme1536", "embedding_model": "gme-Qwen2-VL-2B-Instruct", "embedding_dimension": 1536},
+    {"baseline": "Qwen3-VL-Embedding-8B", "slug": "qwen3_vl_embedding_8b", "service_profile": "qwen4096", "embedding_model": "Qwen3-VL-Embedding-8B", "embedding_dimension": 4096, "runtime_guard": "remote image bytes required"}
+  ],
+  "service_topology": {
+    "ports": {"chat": 18220, "primary_embedding": 18221, "aux_embedding": 18222},
+    "gpu_assignment": {"primary_embedding": [1], "chat": [3, 4], "aux_embedding": [5]},
+    "allocated_gpu_indices": [1, 3, 4, 5],
+    "chat_gpu_memory_utilization": 0.9,
+    "chat_max_model_len": 131072,
+    "chat_max_num_seqs": 1,
+    "parallel_methods": 1,
+    "parallel_units": 1,
+    "reason": "Retains the frozen four-GPU allocated service-window accounting and sequential sample policy used by Wave1 while swapping only the primary retrieval encoder required by each method."
+  },
+  "implementation": {
+    "runtime_guard": {"path": "scripts/wma_wave2_runtime_guard.py", "sha256": "0e2e4102bc0efc7ea39631695022708333cf48e7e481c104ea0374cdafef7fd9"},
+    "seeded_launcher": {"path": "scripts/run_wma_seeded_wave2.py", "sha256": "0ac49d07973aed1dfaa532ecac04a32f34819dce69d553c8d912a48a41058528"},
+    "guarded_lifecycle_launcher": {"path": "scripts/run_wma_wave2_lifecycle_guarded.py", "sha256": "5cdee70be32dd9624bbb5113a346761eceecab5b309d6a4453eeab68f39a61ed"},
+    "gme_server_launcher": {"path": "scripts/run_vllm_gme_guarded.py", "sha256": "232da2e5837a4d1e1536566569002c540b52d95c57f5f39fc3a09f9060a0f787"},
+    "start_services": {"path": "scripts/remote_start_wma_wave2_services.sh", "sha256": "13ac118a8afcc0d07ab6190ec476eb4253d421f6b801bfef89a635cc34f7113f"},
+    "stop_services": {"path": "scripts/remote_stop_wma_wave2_services.sh", "sha256": "3a8bb37e4518aabce70b48952c8bb0c9e09b70e6b746bb061c8f66bb752cfb6e"},
+    "lifecycle_wrapper": {"path": "scripts/remote_wma_wave2_adapter_lifecycle_v2.sh", "sha256": "6325258af9b518eeeab08e06a61735810eb863b87d5b821fc87c5cac45434f96"},
+    "unit_runner": {"path": "scripts/remote_wma_wave2_one_shot_unit.sh", "sha256": "9a52f27cb6abb5dfccf6c0a6902e3ba8eaa39668240b7019e3e59035245795be"},
+    "full_method_scheduler": {"path": "scripts/remote_wma_wave2_full_method.sh", "sha256": "cc73d33ab3fdea57cc5d94498556773092e9496d7c19d4bfcabc4e73913720b9"},
+    "unit_test": {"path": "tests/test_wma_wave2_runtime_guard.py", "sha256": "66317365031253bda341dd7c40479bc6ef55d45d4928468b9408117da6e96937", "tests": 6}
+  },
+  "result_breadth": {
+    "method_seed_numeric_fields": 55,
+    "three_seed_wave2_rows_before_slices": 440,
+    "slice_families": ["scope", "task_family", "subcategory", "difficulty", "evidence_modality", "question_type"],
+    "frozen_slice_count": 53,
+    "metrics_per_slice": 8,
+    "reported_layers": ["answer quality", "retrieval ranking", "retrieval coverage", "memory extraction accuracy", "update handling", "interference rejection", "latency", "token usage", "RAM", "VRAM", "storage", "GPU-hours", "failure denominators"]
+  },
+  "failure_semantics": {
+    "unit": "Any nonzero process exit, missing denominator, identity mismatch, guard absence, service-log HTTP 4xx/5xx, OOM, traceback, A-Mem extraction error, or Omni-SimpleMem add failure seals the fresh unit as TERMINAL_REJECTED.",
+    "scheduler": "A seed is eligible only with exactly 150 accepted and zero rejected units and no infrastructure failure.",
+    "retry": "No in-place retry or resume. A diagnosed technical recovery requires a fresh root and successor authorization while retaining the failed root.",
+    "silent_fallback": "A GME HTTP 400 followed by source-level text fallback is still a technical rejection because the per-unit service-log delta retains the 400."
+  },
+  "transition_rule": {
+    "current": "Implementation may be packaged and validated without GPU use.",
+    "next": "After Wave1 terminal acceptance and release, materialize and audit the two exact project-owned models, then execute only the guarded lifecycle successor.",
+    "numerical_unlock": "Only after a method lifecycle is terminal-accepted may a new FROZEN_BEFORE_EXECUTION numerical authorization bind these exact implementation hashes and fresh roots.",
+    "claim_unlock": "Only complete, independently audited three-seed summaries may populate numeric cells; operational success alone is not a superiority or SOTA claim."
+  },
+  "prohibited_actions": [
+    "starting any Wave2 service or model download while Wave1 is active",
+    "using the superseded lifecycle wrapper",
+    "executing the full scheduler with this implementation prefreeze in place of a post-lifecycle numerical authorization",
+    "editing the frozen WorldMemArena source checkout",
+    "using official paper numbers in same-protocol local comparison cells",
+    "selecting methods, metrics, slices, seeds, or failed units after observing numerical outcomes",
+    "deleting any model before all dependent lifecycle, numerical, projection, archive, and cleanup gates accept"
+  ]
+}
