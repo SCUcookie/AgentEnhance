@@ -1,0 +1,89 @@
+{
+  "schema_version": "agentenhance.model_cleanup_controller_prefreeze.v2",
+  "controller_id": "baseline-project-owned-model-cleanup-20260904-v2",
+  "status": "FROZEN_BEFORE_ANY_PROJECT_OWNED_MODEL_CLEANUP",
+  "frozen_at": "2026-09-04T08:18:00+08:00",
+  "supersedes": {
+    "path": "comparisons/model-cleanup-controller-prefreeze.v1.json",
+    "sha256": "f87e4cacfdefc0f0763fca185963eced1c26fae86b24dee6f9e436b7bbfc1aa3",
+    "reason": "The v1 controller validates only WMA-shaped dependent summaries. The project objective now requires the complete WMA, Mem-Gallery, and Causal-LoCoMo surfaces before any project-owned model cleanup."
+  },
+  "unchanged_inner_controller": {
+    "path": "scripts/model_cleanup_controller.py",
+    "sha256": "afb8e950941e7b23399a4d6aa744e589f2423fb869c4d28dc31ca64d5783693d",
+    "role": "Retains the exact v1 ownership, materialization, inventory, process, quarantine, deletion, and retained-evidence checks."
+  },
+  "cross_track_gate": {
+    "implementation": {
+      "path": "scripts/model_cleanup_controller_v2.py",
+      "sha256": "92c1314ba7f7285b5c0ea5b78a2940eadb4fd6bc836eb8f2872c00982bcebe40"
+    },
+    "tests": {
+      "path": "tests/test_model_cleanup_controller_v2.py",
+      "sha256": "c8f343d385e9f375fb29ed54043b8a8a19b167dcf7c34a76358872f2f2fa6b07",
+      "passed": 3
+    },
+    "global_contract": {
+      "path": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json",
+      "sha256": "f32a8803fc1448e9e6adbaf7a9ba6747dce47b80cde9dcd30eb75007db7ef1f4"
+    },
+    "wma_table_spec": {
+      "path": "comparisons/wma-main-table-spec.v4.json",
+      "sha256": "f3a233b6e62419fa054557e18a326d7b2ba59210184bf782556dd1920f8c4937"
+    },
+    "required_record": "/data1/2026/ldh/AgentEnhance/runs/baseline-cross-track-completion-20260904-v1/cross-track-completion.json",
+    "required_record_root_inventory": "EVIDENCE_SHA256SUMS",
+    "required_record_root_marker": "TERMINAL_ACCEPTED",
+    "forbidden_record_root_marker": "TERMINAL_REJECTED"
+  },
+  "complete_surfaces": [
+    {
+      "track_id": "wma-lifecycle-matched-v1",
+      "registered_public_or_control_methods": 29,
+      "proposed_method_excluded_from_cleanup_gate": "agentenhance-ceu",
+      "source": "comparisons/wma-main-table-spec.v4.json"
+    },
+    {
+      "track_id": "memgallery-static-matched-v1",
+      "registered_methods": 14,
+      "source": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json"
+    },
+    {
+      "track_id": "causal-locomo-safety-v1",
+      "registered_methods": 7,
+      "source": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json"
+    }
+  ],
+  "global_record_required_fields": [
+    "status TERMINAL_ACCEPTED_COMPLETE_SURFACE",
+    "exact frozen global-contract and WMA-table identities",
+    "exact registered-method surface for all three tracks",
+    "disjoint accepted and terminal-blocked-or-failed partitions whose union is the registered surface",
+    "terminal-accepted, hash-inventoried evidence archive for each track",
+    "all denominators reconciled",
+    "all accepted and rejected evidence archived",
+    "official_values_used false"
+  ],
+  "phase_semantics": {
+    "preflight": "Validate the global completion record and all three retained track archives, delegate to the unchanged v1 dry-run preflight, then validate the global record again.",
+    "quarantine": "Validate global completion before and after the unchanged v1 exact-target quarantine phase.",
+    "delete": "Validate global completion before and after the unchanged v1 exact-quarantine deletion phase."
+  },
+  "current_state": {
+    "wma_complete": false,
+    "memgallery_complete": false,
+    "causal_locomo_complete": false,
+    "global_completion_record_present": false,
+    "project_owned_models_cleanup_eligible": 0,
+    "mutation_performed": false
+  },
+  "authorization": "Only scripts/model_cleanup_controller_v2.py may be used for future model cleanup. The v1 entrypoint is retained solely as an inner implementation and historical artifact; direct invocation is prohibited after this successor freeze. This contract authorizes no present preflight eligibility, quarantine, or deletion.",
+  "failure_rule": "A missing, rejected, unsigned, incomplete, official-value-contaminated, denominator-incomplete, archive-incomplete, or method-surface-mismatched global record stops before invoking the v1 controller. Any v1 failure retains its existing fail-closed semantics.",
+  "explicitly_prohibited": [
+    "directly invoking scripts/model_cleanup_controller.py after this v2 freeze",
+    "cleaning a model after WMA alone",
+    "treating a static or causal method failure as permission to omit its registered row",
+    "using official values to complete a track surface",
+    "deleting any shared model, dataset, source, environment, result, log, manifest, evidence root, or archive"
+  ]
+}
