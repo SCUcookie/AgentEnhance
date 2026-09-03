@@ -31,6 +31,7 @@ LOCK_EXPORT_RECOVERY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hinds
 LOCK_EXPORT_RECOVERY_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-recovery1-audit.v1.json"
 SOURCE_AWARE_EXPORT_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-aware-export-prefreeze.v1.json"
 SOURCE_AWARE_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-aware-export-failure-audit.v1.json"
+REGISTRY_ROUTING_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -89,6 +90,9 @@ source_aware_export_prefreeze = json.loads(
 )
 source_aware_export_failure = json.loads(
     SOURCE_AWARE_EXPORT_FAILURE_PATH.read_text(encoding="utf-8")
+)
+registry_routing_prefreeze = json.loads(
+    REGISTRY_ROUTING_PREFREEZE_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -493,6 +497,31 @@ assert source_diagnosis["dependency_body_preserved"] is True
 assert source_diagnosis["network_connections"] == 0
 assert source_diagnosis["dependency_installations"] == 0
 serialized = SOURCE_AWARE_EXPORT_FAILURE_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert registry_routing_prefreeze["status"] == "FROZEN_BEFORE_OFFLINE_SPLIT"
+assert registry_routing_prefreeze["failure_gate"]["sha256"] == sha256_file(
+    ROOT / registry_routing_prefreeze["failure_gate"]["path"]
+)
+routing_identities = registry_routing_prefreeze["frozen_identities"]
+assert routing_identities["splitter_sha256"] == sha256_file(
+    ROOT / routing_identities["splitter"]
+)
+assert routing_identities["body_reference_bytes"] == audit_export["bytes"]
+assert routing_identities["body_reference_sha256"] == audit_export["sha256"]
+routing_contract = registry_routing_prefreeze["routing_contract"]
+assert routing_contract["total_requirement_blocks"] == 208
+assert {row["id"]: row["expected_blocks"] for row in routing_contract["routes"]} == {
+    "pypi": 206,
+    "pytorch-cpu": 2,
+}
+assert routing_contract["byte_exact_reconstruction_required"] is True
+routing_execution = registry_routing_prefreeze["execution_contract"]
+assert routing_execution["independent_split_passes"] == 2
+assert routing_execution["network_connections"] == 0
+assert routing_execution["dependency_installations"] == 0
+assert routing_execution["retry_count"] == 0
+serialized = REGISTRY_ROUTING_PREFREEZE_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(

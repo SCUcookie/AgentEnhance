@@ -1,0 +1,69 @@
+{
+  "schema_version": "agentenhance.hindsight_registry_routing_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-registry-routing-20260904-v1",
+  "status": "FROZEN_BEFORE_OFFLINE_SPLIT",
+  "frozen_at": "2026-09-04T02:25:00+08:00",
+  "scientific_question": "Can all 208 accepted Hindsight requirement blocks be assigned to their uv.lock registries without changing or dropping any block byte?",
+  "decision_informed": "Whether PyPI and PyTorch CPU wheel acquisitions can be isolated into source-faithful, hash-enforced routes.",
+  "scientific_evidence_role": "Offline dependency-routing evidence only; no download, installation, model, lifecycle, numerical, superiority, or SOTA claim is eligible.",
+  "failure_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-source-aware-export-failure-audit.v1.json",
+    "sha256": "ab32dc937a3420dd36155aa3255ed7ac667358b8a92650ef09689a7ac12acf0f",
+    "required_status": "TERMINAL_REJECTED"
+  },
+  "diagnosed_change_only": {
+    "from": "rely on uv --emit-index-url to serialize a package-level explicit source",
+    "to": "derive a byte-traceable per-requirement route from the accepted dependency body and the two exact registries present in uv.lock",
+    "unchanged": "source revision, uv.lock, accepted dependency body, versions, hashes, markers, ordering, Python platform, resources, and scientific roles"
+  },
+  "frozen_identities": {
+    "hindsight_revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "uv_lock_bytes": 1037159,
+    "uv_lock_sha256": "ce0966c58ac9018c77b8aa1d7d93fe9f405deb6c0fadb54e52608fe10a992063",
+    "body_reference_bytes": 256006,
+    "body_reference_sha256": "6f0836431e1a0ba74bdc92732ffb0a81a1c72691bdab2bc3fba43c4a1e3716c6",
+    "splitter": "scripts/split_hindsight_requirements_by_registry.py",
+    "splitter_sha256": "ff7024cf9d86a14a120dc95d625b2d8c783da2b0b6c53e1b5801c14500760f70"
+  },
+  "routing_contract": {
+    "total_requirement_blocks": 208,
+    "routes": [
+      {"id": "pypi", "url": "https://pypi.org/simple", "expected_blocks": 206, "selection": "every non-torch requirement head"},
+      {"id": "pytorch-cpu", "url": "https://download.pytorch.org/whl/cpu", "expected_blocks": 2, "selection": "every requirement head beginning torch=="}
+    ],
+    "ordered_manifest_required": true,
+    "byte_exact_reconstruction_required": true,
+    "unrouted_or_multiply_routed_blocks": 0
+  },
+  "paths": {
+    "source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight",
+    "body_reference": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lock-export-20260904-v1-recovery1/hindsight-all-requirements.txt",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-registry-routing-20260904-v1"
+  },
+  "execution_contract": {
+    "command": "python scripts/split_hindsight_requirements_by_registry.py --source ${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight --body-reference ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lock-export-20260904-v1-recovery1/hindsight-all-requirements.txt --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-registry-routing-20260904-v1",
+    "independent_split_passes": 2,
+    "network_connections": 0,
+    "dependency_installations": 0,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 1,
+    "wall_time_ceiling_minutes": 10,
+    "retry_count": 0,
+    "fresh_evidence_root_required": true
+  },
+  "acceptance": [
+    "Source, uv.lock, and accepted dependency-body identities match and the source remains clean.",
+    "uv.lock contains exactly the PyPI and official PyTorch CPU registries.",
+    "Two independent splits are identical and produce 206 PyPI blocks plus 2 torch blocks.",
+    "Every requirement block has one route, retained byte range and SHA-256, and the ordered manifest reconstructs all 256006 accepted bytes exactly.",
+    "The terminal evidence inventory verifies and accepted/rejected sentinels are mutually consistent."
+  ],
+  "failure": "Any collision, identity change, registry-set change, cardinality change, malformed block, reconstruction mismatch, source mutation, or timeout seals the fresh root TERMINAL_REJECTED and preserves it.",
+  "next_gate_after_acceptance": "Independently audit both routed requirement files, then freeze their sequential --no-deps --require-hashes --only-binary wheel acquisition. Do not download until Wave1 is terminally accepted and its services are released.",
+  "prohibited_actions": [
+    "editing, deleting, or relabeling any earlier export evidence",
+    "changing, reordering, normalizing, dropping, or duplicating a requirement block",
+    "routing any non-torch dependency through the PyTorch index or torch through PyPI",
+    "downloading wheels, installing packages, downloading models, or starting a numerical run"
+  ]
+}
