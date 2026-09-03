@@ -34,6 +34,7 @@ SOURCE_AWARE_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsigh
 REGISTRY_ROUTING_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-prefreeze.v1.json"
 REGISTRY_ROUTING_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-audit.v1.json"
 WHEELHOUSE_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-wheelhouse-prefreeze.v1.json"
+HINDSIGHT_ADAPTER_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-adapter-design-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -101,6 +102,9 @@ registry_routing_audit = json.loads(
 )
 wheelhouse_prefreeze = json.loads(
     WHEELHOUSE_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+hindsight_adapter_design = json.loads(
+    HINDSIGHT_ADAPTER_DESIGN_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -579,6 +583,26 @@ assert wheelhouse_prefreeze["resource_gate"]["current_authorization"] == (
     "NOT_AUTHORIZED_WHILE_WAVE1_IS_RUNNING"
 )
 serialized = WHEELHOUSE_PREFREEZE_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert hindsight_adapter_design["status"] == (
+    "FROZEN_DESIGN_AWAITING_DEPENDENCY_MODEL_GATES"
+)
+for gate in hindsight_adapter_design["prior_gates"]:
+    assert gate["sha256"] == sha256_file(ROOT / gate["path"])
+implementation = hindsight_adapter_design["frozen_implementation"]
+for key in ("adapter", "sitecustomize", "unit_test"):
+    assert implementation[f"{key}_sha256"] == sha256_file(ROOT / implementation[key])
+assert implementation["mock_boundary_tests"] == 5
+mapping = hindsight_adapter_design["official_api_mapping"]
+assert "retain_batch exactly once" in mapping["end_session"]
+assert "list_memories" in mapping["snapshot_memories"]
+assert "RecallScores.final" in mapping["retrieve"]
+assert "Never call reflect" in mapping["final_answer"]
+assert hindsight_adapter_design["frozen_defaults"]["reflect_called"] is False
+assert hindsight_adapter_design["model_and_backbone_contract"]["native_multimodal"] is False
+assert hindsight_adapter_design["model_and_backbone_contract"]["caption_mediated"] is True
+serialized = HINDSIGHT_ADAPTER_DESIGN_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
