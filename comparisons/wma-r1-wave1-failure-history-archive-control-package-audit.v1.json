@@ -1,0 +1,41 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "wma-r1-wave1-failure-history-archive-20260904-v1-control",
+  "status": "CONTROL_PACKAGE_ACCEPTED",
+  "accepted_at": "2026-09-04T06:14:17+08:00",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave1-failure-history-archive-prefreeze.v1.json",
+    "sha256": "ce9a19d8638805d796f8e8da31c6c73d6f92752bae338bf2fe65956c09fbcedc"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave1-failure-history-archive-20260904-v1-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-failure-history-archive-20260904-v1-control.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-failure-history-archive-20260904-v1-control",
+    "bytes": 5294,
+    "sha256": "c74ebaa57fafd13af78634f9221db2c7cc7ace501e92f69ff70e8e82866812e7",
+    "regular_files": 4,
+    "symlinks": 0,
+    "local_and_remote_identity_matched": true
+  },
+  "validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "python_bytecode_writes_disabled": true,
+    "contract_validator_status": "PASS",
+    "unit_tests_passed": 3,
+    "unit_tests_failed": 0,
+    "regular_files_after_validation": 4,
+    "frozen_source_roots": 5,
+    "frozen_source_files": 1742,
+    "frozen_source_bytes": 440254679
+  },
+  "execution_authorization": "The controller is staged but the 440 MB archive operation remains locked until recovery2 is terminal and all project tmux sessions have exited.",
+  "scientific_claim_boundary": "No result metric, comparison claim, or SOTA claim is accepted. The future archive is failure diagnosis and infrastructure provenance only.",
+  "mutation_summary": {
+    "failure_archive_executed": false,
+    "models_loaded": 0,
+    "gpu_processes_started": 0,
+    "numeric_rows_written": 0,
+    "source_runs_deleted": 0,
+    "models_deleted": 0
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "wma-r1-wave1-recovery2-result-admission-20260904-v1-control-recovery1",
+  "status": "CONTROL_PACKAGE_ACCEPTED",
+  "accepted_at": "2026-09-04T06:13:00+08:00",
+  "parent_failure": {
+    "path": "comparisons/wma-r1-wave1-recovery2-result-admission-control-package-failure-audit.v1.json",
+    "sha256": "e395d0cf742f58e182311b03609dc11a361f8a01c63fa2d8346f641c3e45bc92"
+  },
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave1-recovery2-result-admission-control-package-recovery1-prefreeze.v1.json",
+    "sha256": "9269b375047715e11c42109fbf45683b778223a02b50a24fa9e77b5f7273c40f"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave1-recovery2-result-admission-20260904-v1-control-recovery1.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-recovery2-result-admission-20260904-v1-control-recovery1.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-recovery2-result-admission-20260904-v1-control-recovery1",
+    "bytes": 26242,
+    "sha256": "38e93f339369065fc6d28cc78aef856ee952fdc5b51d72143856208d804e6887",
+    "regular_files_before_validation": 18,
+    "symlinks": 0,
+    "local_and_remote_identity_matched": true
+  },
+  "validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "contract_validator_status": "PASS",
+    "successor_tests_passed": 2,
+    "successor_tests_failed": 0,
+    "frozen_identities": 4,
+    "future_rows_after_full_acceptance": 660,
+    "complete_seed_results_at_identity_freeze": 0,
+    "numeric_gate_changes": 0
+  },
+  "post_validation_cache_disclosure": {
+    "python_bytecode_files_created": 3,
+    "archive_members_changed": false,
+    "source_files_changed": false,
+    "scientific_effect": "none; cache files are outside the signed archive identity and are not inputs to promotion",
+    "future_execution_rule": "Set PYTHONDONTWRITEBYTECODE=1 for result promotion and all later offline checks."
+  },
+  "execution_authorization": "The inert controller is staged. Promotion remains prohibited until the recovery2 controller, all four three-seed summaries, complete projection, and raw accepted-evidence archive are terminal-accepted and independently verified.",
+  "mutation_summary": {
+    "models_loaded": 0,
+    "gpu_processes_started": 0,
+    "numeric_rows_written": 0,
+    "source_runs_deleted": 0,
+    "models_deleted": 0
+  }
+}
