@@ -30,6 +30,7 @@ LOCK_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-e
 LOCK_EXPORT_RECOVERY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-recovery1-prefreeze.v1.json"
 LOCK_EXPORT_RECOVERY_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-recovery1-audit.v1.json"
 SOURCE_AWARE_EXPORT_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-aware-export-prefreeze.v1.json"
+SOURCE_AWARE_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-aware-export-failure-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -85,6 +86,9 @@ lock_export_recovery_audit = json.loads(
 )
 source_aware_export_prefreeze = json.loads(
     SOURCE_AWARE_EXPORT_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+source_aware_export_failure = json.loads(
+    SOURCE_AWARE_EXPORT_FAILURE_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -470,6 +474,25 @@ assert source_execution["network_connections"] == 0
 assert source_execution["dependency_installations"] == 0
 assert source_execution["retry_count"] == 0
 serialized = SOURCE_AWARE_EXPORT_PREFREEZE_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert source_aware_export_failure["status"] == "TERMINAL_REJECTED"
+assert source_aware_export_failure["prefreeze_gate"]["sha256"] == sha256_file(
+    ROOT / source_aware_export_failure["prefreeze_gate"]["path"]
+)
+source_diagnosis = source_aware_export_failure["diagnosis"]
+assert source_diagnosis["observed_source_directives"] == [
+    "--index-url https://pypi.org/simple"
+]
+assert source_diagnosis["required_but_absent_source"] == (
+    "https://download.pytorch.org/whl/cpu"
+)
+assert source_diagnosis["dependency_body_suffix_bytes"] == audit_export["bytes"]
+assert source_diagnosis["dependency_body_suffix_sha256"] == audit_export["sha256"]
+assert source_diagnosis["dependency_body_preserved"] is True
+assert source_diagnosis["network_connections"] == 0
+assert source_diagnosis["dependency_installations"] == 0
+serialized = SOURCE_AWARE_EXPORT_FAILURE_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(

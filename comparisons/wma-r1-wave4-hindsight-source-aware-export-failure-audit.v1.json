@@ -1,0 +1,48 @@
+{
+  "schema_version": "agentenhance.hindsight_source_aware_export_failure_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-source-aware-export-failure-audit-20260904-v1",
+  "status": "TERMINAL_REJECTED",
+  "audited_at": "2026-09-04T02:19:39+08:00",
+  "prefreeze_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-source-aware-export-prefreeze.v1.json",
+    "sha256": "a86d34cf6677cba9452b13f3633afc1162a8591541c4c8dbaa7a0acc2ed453e8",
+    "required_status": "FROZEN_BEFORE_OFFLINE_EXPORT"
+  },
+  "rejected_evidence": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-source-aware-export-20260904-v1",
+    "failure_record_bytes": 355,
+    "failure_record_sha256": "466a9565596cab8f21cd4def729d3864d0a4ab07968b338cefdef01258e02cde",
+    "evidence_inventory_bytes": 188,
+    "evidence_inventory_sha256": "e7c91fc744e2d61a9acee4b83d398bb6eecb069aaa435f44799046761888c1aa",
+    "terminal_rejected_present": true,
+    "terminal_accepted_absent": true,
+    "active_process_references_after_exit": 0
+  },
+  "partial_exports": [
+    {"label": "a", "bytes": 256043, "sha256": "1c26d346400363dc9dcaf483ef58082d50f55335ead2677e3937bf56d4c24119"},
+    {"label": "b", "bytes": 256043, "sha256": "1c26d346400363dc9dcaf483ef58082d50f55335ead2677e3937bf56d4c24119"}
+  ],
+  "diagnosis": {
+    "classification": "REJECT_TECHNICAL_EXPLICIT_INDEX_NOT_SERIALIZED",
+    "observed_source_directives": ["--index-url https://pypi.org/simple"],
+    "required_but_absent_source": "https://download.pytorch.org/whl/cpu",
+    "uv_lock_torch_source": "https://download.pytorch.org/whl/cpu",
+    "dependency_body_suffix_bytes": 256006,
+    "dependency_body_suffix_sha256": "6f0836431e1a0ba74bdc92732ffb0a81a1c72691bdab2bc3fba43c4a1e3716c6",
+    "dependency_body_preserved": true,
+    "independent_partial_exports_byte_identical": true,
+    "uv_lock_sha256_after": "ce0966c58ac9018c77b8aa1d7d93fe9f405deb6c0fadb54e52608fe10a992063",
+    "source_clean_after": true,
+    "network_connections": 0,
+    "dependency_installations": 0,
+    "explanation": "uv --emit-index-url serializes the default PyPI index but does not serialize the package-level explicit PyTorch source declared through tool.uv.sources. The resulting file is therefore insufficient as an independent source-routing contract."
+  },
+  "decision": "Preserve and reject the source-aware export root. Replace the failed all-in-one index serialization assumption with an offline registry-routing split: non-torch locked requirements route only to PyPI, and locked torch requirements route only to the official PyTorch CPU index.",
+  "next_gate": "Freeze an offline, byte-traceable requirements split whose two source routes reconstruct the accepted dependency body and retain all 208 requirement heads; no wheel acquisition is authorized yet.",
+  "prohibited_actions": [
+    "editing, deleting, or relabeling the rejected root or its partial exports",
+    "treating the partial export as a complete wheelhouse acquisition input",
+    "using an unrestricted extra-index fallback for every dependency",
+    "downloading wheels, installing packages, changing torch builds, or starting numerical work from this failure"
+  ]
+}
