@@ -1,0 +1,87 @@
+{
+  "schema_version": "agentenhance.wma_wave5_structmem_adapter_design_prefreeze.v1",
+  "stage_id": "wma-r1-wave5-structmem-adapter-design-20260904-v1",
+  "status": "FROZEN_DESIGN_AWAITING_DEPENDENCY_MODEL_GATES",
+  "frozen_at": "2026-09-04T10:35:00+08:00",
+  "scientific_question": "Does a caption-mediated WMA adapter preserve StructMem event extraction, cross-event consolidation, persistent detail and summary stores, and official Qdrant scoring without losing assistant-side evidence?",
+  "decision_informed": "Whether StructMem can proceed to exact execution-source, dependency, model, and lifecycle gates.",
+  "scientific_evidence_role": "static adapter design and mock-boundary evidence only; no real upstream import, model load, lifecycle, numerical, superiority, or SOTA claim",
+  "prior_gates": [
+    {
+      "path": "comparisons/wma-r1-wave5-structmem-source-materialization-audit.v1.json",
+      "sha256": "1f6ddf8f37ba8b612272a98eefdf943aa155f9c1112ccd5be35d3c5dd1e77baf",
+      "required_status": "TERMINAL_ACCEPTED"
+    },
+    {
+      "path": "comparisons/wma-r1-wave5-structmem-adapter-feasibility-audit.v2.json",
+      "sha256": "4fdf80458d0faee4e6b477d07e3fd0ebb3aa917202f06a9f96f0645d3c250b82",
+      "required_status": "TERMINAL_ACCEPTED_FOR_ADAPTER_DESIGN"
+    }
+  ],
+  "frozen_implementation": {
+    "adapter": "scripts/wma_wave5_overlay/structmem_wma_adapter.py",
+    "adapter_sha256": "e76d9b570d2d6a4797488456ba0cd90cbb1c537a541454fef249f7f594d55b33",
+    "sitecustomize": "scripts/wma_wave5_overlay/sitecustomize.py",
+    "sitecustomize_sha256": "d2f8b5b505cff752c110e40bfbda9b421bbc354221b5154be0e2dfd9438474fa",
+    "unit_test": "tests/test_wma_wave5_structmem_adapter.py",
+    "unit_test_sha256": "92a7da778b40507b9a097cf15b2544f6f4800e24e2314ca836c82903ba1160a0",
+    "mock_boundary_tests": 5
+  },
+  "official_api_mapping": {
+    "reset": "Create fresh per-generation on-disk Qdrant detail and summary stores and reset GLOBAL_TOPIC_IDX and GLOBAL_LAST_SUMMARY_TIME.",
+    "ingest_turn": "Buffer every WMA utterance and retain attachment type caption and image_id as text provenance.",
+    "end_session": "Wrap each source utterance as a user message plus empty assistant placeholder exactly as the official LoCoMo builder does under messages_use=user_only. Use factual and relational event prompts, force only the final utterance, and complete process_all cross-event summaries before returning.",
+    "snapshot_memories": "Exhaust official Qdrant scroll pagination for both detail and summary stores and expose stable typed ids and payload provenance.",
+    "retrieve": "Embed once through the common 384-dimensional endpoint, retrieve detail and summary candidates through official Qdrant scores, sort by finite cosine score, and return no more than the single WMA top_k budget with at most five summary candidates.",
+    "reload_from_disk": "Close Qdrant clients, recreate LightMemory on the same per-generation paths, reload the adapter session-id map, and require stable snapshots.",
+    "export_memory_delta": "Diff typed detail and summary backend ids against the previous full snapshot.",
+    "answer": "Never use upstream answer or judge scripts; pass normalized retrieval items to the common WMA answer and judge path."
+  },
+  "frozen_defaults": {
+    "pre_compress": true,
+    "llmlingua_compression_rate": 0.6,
+    "topic_segment": true,
+    "messages_use": "user_only",
+    "extract_threshold": 0.1,
+    "extraction_mode": "event",
+    "update": "offline",
+    "summary_process_all_after_each_session": true,
+    "summary_retrieval_scope": "global",
+    "summary_time_window_seconds": 3600,
+    "summary_top_k_seeds": 15,
+    "summary_candidate_limit": 5,
+    "embedding_dimension": 384,
+    "llm_temperature": 0.0
+  },
+  "model_and_backbone_contract": {
+    "event_extraction_and_summary_llm": "shared frozen Qwen3-VL-8B-Instruct endpoint; disclosed matched-backbone substitution",
+    "embedding": "shared frozen Qwen3-VL-Embedding-2B endpoint at 384 dimensions; disclosed common-track substitution",
+    "precompressor": "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank at 5f0c82792b7ea14c6484e015b6a072009496b7f2; exact file manifest remains a mandatory later gate",
+    "native_multimodal": false,
+    "caption_mediated": true
+  },
+  "license_boundary": {
+    "root_license": "MIT",
+    "pyproject_metadata": "Apache-2.0",
+    "policy": "Keep the inconsistency disclosed, preserve the root LICENSE with execution source, and import the external checkout without copying implementation code into the project overlay."
+  },
+  "static_acceptance": [
+    "Both original user and assistant utterances become independent source records rather than dropping assistant evidence.",
+    "Attachment caption and image_id survive text rendering.",
+    "Only the final utterance forces segmentation and extraction.",
+    "Session completion performs the frozen summary call before returning.",
+    "Missing equal and out-of-order timestamps become strictly monotonic.",
+    "Detail and summary hits share one top_k budget.",
+    "Sample reset clears both upstream module globals."
+  ],
+  "authorization_gate": "This design is not executable. Real import or lifecycle execution requires an accepted minimal execution-source copy, exact dependency wheelhouse and offline isolated environment, accepted LLMLingua model snapshot, accepted shared endpoint identities, and a separate fresh-root lifecycle-execution prefreeze.",
+  "next_gate": "Freeze and materialize only the required tracked StructMem runtime files, then separately freeze dependency resolution and the LLMLingua model manifest.",
+  "prohibited_actions": [
+    "installing dependencies, importing the real upstream package, loading LLMLingua, or opening Qdrant from this design",
+    "dropping assistant-side evidence under messages_use=user_only",
+    "combining top_k detail hits with five extra unbudgeted summary hits",
+    "crediting caption mediation as native multimodal memory",
+    "using source-reported values in local-result cells",
+    "populating a numerical comparison-table cell or making a superiority or SOTA claim"
+  ]
+}

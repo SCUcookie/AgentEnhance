@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-source-materialization-prefreeze.v1.json"
 AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-source-materialization-audit.v1.json"
 FEASIBILITY = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-feasibility-audit.v1.json"
+FEASIBILITY_V2 = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-feasibility-audit.v2.json"
+ADAPTER_DESIGN = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-design-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -88,4 +90,32 @@ assert feasibility["required_additional_model"]["observed_revision"] == "5f0c827
 assert feasibility["numeric_result_rows_added"] == 0
 serialized = FEASIBILITY.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
-print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "numeric_rows_added": 0}, sort_keys=True))
+feasibility_v2 = json.loads(FEASIBILITY_V2.read_text(encoding="utf-8"))
+assert feasibility_v2["status"] == "TERMINAL_ACCEPTED_FOR_ADAPTER_DESIGN"
+assert feasibility_v2["superseded_sha256"] == sha256_file(ROOT / feasibility_v2["supersedes"])
+corrected = feasibility_v2["corrected_wma_mapping"]
+assert "every buffered source utterance" in corrected["end_session"]
+assert "empty assistant placeholder" in corrected["end_session"]
+assert "strictly increasing" in corrected["timestamp_guard"]
+assert len(feasibility_v2["adapter_test_obligations"]) == 8
+assert feasibility_v2["numeric_result_rows_added"] == 0
+serialized = FEASIBILITY_V2.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+adapter_design = json.loads(ADAPTER_DESIGN.read_text(encoding="utf-8"))
+assert adapter_design["status"] == "FROZEN_DESIGN_AWAITING_DEPENDENCY_MODEL_GATES"
+for gate in adapter_design["prior_gates"]:
+    assert gate["sha256"] == sha256_file(ROOT / gate["path"])
+implementation = adapter_design["frozen_implementation"]
+for key in ("adapter", "sitecustomize", "unit_test"):
+    assert implementation[f"{key}_sha256"] == sha256_file(ROOT / implementation[key])
+assert implementation["mock_boundary_tests"] == 5
+defaults = adapter_design["frozen_defaults"]
+assert defaults["extraction_mode"] == "event"
+assert defaults["summary_process_all_after_each_session"] is True
+assert defaults["summary_candidate_limit"] == 5
+assert defaults["embedding_dimension"] == 384
+assert "assistant utterances" in adapter_design["static_acceptance"][0]
+assert adapter_design["model_and_backbone_contract"]["native_multimodal"] is False
+serialized = ADAPTER_DESIGN.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "numeric_rows_added": 0}, sort_keys=True))

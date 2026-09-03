@@ -1,0 +1,44 @@
+{
+  "schema_version": "agentenhance.wma_structmem_adapter_feasibility_audit.v2",
+  "audit_id": "wma-r1-wave5-structmem-adapter-feasibility-20260904-v2",
+  "status": "TERMINAL_ACCEPTED_FOR_ADAPTER_DESIGN",
+  "audited_at": "2026-09-04T10:20:00+08:00",
+  "supersedes": "comparisons/wma-r1-wave5-structmem-adapter-feasibility-audit.v1.json",
+  "superseded_sha256": "a47861c14b14af1e56a637a16cf1fa75256f813f1ea83321491a952dc7263264",
+  "revision_reason": "Correct the ingestion mapping before adapter execution. With messages_use=user_only, passing a real user/assistant pair would silently discard assistant-side evidence. The official LoCoMo builder instead wraps every source utterance as a user message followed by an empty assistant placeholder.",
+  "inherited_without_change": [
+    "source identity and audited file hashes",
+    "event extraction and cross-event summarization mechanisms",
+    "official configuration values",
+    "common-track LLM and embedding substitutions",
+    "caption-mediated multimodality boundary",
+    "license disclosure",
+    "LLMLingua model gate",
+    "numeric-result prohibition"
+  ],
+  "corrected_wma_mapping": {
+    "ingest_turn": "Buffer every normalized WMA turn without dropping either original role. Render attachments as caption-mediated text retaining image_id.",
+    "end_session": "For every buffered source utterance, call add_memory with a two-message list: a user message containing the original role label and rendered utterance plus an empty assistant placeholder. Preserve speaker_id and speaker_name from the original role. Assign a deterministic timestamp that preserves the source timestamp when strictly increasing and otherwise advances by one second. Force segmentation and extraction only on the final source utterance. Then call summarize(process_all=True) before any checkpoint snapshot or question.",
+    "semantic_equivalence": "This mirrors experiments/locomo/add_locomo.py, where every dialogue utterance becomes a user message plus an empty assistant placeholder under messages_use=user_only. It prevents assistant-side evidence loss while leaving upstream extraction code unchanged.",
+    "timestamp_guard": "The adapter must ensure strictly increasing utterance timestamps across the sample because upstream summary progress uses a greater-than timestamp cursor. Original timestamps remain in adapter trace metadata.",
+    "failure_conditions": [
+      "any buffered utterance is omitted",
+      "a non-empty assistant placeholder is passed to upstream add_memory",
+      "assigned timestamps are not strictly increasing",
+      "force_segment or force_extract is set before the final utterance of a session",
+      "summarization does not finish before snapshot and checkpoint retrieval"
+    ]
+  },
+  "adapter_test_obligations": [
+    "both original user and original assistant utterances reach add_memory as separate user-side source records",
+    "attachment caption and image_id survive rendering",
+    "module globals reset between samples",
+    "timestamps are monotonic under missing equal and out-of-order source timestamps",
+    "the final utterance alone forces segmentation and extraction",
+    "summarize uses process_all=True retrieval_scope=global time_window=3600 and top_k_seeds=15",
+    "detail and summary hits share one top_k budget with at most five summaries",
+    "reload preserves detail and summary snapshots"
+  ],
+  "decision": "Only the corrected per-utterance wrapper mapping is authorized for adapter implementation and fake-backend tests. No real import, dependency installation, model download, lifecycle, or numerical run is authorized.",
+  "numeric_result_rows_added": 0
+}
