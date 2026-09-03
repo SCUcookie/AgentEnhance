@@ -1,0 +1,101 @@
+{
+  "schema_version": "agentenhance.engineering_stage_audit.v1",
+  "stage_id": "wma-r1-adapter-lifecycle-accepted-20260903-v1",
+  "audited_at": "2026-09-03T17:39:00+08:00",
+  "outcome": "ACCEPT_PIPELINE_ONLY",
+  "terminal_state": "TERMINAL_ACCEPTED",
+  "source": {
+    "repository": "https://github.com/UCSB-AI/WorldMemArena",
+    "commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "working_tree_clean": true
+  },
+  "environment": {
+    "path": "/data1/2026/ldh/AgentEnhance/environments/worldmemarena-py311-r1",
+    "pip_check": "PASS",
+    "pip_freeze_sha256": "8cf96ec2e711fe0bccdacfd8de676b704018a53d884e932af1753a5c0f8d2936",
+    "key_versions": {
+      "lancedb": "0.25.3",
+      "pylance": "0.39.0",
+      "tantivy": "0.26.0",
+      "pymilvus": "2.6.17",
+      "milvus-lite": "2.5.1",
+      "langchain-tavily": "0.2.18",
+      "langchain-mcp-adapters": "0.3.2",
+      "openai": "2.54.0",
+      "torch": "2.8.0",
+      "transformers": "4.57.3"
+    }
+  },
+  "services": {
+    "chat": {
+      "model": "Qwen3-VL-8B-Instruct",
+      "model_revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+      "tensor_parallel_size": 2,
+      "gpu_indices": [3, 4],
+      "max_model_length": 32768,
+      "endpoint": "http://127.0.0.1:18120/v1"
+    },
+    "embedding_1024": {
+      "model": "Qwen3-VL-Embedding-2B",
+      "model_revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "dimension": 1024,
+      "gpu_index": 1,
+      "endpoint": "http://127.0.0.1:18113/v1"
+    },
+    "embedding_384": {
+      "model": "Qwen3-VL-Embedding-2B",
+      "model_revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "dimension": 384,
+      "gpu_index": 5,
+      "endpoint": "http://127.0.0.1:18114/v1"
+    }
+  },
+  "accepted_lifecycle_checks": [
+    {
+      "method_id": "mmfu-single",
+      "status": "LIFECYCLE_PASSED",
+      "snapshot_count": 1,
+      "retrieval_count": 1,
+      "implementation_scope": "WorldMemArena native long-context control"
+    },
+    {
+      "method_id": "vilomem",
+      "status": "LIFECYCLE_PASSED",
+      "snapshot_count": 1,
+      "retrieval_count": 1,
+      "implementation_scope": "WorldMemArena bundled dual-stream adapter; not the complete upstream paper agent"
+    },
+    {
+      "method_id": "m2a",
+      "status": "LIFECYCLE_PASSED",
+      "snapshot_count": 2,
+      "retrieval_count": 2,
+      "implementation_scope": "WorldMemArena bundled adapter with run_chat_agent=false and direct SemanticStore path"
+    },
+    {
+      "method_id": "simplemem",
+      "status": "LIFECYCLE_PASSED",
+      "snapshot_count": 2,
+      "retrieval_count": 2,
+      "keyword_retrieval_count": 2,
+      "implementation_scope": "WorldMemArena bundled adapter driving the upstream SimpleMem text pipeline"
+    }
+  ],
+  "compatibility_overlays": [
+    "Environment-only SimpleMem config module; algorithm defaults mirror the frozen upstream example and contain no credentials.",
+    "ViLoMem namespace shims bypass eager imports of an omitted tools package while loading frozen vl_agent.memory and common.retry unchanged."
+  ],
+  "rejected_or_superseded_attempts": [
+    "Python 3.10 environment: ViLoMem requires Python 3.11 and pymilvus 3 rejected the M2A schema.",
+    "ViLoMem recovery1-recovery3: upstream dependency list omitted langchain-tavily and langchain-mcp-adapters; bundled tools package was absent.",
+    "SimpleMem recovery5: dateparser was absent.",
+    "SimpleMem lifecycle recovery7: json_object mode conflicted with its required top-level JSON array; restored upstream default false.",
+    "SimpleMem lifecycle recovery8-recovery10: semantic retrieval worked but keyword retrieval was degraded until lancedb, tantivy, and pylance matched upstream requirements."
+  ],
+  "server_run_path": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-adapter-lifecycle-accepted-20260903-v1",
+  "artifact_manifest_sha256": "c67e49e308ee53e7fe9dbd9020cd0d52cc0e91275514507796ba85583cf52125",
+  "evidence_role": "engineering foundation only",
+  "main_comparison_eligible": false,
+  "scientific_interpretation": "The check proves that four benchmark adapters can store and retrieve a known synthetic fact under the frozen local model stack. It does not measure benchmark accuracy, establish paper-method fidelity beyond the declared implementation scope, or support a SOTA claim.",
+  "next_allowed_gate": "Complete and verify the frozen 150-sample WorldMemArena small dataset, then prefreeze and run same-protocol benchmark reproductions before AgentEnhance."
+}
