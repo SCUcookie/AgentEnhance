@@ -1,0 +1,39 @@
+{
+  "schema_version": "agentenhance.control_package_recovery_prefreeze.v1",
+  "recovery_id": "wma-r1-wave2-runner-implementation-20260904-v1-control-recovery1",
+  "status": "FROZEN_BEFORE_RECOVERY_VALIDATION",
+  "frozen_at": "2026-09-04T06:51:00+08:00",
+  "parent": {
+    "prefreeze": "comparisons/wma-r1-wave2-runner-control-package-prefreeze.v1.json",
+    "remote_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave2-runner-implementation-20260904-v1-control",
+    "package_sha256": "abfa7977dab25d8238fd18dcecda0a48755001b1fc7d11060bf7d7e4641706c4",
+    "code_validation_passed": true,
+    "terminal_disposition": "TERMINAL_REJECTED_EVIDENCE_INVENTORY",
+    "retained": true
+  },
+  "diagnosed_cause": "The post-validation find pipeline included PACKAGE_SHA256SUMS itself because shell redirection created the destination before find enumerated files. The resulting self-entry cannot validate and the original root is not acceptable evidence.",
+  "single_change": "Generate the recovery inventory over exactly the 16 extracted regular files, explicitly excluding PACKAGE_SHA256SUMS and every terminal marker; then validate every inventory entry before publishing CONTROL_PACKAGE_ACCEPTED.",
+  "fresh_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave2-runner-implementation-20260904-v1-control-recovery1",
+  "unchanged": [
+    "archive bytes and SHA-256",
+    "16 archive members",
+    "implementation hashes",
+    "six unit tests",
+    "shell syntax checks",
+    "no model, service, tmux, network inference, or GPU action"
+  ],
+  "acceptance": [
+    "fresh recovery root is absent before extraction",
+    "archive remains 23729 bytes with the frozen SHA-256",
+    "safe member audit reports exactly 16 regular files and 3 directories",
+    "implementation validator and all six tests pass",
+    "PACKAGE_SHA256SUMS contains exactly 16 entries, contains no self-entry or marker, and sha256sum -c passes",
+    "CONTROL_PACKAGE_ACCEPTED is written only after all preceding checks pass"
+  ],
+  "prohibited": [
+    "editing, deleting, or reusing the parent extraction root",
+    "changing any package member",
+    "starting Wave2 services or downloads",
+    "treating the recovery as lifecycle, numerical, superiority, or SOTA evidence"
+  ]
+}
