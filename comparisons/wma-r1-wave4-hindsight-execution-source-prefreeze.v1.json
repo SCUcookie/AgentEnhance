@@ -1,0 +1,78 @@
+{
+  "schema_version": "agentenhance.wma_wave4_hindsight_execution_source_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-execution-source-20260904-v1",
+  "status": "FROZEN_BEFORE_EXTERNAL_EXECUTION_SOURCE_COPY",
+  "frozen_at": "2026-09-04T01:27:41+08:00",
+  "scientific_question": "Can the accepted Hindsight revision be reduced to a source-authoritative, project-owned runtime package set without changing method code or including unrelated interfaces, tests, and documentation?",
+  "decision_informed": "Whether Hindsight can proceed to a dedicated dependency environment and embedded-service lifecycle gate.",
+  "scientific_evidence_role": "engineering source-copy gate only; no import, service, lifecycle, numerical, superiority, or SOTA claim is permitted",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-adapter-feasibility-audit.v1.json",
+    "sha256": "ff4eca4c2729227e11bf6f5b0e94032548bf8ff617b0a05233a15bc64d1211b3"
+  },
+  "materializer": {
+    "path": "scripts/materialize_wma_wave4_hindsight_execution_source.py",
+    "sha256": "7f7064ece8af5ce0e7d723080f0b9c2d754a619b0ded7938aff5b904819ee21a"
+  },
+  "source": {
+    "repository": "https://github.com/vectorize-io/hindsight.git",
+    "revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "path": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight",
+    "required_clean": true
+  },
+  "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-execution-source-20260904-v1/hindsight",
+  "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-execution-source-20260904-v1",
+  "copy_scope": {
+    "authority": "Git-tracked files at the frozen source revision only",
+    "exact_files": [
+      "LICENSE",
+      "pyproject.toml",
+      "hindsight-all/README.md",
+      "hindsight-all/pyproject.toml",
+      "hindsight-api-slim/README.md",
+      "hindsight-api-slim/pyproject.toml",
+      "hindsight-clients/python/README.md",
+      "hindsight-clients/python/pyproject.toml",
+      "hindsight-embed/README.md",
+      "hindsight-embed/pyproject.toml"
+    ],
+    "runtime_directories": [
+      "hindsight-all/hindsight",
+      "hindsight-api-slim/hindsight_api",
+      "hindsight-clients/python/hindsight_client",
+      "hindsight-clients/python/hindsight_client_api",
+      "hindsight-embed/hindsight_embed"
+    ],
+    "excluded": "tests, docs, frontend/control-plane packages, integrations, examples, Docker/Helm assets, Git metadata, untracked files, bytecode, symlinks, and all other repository paths",
+    "expected_file_count": 563,
+    "expected_total_bytes": 9417481
+  },
+  "execution_contract": {
+    "command": "python scripts/materialize_wma_wave4_hindsight_execution_source.py --source ${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight --destination ${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-execution-source-20260904-v1/hindsight --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-execution-source-20260904-v1",
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 10,
+    "retry_count": 0,
+    "fresh_roots_required": true,
+    "wave1_non_interference": "This small source-only copy may run while Wave-1 is active because it performs no network access, dependency installation, model download, model load, API call, service start, or GPU operation."
+  },
+  "acceptance": [
+    "The accepted source checkout resolves to the exact frozen revision and is clean.",
+    "Only selected Git-tracked regular files are copied.",
+    "The destination and evidence roots were absent before execution.",
+    "The result contains exactly 563 files and 9417481 bytes.",
+    "No copied relative path contains __pycache__ and no copied file ends in .pyc.",
+    "Every copied file has a retained relative path, byte size, and SHA-256.",
+    "The evidence root has TERMINAL_ACCEPTED, no TERMINAL_REJECTED, and a verified evidence inventory."
+  ],
+  "failure": "Any collision, source identity mismatch, dirty source, non-regular selected file, cardinality mismatch, copy error, bytecode inclusion, or timeout seals a fresh TERMINAL_REJECTED root and retains the partial destination.",
+  "next_gate_after_acceptance": "Independently audit the execution copy, then freeze a dedicated Python 3.11 dependency environment. This stage never authorizes model acquisition, import, service, lifecycle, or numerical execution.",
+  "prohibited_actions": [
+    "editing the accepted official source checkout",
+    "copying untracked, test, documentation, integration, bytecode, symlink, or model files",
+    "installing dependencies, downloading models, calling an LLM, starting pg0, binding a port, or using a GPU",
+    "starting a lifecycle or numerical run",
+    "deleting or repairing a rejected destination in place",
+    "populating any comparison-table numeric cell from this gate"
+  ]
+}
