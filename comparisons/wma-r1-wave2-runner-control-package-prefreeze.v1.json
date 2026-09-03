@@ -1,0 +1,47 @@
+{
+  "schema_version": "agentenhance.control_package_prefreeze.v1",
+  "package_id": "wma-r1-wave2-runner-implementation-20260904-v1-control",
+  "status": "FROZEN_BEFORE_TRANSFER",
+  "frozen_at": "2026-09-04T06:47:00+08:00",
+  "implementation_commit": "5c5c7b4",
+  "purpose": "Stage and independently validate the inert guarded Wave2 lifecycle and numerical runner implementation without downloading models, starting services, or authorizing a numerical run.",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave2-runner-implementation-20260904-v1-control.tar.gz",
+    "bytes": 23729,
+    "sha256": "abfa7977dab25d8238fd18dcecda0a48755001b1fc7d11060bf7d7e4641706c4",
+    "format": "git-archive-tar.gz",
+    "regular_files": 16,
+    "directories": 3
+  },
+  "remote": {
+    "host_alias": "agent-enhance-gpu",
+    "archive_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave2-runner-implementation-20260904-v1-control.tar.gz",
+    "extraction_root": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave2-runner-implementation-20260904-v1-control",
+    "both_targets_must_be_absent": true
+  },
+  "transfer": {
+    "protocol": "OpenSSH SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "connections": 1,
+    "resume": true,
+    "overwrite_final": false
+  },
+  "validation": [
+    "verify remote archive byte count and SHA-256 before extraction",
+    "reject absolute paths, parent traversal, links, devices, or any member outside comparisons, scripts, and tests",
+    "extract only into the fresh declared root",
+    "run scripts/validate_wma_wave2_runner_implementation.py with PYTHONDONTWRITEBYTECODE=1",
+    "run the six runtime-guard unit tests without writing bytecode",
+    "run bash -n on all five remote shell entry points",
+    "confirm the validation creates no model, run, service, tmux, port, network, or GPU side effect"
+  ],
+  "scientific_boundary": "The package contains no lifecycle result, sample output, metric, official score, AgentEnhance result, or numerical execution authorization.",
+  "next_gate": "After Wave1 terminal acceptance and service release, use the already frozen exact-model materializer; only accepted model records unlock a fresh guarded lifecycle execution package.",
+  "prohibited": [
+    "executing either model materializer from this package",
+    "starting the packaged service launcher while Wave1 is active",
+    "using the implementation prefreeze as NUMERICAL_AUTHORIZATION",
+    "populating any comparison-table numeric cell",
+    "deleting any source, model, dataset, result, failure root, or archive"
+  ]
+}
