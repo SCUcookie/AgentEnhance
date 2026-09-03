@@ -1,0 +1,89 @@
+{
+  "schema_version": "agentenhance.wma_structmem_adapter_feasibility_audit.v1",
+  "audit_id": "wma-r1-wave5-structmem-adapter-feasibility-20260904-v1",
+  "status": "TERMINAL_ACCEPTED_FOR_ADAPTER_DESIGN",
+  "audited_at": "2026-09-04T10:05:00+08:00",
+  "scientific_question": "Can the accepted StructMem revision be mapped to the frozen WMA lifecycle without importing upstream result values or changing its event-extraction and cross-event-summary mechanisms?",
+  "scientific_evidence_role": "source-authoritative adapter feasibility only; no dependency, model, lifecycle, numerical, superiority, or SOTA claim",
+  "source_gate": {
+    "path": "comparisons/wma-r1-wave5-structmem-source-materialization-audit.v1.json",
+    "sha256": "1f6ddf8f37ba8b612272a98eefdf943aa155f9c1112ccd5be35d3c5dd1e77baf"
+  },
+  "source_identity": {
+    "repository": "https://github.com/zjunlp/LightMem.git",
+    "revision": "aa1c484cc6fd964c8ea1af897e36a0c3ba06d7db",
+    "git_tree": "da4212efaa196112988b89c2afd9813db27f1784",
+    "package_name": "lightmem",
+    "package_version": "0.1.0",
+    "requires_python": ">=3.10,<3.12",
+    "root_license": "MIT",
+    "package_metadata_license": "Apache-2.0",
+    "license_interpretation": "The repository root LICENSE is MIT while pyproject.toml declares Apache-2.0. Both are permissive but the inconsistency must stay visible. The adapter will import the external checkout without copying upstream implementation code and will preserve the root license in any source package."
+  },
+  "audited_files": [
+    {"path": "pyproject.toml", "sha256": "632334023335283070abb2eebfc5bece3eea11387724eaccb7aeda40732b97bb"},
+    {"path": "StructMem.md", "sha256": "533a5d58ec8c62c3c13369f12b49e1a3a896f8a82974be72b9d9de855bdb6745"},
+    {"path": "experiments/locomo/add_locomo.py", "sha256": "e61fc3b2519f69ca8f981bac4721184c3e1bb44a3ec317c409becf1e48aa5742"},
+    {"path": "experiments/locomo/search_locomo.py", "sha256": "ffaa9e8d6e18d7e37b24fd63b1fc686f93d406270a77c3f02df3cd02356cc313"},
+    {"path": "experiments/locomo/retrievers.py", "sha256": "c0b4b7db7cde82f85ac1011f1f1c1269d9d89dcb4d2da7cd4e28716cbee9462d"},
+    {"path": "experiments/locomo/prompts.py", "sha256": "b4f1dd70d05db9adc16bc5199e827f7668f56ad91ef4d0a7a683b5d01c8d9f06"},
+    {"path": "src/lightmem/memory/lightmem.py", "sha256": "93c9f5167610e609f4d27dd392f6507d3f408b7a7e51bee2db8488d8e46c3528"},
+    {"path": "src/lightmem/configs/base.py", "sha256": "86f4bc3f954c4870e86c012414d2e18901f97c1fcbb9813801a11d619487e09e"},
+    {"path": "src/lightmem/factory/memory_manager/openai.py", "sha256": "91c9c65b7ec46c45453b36993824c6a863ab1ec362a06d3f24110ef9dacc984a"},
+    {"path": "src/lightmem/factory/text_embedder/openai.py", "sha256": "c59421ccb17e4914e780f9c717fcb7eb231f744be9fe060cd4b139ab0b1c4008"},
+    {"path": "src/lightmem/factory/retriever/embeddingretriever/qdrant.py", "sha256": "09704ee891894745c061ce522db34fbac43e7953a7336d5edf428246b443ab70"}
+  ],
+  "method_mechanism": {
+    "event_extraction": "LightMemory.add_memory with extraction_mode=event invokes separate factual and relational prompts and merges both extracted entry sets.",
+    "cross_event_summary": "LightMemory.summarize retrieves entries within a temporal window, retrieves semantically related seed entries, calls the summary LLM, and stores the resulting summary in a separate Qdrant collection.",
+    "official_locomo_settings_to_preserve": {
+      "pre_compress": true,
+      "pre_compressor": "llmlingua-2",
+      "compression_rate": 0.6,
+      "topic_segment": true,
+      "messages_use": "user_only",
+      "metadata_generate": true,
+      "text_summary": true,
+      "extract_threshold": 0.1,
+      "index_strategy": "embedding",
+      "retrieve_strategy": "embedding",
+      "update": "offline",
+      "extraction_mode": "event",
+      "summary_time_window_seconds": 3600,
+      "summary_top_k_seeds": 15,
+      "summary_retrieval_scope": "global"
+    }
+  },
+  "wma_mapping": {
+    "reset": "Create a fresh per-generation Qdrant detail collection and summary collection under the project-owned run storage; reset upstream GLOBAL_TOPIC_IDX to 0 and GLOBAL_LAST_SUMMARY_TIME to None.",
+    "ingest_turn": "Buffer normalized WMA turns and render every attachment as caption-mediated text retaining image_id; native image tensors are not passed to StructMem.",
+    "end_session": "For each ordered user and assistant pair call add_memory with the official factual and relational LoCoMo prompts. Force segmentation and extraction only on the final pair, matching the official example. Then call summarize with process_all=True so every newly available entry is summarized before any WMA checkpoint question can run.",
+    "snapshot_memories": "Enumerate all detail and summary Qdrant records through the frozen official Qdrant wrapper scroll/get_all path. Preserve backend ids, entry_type, timestamps, source ids, and summary provenance.",
+    "export_memory_delta": "Diff stable backend ids against the previous snapshot and label detail versus summary records without inventing update or delete operations.",
+    "reload_from_disk": "Close references and construct a new LightMemory against the same on-disk Qdrant paths; require identical detail and summary snapshots before and after reload.",
+    "retrieve": "Embed the query through the common 384-dimensional local OpenAI-compatible embedding endpoint. Retrieve details and summaries separately using the official Qdrant search scores and return at most the frozen WMA top_k total items, with a predeclared maximum summary allocation of min(5, top_k).",
+    "answer": "Use the common WMA answer and judge path. Do not run upstream search_locomo answer generation or import its source-reported scores."
+  },
+  "common_track_substitutions": {
+    "memory_llm": "Use the frozen common Qwen3-VL-8B-Instruct OpenAI-compatible endpoint for event extraction and summary generation instead of the paper's external API backbone.",
+    "embedding": "Use the frozen common Qwen3-VL-Embedding-2B endpoint at 384 dimensions instead of downloading the paper's remote embedding service. The endpoint remains labeled as a common-track substitution.",
+    "multimodality": "StructMem is evaluated as a text method with caption-mediated images. It cannot support a native-multimodal claim."
+  },
+  "required_additional_model": {
+    "repository": "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank",
+    "observed_revision": "5f0c82792b7ea14c6484e015b6a072009496b7f2",
+    "license": "Apache-2.0",
+    "status": "IDENTITY_VERIFIED_FILE_MANIFEST_PENDING",
+    "note": "The exact repository HEAD was verified by Git. The official metadata API timed out before an exact file manifest could be frozen, so model download remains prohibited."
+  },
+  "known_fail_closed_risks": [
+    "Upstream GLOBAL_TOPIC_IDX and GLOBAL_LAST_SUMMARY_TIME are module globals and must be reset between WMA samples.",
+    "Incremental WMA checkpoints require summarization after each session rather than only after the final dataset session; the lifecycle gate must prove no future-session leakage.",
+    "The upstream retrieve method omits backend ids and scores, so the adapter must use the frozen official Qdrant wrapper search output without changing ranking.",
+    "Detail and summary retrieval must share the total top_k budget; duplicate backend ids or non-finite scores are terminal failures.",
+    "The root-license and package-metadata license inconsistency must remain disclosed.",
+    "No exact LLMLingua file inventory is yet accepted, so no download is authorized."
+  ],
+  "decision": "StructMem is feasible for a caption-mediated WMA adapter design. Freeze adapter code, state-reset checks, retrieval-budget arbitration, execution-source copy, an exact dependency environment, and the LLMLingua file manifest before any lifecycle run.",
+  "numeric_result_rows_added": 0
+}
