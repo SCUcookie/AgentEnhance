@@ -1,0 +1,66 @@
+{
+  "schema_version": "agentenhance.wma_wave4_hindsight_execution_source_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-execution-source-audit-20260904-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T01:30:17+08:00",
+  "scientific_evidence_role": "independent source-copy integrity evidence only; no import, service, lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "prefreeze_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-execution-source-prefreeze.v1.json",
+    "sha256": "34212bbc2ed166cdc8fc45d8fb676741756c51e60f7146a456073efc891311e9",
+    "required_status": "FROZEN_BEFORE_EXTERNAL_EXECUTION_SOURCE_COPY"
+  },
+  "control_package": {
+    "path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-execution-source-20260904-v1-control.tar.gz",
+    "sha256": "1117b4406c49b32161fe12f485657f943b7d6e9565f6f837cd80663655229efd",
+    "bytes": 7022,
+    "transport": "resumable SFTP capped at 4096 Kbit/s"
+  },
+  "source_identity": {
+    "repository": "https://github.com/vectorize-io/hindsight.git",
+    "revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "clean_at_audit": true,
+    "source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight"
+  },
+  "execution_copy": {
+    "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-execution-source-20260904-v1/hindsight",
+    "file_count": 563,
+    "total_bytes": 9417481,
+    "record": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-execution-source-20260904-v1/execution-source.json",
+    "record_bytes": 115952,
+    "record_sha256": "62b82cd371798bdf2b239455e4c087bdaa138dffccedb91584c70aed0558016d",
+    "evidence_inventory": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-execution-source-20260904-v1/EVIDENCE_SHA256SUMS",
+    "evidence_inventory_bytes": 174,
+    "evidence_inventory_sha256": "c4b6b240e39be71d1bc745580ef7afbb2637c72840272be464b3f7094b9a84d1"
+  },
+  "independent_checks": {
+    "terminal_accepted_present": true,
+    "terminal_rejected_absent": true,
+    "evidence_inventory_verified": true,
+    "record_status": "TERMINAL_ACCEPTED",
+    "record_file_count": 563,
+    "record_total_bytes": 9417481,
+    "observed_file_count": 563,
+    "observed_total_bytes": 9417481,
+    "record_paths_sizes_hashes_equal_observed_copy": true,
+    "symlink_count": 0,
+    "bytecode_file_count": 0,
+    "active_destination_process_references": 0
+  },
+  "wave1_non_interference_observation": {
+    "before_copy_accepted_units": 41,
+    "after_audit_accepted_units": 42,
+    "before_copy_rejected_units": 0,
+    "after_audit_rejected_units": 0,
+    "after_audit_current_unit": "043_minecraft_03",
+    "interpretation": "Wave-1 continued under its original controller while the source-only copy completed; this observation does not prove numerical equivalence or authorize concurrent model/environment work."
+  },
+  "decision": "ACCEPT the Hindsight execution-source copy for the next dedicated Python 3.11 environment prefreeze.",
+  "next_allowed_gate": "Freeze an isolated project-owned Python 3.11 environment, exact dependency artifacts, pg0 storage/service lifecycle, and adapter overlay. Do not install dependencies or download/load models until the Wave-1 resource gate is released.",
+  "prohibited_actions": [
+    "editing the accepted source or execution copy in place",
+    "installing Hindsight into a shared or Wave-1 environment",
+    "starting pg0, allocating a service port, downloading or loading a model from this audit",
+    "starting a lifecycle or numerical run",
+    "populating any comparison-table numeric cell from this audit"
+  ]
+}

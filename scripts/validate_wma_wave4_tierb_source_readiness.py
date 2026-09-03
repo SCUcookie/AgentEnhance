@@ -16,6 +16,7 @@ FEASIBILITY_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-adapter-feasib
 MODEL_MANIFEST_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-model-prefetch-manifest.v1.json"
 MODEL_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-model-materialization-prefreeze.v1.json"
 EXECUTION_SOURCE_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-execution-source-prefreeze.v1.json"
+EXECUTION_SOURCE_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-execution-source-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -33,6 +34,9 @@ model_manifest = json.loads(MODEL_MANIFEST_PATH.read_text(encoding="utf-8"))
 model_prefreeze = json.loads(MODEL_PREFREEZE_PATH.read_text(encoding="utf-8"))
 execution_source_prefreeze = json.loads(
     EXECUTION_SOURCE_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+execution_source_audit = json.loads(
+    EXECUTION_SOURCE_AUDIT_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -168,6 +172,26 @@ assert execution_source_prefreeze["execution_contract"]["gpu_count"] == 0
 assert execution_source_prefreeze["execution_contract"]["retry_count"] == 0
 serialized = EXECUTION_SOURCE_PREFREEZE_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert execution_source_audit["status"] == "TERMINAL_ACCEPTED"
+assert execution_source_audit["prefreeze_gate"]["sha256"] == sha256_file(
+    ROOT / execution_source_audit["prefreeze_gate"]["path"]
+)
+copy = execution_source_audit["execution_copy"]
+checks = execution_source_audit["independent_checks"]
+assert copy["file_count"] == checks["record_file_count"] == checks["observed_file_count"] == 563
+assert copy["total_bytes"] == checks["record_total_bytes"] == checks["observed_total_bytes"] == 9417481
+assert checks["terminal_accepted_present"] is True
+assert checks["terminal_rejected_absent"] is True
+assert checks["evidence_inventory_verified"] is True
+assert checks["record_paths_sizes_hashes_equal_observed_copy"] is True
+assert checks["symlink_count"] == checks["bytecode_file_count"] == 0
+assert checks["active_destination_process_references"] == 0
+wave1 = execution_source_audit["wave1_non_interference_observation"]
+assert wave1["after_audit_accepted_units"] >= wave1["before_copy_accepted_units"]
+assert wave1["before_copy_rejected_units"] == wave1["after_audit_rejected_units"] == 0
+serialized = EXECUTION_SOURCE_AUDIT_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {
@@ -179,6 +203,7 @@ print(
             "frozen_hindsight_models": sorted(row["repository"] for row in models.values()),
             "frozen_hindsight_model_bytes": sum(row["expected_total_bytes"] for row in models.values()),
             "hindsight_execution_source_files": execution_source_prefreeze["copy_scope"]["expected_file_count"],
+            "accepted_hindsight_execution_source_files": copy["file_count"],
             "numeric_result_rows_added": 0,
         },
         sort_keys=True,
