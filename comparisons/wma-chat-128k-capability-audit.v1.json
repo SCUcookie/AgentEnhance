@@ -1,0 +1,37 @@
+{
+  "schema_version": "agentenhance.wma_service_capability_audit.v1",
+  "run_id": "wma-chat-128k-capability-20260903-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-03T20:55:00+08:00",
+  "purpose": "Resolve the pre-main-run mismatch between WMA retrieval.answer_model_ctx=128000 and the earlier 32768-token chat service without producing method scores.",
+  "source": {
+    "model": "Qwen/Qwen3-VL-8B-Instruct",
+    "model_revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+    "vllm_version": "0.11.0",
+    "tensor_parallel_size": 2,
+    "gpu_indices": [3, 4]
+  },
+  "requested_runtime": {
+    "max_model_len": 131072,
+    "max_num_seqs": 1,
+    "gpu_memory_utilization": 0.95
+  },
+  "observed_runtime": {
+    "engine_max_model_len": 131072,
+    "gpu_kv_cache_tokens": 166784,
+    "maximum_concurrency_at_131072_tokens": 1.27,
+    "short_chat_completion_health_check": "PASS",
+    "service_ready_marker": true,
+    "service_stopped_marker": true,
+    "owned_tmux_sessions_remaining": 0
+  },
+  "evidence_sha256": {
+    "chat_runtime_config": "d5a9944814fe5eeb78875a0fbddcce5c8fbf9e164c2d98c0de6f44daadca094a",
+    "chat_smoke": "60ec7815f709a0ef4a76f07fb906fae244b1efea352f7f5b6005665bdeb2df20",
+    "service_evidence_inventory": "bea6c2a0fd6fd815968c4a101a269f661c46b2f22ec66c0b3652ea945e9ff3b5",
+    "chat_log": "2ba5783f632b20b276adbace13d1ea514964427e2725dc4d51d3b961171bad77"
+  },
+  "decision": "Use the pinned WMA config unchanged with answer_model_ctx=128000 and run the answer/judge service at max_model_len=131072, max_num_seqs=1 for the full comparison track.",
+  "claim_scope": "technical service capacity only; no accuracy, throughput, ranking, or SOTA claim",
+  "server_root": "/data1/2026/ldh/AgentEnhance/runs/wma-chat-128k-capability-20260903-v1"
+}

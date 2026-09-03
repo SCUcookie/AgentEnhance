@@ -1,0 +1,26 @@
+{
+  "schema_version": "agentenhance.wma_determinism_gate_terminal_audit.v1",
+  "gate_id": "wma-r1-determinism-gate-20260903-v1",
+  "status": "TERMINAL_REJECTED",
+  "audited_at": "2026-09-03T21:00:07+08:00",
+  "reason": "The frozen semantic hasher excluded aggregate runtime and QA retrieval/answer durations but still included session-level storage_seconds. This contradicted the prefreeze statement that runtime durations were excluded and would misclassify identical semantic outputs as stochastic.",
+  "observed_before_stop": {
+    "accepted_units": 1,
+    "accepted_unit": "replicate-1/MMFU_Single/mobile_05",
+    "accepted_unit_artifact_inventory_sha256": "64028a827a9d89f25ac867d43553f649e4992c42eafc220322565a3d9ae5316a",
+    "next_unit_interrupted": "replicate-1/SimpleMem/mobile_05",
+    "gate_terminal_marker_sha256": "34359564469b011c11588b7dbb35e3dc4219478771fbac0aca13483ee2ab4dfb"
+  },
+  "cleanup_audit": {
+    "project_owned_tmux_sessions_remaining": 0,
+    "gpu_1_used_mib": 14,
+    "gpu_3_used_mib": 14,
+    "gpu_4_used_mib": 14,
+    "gpu_5_used_mib": 14,
+    "service_stopped_marker": true
+  },
+  "evidence_disposition": "Preserve the complete root for diagnosis. The accepted MMFU unit and all partial SimpleMem artifacts are prohibited from the recovery decision and from paper-facing results.",
+  "scientific_interpretation": "none",
+  "recovery_rule": "Use a fresh gate ID and root; change only the semantic hasher to exclude storage_seconds consistently with the original prefreeze.",
+  "server_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-determinism-gate-20260903-v1"
+}
