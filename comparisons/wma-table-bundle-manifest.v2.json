@@ -1,0 +1,76 @@
+{
+  "schema_version": "agentenhance.wma_table_bundle_manifest.v2",
+  "bundle_id": "wma-comparison-tables-20260904-v2",
+  "status": "FROZEN_BEFORE_MAIN_COMPARISON_RESULTS",
+  "frozen_at": "2026-09-04T09:20:00+08:00",
+  "supersedes": "comparisons/wma-table-bundle-manifest.v1.json",
+  "revision_reason": "Add StructMem and license-blocked HeLa-Mem before any accepted main result while retaining all prior methods, metrics, and slices.",
+  "claim_supported": "A complete, predeclared same-protocol comparison surface exists before AgentEnhance is evaluated, preventing post-result method, metric, or slice selection.",
+  "method_corpus": {
+    "rows": 24,
+    "accepted_local_rows_only_in_paper_projection": true,
+    "internal_master_keeps_all_rows": true,
+    "execution_matrix": "comparisons/wma-execution-matrix.v2.csv",
+    "execution_matrix_sha256": "5ec554cad8add563862fa2a07ec675583613e515287607704757f9ef3cbc05c3"
+  },
+  "panels": [
+    {
+      "name": "main_quality",
+      "path": "comparisons/wma-main-table-template.v3.csv",
+      "sha256": "777d9be96d16ca66dc55c3c84e0511565dc9ef1550083d784339f5b4c47d07bc",
+      "rows": 24,
+      "columns": 28
+    },
+    {
+      "name": "retrieval_and_memory",
+      "path": "comparisons/wma-retrieval-memory-table-template.v2.csv",
+      "sha256": "d902d182c32ff9059441e352e7e05df73b183bd96cb432ea069472febbab94bb",
+      "rows": 24,
+      "columns": 28
+    },
+    {
+      "name": "efficiency_and_reliability",
+      "path": "comparisons/wma-efficiency-reliability-table-template.v2.csv",
+      "sha256": "ebc7e2244aefaa8b0e563ac92c9a2cb5517f54d9151dfbe8895979eab603bf1a",
+      "rows": 24,
+      "columns": 38
+    },
+    {
+      "name": "all_frozen_slices_long_form",
+      "path": "comparisons/wma-slice-table-template.v2.csv",
+      "sha256": "bb7e372cb0e6774d508471833c8fbfb40461b762be6a2dc12eb30ad66e127c2e",
+      "rows": 1272,
+      "columns": 17,
+      "slice_values_per_method": 53
+    }
+  ],
+  "slice_surface": {
+    "overall": 1,
+    "question_type": 12,
+    "scope": 2,
+    "task_family": 4,
+    "difficulty": 3,
+    "evidence_modality": 4,
+    "subcategory": 27,
+    "total_values_per_method": 53,
+    "slice_inventory": "comparisons/wma-dataset-slice-inventory.v1.json",
+    "slice_inventory_sha256": "a00203cef36e8ad619ea71889b5b5501b64b3632d76f72bf5213638079cac993"
+  },
+  "metric_coverage": {
+    "quality": ["correct", "hallucination", "omission", "F1", "BLEU-1"],
+    "retrieval": ["hit rate", "R@1", "R@5", "R@10", "nDCG@1", "nDCG@5", "nDCG@10", "covered and gold counts"],
+    "memory": ["recall", "weighted recall", "pooled weighted recall", "correctness", "hallucination", "irrelevance", "itemwise correctness", "itemwise hallucination", "update handling", "interference rejection", "memory count"],
+    "efficiency": ["stage and end-to-end time", "p50 and p95 latency", "stage token counts", "storage bytes", "RAM", "VRAM", "GPU-hours"],
+    "reliability": ["expected", "observed", "failed", "failure rate"]
+  },
+  "source_data_policy": "All numeric cells remain empty until admitted from comparisons/reproduced-results.v1.csv after an accepted same-track local audit; official numbers never fill missing cells.",
+  "generator": {
+    "path": "scripts/materialize_wma_table_templates_v2.py",
+    "sha256": "14dac41977f6785d011897453d8026c8a495d7a079258fee5af37e78dad647fa"
+  },
+  "table_spec": {
+    "path": "comparisons/wma-main-table-spec.v3.json",
+    "sha256": "0e35453a89180f65d33afe20e132537b5ff89f9bf1c7ad32d8f1709cb8406a89"
+  },
+  "layout_note": "These CSVs are the internal source-of-truth bundle. A paper-ready LaTeX projection is deferred until a venue and manuscript width are fixed; no result is missing because of that formatting deferral."
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": "agentenhance.recent_2026_source_discovery_audit.v1",
+  "audit_id": "recent-2026-official-source-discovery-20260904-v1",
+  "status": "TERMINAL_ACCEPTED_FOR_REGISTRY_EXPANSION",
+  "observed_at": "2026-09-04T09:00:00+08:00",
+  "scope": "Read-only verification of official publication pages and repositories for recent memory methods before any accepted WMA main-result row exists.",
+  "selection_firewall": {
+    "eligible_inputs": [
+      "publication year and venue",
+      "method identity",
+      "official repository existence",
+      "repository revision",
+      "license and executable-code availability",
+      "benchmark-domain compatibility"
+    ],
+    "prohibited_inputs": [
+      "source-reported quality scores",
+      "observed AgentEnhance scores",
+      "observed local WMA scores for the newly registered methods"
+    ],
+    "local_result_state_at_freeze": "comparisons/reproduced-results.v1.csv contains zero rows",
+    "decision": "Registry expansion is driven only by recency and newly verified source availability. Paper-reported numbers cannot select, order, or populate local-result rows."
+  },
+  "methods": [
+    {
+      "method_id": "structmem",
+      "display_name": "StructMem",
+      "publication": "ACL 2026 short paper",
+      "primary_source": "https://aclanthology.org/2026.acl-short.12/",
+      "official_repository": "https://github.com/zjunlp/LightMem",
+      "discovery_head": "aa1c484cc6fd964c8ea1af897e36a0c3ba06d7db",
+      "license_observed": "MIT",
+      "identity_note": "Official StructMem code is contained in a multi-method repository named LightMem; StructMem is not an alias of either ACL 2026 LightMem or ICLR 2026 LightMem.",
+      "execution_state": "ELIGIBLE_FOR_SOURCE_MATERIALIZATION",
+      "next_gate": "Freeze and materialize the exact source revision, then audit the StructMem execution path before any lifecycle or numeric run."
+    },
+    {
+      "method_id": "hela-mem",
+      "display_name": "HeLa-Mem",
+      "publication": "ACL 2026 long paper",
+      "primary_source": "https://aclanthology.org/2026.acl-long.625/",
+      "official_repository": "https://github.com/ReinerBRO/HeLa-Mem",
+      "discovery_head": "68f19b3fac8c6156570d5aeb3a7a3e8f3ba7cb04",
+      "license_observed": "NO_LICENSE_FILE_VERIFIED",
+      "identity_note": "The official publication page links this repository and the repository contains method code and scripts.",
+      "execution_state": "OFFICIAL_CODE_LICENSE_MISSING_EXECUTION_BLOCKED",
+      "next_gate": "Obtain an explicit upstream license or other permission before copying, adapting, or executing the repository."
+    },
+    {
+      "method_id": "memory-r1",
+      "display_name": "Memory-R1",
+      "publication": "ACL 2026 long paper",
+      "primary_source": "https://aclanthology.org/2026.acl-long.583/",
+      "official_repository": "https://github.com/yansikuan/memory-r1",
+      "discovery_head": "9c413a2413c4fee160ec05445856c1529d63ac7a",
+      "license_observed": "MIT",
+      "identity_note": "The official repository exists but its README states that code is coming soon; the current tree contains no executable method implementation.",
+      "execution_state": "OFFICIAL_REPOSITORY_CODE_COMING_SOON",
+      "next_gate": "Re-audit a future immutable revision only after executable method code is released."
+    },
+    {
+      "method_id": "apex-mem",
+      "display_name": "APEX-MEM",
+      "publication": "ACL 2026 long paper",
+      "primary_source": "https://aclanthology.org/2026.acl-long.749/",
+      "official_repository": null,
+      "discovery_head": null,
+      "license_observed": null,
+      "identity_note": "No official code link was present on the publication page and no official repository was verified in this audit.",
+      "execution_state": "NO_OFFICIAL_CODE_VERIFIED",
+      "next_gate": "Require an author-controlled source and immutable revision before execution."
+    },
+    {
+      "method_id": "lightmem-acl-2026",
+      "display_name": "LightMem (ACL 2026)",
+      "publication": "ACL 2026 long paper",
+      "primary_source": "https://aclanthology.org/2026.acl-long.588/",
+      "official_repository": null,
+      "discovery_head": null,
+      "license_observed": null,
+      "identity_note": "No official implementation was verified. The zjunlp/LightMem repository belongs to a different author group and method and must not be used as this paper's code.",
+      "execution_state": "NO_OFFICIAL_CODE_VERIFIED_NAME_COLLISION_REJECTED",
+      "next_gate": "Require an author-controlled source with an unambiguous paper identity before execution."
+    }
+  ],
+  "registry_decisions": {
+    "add": ["structmem", "hela-mem"],
+    "retain_with_updated_gate": ["memory-r1", "apex-mem", "lightmem"],
+    "numeric_rows_added": 0,
+    "source_reported_scores_imported": 0
+  }
+}

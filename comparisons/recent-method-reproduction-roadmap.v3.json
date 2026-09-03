@@ -1,0 +1,66 @@
+{
+  "schema_version": "agentenhance.recent_method_reproduction_roadmap.v3",
+  "roadmap_id": "recent-memory-methods-2025-2026-20260904-v3",
+  "status": "FROZEN_BEFORE_ANY_ACCEPTED_WMA_MAIN_RESULT",
+  "frozen_at": "2026-09-04T09:10:00+08:00",
+  "supersedes": "comparisons/recent-method-reproduction-roadmap.v2.json",
+  "superseded_roadmap_sha256": "c50a1dc3a23fee01bff377fe002a79e005fed43fdc5ba305f71ac88fc08ee692",
+  "reason_for_revision": "Add two ACL 2026 methods discovered through official publication-to-repository verification before any accepted WMA result exists, while fail-closing methods without executable or licensed official code.",
+  "source_discovery_audit": {
+    "path": "comparisons/recent-2026-source-discovery-audit.v1.json",
+    "sha256": "3ac6b84145db52a3655ce1b9c3a65fad4ea9e1b9aea17c69edbded771fbb164e"
+  },
+  "registry": {
+    "path": "comparisons/baseline-register.v3.csv",
+    "sha256": "ac0a96da3ad98fae135e3b23f4426e334367f3fae93cac705cd052b2eb108759",
+    "supersedes": "comparisons/baseline-register.v2.csv",
+    "superseded_sha256": "8513ae3481e4329063c6eebd45ea03ae43a7888530960292f1eff4cf5aed9316"
+  },
+  "inherited_without_change": [
+    "scope and evidence policy",
+    "local-results-first numeric policy",
+    "matched-track boundaries",
+    "seed and missing-run rules",
+    "OmniMem alias resolution",
+    "all prior method assignments except explicitly updated source gates"
+  ],
+  "effective_coverage": {
+    "registered_recent_rows": 29,
+    "resolved_unique_method_entities": 28,
+    "deprecated_alias_rows": 1,
+    "wma_track_unique_candidates": 16,
+    "note": "Counts distinguish bibliographic registry rows from independently executable method entities. HeLa-Mem remains registered but execution-blocked until licensed."
+  },
+  "effective_group_adjustments": [
+    {
+      "group_id": "wave5_newly_verified_acl2026",
+      "methods": ["structmem", "hela-mem"],
+      "execution_order": ["structmem", "hela-mem"],
+      "change": "StructMem may enter source materialization; HeLa-Mem is visible in the fixed comparison surface but cannot execute without a verified license."
+    },
+    {
+      "group_id": "source_blocked_acl2026",
+      "methods": ["memory-r1", "apex-mem", "lightmem"],
+      "change": "Memory-R1 has an official repository without released method code; APEX-MEM and ACL LightMem have no verified official code; the zjunlp repository is explicitly rejected as ACL LightMem code."
+    }
+  ],
+  "execution_gates": {
+    "structmem": "Freeze an exact source-only materialization and license audit, then freeze a method-specific WMA lifecycle adapter before numeric execution.",
+    "hela-mem": "No source copy, adaptation, environment creation, or execution until an explicit upstream license or other permission is recorded.",
+    "memory-r1": "No execution until a later official revision contains executable method code.",
+    "apex-mem": "No execution until an author-controlled official source is verified.",
+    "lightmem": "No execution until an author-controlled source for ACL 2026 long.588 is verified without name collision."
+  },
+  "selection_and_numeric_policy": "The revision is based only on recency, identity, official-code availability, licensing, and task compatibility. No source-reported score or future AgentEnhance score may remove a registered method, select a favorable subset, or fill a local-result cell.",
+  "prohibited_actions": [
+    "Do not use zjunlp/LightMem as the implementation of ACL 2026 LightMem.",
+    "Do not execute or redistribute HeLa-Mem repository content without a verified license or permission.",
+    "Do not treat a repository README or paper number as a local reproduction.",
+    "Do not edit v1 or v2 artifacts to hide the prospective registry revision.",
+    "Do not import source-reported scores into same-protocol local-result rows."
+  ],
+  "validator": {
+    "path": "scripts/validate_recent_method_reproduction_roadmap_v3.py",
+    "sha256": "322e4ab70ee59e6c2354394aff88c5b19d2d153b7f62a32010b2948fdf1de6e6"
+  }
+}

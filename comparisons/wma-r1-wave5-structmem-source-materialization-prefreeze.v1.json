@@ -1,0 +1,54 @@
+{
+  "schema_version": "agentenhance.git_source_materialization_prefreeze.v1",
+  "stage_id": "wma-r1-wave5-structmem-source-materialization-20260904-v1",
+  "status": "FROZEN_BEFORE_EXTERNAL_SOURCE_MATERIALIZATION",
+  "frozen_at": "2026-09-04T09:30:00+08:00",
+  "scientific_question": "Can StructMem be bound to a complete immutable official source tree with an executable-code and license audit before adapter design?",
+  "decision_informed": "Whether StructMem may enter a separate fail-closed WMA adapter feasibility and lifecycle design gate.",
+  "scientific_evidence_role": "engineering source-identity gate only; no import, dependency, lifecycle, benchmark, numerical, superiority, or SOTA claim is permitted",
+  "prior_gate": {
+    "path": "comparisons/recent-2026-source-discovery-audit.v1.json",
+    "sha256": "3ac6b84145db52a3655ce1b9c3a65fad4ea9e1b9aea17c69edbded771fbb164e"
+  },
+  "source": {
+    "method_id": "structmem",
+    "repository": "https://github.com/zjunlp/LightMem.git",
+    "revision": "aa1c484cc6fd964c8ea1af897e36a0c3ba06d7db",
+    "mode": "CLONE_EXACT_ONCE",
+    "target": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave5-source-20260904-v1/structmem-lightmem",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-source-materialization-20260904-v1",
+    "materializer": "scripts/materialize_structmem_source.py",
+    "materializer_sha256": "4e4a1f69e02acca31c0ca53f26d7ecac1cf46d2d8999c881774988c0db2fdc8e"
+  },
+  "execution_contract": {
+    "server_root_injection": "Set AGENT_ENHANCE_REMOTE_ROOT immediately before execution; it must resolve to a writable project root named AgentEnhance under /data1 or /data2.",
+    "command": "python scripts/materialize_structmem_source.py --project-root ${AGENT_ENHANCE_REMOTE_ROOT}",
+    "network": "one ordinary Git HTTPS clone of the exact small public source repository; no model or dataset download",
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 30,
+    "source_worktree_byte_ceiling": 536870912,
+    "parallel_materializations": 1,
+    "retry_count": 0,
+    "fresh_roots_required": true,
+    "wave1_non_interference": "The source-only clone may run while Wave1 is active because it does not install dependencies, download models or datasets, load models, call APIs, start services, or use GPUs."
+  },
+  "admission_rule": [
+    "The exact commit is detached, clean, and matches the frozen official repository.",
+    "All tracked regular files have retained relative paths, byte sizes, and SHA-256 values.",
+    "The checkout contains an MIT LICENSE file.",
+    "The source contains no submodule, unresolved Git LFS pointer, or model-like weight file.",
+    "The source and evidence roots were absent before execution and remain unique.",
+    "The evidence root contains TERMINAL_ACCEPTED, no TERMINAL_REJECTED, and a verified evidence inventory."
+  ],
+  "failure_rule": "Any collision, clone error, identity mismatch, dirty state, missing or non-MIT license, submodule, LFS pointer, weight-like file, byte-ceiling breach, or timeout seals the fresh evidence root TERMINAL_REJECTED. Preserve the partial source and do not retry or repair it in place.",
+  "next_gate_after_acceptance": "Independently audit the source inventory and identify the exact StructMem execution path. Source acceptance alone never authorizes dependency installation, lifecycle execution, or numerical execution.",
+  "prohibited_actions": [
+    "using a moving branch name as an execution identity",
+    "treating the repository-wide LightMem name as the ACL 2026 LightMem method",
+    "installing dependencies or downloading models during source materialization",
+    "starting a lifecycle or numerical run from this gate",
+    "using source-reported scores as local reproduction values",
+    "deleting a rejected or partial source root"
+  ]
+}
