@@ -1,0 +1,65 @@
+{
+  "schema_version": "agentenhance.control_package_transfer_audit.v1",
+  "audit_id": "wma-r1-wave5-structmem-postwave1-control-transfer-20260904-v1-recovery2",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T14:25:00+08:00",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave5-structmem-postwave1-control-package-recovery2-prefreeze.v1.json",
+    "sha256": "f537ed6bd975591a71f04ca2ae4fbdb9ff871d8513cace886b780b98cb6b6147"
+  },
+  "transfer": {
+    "protocol": "sftp",
+    "command": "put",
+    "rate_limit_kbit_per_second": 4096,
+    "attempt_count": 1,
+    "retry_count": 0,
+    "source_archive_bytes": 13372,
+    "remote_archive_bytes": 13372,
+    "source_archive_sha256": "afe4839f96c4bc9138948ce6886f2530278992f63e2a3f1ec762e26832343736",
+    "remote_archive_sha256": "afe4839f96c4bc9138948ce6886f2530278992f63e2a3f1ec762e26832343736",
+    "large_artifact_exception_used": false,
+    "ordinary_put_scope": "this exact 13372-byte control archive only"
+  },
+  "archive_safety": {
+    "member_count": 9,
+    "regular_file_count": 9,
+    "symlink_count": 0,
+    "hardlink_count": 0,
+    "device_count": 0,
+    "absolute_path_count": 0,
+    "parent_traversal_count": 0
+  },
+  "extraction": {
+    "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave5-structmem-postwave1-control-20260904-v1-recovery2",
+    "destination_absent_before_extraction": true,
+    "observed_file_count": 9,
+    "observed_total_bytes": 44512,
+    "paths_sizes_hashes_equal_frozen_manifest": true,
+    "unexpected_file_count": 0
+  },
+  "execution_non_effect": {
+    "packaged_scripts_executed": 0,
+    "dependency_resolutions": 0,
+    "dependency_installations": 0,
+    "model_payload_bytes_downloaded": 0,
+    "gpu_processes_started": 0,
+    "destination_process_references_after_audit": 0,
+    "model_target_process_references_after_audit": 0,
+    "numeric_result_rows_added": 0
+  },
+  "wave1_non_interference_observation": {
+    "before_transfer_accepted_units": 62,
+    "after_audit_accepted_units": 64,
+    "before_transfer_rejected_units": 0,
+    "after_audit_rejected_units": 0,
+    "controller_remained_active": true
+  },
+  "decision": "Accept recovery2 transport and extraction. The exact post-Wave1 control inputs are present and inert on the server. Every packaged execution stage remains governed by its own Wave1 terminal resource gate.",
+  "next_gate": "Continue observing Wave1. Do not execute model materialization or dependency locking until the controller is TERMINAL_ACCEPTED and every Wave1 service and evaluator has stopped.",
+  "prohibited_actions": [
+    "using ordinary put authorization for a large artifact",
+    "editing or deleting the two rejected transport histories",
+    "executing a packaged stage while Wave1 remains active",
+    "treating transport acceptance as import, lifecycle, numerical, superiority, or SOTA evidence"
+  ]
+}

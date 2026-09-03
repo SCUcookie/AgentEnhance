@@ -27,6 +27,7 @@ CONTROL_PACKAGE_FAILURE = ROOT / "comparisons" / "wma-r1-wave5-structmem-postwav
 CONTROL_PACKAGE_RECOVERY1 = ROOT / "comparisons" / "wma-r1-wave5-structmem-postwave1-control-package-recovery1-prefreeze.v1.json"
 CONTROL_PACKAGE_RECOVERY1_FAILURE = ROOT / "comparisons" / "wma-r1-wave5-structmem-postwave1-control-package-recovery1-failure-audit.v1.json"
 CONTROL_PACKAGE_RECOVERY2 = ROOT / "comparisons" / "wma-r1-wave5-structmem-postwave1-control-package-recovery2-prefreeze.v1.json"
+CONTROL_PACKAGE_RECOVERY2_AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-postwave1-control-package-recovery2-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -291,4 +292,20 @@ assert control_recovery2["extraction_contract"]["execution_after_extraction"] is
 for path in (CONTROL_PACKAGE_RECOVERY1_FAILURE, CONTROL_PACKAGE_RECOVERY2):
     serialized = path.read_text(encoding="utf-8")
     assert "/data1/" not in serialized and "/data2/" not in serialized
-print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "model_files": frozen_model["expected_file_count"], "model_bytes": frozen_model["expected_total_bytes"], "model_materialization_gate": model_materialization["status"], "model_materializer_tests": model_materializer["unit_tests"], "dependency_lock_gate": dependency_lock["status"], "direct_dependencies": workspace["direct_dependency_count"], "lock_materializer_tests": lock_impl["unit_tests"], "control_package_files": control_package["archive"]["member_count"], "transport_recovery_gate": control_recovery2["status"], "transport_failed_stages": 2, "numeric_rows_added": 0}, sort_keys=True))
+control_recovery2_audit = json.loads(CONTROL_PACKAGE_RECOVERY2_AUDIT.read_text(encoding="utf-8"))
+assert control_recovery2_audit["status"] == "TERMINAL_ACCEPTED"
+assert control_recovery2_audit["prefreeze"]["sha256"] == sha256_file(ROOT / control_recovery2_audit["prefreeze"]["path"])
+transfer = control_recovery2_audit["transfer"]
+assert transfer["source_archive_bytes"] == transfer["remote_archive_bytes"] == control_package["archive"]["bytes"]
+assert transfer["source_archive_sha256"] == transfer["remote_archive_sha256"] == control_package["archive"]["sha256"]
+assert transfer["attempt_count"] == 1 and transfer["retry_count"] == 0
+assert control_recovery2_audit["archive_safety"]["regular_file_count"] == 9
+assert control_recovery2_audit["extraction"]["paths_sizes_hashes_equal_frozen_manifest"] is True
+assert control_recovery2_audit["execution_non_effect"]["packaged_scripts_executed"] == 0
+assert control_recovery2_audit["execution_non_effect"]["numeric_result_rows_added"] == 0
+wave1_transport = control_recovery2_audit["wave1_non_interference_observation"]
+assert wave1_transport["after_audit_accepted_units"] >= wave1_transport["before_transfer_accepted_units"]
+assert wave1_transport["before_transfer_rejected_units"] == wave1_transport["after_audit_rejected_units"] == 0
+serialized = CONTROL_PACKAGE_RECOVERY2_AUDIT.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "model_files": frozen_model["expected_file_count"], "model_bytes": frozen_model["expected_total_bytes"], "model_materialization_gate": model_materialization["status"], "model_materializer_tests": model_materializer["unit_tests"], "dependency_lock_gate": dependency_lock["status"], "direct_dependencies": workspace["direct_dependency_count"], "lock_materializer_tests": lock_impl["unit_tests"], "control_package_files": control_package["archive"]["member_count"], "transport_status": control_recovery2_audit["status"], "transport_failed_stages": 2, "numeric_rows_added": 0}, sort_keys=True))
