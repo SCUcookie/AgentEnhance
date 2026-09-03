@@ -1,0 +1,53 @@
+{
+  "schema_version": "agentenhance.negative_gate_audit.v1",
+  "audit_id": "mem-gallery-data-materialization-wave1-gate-20260904-v1",
+  "status": "TERMINAL_ACCEPTED_NEGATIVE_CONTROL",
+  "observed_at": "2026-09-04T07:33:00+08:00",
+  "purpose": "Prove that the accepted Mem-Gallery data materializer cannot create data, staging, or evidence paths while the exact Wave1 recovery2 acceptance marker is absent.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-data-materialization-prefreeze.v1.json",
+      "sha256": "6c4bbcd59721a13237c280093dc4fdb8342dffe729c502657d26239632636fcf"
+    },
+    {
+      "path": "comparisons/memgallery-data-materialization-control-package-audit.v1.json",
+      "sha256": "4e02175eb62365e7e7020b694c3ac8a47406597d1b6d37cf0d731e14c4107eae"
+    },
+    {
+      "path": "scripts/materialize_hf_dataset_snapshot.py",
+      "sha256": "4fe9ed3c46da1d5e830ae1d94645ef0dd0c901cbc9fdce76a283f6160cc636c3"
+    }
+  ],
+  "execution": {
+    "control_root": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-data-materialization-20260904-v1-control",
+    "argv_identity": "exact argv frozen in comparisons/memgallery-data-materialization-prefreeze.v1.json",
+    "python": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "python_bytecode_writes_disabled": true,
+    "expected_exit": "nonzero before any path creation",
+    "observed_exit_code": 1,
+    "observed_stderr": "prerequisite marker gate failed: required=/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1/TERMINAL_ACCEPTED, forbidden=/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1/TERMINAL_REJECTED"
+  },
+  "precondition_observation": {
+    "required_wave1_acceptance_marker_present": false,
+    "forbidden_wave1_rejection_marker_present": false,
+    "wave1_controller": "RUNNING",
+    "wave1_method_seed": "wma-mmfu-single seed 0 recovery2",
+    "wave1_accepted_units": 23,
+    "wave1_rejected_units": 0
+  },
+  "postcondition": {
+    "target": "/data1/2026/ldh/AgentEnhance/datasets/raw/mem-gallery-af912dab",
+    "target_present": false,
+    "stage_root": "/data1/2026/ldh/AgentEnhance/datasets/raw/mem-gallery-af912dab.partial-materialization-v1",
+    "stage_root_present": false,
+    "evidence_root": "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-materialization-af912dab-20260904-v1",
+    "evidence_root_present": false,
+    "dataset_files_downloaded": 0,
+    "dataset_bytes_downloaded": 0,
+    "network_requests_started": 0,
+    "numeric_result_rows_added": 0,
+    "files_deleted": 0
+  },
+  "interpretation": "The missing prerequisite marker fails before tmux, port, disk, staging, or network work. This accepts only the negative gate behavior and does not authorize later materialization or scientific execution.",
+  "next_allowed_action": "Continue Wave1. Re-run the exact materialization stage only after the positive marker, negative marker, tmux, port, freshness, and disk gates all pass together."
+}
