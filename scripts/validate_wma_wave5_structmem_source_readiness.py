@@ -17,6 +17,7 @@ FEASIBILITY_V2 = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-feasibil
 ADAPTER_DESIGN = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-design-prefreeze.v1.json"
 EXECUTION_SOURCE_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-execution-source-prefreeze.v1.json"
 EXECUTION_SOURCE_AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-execution-source-audit.v1.json"
+MODEL_METADATA_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-llmlingua-metadata-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -158,4 +159,18 @@ assert wave1["before_copy_rejected_units"] == wave1["after_audit_rejected_units"
 assert execution_audit["numeric_result_rows_added"] == 0
 serialized = EXECUTION_SOURCE_AUDIT.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
-print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "numeric_rows_added": 0}, sort_keys=True))
+model_prefreeze = json.loads(MODEL_METADATA_PREFREEZE.read_text(encoding="utf-8"))
+assert model_prefreeze["status"] == "FROZEN_BEFORE_MODEL_METADATA_CLONE"
+assert model_prefreeze["prior_gate"]["sha256"] == sha256_file(ROOT / model_prefreeze["prior_gate"]["path"])
+model_impl = model_prefreeze["implementation"]
+assert model_impl["script_sha256"] == sha256_file(ROOT / model_impl["script"])
+assert model_impl["unit_test_sha256"] == sha256_file(ROOT / model_impl["unit_test"])
+assert model_impl["tests"] == 3
+model_contract = model_prefreeze["execution_contract"]
+assert model_contract["network_retries"] == 0
+assert model_contract["gpu_count"] == 0
+assert model_contract["model_payload_byte_ceiling"] == 0
+assert "GIT_LFS_SKIP_SMUDGE=1" in model_contract["git_mode"]
+serialized = MODEL_METADATA_PREFREEZE.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "numeric_rows_added": 0}, sort_keys=True))

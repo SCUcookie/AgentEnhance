@@ -1,0 +1,58 @@
+{
+  "schema_version": "agentenhance.structmem_llmlingua_metadata_prefreeze.v1",
+  "stage_id": "wma-r1-wave5-structmem-llmlingua-metadata-20260904-v1",
+  "status": "FROZEN_BEFORE_MODEL_METADATA_CLONE",
+  "frozen_at": "2026-09-04T11:20:00+08:00",
+  "scientific_question": "Can the exact LLMLingua model file identities and payload hashes be learned from immutable Git and LFS metadata without downloading any model payload?",
+  "decision_informed": "Whether an exact bounded model materialization manifest can be frozen for StructMem.",
+  "scientific_evidence_role": "model metadata discovery only; no model payload, import, lifecycle, numerical, superiority, or SOTA claim",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave5-structmem-execution-source-audit.v1.json",
+    "sha256": "5ec9071d88a07454e29fd64824159120c43483b48c3abf7ae76cb3ad167fd1e3",
+    "required_status": "TERMINAL_ACCEPTED"
+  },
+  "model": {
+    "repository": "https://huggingface.co/microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank",
+    "revision": "5f0c82792b7ea14c6484e015b6a072009496b7f2",
+    "license": "Apache-2.0",
+    "target": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave5-model-metadata-20260904-v1/llmlingua",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-llmlingua-metadata-20260904-v1"
+  },
+  "implementation": {
+    "script": "scripts/audit_structmem_llmlingua_git_metadata.py",
+    "script_sha256": "dca44f2d1729f5e34efd1f3e230988c1e55f8955a2cd58886f6d5b04bc3ccc87",
+    "unit_test": "tests/test_structmem_llmlingua_git_metadata.py",
+    "unit_test_sha256": "bdfb4bce8983644b019795d6993838852791cccd2580b160983afd8a6ebd1431",
+    "tests": 3
+  },
+  "execution_contract": {
+    "command": "python scripts/audit_structmem_llmlingua_git_metadata.py --project-root ${AGENT_ENHANCE_REMOTE_ROOT}",
+    "git_mode": "clone --no-checkout with GIT_LFS_SKIP_SMUDGE=1",
+    "network_retries": 0,
+    "parallel_downloads": 1,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 30,
+    "git_metadata_byte_ceiling": 67108864,
+    "model_payload_byte_ceiling": 0,
+    "fresh_roots_required": true,
+    "wave1_non_interference": "This small metadata-only Git operation may run during Wave1. It must not checkout or materialize any LFS payload, install a package, call an API model, or start a GPU process."
+  },
+  "acceptance": [
+    "The immutable revision exists in the cloned official repository.",
+    "Every tree blob is inventoried by path Git object id byte size and SHA-256.",
+    "model.safetensors is a syntactically valid LFS pointer with an exact payload SHA-256 and byte size.",
+    "No LFS payload exists in the worktree and model_payload_materialized is false.",
+    "The metadata clone remains within 64 MiB.",
+    "The evidence root contains TERMINAL_ACCEPTED and a verified evidence inventory."
+  ],
+  "failure": "Any collision, network or Git error, revision mismatch, unsupported tree entry, invalid model pointer, payload appearance, byte-ceiling breach, timeout, or retry seals TERMINAL_REJECTED and preserves the partial target.",
+  "next_gate_after_acceptance": "Convert the accepted tree and LFS identities into an allowlisted exact model materialization manifest. Metadata acceptance alone never authorizes model download.",
+  "prohibited_actions": [
+    "checking out or smudging a Git LFS or Xet model payload",
+    "downloading model.safetensors or any other model payload",
+    "installing dependencies or importing StructMem",
+    "starting a lifecycle or numerical run",
+    "populating a comparison-table numeric cell"
+  ]
+}
