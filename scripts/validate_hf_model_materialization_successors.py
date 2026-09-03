@@ -15,6 +15,10 @@ SUCCESSORS = (
     ROOT / "comparisons/wma-r1-wave3-model-materialization-prefreeze.v2.json",
     ROOT / "comparisons/wma-r1-wave4-hindsight-model-materialization-prefreeze.v2.json",
 )
+WAVE2_MANIFEST = ROOT / "comparisons/wma-wave2-model-prefetch-manifest.v2.json"
+WAVE2_PREFREEZE = ROOT / "comparisons/wma-wave2-model-materialization-prefreeze.v2.json"
+V4_DOWNLOADER = ROOT / "scripts/materialize_hf_model_snapshot_v4.py"
+V4_TEST = ROOT / "tests/test_hf_model_materializer_v4.py"
 
 
 def sha256_file(path: Path) -> str:
@@ -73,11 +77,61 @@ def main() -> int:
         model_count += len(payload["execution_order"])
         file_count += observed_files
         total_bytes += observed_bytes
+    wave2_manifest = json.loads(WAVE2_MANIFEST.read_text(encoding="utf-8"))
+    wave2_prefreeze = json.loads(WAVE2_PREFREEZE.read_text(encoding="utf-8"))
+    assert wave2_manifest["status"] == "FROZEN_BEFORE_DOWNLOAD"
+    old_manifest = ROOT / wave2_manifest["supersedes"]["path"]
+    assert wave2_manifest["supersedes"]["sha256"] == sha256_file(old_manifest)
+    models = {row["repository"]: row for row in wave2_manifest["models"]}
+    assert set(models) == {
+        "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+        "Qwen/Qwen3-VL-Embedding-8B",
+    }
+    wave2_files = 0
+    wave2_bytes = 0
+    lfs_files = 0
+    git_files = 0
+    for model in models.values():
+        paths = [row["path"] for row in model["expected_files"]]
+        assert paths == sorted(paths) and len(paths) == len(set(paths))
+        assert len(paths) == model["expected_file_count"]
+        assert sum(row["bytes"] for row in model["expected_files"]) == model[
+            "expected_total_bytes"
+        ]
+        for row in model["expected_files"]:
+            assert ("sha256" in row) != ("git_blob_sha1" in row)
+            if "sha256" in row:
+                assert len(row["sha256"]) == 64
+                lfs_files += 1
+            else:
+                assert len(row["git_blob_sha1"]) == 40
+                git_files += 1
+        wave2_files += model["expected_file_count"]
+        wave2_bytes += model["expected_total_bytes"]
+    assert (wave2_files, wave2_bytes, lfs_files, git_files) == (46, 25153920691, 8, 38)
+    assert wave2_prefreeze["status"] == "FROZEN_AWAITING_WAVE1_RESOURCE_GATE"
+    assert wave2_prefreeze["supersedes"]["sha256"] == sha256_file(
+        ROOT / wave2_prefreeze["supersedes"]["path"]
+    )
+    assert wave2_prefreeze["source_manifest"]["sha256"] == sha256_file(WAVE2_MANIFEST)
+    assert wave2_prefreeze["implementation"]["downloader_sha256"] == sha256_file(
+        V4_DOWNLOADER
+    )
+    assert wave2_prefreeze["implementation"]["unit_test_sha256"] == sha256_file(V4_TEST)
+    assert wave2_prefreeze["execution_contract"]["network_retry_count"] == 0
+    assert wave2_prefreeze["execution_contract"]["logical_requests_per_file"] == 1
+    assert "/data1/" not in WAVE2_MANIFEST.read_text(encoding="utf-8")
+    assert "/data2/" not in WAVE2_MANIFEST.read_text(encoding="utf-8")
+    assert "/data1/" not in WAVE2_PREFREEZE.read_text(encoding="utf-8")
+    assert "/data2/" not in WAVE2_PREFREEZE.read_text(encoding="utf-8")
+    model_count += len(models)
+    file_count += wave2_files
+    total_bytes += wave2_bytes
     print(
         json.dumps(
             {
                 "status": "PASS",
-                "successor_contracts": len(SUCCESSORS),
+                "successor_contracts": len(SUCCESSORS) + 1,
                 "models": model_count,
                 "expected_files": file_count,
                 "expected_bytes": total_bytes,

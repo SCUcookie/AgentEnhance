@@ -1,0 +1,114 @@
+{
+  "schema_version": "agentenhance.model_prefetch_manifest.v2",
+  "manifest_id": "wma-wave2-model-prefetch-20260904-v2",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-04T04:44:37+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-wave2-model-prefetch-manifest.v1.json",
+    "sha256": "348c9eb1078efb171e4d3b572a6e4b364ac04943f816ed996a1f4916cc12ff0c",
+    "prior_download_performed": false,
+    "reason": "V1 froze only repository-wide file counts and byte totals. V2 freezes the exact sorted path, byte size, and immutable Git-blob or LFS content identity for every file."
+  },
+  "source": "Hugging Face official expanded tree API at immutable revisions",
+  "tree_api_evidence": [
+    {
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "response_bytes": 23629,
+      "response_sha256": "f7c499c2a1892eae93468926d55dd386f09ff91d95d3a9ac8c9299b81b333a7e",
+      "retained_response": "${AGENT_ENHANCE_LOCAL_STAGING}/agentenhance-gme-tree-9cfa6413.json"
+    },
+    {
+      "repository": "Qwen/Qwen3-VL-Embedding-8B",
+      "revision": "2c4565515e0f265c6511776e7193b22c0968ddc7",
+      "response_bytes": 22913,
+      "response_sha256": "846e099825f635fc7ef2eaea2ab45b8ef89c2e98260db38acc048011dd675dc7",
+      "retained_response": "${AGENT_ENHANCE_LOCAL_STAGING}/agentenhance-qwen3-embed8b-tree-2c456551.json"
+    }
+  ],
+  "models": [
+    {
+      "purpose": "Required 1536-dimensional multimodal encoder for NGMemory, AUGUSTUSMemory, and UniversalRAGMemory",
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "license": "apache-2.0",
+      "private": false,
+      "gated": false,
+      "expected_files": [
+        {"path": ".gitattributes", "bytes": 1519, "git_blob_sha1": "a6344aac8c09253b3b630fb776ae94478aa0275b"},
+        {"path": "1_Pooling/config.json", "bytes": 316, "git_blob_sha1": "e0ef9ff7d3f9bf794b772fb435285b46dba988db"},
+        {"path": "README.md", "bytes": 101455, "git_blob_sha1": "01628530ff4a4a8ab6589ad7f1ea40bdd0a3bfb9"},
+        {"path": "added_tokens.json", "bytes": 392, "git_blob_sha1": "caa81304af029feb531f1fe80a096dc539ea0153"},
+        {"path": "chat_template.json", "bytes": 1050, "git_blob_sha1": "732bd68bc5427d1fb6c06a59b3bf2456b2155d24"},
+        {"path": "config.json", "bytes": 1251, "git_blob_sha1": "431cb3f7166250e25dc563fbbad1e1be8c479799"},
+        {"path": "config_sentence_transformers.json", "bytes": 161, "git_blob_sha1": "ef09c3ed617f4b4d85ace9a2cd0f98c59eba42f5"},
+        {"path": "custom_st.py", "bytes": 8622, "git_blob_sha1": "62a34b5fa5f4cfd7db610d1fa67010a14b1af60c"},
+        {"path": "generation_config.json", "bytes": 249, "git_blob_sha1": "efd814d887acf8e62ea22d61d1b519733b94da6a"},
+        {"path": "gme_inference.py", "bytes": 13192, "git_blob_sha1": "4eae2843de8103e7f83d84b1be8ca8bdcdc2129f"},
+        {"path": "images/gme_logo.png", "bytes": 525625, "git_blob_sha1": "d2a87e94590a9235e0e5f6eafe14e15c893d77d0"},
+        {"path": "merges.txt", "bytes": 1671853, "git_blob_sha1": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7"},
+        {"path": "model-00001-of-00003.safetensors", "bytes": 4046085544, "sha256": "ce525de1d47307ebf63285ce4f2f80ca8ffffd94235b2151585e5714307e4e99"},
+        {"path": "model-00002-of-00003.safetensors", "bytes": 4063188000, "sha256": "7b42b76064f5d14ee9d0390f9a1f3571fc66eae4f40764f818cb5e9aafc5d6f5"},
+        {"path": "model-00003-of-00003.safetensors", "bytes": 726747736, "sha256": "e3f1342fe1dd7df1582be00ebd45557316015050ae2edb841e61150825f16adc"},
+        {"path": "model.safetensors.index.json", "bytes": 56411, "git_blob_sha1": "384d0cbf92033a0a34b26a773aa1bd3130f84954"},
+        {"path": "modeling_gme_qwen2vl.py", "bytes": 13261, "git_blob_sha1": "eaaabaaf6ea94a22f12779e190f22560d78e3c96"},
+        {"path": "modules.json", "bytes": 341, "git_blob_sha1": "21413a5d83256757cfd339bd2e0108e2a68c9f7c"},
+        {"path": "preprocessor_config.json", "bytes": 347, "git_blob_sha1": "c8bf52bdaee98b049e28da3ef94119f896b03a8d"},
+        {"path": "results.json", "bytes": 15851, "git_blob_sha1": "637cd8c23363d16a13c2252741bf473d098bdadc"},
+        {"path": "special_tokens_map.json", "bytes": 613, "git_blob_sha1": "ac23c0aaa2434523c494330aeb79c58395378103"},
+        {"path": "tokenizer.json", "bytes": 7030148, "git_blob_sha1": "6a12bcd76a6f4151c9aca398ff5ef0dbfdb4a235"},
+        {"path": "tokenizer_config.json", "bytes": 4256, "git_blob_sha1": "4976841af79d8587e3e38006a6be978efe3a2208"},
+        {"path": "vocab.json", "bytes": 2776833, "git_blob_sha1": "4783fe10ac3adce15ac8f358ef5462739852c569"}
+      ],
+      "expected_file_count": 24,
+      "expected_total_bytes": 8848245026,
+      "expected_lfs_sha256_files": 3,
+      "expected_git_blob_sha1_files": 21,
+      "expected_local_path": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave2-gme-20260903-v1"
+    },
+    {
+      "purpose": "Canonical WorldMemArena Qwen3-VL embedding-only control",
+      "repository": "Qwen/Qwen3-VL-Embedding-8B",
+      "revision": "2c4565515e0f265c6511776e7193b22c0968ddc7",
+      "license": "apache-2.0",
+      "private": false,
+      "gated": false,
+      "expected_files": [
+        {"path": ".gitattributes", "bytes": 1570, "git_blob_sha1": "52373fe24473b1aa44333d318f578ae6bf04b49b"},
+        {"path": "1_Pooling/config.json", "bytes": 97, "git_blob_sha1": "43eba2e03c04b5cee177cdc684cd2db0d0d9fba8"},
+        {"path": "README.md", "bytes": 24166, "git_blob_sha1": "ee9692d0e176afb06792f0391845ec2ddb93ce5e"},
+        {"path": "added_tokens.json", "bytes": 707, "git_blob_sha1": "b54f9135e44c1e81047e8d05cb027af8bc039eed"},
+        {"path": "chat_template.jinja", "bytes": 5519, "git_blob_sha1": "a0b161f8af53a32ce7e659103babce500990a863"},
+        {"path": "config.json", "bytes": 1539, "git_blob_sha1": "bbc95092cb9d1bccc2e2205eeaa2625bc385b59b"},
+        {"path": "config_sentence_transformers.json", "bytes": 238, "git_blob_sha1": "45201cb7fdb6b2546b0887a0f4f29d01df334ca4"},
+        {"path": "merges.txt", "bytes": 1671853, "git_blob_sha1": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7"},
+        {"path": "model-00001-of-00004.safetensors", "bytes": 4998056552, "sha256": "79ef275ec5f751d5fb59357c00d473268f9fd74abf5e38aa30137d268e7733c4"},
+        {"path": "model-00002-of-00004.safetensors", "bytes": 4915962464, "sha256": "a4da61f512e84fc0f0b80bcb7bcc5137eb3bf25b658a7d55f84f4056078545f0"},
+        {"path": "model-00003-of-00004.safetensors", "bytes": 4915962496, "sha256": "7fb17cf8f06d6fe5aaacf114e85c4e6d8318799f24b517f50d1ec154a8d47007"},
+        {"path": "model-00004-of-00004.safetensors", "bytes": 1459698112, "sha256": "000213b6d1d03ed9023fac23716da51ec4c5be221a04526c2f732d31d8fed1f5"},
+        {"path": "model.safetensors.index.json", "bytes": 67737, "git_blob_sha1": "8adc862dba2582b08afd3679524c100eb042f57b"},
+        {"path": "modules.json", "bytes": 430, "git_blob_sha1": "b90278c6da887b649f2c892ca2512ecd7775ef83"},
+        {"path": "preprocessor_config.json", "bytes": 784, "git_blob_sha1": "a1352efedad1e881d73ea4d9f30d9ae6a149dd63"},
+        {"path": "scripts/qwen3_vl_embedding.py", "bytes": 13258, "git_blob_sha1": "36d45865735be96a1278a21c132ff640e2ae68ca"},
+        {"path": "sentence_bert_config.json", "bytes": 771, "git_blob_sha1": "3385a6eaa790e12ba8cd8b9fe747efbe6500b338"},
+        {"path": "special_tokens_map.json", "bytes": 613, "git_blob_sha1": "ac23c0aaa2434523c494330aeb79c58395378103"},
+        {"path": "tokenizer.json", "bytes": 11423705, "sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a"},
+        {"path": "tokenizer_config.json", "bytes": 5404, "git_blob_sha1": "1d4fba2de0e94e8f97e08927cfb7d084160c2880"},
+        {"path": "video_preprocessor_config.json", "bytes": 817, "git_blob_sha1": "e32b1d90356f74457edbfca27aa1e121dab7cdc7"},
+        {"path": "vocab.json", "bytes": 2776833, "git_blob_sha1": "4783fe10ac3adce15ac8f358ef5462739852c569"}
+      ],
+      "expected_file_count": 22,
+      "expected_total_bytes": 16305675665,
+      "expected_lfs_sha256_files": 5,
+      "expected_git_blob_sha1_files": 17,
+      "expected_local_path": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave2-qwen3-vl-embedding-8b-20260903-v1"
+    }
+  ],
+  "download_policy": {
+    "scheduler_gate": "Do not download any file until Wave1 is terminal-accepted and all Wave1 services and evaluators have stopped.",
+    "transport": "One direct HTTPS request per exact file on the server; no application retries. If a large file must originate on the Mac, use resumable SFTP limited to 4096 Kbit/s.",
+    "identity": "Every LFS payload must match its frozen SHA-256; every non-LFS payload must match its frozen Git blob SHA-1; all observed files also receive retained SHA-256.",
+    "offline_execution": "Lifecycle and numerical runs deny network model resolution and load only accepted local snapshots.",
+    "cleanup": "Project-owned targets remain protected until their dependent reproductions and archives satisfy model-retention-policy.v2."
+  }
+}

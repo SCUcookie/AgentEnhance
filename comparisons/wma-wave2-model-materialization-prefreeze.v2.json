@@ -1,0 +1,90 @@
+{
+  "schema_version": "agentenhance.model_materialization_prefreeze.v2",
+  "materialization_id": "wma-wave2-model-materialization-20260904-v2",
+  "status": "FROZEN_AWAITING_WAVE1_RESOURCE_GATE",
+  "frozen_at": "2026-09-04T04:44:37+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-wave2-model-materialization-prefreeze.v1.json",
+    "sha256": "3fc57ce103999187ba590738eda35c3feaec52b3410d19966b3caa84874f26d4",
+    "prior_execution_performed": false,
+    "reason": "V1 used an untracked snapshot_download retry policy and admitted a repository from counts and bytes only. V2 binds all file paths and immutable content identities before download."
+  },
+  "scientific_evidence_role": "prospective acquisition contract only; no model, lifecycle, numerical, superiority, or SOTA claim",
+  "source_manifest": {
+    "path": "comparisons/wma-wave2-model-prefetch-manifest.v2.json",
+    "sha256": "b86b62467296f6df19daadbe88e83d40e54872152dae48b1774798f9fd342230",
+    "models": 2,
+    "exact_expected_files": 46,
+    "expected_total_bytes": 25153920691,
+    "lfs_sha256_files": 8,
+    "git_blob_sha1_files": 38
+  },
+  "implementation": {
+    "downloader": "scripts/materialize_hf_model_snapshot_v4.py",
+    "downloader_sha256": "3489fd20342b19816f24d67c7dafb3ed52b9ac2167770806ba5eded4522ac46b",
+    "base_nested_path_library": "scripts/materialize_hf_model_snapshot_v3.py",
+    "base_nested_path_library_sha256": "6bf3cd9b1458920d9a4e9accf11e9d3e3c1c9d710d627e88272810fa73d4dde9",
+    "unit_test": "tests/test_hf_model_materializer_v4.py",
+    "unit_test_sha256": "54ac66e1216b8ad17610fcc67ce528d68de3ac0e05b0740d913d98f1f6f14575",
+    "unit_tests": 3,
+    "network_client": "Python urllib.request, one sequential logical request per exact file, no application retry loop"
+  },
+  "execution_order": [
+    {
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave2-gme-20260903-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave2-gme-model-materialization-20260903-v1",
+      "expected_files": 24,
+      "expected_bytes": 8848245026,
+      "lfs_sha256_files": 3,
+      "git_blob_sha1_files": 21
+    },
+    {
+      "repository": "Qwen/Qwen3-VL-Embedding-8B",
+      "revision": "2c4565515e0f265c6511776e7193b22c0968ddc7",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave2-qwen3-vl-embedding-8b-20260903-v1",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave2-qwen3-vl-embedding-8b-model-materialization-20260903-v1",
+      "expected_files": 22,
+      "expected_bytes": 16305675665,
+      "lfs_sha256_files": 5,
+      "git_blob_sha1_files": 17
+    }
+  ],
+  "scheduler": {
+    "start_condition": "Wave1 controller is independently TERMINAL_ACCEPTED, all Wave1 services and evaluators have stopped, all four frozen target/evidence roots remain absent, at least 40 GiB is free, and no process references either target.",
+    "execution_order": ["Alibaba-NLP/gme-Qwen2-VL-2B-Instruct", "Qwen/Qwen3-VL-Embedding-8B"],
+    "parallel_materializations": 1,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "direct_server_download": true,
+    "mac_to_server_recovery": "Requires a separately frozen recovery using resumable SFTP limited to 4096 Kbit/s; this primary stage never silently changes transport."
+  },
+  "execution_contract": {
+    "command_template": "python scripts/materialize_hf_model_snapshot_v4.py --prefetch-manifest comparisons/wma-wave2-model-prefetch-manifest.v2.json --repository <frozen-repository> --evidence-root <frozen-fresh-evidence-root> --timeout-seconds 600",
+    "wall_time_ceiling_hours_per_model": 6,
+    "network_retry_count": 0,
+    "logical_requests_per_file": 1,
+    "redirects_allowed": true,
+    "fresh_target_and_evidence_roots_required": true,
+    "partial_files_retained_on_failure": true
+  },
+  "acceptance": [
+    "The scheduler start condition is independently observed before either command starts.",
+    "Only the exact 46 sorted files in the immutable-revision v2 manifest are requested.",
+    "Every response is HTTPS status 200 and redirect metadata is retained without signed URLs.",
+    "All eight LFS payloads match their frozen SHA-256 and all 38 non-LFS files match their frozen Git blob SHA-1.",
+    "Every observed file receives a retained SHA-256; counts and byte totals match each model and the complete manifest.",
+    "Both evidence roots report one logical request per file, zero retries, TERMINAL_ACCEPTED, and no TERMINAL_REJECTED."
+  ],
+  "failure": "Any premature start, collision, unsafe path, timeout, HTTP error, identity mismatch, byte mismatch, file-set mismatch, storage breach, or evidence mismatch seals the fresh evidence root as TERMINAL_REJECTED and retains the partial target. A recovery requires new roots and a separately frozen contract.",
+  "next_gate_after_acceptance": "Independently audit and archive both model identities, then freeze a lifecycle successor that binds their exact records. Model acceptance does not authorize lifecycle or numerical execution.",
+  "prohibited_actions": [
+    "executing the superseded v1 model contracts",
+    "starting while Wave1 or any Wave1 service remains active",
+    "using snapshot_download, a moving revision, an implicit cache, or an application retry",
+    "loading a model or installing dependencies during acquisition",
+    "repairing, resuming, overwriting, or deleting a rejected target in place",
+    "populating a comparison-table numeric cell from model acquisition"
+  ]
+}
