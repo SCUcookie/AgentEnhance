@@ -1,0 +1,58 @@
+{
+  "schema_version": "agentenhance.model_cleanup_controller_prefreeze.v1",
+  "controller_id": "baseline-project-owned-model-cleanup-20260904-v1",
+  "status": "FROZEN_BEFORE_ANY_PROJECT_OWNED_MODEL_CLEANUP",
+  "frozen_at": "2026-09-04T06:23:55+08:00",
+  "purpose": "Implement the requested data-retention policy: after every dependent reproduction and archive is accepted, remove only an exact project-owned reproducible model root while retaining all data, predictions, metrics, logs, manifests, source, environments, and archives.",
+  "parents": {
+    "retention_policy": {
+      "path": "comparisons/model-retention-policy.v2.json",
+      "sha256": "196c83d19320f406b5ca4a1d124ef025d8dbf6672d9e538dd3d2795464dbfec7"
+    },
+    "ownership_ledger": {
+      "path": "comparisons/baseline-model-ownership-ledger.v1.json",
+      "sha256": "3b855e216f8eca4d39d18bade4bcdda91136df7d8a06333fcfd6d93067ff0613",
+      "project_owned_candidates": 7,
+      "expected_bytes": 26623841724,
+      "currently_cleanup_eligible": 0
+    }
+  },
+  "implementation": {
+    "path": "scripts/model_cleanup_controller.py",
+    "sha256": "afb8e950941e7b23399a4d6aa744e589f2423fb869c4d28dc31ca64d5783693d",
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "python_bytecode_writes_disabled": true,
+    "phases": ["preflight", "quarantine", "delete"]
+  },
+  "per_model_eligibility_record_required": [
+    "status DRY_RUN_ELIGIBLE and exact model id, repository, immutable revision, literal target, and literal unique sibling quarantine",
+    "exact frozen retention-policy and ownership-ledger paths and SHA-256 values",
+    "terminal-accepted materialization record and complete MODEL_SHA256SUMS identity",
+    "live device, inode, regular-file count, byte count, and path-size-content tree SHA-256",
+    "an independently hashed IMMUTABLE_REVISION_ACCESSIBLE repository audit",
+    "exact coverage of every required and conservative dependent in the ownership ledger",
+    "for every dependent: terminal-accepted lifecycle, three-seed summary, and accepted-evidence archive with valid inventories",
+    "project reference status ONLY_RETIRED_ACCEPTED_DEPENDENTS"
+  ],
+  "live_fail_closed_checks": [
+    "target and quarantine are literal exact children of an eligible AgentEnhance cache/models root",
+    "target, quarantine, and all model contents are not symlinks or mount points",
+    "materialization repository, revision, target, file count, and bytes equal the ownership ledger",
+    "MODEL_SHA256SUMS covers exactly every current model file and every hash matches",
+    "live tree identity equals the dry-run record",
+    "lsof reports no process reference to the exact current model root",
+    "all dependent lifecycle, summary, archive, denominator, method identity, and inventory checks pass again"
+  ],
+  "phase_semantics": {
+    "preflight": "Read-only; prints DRY_RUN_ELIGIBLE only after all frozen and live checks pass.",
+    "quarantine": "Atomically rename only the exact model root to its predeclared unique sibling on the same filesystem, rehash it, repeat the process audit, and write an immutable QUARANTINED record.",
+    "delete": "Revalidate the eligibility record, quarantined tree, all dependent evidence, and no-process state; delete only the literal quarantine root; verify original and quarantine absence and retained-evidence presence; write an immutable DELETED record."
+  },
+  "protected_assets": [
+    "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+    "all pre-existing/shared models and every dataset, source, environment, run, result, log, manifest, and archive"
+  ],
+  "authorization": "This controller is implementation-only and authorizes no current deletion. Each future model requires its own fully rendered, independently reviewed DRY_RUN_ELIGIBLE record after all dependents are retired and archived.",
+  "failure_rule": "Any missing, ambiguous, inaccessible, active, mismatched, partial, symlinked, mounted, unarchived, or unexpected state stops before mutation. A failure after quarantine preserves the quarantine for a fresh audit; no in-place evidence repair is allowed."
+}

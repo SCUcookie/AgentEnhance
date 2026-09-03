@@ -14,6 +14,7 @@ baseline-check:
 	python3 scripts/validate_foundation_results.py
 	python3 scripts/validate_model_retention_policy_v2.py
 	python3 scripts/validate_baseline_model_ownership_ledger.py
+	python3 scripts/validate_model_cleanup_controller.py
 	python3 scripts/validate_recent_method_reproduction_roadmap_v2.py
 	python3 scripts/validate_recent_method_reproduction_roadmap_v3.py
 	python3 scripts/validate_wma_table_bundle_v2.py --require-no-admitted-results
