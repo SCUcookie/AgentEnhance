@@ -1,0 +1,48 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "wma-r1-wave1-postprocess-archive-control-20260903-v1",
+  "status": "CONTROL_PACKAGE_ACCEPTED",
+  "accepted_at": "2026-09-03T23:25:11+08:00",
+  "source_commit": "e964a518e7f755f30e88f3b1da7e88e6689d3ea9",
+  "local_archive": {
+    "path": "/private/tmp/wma-r1-wave1-postprocess-archive-20260903-v1-control.tar.gz",
+    "bytes": 11896,
+    "sha256": "3e28e8dbb3b6215feed72742dda691fd1d8099be565cca6b7a6ed67e87c6e370",
+    "package_manifest_sha256": "c1b4d84bdfe1d303ac27772090347f34afd47e02598de37cb05fe608abb33441"
+  },
+  "remote": {
+    "host_alias": "agent-enhance-gpu",
+    "archive_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-postprocess-archive-20260903-v1-control.tar.gz",
+    "package_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-postprocess-archive-20260903-v1-control",
+    "transfer_protocol": "SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "remote_archive_sha256_verified": true,
+    "package_file_hashes_verified": 8
+  },
+  "static_validation": {
+    "postprocess_matrix": "PASS: methods=4 seeds=3 aggregate_roots=12",
+    "archive_partition": "PASS: archives=5 schedulers=12 aggregates=12 summaries=4",
+    "sftp_download_script_syntax": "PASS",
+    "postprocess_output_root_absent": true,
+    "archive_output_root_absent": true
+  },
+  "runtime_state_at_package_acceptance": {
+    "wave1_controller_status": "RUNNING",
+    "current_method": "MMFU_Single",
+    "current_seed": 0,
+    "accepted_samples": 16,
+    "failed_samples": 0,
+    "last_progress_timestamp": "2026-09-03T23:21:28+08:00",
+    "active_project_sessions": [
+      "agentenhance-wma-wave1-controller-r1",
+      "agentenhance-wma-chat-full-mmfu-single-s0-v1",
+      "agentenhance-wma-e1024-full-mmfu-single-s0-v1",
+      "agentenhance-wma-e384-full-mmfu-single-s0-v1"
+    ],
+    "gpu_monitor_lines": 3497,
+    "data1_available": "1.7T",
+    "data2_available": "1.5T"
+  },
+  "execution_authorization": "This audit accepts only the inert control package. The postprocess remains locked until Wave-1 is terminal-accepted and all project services exit; the archive remains locked until postprocess is terminal-accepted.",
+  "scientific_claim_boundary": "No complete seed, three-seed statistic, pairwise result, or SOTA claim is accepted by this package audit. No metric values were inspected."
+}
