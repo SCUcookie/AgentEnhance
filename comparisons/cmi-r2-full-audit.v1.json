@@ -1,0 +1,38 @@
+{
+  "schema_version": "agentenhance.prospective_stage_audit.v1",
+  "stage_id": "cmi-r2-deterministic-full-20260903-v1",
+  "parent_stage_id": "cmi-r1-official-smoke-recovery2-20260903-v1",
+  "audited_at": "2026-09-03T16:18:00+08:00",
+  "outcome": "REJECT_TECHNICAL",
+  "launcher_exit_code": 1,
+  "terminal_sentinel_present": false,
+  "failure_stage": "registered denominator assertion after both attempts",
+  "diagnosis": "The official runner implements dry_run by replacing max_examples with min(max_examples, 5). Therefore --dry_run silently overrode --max_examples 87 and each attempt emitted 35 rather than 609 rows.",
+  "code_evidence": "src/experiments/run_experiment.py lines 88-89 at commit 65a66cb4347aeeb62a870132269e8a983211e036",
+  "attempts_observed": [
+    {
+      "attempt": "full1",
+      "examples": 5,
+      "methods": 7,
+      "scores": 35,
+      "failures": 0
+    },
+    {
+      "attempt": "full2",
+      "examples": 5,
+      "methods": 7,
+      "scores": 35,
+      "failures": 0
+    }
+  ],
+  "expected_scores_per_attempt": 609,
+  "numeric_results_produced": true,
+  "numeric_results_admissible": false,
+  "artifact_manifest_created": false,
+  "timing_record_created": false,
+  "active_matching_containers_after_audit": 0,
+  "residual_tmux_session": false,
+  "run_root_preserved": true,
+  "scientific_interpretation_allowed": false,
+  "authorized_recovery_change": "Remove only the --dry_run flag. Keep --max_examples 87, --deterministic_only, --skip_llm_judge, --no_cache, empty API key, network none, source, dataset, methods, environment, two attempts, denominator, hashes, and resource ceilings unchanged."
+}
