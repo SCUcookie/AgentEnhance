@@ -1,0 +1,62 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "wma-r1-zero-retry-hf-model-control-20260904-v1",
+  "status": "CONTROL_PACKAGE_ACCEPTED",
+  "accepted_at": "2026-09-04T04:39:50+08:00",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-zero-retry-hf-model-control-package-prefreeze.v1.json",
+    "sha256": "5956ae342b180a036c167485a001e06be4761f45e4137278d4df7951bd300057"
+  },
+  "implementation_commit": "d20fa88c07ef013118a2584eaa32af035edfaa8c",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-zero-retry-hf-model-control-20260904-v1.tar.gz",
+    "remote_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-zero-retry-hf-model-control-20260904-v1.tar.gz",
+    "bytes": 8313,
+    "sha256": "a295c283041cce2af0d2c4e019148d905814d890a6c2fe01008c78537e29112d",
+    "local_and_remote_identity_matched": true
+  },
+  "transfer": {
+    "protocol": "OpenSSH SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "connections": 1,
+    "retries": 0,
+    "ordinary_put_size_scoped_exception_used": true
+  },
+  "extraction": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-zero-retry-hf-model-control-20260904-v1",
+    "fresh_before_extraction": true,
+    "regular_files": 5,
+    "directories": 2,
+    "unexpected_or_unsafe_members": 0,
+    "all_extracted_file_hashes_matched": true
+  },
+  "covered_models": [
+    "sentence-transformers/all-MiniLM-L6-v2",
+    "facebook/contriever",
+    "BAAI/bge-small-en-v1.5",
+    "cross-encoder/ms-marco-MiniLM-L6-v2"
+  ],
+  "frozen_expected_surface": {
+    "models": 4,
+    "files": 37,
+    "bytes": 756612541,
+    "network_retry_count": 0,
+    "logical_requests_per_file": 1
+  },
+  "runtime_observation_after_acceptance": {
+    "all_four_model_targets_absent": true,
+    "all_four_evidence_targets_absent": true,
+    "wave1_first_method_seed": "wma-mmfu-single seed 0",
+    "accepted_units": 68,
+    "rejected_units": 0
+  },
+  "execution_authorization": "Only the inert control package is accepted. Every model acquisition remains locked until Wave1 is terminal-accepted and all Wave1 services and evaluators have stopped.",
+  "scientific_claim_boundary": "No model bytes, import result, lifecycle result, numerical row, AgentEnhance result, or SOTA claim is accepted by this package audit.",
+  "mutation_summary": {
+    "model_payload_bytes_downloaded": 0,
+    "dependencies_installed": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0,
+    "models_deleted": 0
+  }
+}
