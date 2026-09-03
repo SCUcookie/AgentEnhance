@@ -1,0 +1,87 @@
+{
+  "schema_version": "agentenhance.hindsight_lock_export_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-lock-export-20260904-v1",
+  "status": "FROZEN_BEFORE_OFFLINE_EXPORT",
+  "frozen_at": "2026-09-04T01:57:16+08:00",
+  "scientific_question": "Does Hindsight's accepted official uv.lock deterministically yield a complete third-party dependency list for hindsight-all without network resolution, dependency installation, or local workspace references?",
+  "decision_informed": "Whether a hash-complete wheelhouse acquisition stage can be frozen from one immutable dependency list.",
+  "scientific_evidence_role": "dependency-lock export evidence only; no wheel acquisition, package installation, import, model, service, lifecycle, numerical, superiority, or SOTA claim is permitted",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-recovery2-audit.v1.json",
+    "sha256": "a2a107aff2caacedffad5432ae12171edf229f0463523a8938896f0533d67be2",
+    "required_status": "TERMINAL_ACCEPTED"
+  },
+  "source_identity": {
+    "repository": "https://github.com/vectorize-io/hindsight.git",
+    "revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight",
+    "uv_lock_bytes": 1037159,
+    "uv_lock_sha256": "ce0966c58ac9018c77b8aa1d7d93fe9f405deb6c0fadb54e52608fe10a992063",
+    "required_clean": true
+  },
+  "tool_identity": {
+    "path": "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery2/uv",
+    "sha256": "671793498fe0a545432e2524b6691ffb9eea4540d9fda43ca2f978df2dbf8426",
+    "version_output": "uv 0.12.9 (x86_64-unknown-linux-gnu)"
+  },
+  "interpreter_identity": {
+    "path_variable": "${AGENT_ENHANCE_PYTHON311}",
+    "required_version_prefix": "3.11.0 | packaged by conda-forge |",
+    "executable_bytes": 32882744,
+    "executable_sha256": "db8630b1dda55498c4d254878d144e04d3c6fd82115b700c00a13c9029fdbd02",
+    "soabi": "cpython-311-x86_64-linux-gnu",
+    "access": "read-only interpreter selection; no package is installed into its prefix"
+  },
+  "exporter": {
+    "path": "scripts/export_hindsight_uv_lock.py",
+    "sha256": "2f86dc02311c91aaa46b57105c3600c4e87b6b99b64251be4dbecfc08397a6fa"
+  },
+  "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lock-export-20260904-v1",
+  "execution_contract": {
+    "command": "python scripts/export_hindsight_uv_lock.py --uv ${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery2/uv --python ${AGENT_ENHANCE_PYTHON311} --source ${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-lock-export-20260904-v1",
+    "uv_export_flags": [
+      "--frozen",
+      "--offline",
+      "--no-cache",
+      "--no-dev",
+      "--package hindsight-all",
+      "--no-emit-workspace",
+      "--format requirements.txt",
+      "--no-python-downloads"
+    ],
+    "independent_export_passes": 2,
+    "network_connections": 0,
+    "dependency_installations": 0,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 1,
+    "wall_time_ceiling_minutes": 10,
+    "retry_count": 0,
+    "fresh_evidence_root_required": true,
+    "wave1_non_interference": "The stage parses an existing lock and writes two text exports only; it cannot access models, datasets, package indexes, pg0, APIs, shared environments, or GPUs."
+  },
+  "required_export_content": [
+    "pg0-embedded",
+    "sentence-transformers",
+    "torch==2.10.0+cpu",
+    "transformers"
+  ],
+  "acceptance": [
+    "Source revision, cleanliness, uv.lock bytes/hash, uv bytes/hash/version, and Python executable hash/version match the frozen identities.",
+    "Both export passes succeed with --frozen and --offline and cannot update uv.lock.",
+    "uv.lock has identical SHA-256 before and after export and the source remains clean.",
+    "The two requirements exports are byte-identical and non-empty.",
+    "The export contains the required embedded database, local embedding/reranker, CPU Torch, and Transformers dependencies.",
+    "The export contains no editable, file URL, source checkout, or Hindsight workspace-package reference.",
+    "The evidence root is TERMINAL_ACCEPTED without TERMINAL_REJECTED and all files have a retained SHA-256 inventory."
+  ],
+  "failure": "Any collision, identity mismatch, source mutation, network requirement, export disagreement, missing required package, local path leakage, command failure, or timeout seals the evidence root as TERMINAL_REJECTED and preserves all outputs.",
+  "next_gate_after_acceptance": "Independently audit and retain the canonical requirements export, then freeze download/build of a project-owned wheelhouse. No package installation or model acquisition is authorized by export acceptance.",
+  "prohibited_actions": [
+    "updating or regenerating uv.lock",
+    "running uv without --frozen, --offline, --no-cache, --no-dev, or --no-emit-workspace",
+    "using a different Python or uv executable",
+    "installing any requirement or writing into the shared Python prefix",
+    "downloading models or starting pg0/service/lifecycle/numerical work",
+    "populating any comparison-table numeric cell from this stage"
+  ]
+}
