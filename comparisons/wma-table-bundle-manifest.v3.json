@@ -1,0 +1,85 @@
+{
+  "schema_version": "agentenhance.wma_table_bundle_manifest.v3",
+  "bundle_id": "wma-comparison-tables-20260904-v3",
+  "status": "FROZEN_BEFORE_MAIN_COMPARISON_RESULTS",
+  "frozen_at": "2026-09-04T15:25:00+08:00",
+  "supersedes": "comparisons/wma-table-bundle-manifest.v2.json",
+  "revision_reason": "Close the pre-result coverage gap by adding MemoryOS, MemGAS, Hindsight, Memory-R1, APEX-MEM, and ACL 2026 LightMem. The first three are pending local execution and the latter three remain explicit source-blocked NA rows.",
+  "claim_supported": "The internal comparison surface now contains all 16 unique recent same-track public candidates from the frozen roadmap, plus controls and AgentEnhance, before any local main result is admitted.",
+  "method_corpus": {
+    "rows": 30,
+    "recent_same_track_public_candidates": 16,
+    "blocked_public_rows": 4,
+    "accepted_local_rows_only_in_paper_projection": true,
+    "internal_master_keeps_all_rows": true,
+    "execution_matrix": "comparisons/wma-execution-matrix.v3.csv",
+    "execution_matrix_sha256": "244759bf0eb55418fbdae0f840e913f4361d49ba9ba036ced99df84f20ce4331"
+  },
+  "panels": [
+    {
+      "name": "main_quality",
+      "path": "comparisons/wma-main-table-template.v4.csv",
+      "sha256": "a549122d09839c9e4299118a95a85cf2f458ce08d7d66b1d915fdbf2836dafdf",
+      "rows": 30,
+      "columns": 28
+    },
+    {
+      "name": "retrieval_and_memory",
+      "path": "comparisons/wma-retrieval-memory-table-template.v3.csv",
+      "sha256": "afa675e72f01803640852505b1db22b9f6ff1f7ec0bedb228e42394946998108",
+      "rows": 30,
+      "columns": 28
+    },
+    {
+      "name": "efficiency_and_reliability",
+      "path": "comparisons/wma-efficiency-reliability-table-template.v3.csv",
+      "sha256": "1eed37f9a6efccb1779154b5fc7ac1849efea0a80388d78f8fbef75600d3f098",
+      "rows": 30,
+      "columns": 38
+    },
+    {
+      "name": "all_frozen_slices_long_form",
+      "path": "comparisons/wma-slice-table-template.v3.csv",
+      "sha256": "1239810e64178e1a1d46a655faf6e7b621c8acb3254fbca5bc496d2abb4feb63",
+      "rows": 1590,
+      "columns": 17,
+      "slice_values_per_method": 53
+    }
+  ],
+  "slice_surface": {
+    "overall": 1,
+    "question_type": 12,
+    "scope": 2,
+    "task_family": 4,
+    "difficulty": 3,
+    "evidence_modality": 4,
+    "subcategory": 27,
+    "total_values_per_method": 53,
+    "slice_inventory": "comparisons/wma-dataset-slice-inventory.v1.json",
+    "slice_inventory_sha256": "a00203cef36e8ad619ea71889b5b5501b64b3632d76f72bf5213638079cac993"
+  },
+  "metric_coverage": {
+    "quality": ["correct", "hallucination", "omission", "F1", "BLEU-1"],
+    "retrieval": ["hit rate", "R@1", "R@5", "R@10", "nDCG@1", "nDCG@5", "nDCG@10", "covered and gold counts"],
+    "memory": ["recall", "weighted recall", "pooled weighted recall", "correctness", "hallucination", "irrelevance", "itemwise correctness", "itemwise hallucination", "update handling", "interference rejection", "memory count"],
+    "efficiency": ["stage and end-to-end time", "p50 and p95 latency", "stage token counts", "storage bytes", "RAM", "VRAM", "GPU-hours"],
+    "reliability": ["expected", "observed", "failed", "failure rate"]
+  },
+  "blocked_statuses": {
+    "wma-memory-r1": "CODE_NOT_RELEASED",
+    "wma-apex-mem": "OFFICIAL_CODE_UNVERIFIED",
+    "wma-lightmem": "OFFICIAL_CODE_UNVERIFIED",
+    "wma-hela-mem": "LICENSE_BLOCKED"
+  },
+  "source_data_policy": "All numeric cells remain empty until admitted from comparisons/reproduced-results.v1.csv after an accepted same-track local audit. Official numbers never fill missing local cells, and source-blocked methods remain visible with explicit status.",
+  "generator": {
+    "path": "scripts/materialize_wma_table_templates_v3.py",
+    "sha256": "db677e2e09fb6b63ce17e4e88bca27c8b45caba3d0926b5d66d67a5a89a34500",
+    "inherited_generator": "scripts/materialize_wma_table_templates_v2.py"
+  },
+  "table_spec": {
+    "path": "comparisons/wma-main-table-spec.v4.json",
+    "sha256": "f3a233b6e62419fa054557e18a326d7b2ba59210184bf782556dd1920f8c4937"
+  },
+  "layout_note": "These result-free CSVs are the internal source-of-truth. Paper projections are generated only from accepted local result artifacts and retain the implementation-scope and blocked-status disclosures."
+}

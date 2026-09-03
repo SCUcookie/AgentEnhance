@@ -1,0 +1,93 @@
+{
+  "schema_version": "agentenhance.wma_main_table_spec.v4",
+  "table_id": "wma-lifecycle-matched-main-20260904-v4",
+  "status": "FROZEN_BEFORE_NUMERIC_RESULTS",
+  "frozen_at": "2026-09-04T15:15:00+08:00",
+  "supersedes": {
+    "path": "comparisons/wma-main-table-spec.v3.json",
+    "sha256": "0e35453a89180f65d33afe20e132537b5ff89f9bf1c7ad32d8f1709cb8406a89"
+  },
+  "revision_reason": "Correct the pre-result method surface by adding the already prepared official-source adapters MemoryOS, MemGAS, and Hindsight, plus visible NA rows for Memory-R1, APEX-MEM, and ACL 2026 LightMem whose executable official code is unavailable. This closes the gap between the recent-method roadmap and the actual comparison templates before any local main result is admitted.",
+  "inherited_contract": {
+    "source": "comparisons/wma-main-table-spec.v3.json",
+    "all_metrics_inherited_without_change": true,
+    "all_53_slice_values_inherited_without_change": true,
+    "all_statistical_columns_inherited_without_change": true,
+    "all_predeclared_best_result_axes_inherited_without_change": true,
+    "all_anti_cherry_pick_rules_inherited_without_change": true,
+    "same_track": "wma-lifecycle-matched-v1",
+    "row_unit": "one locally reproduced method under the same frozen protocol"
+  },
+  "method_corpus": {
+    "execution_matrix": "comparisons/wma-execution-matrix.v3.csv",
+    "execution_matrix_sha256": "244759bf0eb55418fbdae0f840e913f4361d49ba9ba036ced99df84f20ce4331",
+    "total_rows": 30,
+    "proposed_rows": 1,
+    "blocked_public_rows": 4,
+    "nonblocked_public_or_control_rows": 25,
+    "accepted_local_numeric_rows_at_freeze": 0
+  },
+  "method_groups": {
+    "wave_1_foundation": ["wma-mmfu-single", "wma-simplemem", "wma-m2a", "wma-vilomem"],
+    "wave_2_benchmark_and_bundled": ["wma-dummy", "wma-base-model", "wma-fumemory", "wma-stmemory", "wma-ltmemory", "wma-gamemory", "wma-mgmemory", "wma-rfmemory", "wma-mmmemory", "wma-mmfumemory", "wma-ngmemory", "wma-augustus", "wma-universalrag"],
+    "wave_2_external_adapters": ["wma-a-mem", "wma-omni-simplemem", "wma-mirix", "wma-qwen3-vl-embedding-8b"],
+    "wave_3_official_adapters": ["wma-memoryos", "wma-memgas"],
+    "release_watch_blocked": ["wma-memory-r1", "wma-apex-mem", "wma-lightmem"],
+    "wave_4_official_adapter": ["wma-hindsight"],
+    "wave_5_acl2026": ["wma-structmem", "wma-hela-mem"],
+    "proposed": ["agentenhance-ceu"]
+  },
+  "recent_same_track_public_candidates": {
+    "source_registry": "comparisons/baseline-register.v3.csv",
+    "source_registry_sha256": "ac0a96da3ad98fae135e3b23f4426e334367f3fae93cac705cd052b2eb108759",
+    "source_roadmap": "comparisons/recent-method-reproduction-roadmap.v3.json",
+    "source_roadmap_sha256": "5184b8a05c4a6af278d6a7cfe44f3b2ebe402f63ef0a1f1e322c53a524bf2482",
+    "unique_count": 16,
+    "implementation_ids": [
+      "wma-a-mem",
+      "wma-memoryos",
+      "wma-universalrag",
+      "wma-mgmemory",
+      "wma-mirix",
+      "wma-m2a",
+      "wma-simplemem",
+      "wma-omni-simplemem",
+      "wma-vilomem",
+      "wma-memgas",
+      "wma-memory-r1",
+      "wma-apex-mem",
+      "wma-lightmem",
+      "wma-hindsight",
+      "wma-structmem",
+      "wma-hela-mem"
+    ],
+    "identity_rule": "The deprecated omnimem-agent alias is represented only by canonical wma-omni-simplemem and is never executed as a duplicate row."
+  },
+  "blocked_statuses": {
+    "wma-memory-r1": "CODE_NOT_RELEASED",
+    "wma-apex-mem": "OFFICIAL_CODE_UNVERIFIED",
+    "wma-lightmem": "OFFICIAL_CODE_UNVERIFIED",
+    "wma-hela-mem": "LICENSE_BLOCKED"
+  },
+  "admission_and_display_policy": {
+    "internal_master": "Keep all 30 rows visible, including blocked and proposed rows.",
+    "paper_projection": "Populate numeric cells only from complete same-protocol locally reproduced results with terminal acceptance and verified artifacts.",
+    "blocked_rows": "Keep blocked rows as explicit NA status rows; never substitute source-reported numbers.",
+    "official_numbers": "Official paper values remain in the separate source-reported evidence layer and never fill a local result cell.",
+    "failed_runs": "Keep the method visible, preserve the failure evidence, and do not silently remove its row or samples.",
+    "proposed_method": "AgentEnhance remains locked until the public baseline gates are accepted."
+  },
+  "claim_policy": {
+    "overall_sota": "Requires an accepted local AgentEnhance result against all nonblocked required comparators on the same protocol and must show all guardrails.",
+    "axis_or_slice_best": "May be claimed only on a predeclared inherited axis or slice, with its exact scope and denominator, and must not be relabeled overall SOTA.",
+    "no_guarantee": "The table is designed to reveal defensible best results if they occur; it does not guarantee or manufacture a favorable result."
+  },
+  "prohibited_actions": [
+    "removing a recent candidate after observing results",
+    "conflating the three distinct LightMem-named projects",
+    "executing a blocked source as if official code existed",
+    "filling a local cell with an official-paper value",
+    "hiding failed samples, seeds, methods, guardrails, or unfavorable metrics",
+    "claiming overall SOTA from one favorable slice or efficiency axis"
+  ]
+}
