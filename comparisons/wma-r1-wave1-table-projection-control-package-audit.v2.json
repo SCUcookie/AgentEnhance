@@ -1,0 +1,62 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v2",
+  "audit_id": "wma-r1-wave1-table-projection-control-20260904-v2",
+  "status": "CONTROL_PACKAGE_ACCEPTED",
+  "accepted_at": "2026-09-04T04:29:49+08:00",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave1-table-projection-control-package-prefreeze.v2.json",
+    "sha256": "5b8a442993883b96bd820b5b518cca1623b7d0d3880aa8373ff43b08f9d7b837"
+  },
+  "implementation_commit": "23d78f7945b5d5980a9a0d4322cbfbfb5022ee4d",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave1-table-projection-control-20260904-v2.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-table-projection-control-20260904-v2.tar.gz",
+    "bytes": 24378,
+    "sha256": "0360fd84dba60eb4c0a07ceb7f4a1942b312c19d5217c62b9722a85c264b0c1c",
+    "local_and_remote_identity_matched": true
+  },
+  "transfer": {
+    "protocol": "OpenSSH SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "connections": 1,
+    "retries": 0,
+    "ordinary_put_size_scoped_exception_used": true
+  },
+  "extraction": {
+    "root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-table-projection-control-20260904-v2",
+    "fresh_before_extraction": true,
+    "regular_files": 12,
+    "directories": 2,
+    "unexpected_or_unsafe_members": 0,
+    "all_extracted_file_hashes_matched": true
+  },
+  "bound_execution_contracts": {
+    "projection": {
+      "path": "comparisons/wma-r1-wave1-table-projection-prefreeze.v2.json",
+      "sha256": "bcae8764f742b92e48a2f0cfdd21654a30ed0c6fdee20853789ad1b85dbe7d48"
+    },
+    "projection_archive": {
+      "path": "comparisons/wma-r1-wave1-table-projection-archive-prefreeze.v2.json",
+      "sha256": "47b0d27a2a59d836561ba9474894f2e4a47d84b41cdf2512de7f80c4e8b324e8"
+    }
+  },
+  "runtime_observation_after_acceptance": {
+    "wave1_first_method_seed": "wma-mmfu-single seed 0",
+    "accepted_units": 66,
+    "rejected_units": 0,
+    "summary_root_exists": false,
+    "projection_root_exists": false,
+    "raw_archive_root_exists": false,
+    "projection_archive_root_exists": false
+  },
+  "execution_authorization": "Only the inert control package is accepted. The v1 summary postprocess remains locked until Wave1 is terminal-accepted and all project services exit; projection remains locked until that postprocess is accepted; raw archive remains locked until the summary is accepted; projection archive remains locked until both raw archive and projection are accepted.",
+  "scientific_claim_boundary": "No complete seed, three-seed statistic, projected numeric row, archive, AgentEnhance result, or SOTA claim is accepted by this control-package audit.",
+  "mutation_summary": {
+    "models_downloaded": 0,
+    "dependencies_installed": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0,
+    "source_runs_deleted": 0,
+    "models_deleted": 0
+  }
+}
