@@ -9,8 +9,11 @@ set -euo pipefail
 : "${UNIT_INVENTORY:?set UNIT_INVENTORY}"
 : "${UNIT_INVENTORY_SHA256:?set UNIT_INVENTORY_SHA256}"
 : "${START_SERVICES_SCRIPT:?set START_SERVICES_SCRIPT}"
+: "${START_SERVICES_SCRIPT_SHA256:?set START_SERVICES_SCRIPT_SHA256}"
 : "${STOP_SERVICES_SCRIPT:?set STOP_SERVICES_SCRIPT}"
+: "${STOP_SERVICES_SCRIPT_SHA256:?set STOP_SERVICES_SCRIPT_SHA256}"
 : "${UNIT_SCRIPT:?set UNIT_SCRIPT}"
+: "${UNIT_SCRIPT_SHA256:?set UNIT_SCRIPT_SHA256}"
 : "${WMA_SEEDED_LAUNCHER:?set WMA_SEEDED_LAUNCHER}"
 : "${WMA_SEEDED_LAUNCHER_SHA256:?set WMA_SEEDED_LAUNCHER_SHA256}"
 : "${WMA_REPO:?set WMA_REPO}"
@@ -42,6 +45,19 @@ esac
 [[ "$(sha256sum "${UNIT_INVENTORY}" | awk '{print $1}')" == "${UNIT_INVENTORY_SHA256}" ]] || {
   echo "unit inventory digest mismatch" >&2; exit 3;
 }
+for script_spec in \
+  "${START_SERVICES_SCRIPT}:${START_SERVICES_SCRIPT_SHA256}:start-services" \
+  "${STOP_SERVICES_SCRIPT}:${STOP_SERVICES_SCRIPT_SHA256}:stop-services" \
+  "${UNIT_SCRIPT}:${UNIT_SCRIPT_SHA256}:unit-runner"; do
+  script_path=${script_spec%%:*}
+  remainder=${script_spec#*:}
+  expected_sha256=${remainder%%:*}
+  script_label=${remainder#*:}
+  [[ -f "${script_path}" ]] || { echo "missing ${script_label} script" >&2; exit 3; }
+  [[ "$(sha256sum "${script_path}" | awk '{print $1}')" == "${expected_sha256}" ]] || {
+    echo "${script_label} script digest mismatch" >&2; exit 3;
+  }
+done
 
 mkdir -p "${RUN_ROOT}/units" "${RUN_ROOT}/evidence"
 services_started=0
@@ -61,8 +77,10 @@ scheduler_terminalize() {
 }
 trap scheduler_terminalize EXIT
 
-printf 'baseline=%s\nseed=%s\nstarted_at=%s\nunit_inventory_sha256=%s\n' \
+printf 'baseline=%s\nseed=%s\nstarted_at=%s\nunit_inventory_sha256=%s\nstart_services_sha256=%s\nstop_services_sha256=%s\nunit_runner_sha256=%s\nseeded_launcher_sha256=%s\n' \
   "${BASELINE}" "${UNIT_SEED}" "$(date -Is)" "${UNIT_INVENTORY_SHA256}" \
+  "${START_SERVICES_SCRIPT_SHA256}" "${STOP_SERVICES_SCRIPT_SHA256}" \
+  "${UNIT_SCRIPT_SHA256}" "${WMA_SEEDED_LAUNCHER_SHA256}" \
   >"${RUN_ROOT}/evidence/scheduler-identity.txt"
 printf 'sample_index,sample_id,unit_root,reason\n' >"${RUN_ROOT}/rejected-units.csv"
 
