@@ -1,0 +1,73 @@
+{
+  "schema_version": "agentenhance.git_source_materialization_prefreeze.v1",
+  "stage_id": "wma-r1-wave3-source-materialization-20260904-v1",
+  "status": "FROZEN_BEFORE_EXTERNAL_SOURCE_MATERIALIZATION",
+  "frozen_at": "2026-09-04T00:00:03+08:00",
+  "scientific_question": "Can the two remaining independent Wave-3 methods be bound to complete, immutable, locally auditable official source trees before adapter design?",
+  "decision_informed": "Whether MemoryOS and MemGAS are eligible to enter separate fail-closed WMA lifecycle adapter prefreezes.",
+  "scientific_evidence_role": "engineering source-identity gate only; no lifecycle, benchmark, or paper-result claim is permitted",
+  "prior_evidence": [
+    "The current MemoryOS official remote HEAD and existing clean local checkout both resolved to 587ed7755c7aed179965792830ff1b5ad9a6fa92.",
+    "The current MemGAS official remote HEAD resolved to c2d4e9fdc331074802a711baf4371197f9194399.",
+    "The OmniMem identity audit reduced Wave-3 to the two independent methods MemoryOS and MemGAS."
+  ],
+  "methods": [
+    {
+      "method_id": "memoryos",
+      "repository": "https://github.com/BAI-LAB/MemoryOS.git",
+      "revision": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+      "mode": "VERIFY_EXISTING_READ_ONLY",
+      "source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/baseline-reproduction-r0-recovery1-20260903-v1/memoryos",
+      "required_checks": [
+        "origin URL matches the official repository",
+        "HEAD and tree are recorded",
+        "worktree is clean",
+        "tracked files are inventoried by path, byte size, and SHA-256",
+        "no model weight or unresolved Git LFS file is presented as source code"
+      ]
+    },
+    {
+      "method_id": "memgas",
+      "repository": "https://github.com/Applied-Machine-Learning-Lab/ICLR2026_MemGAS.git",
+      "revision": "c2d4e9fdc331074802a711baf4371197f9194399",
+      "mode": "CLONE_EXACT_ONCE",
+      "source": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-source-20260904-v1/memgas",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memgas-source-materialization-20260904-v1",
+      "materializer": "scripts/materialize_memgas_source.py",
+      "materializer_sha256": "a0ab52c22d6f345a9c37f150ee5f5a59b28c1d70e8077cfe253958c496f0dae1"
+    }
+  ],
+  "execution_contract": {
+    "server_root_injection": "Set AGENT_ENHANCE_REMOTE_ROOT immediately before execution; it must resolve to a writable project root named AgentEnhance under /data1 or /data2.",
+    "memgas_command": "python scripts/materialize_memgas_source.py --project-root ${AGENT_ENHANCE_REMOTE_ROOT}",
+    "network": "ordinary git HTTPS clone of the exact public source repository; no model or dataset download",
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 30,
+    "source_worktree_byte_ceiling": 536870912,
+    "parallel_materializations": 1,
+    "retry_count": 0
+  },
+  "admission_rule": [
+    "The exact commit is detached, clean, and matches the frozen repository.",
+    "All tracked regular files have retained relative paths, byte sizes, and SHA-256 values.",
+    "The source contains no submodule, unresolved Git LFS pointer, or model-like weight file.",
+    "The source and evidence roots were absent before execution and remain unique.",
+    "The evidence root contains TERMINAL_ACCEPTED, no TERMINAL_REJECTED, and a verified evidence inventory."
+  ],
+  "failure_rule": "Any collision, clone error, identity mismatch, dirty state, submodule, LFS pointer, weight-like file, byte-ceiling breach, or timeout seals the fresh evidence root TERMINAL_REJECTED. Preserve the partial source and do not retry or repair it in place.",
+  "wave1_non_interference": [
+    "Do not download or load any model.",
+    "Do not start, stop, inspect through, or alter any Wave-1 service process.",
+    "Do not change CUDA_VISIBLE_DEVICES or create a GPU process.",
+    "Do not write beneath any Wave-1 run, dataset, environment, service, or archive root."
+  ],
+  "next_gate_after_acceptance": "Independently audit both source inventories, then design separate MemoryOS and MemGAS WMA lifecycle adapters. Source acceptance alone never authorizes numerical execution.",
+  "prohibited_actions": [
+    "using a moving branch name as an execution identity",
+    "installing dependencies during source materialization",
+    "using official reported scores as local reproduction values",
+    "starting a lifecycle or numerical run from this gate",
+    "deleting a rejected or partial source root"
+  ]
+}
