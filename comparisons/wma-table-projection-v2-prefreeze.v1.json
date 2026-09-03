@@ -1,0 +1,77 @@
+{
+  "schema_version": "agentenhance.wma_table_projection_prefreeze.v2",
+  "stage_id": "wma-table-projection-v2-20260904-v1",
+  "status": "FROZEN_BEFORE_ACCEPTED_LOCAL_RESULTS",
+  "frozen_at": "2026-09-04T15:45:00+08:00",
+  "scientific_question": "Can complete local three-seed public-baseline summaries be projected into every frozen 30-method WMA panel without importing official values, dropping blocked rows, or unlocking AgentEnhance?",
+  "decision_informed": "Whether an accepted local baseline is eligible to enter the internal comparison master and later paper projections.",
+  "source_bundle": {
+    "path": "comparisons/wma-table-bundle-manifest.v3.json",
+    "sha256": "e7faa9d42e314b30d21542b90071bea4763014779b6674a00c234d7dc7d80914",
+    "methods": 30,
+    "recent_same_track_public_candidates": 16,
+    "slice_rows": 1590
+  },
+  "implementation": {
+    "projector": "scripts/project_wma_method_summaries_v2.py",
+    "projector_sha256": "c9a01b59ed3522b2aa3e7d1e5301f6b5dc183f0a2e08dea9de033a9cf200f1fa",
+    "unit_test": "tests/test_project_wma_method_summaries_v2.py",
+    "unit_test_sha256": "088d86596b710b486bc4df99fca1268147abe6dc8fb4ed19a7186c471d6972a0",
+    "unit_tests": 4
+  },
+  "input_contract": {
+    "one_summary_root_per_implementation": true,
+    "required_terminal_status": "TERMINAL_ACCEPTED without TERMINAL_REJECTED",
+    "required_seed_set": [0, 1, 2],
+    "required_seed_count": 3,
+    "required_samples_per_seed": 150,
+    "required_qa_per_seed": 7906,
+    "required_failed_units_per_seed": 0,
+    "required_non_overall_slices": 52,
+    "artifact_inventory_sha256_required": true,
+    "official_or_source_reported_input_allowed": false
+  },
+  "admissible_implementation_policy": {
+    "allowed": "Only registered nonblocked public baselines with accepted complete local summaries.",
+    "blocked": ["wma-memory-r1", "wma-apex-mem", "wma-lightmem", "wma-hela-mem"],
+    "proposed_locked": "agentenhance-ceu",
+    "allowed_count": 25,
+    "newly_covered_runnable_adapters": ["wma-memoryos", "wma-memgas", "wma-hindsight", "wma-structmem"]
+  },
+  "execution_contract": {
+    "command_template": "python3 scripts/project_wma_method_summaries_v2.py --comparisons-root comparisons --summary-root <TERMINAL_ACCEPTED_THREE_SEED_ROOT> [--summary-root ...] --output-root <FRESH_PROJECTED_BUNDLE_ROOT>",
+    "fresh_output_root_required": true,
+    "network_connections": 0,
+    "model_loads": 0,
+    "dependency_installations": 0,
+    "gpu_count": 0,
+    "retry_count": 0
+  },
+  "outputs": {
+    "internal_master_rows_per_non_slice_panel": 30,
+    "internal_master_slice_rows": 1590,
+    "accepted_rows_status": "LOCAL_3SEED_ACCEPTED",
+    "unaccepted_rows_preserve_frozen_status": true,
+    "manifest_records_official_values_used_false": true,
+    "sha256_inventory_required": true,
+    "terminal_accepted_required": true
+  },
+  "acceptance": [
+    "Every input root and its complete artifact inventory verify before projection.",
+    "Every admitted summary contains exactly seeds 0, 1, and 2 with 150 samples and 7906 questions per seed and no failed unit.",
+    "Every admitted method is a registered nonblocked public baseline; blocked rows and AgentEnhance are rejected as inputs.",
+    "All 30 method rows and all 53 slice rows per method remain present in their frozen order.",
+    "Only accepted local rows receive numeric and artifact fields; all other rows retain their frozen status and blank numeric fields.",
+    "The output declares official_values_used=false and blocked_or_proposed_values_used=false and has a verified SHA-256 inventory."
+  ],
+  "failure": "Any source-bundle mutation, duplicate/unregistered/blocked/proposed implementation, incomplete seed set, denominator mismatch, failed unit, missing slice, inventory mismatch, or output collision rejects the fresh projection root.",
+  "next_gate_after_acceptance": "Independently audit projected cells against source summaries, then generate a paper-facing accepted-row projection. Table projection never authorizes a SOTA claim by itself.",
+  "prohibited_actions": [
+    "using official paper numbers as projection inputs",
+    "admitting one or two seeds",
+    "projecting a failed, blocked, unregistered, or proposed row",
+    "dropping pending or blocked methods from the internal master",
+    "editing frozen templates after observing local results",
+    "claiming overall SOTA from projection success"
+  ]
+}

@@ -13,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "comparisons" / "wma-table-bundle-manifest.v3.json"
 SPEC = ROOT / "comparisons" / "wma-main-table-spec.v4.json"
+PROJECTION_PREFREEZE = ROOT / "comparisons" / "wma-table-projection-v2-prefreeze.v1.json"
 BLOCKED = {
     "wma-memory-r1": "CODE_NOT_RELEASED",
     "wma-apex-mem": "OFFICIAL_CODE_UNVERIFIED",
@@ -116,6 +117,20 @@ def main() -> int:
         raise SystemExit("pre-result bundle expects zero admitted local result rows")
     if any(row.get("status") != "ACCEPTED" for row in result_rows):
         raise SystemExit("non-accepted row present in reproduced-results")
+    projection = json.loads(PROJECTION_PREFREEZE.read_text(encoding="utf-8"))
+    if projection["status"] != "FROZEN_BEFORE_ACCEPTED_LOCAL_RESULTS":
+        raise SystemExit("table projection gate is not frozen")
+    if projection["source_bundle"]["sha256"] != sha256_file(ROOT / projection["source_bundle"]["path"]):
+        raise SystemExit("table projection source bundle mismatch")
+    implementation = projection["implementation"]
+    if implementation["projector_sha256"] != sha256_file(ROOT / implementation["projector"]):
+        raise SystemExit("table projector identity mismatch")
+    if implementation["unit_test_sha256"] != sha256_file(ROOT / implementation["unit_test"]):
+        raise SystemExit("table projector test identity mismatch")
+    if projection["admissible_implementation_policy"]["allowed_count"] != 25:
+        raise SystemExit("table projection allowed-method count mismatch")
+    if projection["input_contract"]["official_or_source_reported_input_allowed"] is not False:
+        raise SystemExit("table projection permits official values")
     print(json.dumps({
         "status": "PASS",
         "methods": len(expected_ids),
@@ -124,6 +139,7 @@ def main() -> int:
         "panels": checked,
         "slice_rows": manifest["panels"][3]["rows"],
         "admitted_main_result_rows": len(result_rows),
+        "projection_allowed_public_rows": projection["admissible_implementation_policy"]["allowed_count"],
     }, sort_keys=True))
     return 0
 
