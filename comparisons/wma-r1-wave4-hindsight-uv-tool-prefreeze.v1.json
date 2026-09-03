@@ -1,0 +1,63 @@
+{
+  "schema_version": "agentenhance.uv_tool_materialization_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-uv-tool-20260904-v1",
+  "status": "FROZEN_BEFORE_TOOL_DOWNLOAD",
+  "frozen_at": "2026-09-04T01:35:45+08:00",
+  "scientific_question": "Can the official Hindsight uv.lock be exported with a frozen, project-owned uv binary without mutating a shared Python environment or re-resolving package versions?",
+  "decision_informed": "Whether an exact third-party dependency artifact plan can be produced before Hindsight environment installation.",
+  "scientific_evidence_role": "dependency-tool acquisition evidence only; no package resolution change, dependency installation, import, model, service, lifecycle, numerical, superiority, or SOTA claim is permitted",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-execution-source-audit.v1.json",
+    "sha256": "d2da9f895227a55f25859578e273421baed3e91336b2d322af7e0ddbf50bd69c",
+    "required_status": "TERMINAL_ACCEPTED"
+  },
+  "official_release": {
+    "repository": "https://github.com/astral-sh/uv",
+    "version": "0.12.9",
+    "published_at": "2026-09-01T21:58:26Z",
+    "target_triple": "x86_64-unknown-linux-gnu",
+    "archive_url": "https://github.com/astral-sh/uv/releases/download/0.12.9/uv-x86_64-unknown-linux-gnu.tar.gz",
+    "archive_bytes": 19423276,
+    "archive_sha256": "ec7a99cd05e0cd7f80243f135ce1361c76835cb0ee60055d14d20eba8eba1460",
+    "checksum_url": "https://github.com/astral-sh/uv/releases/download/0.12.9/uv-x86_64-unknown-linux-gnu.tar.gz.sha256",
+    "checksum_bytes": 101,
+    "checksum_sha256": "18f88ae6a13764973e76d72c1a4ade28c70b53d8279f5b4715e48b2291c264a5",
+    "source": "Astral official GitHub releases API and release checksum sidecar"
+  },
+  "materializer": {
+    "path": "scripts/materialize_uv_tool.py",
+    "sha256": "24053659cf59436e9aa05607f6ce306cdb93eee5a391fcb42db8d5e581e9bed8"
+  },
+  "target": "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu",
+  "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1",
+  "execution_contract": {
+    "command": "python scripts/materialize_uv_tool.py --target ${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1",
+    "fresh_roots_required": true,
+    "network_retries": 0,
+    "connect_timeout_seconds": 30,
+    "wall_time_ceiling_minutes": 15,
+    "download_rate_ceiling": "512 KiB/s",
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 1,
+    "wave1_non_interference": "This bounded tool-only acquisition may run during Wave-1 because it cannot access models, datasets, dependency environments, APIs, pg0, or GPUs and its network rate is capped."
+  },
+  "acceptance": [
+    "The checksum sidecar matches its frozen byte count and SHA-256 and names the frozen archive hash.",
+    "The archive matches its frozen byte count and SHA-256.",
+    "The archive contains exactly one directory plus regular uv and uvx files with no links or path traversal.",
+    "The extracted uv binary reports exactly uv 0.12.9.",
+    "Both binary sizes and SHA-256 values are retained.",
+    "The evidence root has TERMINAL_ACCEPTED, no TERMINAL_REJECTED, and a verified evidence inventory."
+  ],
+  "failure": "Any collision, download failure, byte or hash mismatch, unsafe archive member, extraction error, or version mismatch seals a fresh TERMINAL_REJECTED evidence root and retains all partial artifacts.",
+  "next_gate_after_acceptance": "Independently audit the tool, then export the accepted source uv.lock with --frozen, --no-dev, --package hindsight-all, and --no-emit-workspace. Export only; do not install packages until Wave-1 releases the resource gate.",
+  "prohibited_actions": [
+    "using an installer script or moving latest-version URL",
+    "executing downloaded content before archive hash and member validation",
+    "using uv to update uv.lock or resolve new versions",
+    "installing Python packages, downloading models, or changing shared environments",
+    "starting pg0, a service, lifecycle, or numerical evaluation",
+    "deleting or repairing a rejected root in place",
+    "populating any comparison-table numeric cell from this stage"
+  ]
+}

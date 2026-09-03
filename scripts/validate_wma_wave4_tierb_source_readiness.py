@@ -17,6 +17,7 @@ MODEL_MANIFEST_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-model-prefe
 MODEL_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-model-materialization-prefreeze.v1.json"
 EXECUTION_SOURCE_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-execution-source-prefreeze.v1.json"
 EXECUTION_SOURCE_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-execution-source-audit.v1.json"
+UV_TOOL_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -38,6 +39,7 @@ execution_source_prefreeze = json.loads(
 execution_source_audit = json.loads(
     EXECUTION_SOURCE_AUDIT_PATH.read_text(encoding="utf-8")
 )
+uv_tool_prefreeze = json.loads(UV_TOOL_PREFREEZE_PATH.read_text(encoding="utf-8"))
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
 candidates = {row["method_id"]: row for row in payload["candidates"]}
@@ -192,6 +194,24 @@ assert wave1["after_audit_accepted_units"] >= wave1["before_copy_accepted_units"
 assert wave1["before_copy_rejected_units"] == wave1["after_audit_rejected_units"] == 0
 serialized = EXECUTION_SOURCE_AUDIT_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert uv_tool_prefreeze["status"] == "FROZEN_BEFORE_TOOL_DOWNLOAD"
+assert uv_tool_prefreeze["prior_gate"]["sha256"] == sha256_file(
+    ROOT / uv_tool_prefreeze["prior_gate"]["path"]
+)
+assert uv_tool_prefreeze["materializer"]["sha256"] == sha256_file(
+    ROOT / uv_tool_prefreeze["materializer"]["path"]
+)
+release = uv_tool_prefreeze["official_release"]
+assert release["version"] == "0.12.9"
+assert release["target_triple"] == "x86_64-unknown-linux-gnu"
+assert release["archive_bytes"] == 19423276
+assert release["archive_sha256"] == "ec7a99cd05e0cd7f80243f135ce1361c76835cb0ee60055d14d20eba8eba1460"
+assert uv_tool_prefreeze["execution_contract"]["network_retries"] == 0
+assert uv_tool_prefreeze["execution_contract"]["gpu_count"] == 0
+assert uv_tool_prefreeze["execution_contract"]["download_rate_ceiling"] == "512 KiB/s"
+serialized = UV_TOOL_PREFREEZE_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {
@@ -204,6 +224,7 @@ print(
             "frozen_hindsight_model_bytes": sum(row["expected_total_bytes"] for row in models.values()),
             "hindsight_execution_source_files": execution_source_prefreeze["copy_scope"]["expected_file_count"],
             "accepted_hindsight_execution_source_files": copy["file_count"],
+            "frozen_uv_tool_version": release["version"],
             "numeric_result_rows_added": 0,
         },
         sort_keys=True,
