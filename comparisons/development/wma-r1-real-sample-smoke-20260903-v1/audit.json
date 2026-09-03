@@ -1,0 +1,66 @@
+{
+  "benchmark_id": "worldmemarena-2026",
+  "benchmark_source_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+  "dataset_manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+  "backbone": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+  "environment_lock": "requirements/locks/worldmemarena-py311-r1.txt",
+  "environment_lock_sha256": "8cf96ec2e711fe0bccdacfd8de676b704018a53d884e932af1753a5c0f8d2936",
+  "claim_boundary": "Single-sample smoke results validate execution and expose descriptive tradeoffs only; they are not estimates of benchmark performance or SOTA evidence.",
+  "evidence_role": "development-foundation",
+  "main_comparison_eligible": false,
+  "methods": [
+    "wma-mmfu-single",
+    "wma-simplemem",
+    "wma-m2a",
+    "wma-vilomem"
+  ],
+  "metric_projection": {
+    "answer_bleu1": "question_answering.answer_matching.avg_bleu1",
+    "answer_f1": "question_answering.answer_matching.avg_f1",
+    "end_to_end_seconds": "timing.total_seconds",
+    "memory_avg_correctness": "memory_correctness.avg_correctness",
+    "memory_avg_recall": "memory_recall.avg_recall",
+    "memory_interference_rejection": "interference_rejection.score",
+    "memory_update_handling": "update_handling.score",
+    "qa_correct_ratio": "question_answering.correct_ratio",
+    "qa_hallucination_ratio": "question_answering.hallucination_ratio",
+    "qa_omission_ratio": "question_answering.omission_ratio",
+    "retrieval_ndcg_at_10": "question_answering.retrieval_ranking.ndcg_at.10",
+    "retrieval_recall_at_10": "question_answering.retrieval_ranking.recall_at.10",
+    "total_tokens": "token_usage.total.total_tokens"
+  },
+  "n_qa_per_method": 13,
+  "n_samples_per_method": 1,
+  "n_sessions_per_method": 11,
+  "result_file_sha256": {
+    "wma-m2a": "460aad41ce6297f3861be0b1142c4b1793b2f6c2128404578c3e92bebd50f296",
+    "wma-mmfu-single": "869166f9fe3390dd40c395f815f5ae2d25fb05a1d93260a51ebcaf133e31e962",
+    "wma-simplemem": "6545f25b26a138d7f495eb093ec5d40659b2b41840392273b4ca32f38d862bc4",
+    "wma-vilomem": "89073ed705e9b8287286344bf7403969d026700faec059c0aa2af07b8b0bcc1e"
+  },
+  "run_id": "wma-r1-real-sample-smoke-20260903-v1",
+  "server_run_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-real-sample-smoke-20260903-v1",
+  "run_inventory_sha256": "8736cfa1d8f3413d7970c942a6c165069c7ebf40f3de2603bc6712aa00f03e6a",
+  "full_evidence_archive": {
+    "server_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-real-sample-smoke-20260903-v1.tar.gz",
+    "local_ignored_path": "artifacts/runs/wma-r1-real-sample-smoke-20260903-v1.tar.gz",
+    "bytes": 916213,
+    "sha256": "16ea09e33b2aa36152a50e90c13d8216bf5e17beb1d0b5724e42137bbf8e804b",
+    "local_mapped_file_verification": {
+      "status": "PASS",
+      "files_checked": 169
+    }
+  },
+  "service_cleanup": {
+    "service_run_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-model-services-20260903-v2",
+    "project_tmux_sessions_remaining": 0,
+    "gpu_memory_after_grace_period_mib": [14, 14, 14, 14, 14, 14, 14],
+    "status": "STOPPED_AND_RELEASED"
+  },
+  "sample_id": "mobile_05",
+  "sample_index": 100,
+  "schema_version": "agentenhance.wma_development_summary.v1",
+  "status": "ACCEPTED_DEVELOPMENT",
+  "summary_csv_sha256": "f8f57eeb541b60ef56a23fcf2abaa735674f69e0bb933347c5f313cd2ae626b8",
+  "track_id": "wma-lifecycle-matched-v1"
+}
