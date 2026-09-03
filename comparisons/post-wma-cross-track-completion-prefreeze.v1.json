@@ -1,0 +1,146 @@
+{
+  "schema_version": "agentenhance.cross_track_completion_prefreeze.v1",
+  "contract_id": "post-wma-static-causal-completion-20260904-v1",
+  "status": "FROZEN_BEFORE_ANY_ACCEPTED_MAIN_COMPARISON_RESULT_OUTSIDE_WMA",
+  "frozen_at": "2026-09-04T07:10:00+08:00",
+  "purpose": "Prevent the baseline objective from being closed or project-owned models from being cleaned after WMA alone. The two remaining directly comparable tracks must produce fresh local evidence under their own matched protocols.",
+  "selection_firewall": {
+    "frozen_before_agentenhance_public_results": true,
+    "eligible_inputs": [
+      "publication year and method identity",
+      "official source and immutable revision availability",
+      "license and executable-code availability",
+      "declared common-track compatibility",
+      "control coverage required by the frozen evidence policy"
+    ],
+    "prohibited_inputs": [
+      "source-reported quality values",
+      "future AgentEnhance values",
+      "favorable or unfavorable local comparator values"
+    ]
+  },
+  "bound_inputs": [
+    {
+      "path": "comparisons/baseline-evidence-policy.v2.json",
+      "sha256": "c9d3697c917c82bc939078cf47922403f20332b62bc4d07f6561fc6355541453"
+    },
+    {
+      "path": "comparisons/baseline-register.v3.csv",
+      "sha256": "ac0a96da3ad98fae135e3b23f4426e334367f3fae93cac705cd052b2eb108759"
+    },
+    {
+      "path": "comparisons/reproduction-ledger.v1.csv",
+      "sha256": "94e4f8e660ce9b5c7cdfb0c7aa0162cef2ac278beeba1c375357c3141a7a1af1"
+    },
+    {
+      "path": "comparisons/recent-method-reproduction-roadmap.v3.json",
+      "sha256": "5184b8a05c4a6af278d6a7cfe44f3b2ebe402f63ef0a1f1e322c53a524bf2482"
+    },
+    {
+      "path": "comparisons/cmi-r2-full-recovery1-audit.v1.json",
+      "sha256": "f0bdfb536a0148af980fee7571cf5aa7886c231699d797e2582c879c8dc4b054"
+    },
+    {
+      "path": "comparisons/wma-postwave1-release-sequence-prefreeze.v3.json",
+      "sha256": "c976cf2a3bbecbcb3b845b34f7965dbe218da06dcd8a05ce49a95879c2440841"
+    }
+  ],
+  "global_entry_gate": "The WMA v3 sequence must be terminal-accepted through effective phases 1-5, with all accepted and rejected evidence archived. WMA completion is a prerequisite, not completion of the overall baseline objective.",
+  "tracks": [
+    {
+      "order": 1,
+      "track_id": "memgallery-static-matched-v1",
+      "benchmark_id": "mem-gallery-acl2026",
+      "role": "primary static multimodal comparison",
+      "recent_method_order": [
+        "a-mem",
+        "memoryos",
+        "universalrag",
+        "ngm",
+        "augustus",
+        "m2a",
+        "v-mem"
+      ],
+      "control_order": [
+        "no-memory",
+        "full-memory-text",
+        "full-memory-mm",
+        "fifo-recent",
+        "bm25",
+        "naive-rag",
+        "hybrid-rag"
+      ],
+      "identity_exclusions": {
+        "omnimem-agent": "Deprecated alias; it must not create a second numeric entity beside the canonical Omni-SimpleMem WMA run.",
+        "agentenhance-ceu": "Proposed method remains locked until at least two recent baselines on this track are locally accepted."
+      },
+      "matched_protocol": {
+        "answer_backbone": "one exact frozen local model and revision shared by every method and later AgentEnhance run",
+        "evaluator": "one exact frozen local evaluator, prompt, decoding configuration and implementation",
+        "questions_expected": 1711,
+        "failure_denominator_rule": "observed plus failed equals 1711; empty answers and per-question exceptions remain failures in the denominator",
+        "retrieval_budget": "K=10 or a prospectively frozen token-equivalent budget reported alongside K",
+        "seed_rule": "seeds 0,1,2 for stochastic methods; one run only after a separate byte-determinism audit",
+        "official_values_allowed_in_local_cells": false
+      },
+      "required_stage_order": [
+        "freeze exact dataset, qid order, source revisions, model revisions, environment locks and resource ceilings",
+        "materialize and audit sources, data and project-owned models without numerical execution",
+        "run method-specific lifecycle or integration smoke in fresh roots and retain every failure",
+        "freeze method-specific numerical authorization before reading a complete method score",
+        "execute every registered method and control without score-based dropping",
+        "reconcile all 1711 qids, metrics, failures and seeds, then archive raw and projected evidence"
+      ],
+      "exit_gate": "All seven recent methods and seven controls have accepted complete local summaries, or an immutable terminal technical blocker recorded after the frozen attempt. No official value fills a missing cell."
+    },
+    {
+      "order": 2,
+      "track_id": "causal-locomo-safety-v1",
+      "benchmark_id": "causal-locomo-2026",
+      "role": "secondary counterfactual and harmful-memory comparison",
+      "method_order": [
+        "cmi-no-memory",
+        "cmi-full-history",
+        "cmi-vector-memory",
+        "cmi-summary-memory",
+        "cmi-reflection-memory",
+        "cmi-graph-memory",
+        "cmi"
+      ],
+      "development_evidence_boundary": "cmi-r2-deterministic-full-recovery1 is retained as development evidence only. Its deterministic answer fallback and zero selected memories cannot populate main-comparison cells.",
+      "matched_protocol": {
+        "answer_backbone": "one exact frozen local model and revision shared by all seven methods and later AgentEnhance",
+        "examples_expected": 87,
+        "methods_expected": 7,
+        "predictions_expected_per_complete_attempt": 609,
+        "failure_denominator_rule": "all registered example-method pairs remain in the denominator",
+        "seed_rule": "seeds 0,1,2 unless a separate complete-run byte-determinism audit authorizes one run",
+        "official_or_development_values_allowed_in_local_main_cells": false
+      },
+      "required_stage_order": [
+        "freeze the local answer-model adapter, evaluator, dataset identity, method identities and resource ceilings",
+        "accept a real-model lifecycle and denominator smoke without reusing development outputs",
+        "freeze numerical authorization before any complete real-model score is observed",
+        "execute, reconcile and archive every method under the same protocol"
+      ],
+      "exit_gate": "All seven local real-model method results and their complete evidence archive are accepted, or terminal failures remain visible without source-reported replacement."
+    }
+  ],
+  "current_numeric_state": {
+    "wma_admitted_rows": 0,
+    "memgallery_static_admitted_rows": 0,
+    "causal_locomo_main_admitted_rows": 0,
+    "cmi_development_rows": 7,
+    "agentenhance_public_rows": 0
+  },
+  "different_domain_boundary": "M3-Agent, MM-Mem and MMA remain recorded on their own benchmarks. Their values cannot be merged into or ranked against WMA, Mem-Gallery or Causal-LoCoMo cells.",
+  "cleanup_gate": "No project-owned model may become DRY_RUN_ELIGIBLE until every dependent method across WMA, Mem-Gallery and Causal-LoCoMo is terminal, all accepted and failed evidence is archived and verified, and the frozen ownership ledger proves that no pending track still references the model.",
+  "explicitly_prohibited": [
+    "declaring the overall baseline objective complete after WMA alone",
+    "copying source-reported or development-only values into local main-comparison cells",
+    "dropping a method, seed, qid, example, metric or failure after observing its score",
+    "running AgentEnhance on a track before the evidence policy's recent-baseline gate is met",
+    "cleaning a model while any dependent cross-track reproduction remains pending",
+    "claiming SOTA from incomparable tracks or incomplete local evidence"
+  ]
+}
