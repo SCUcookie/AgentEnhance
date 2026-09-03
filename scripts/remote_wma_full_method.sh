@@ -61,8 +61,17 @@ done
 
 mkdir -p "${RUN_ROOT}/units" "${RUN_ROOT}/evidence"
 services_started=0
+gpu_monitor_pid=
+stop_gpu_monitor() {
+  if [[ -n "${gpu_monitor_pid}" ]]; then
+    kill "${gpu_monitor_pid}" 2>/dev/null || true
+    wait "${gpu_monitor_pid}" 2>/dev/null || true
+    gpu_monitor_pid=
+  fi
+}
 scheduler_terminalize() {
   local code=$?
+  stop_gpu_monitor
   if (( services_started == 1 )); then
     SERVICE_RUN_ROOT="${SERVICE_ROOT}" \
     CHAT_SESSION="${CHAT_SESSION}" \
@@ -95,6 +104,25 @@ CHAT_MAX_NUM_SEQS=1 \
 CHAT_GPU_MEMORY_UTILIZATION=0.95 \
   bash "${START_SERVICES_SCRIPT}" >"${RUN_ROOT}/scheduler.log" 2>&1
 services_started=1
+
+printf 'timestamp_unix,timestamp_iso,gpu_index,memory_used_mib,memory_total_mib,utilization_gpu_percent\n' \
+  >"${RUN_ROOT}/evidence/gpu-monitor.csv"
+(
+  while true; do
+    timestamp_unix=$(date +%s)
+    timestamp_iso=$(date -Is)
+    nvidia-smi --query-gpu=index,memory.used,memory.total,utilization.gpu \
+      --format=csv,noheader,nounits \
+      | awk -F',' -v ts="${timestamp_unix}" -v iso="${timestamp_iso}" '
+          BEGIN { OFS="," }
+          {
+            for (i = 1; i <= NF; i++) gsub(/^[[:space:]]+|[[:space:]]+$/, "", $i)
+            if ($1 == 1 || $1 == 3 || $1 == 4 || $1 == 5) print ts, iso, $1, $2, $3, $4
+          }'
+    sleep 5
+  done
+) >>"${RUN_ROOT}/evidence/gpu-monitor.csv" 2>>"${RUN_ROOT}/scheduler.log" &
+gpu_monitor_pid=$!
 
 accepted=0
 rejected=0
@@ -134,8 +162,14 @@ while IFS=, read -r sample_index sample_id relative_json_path sessions turns att
   printf 'accepted=%s\nrejected=%s\nlast_sample_index=%s\nlast_sample_id=%s\nupdated_at=%s\n' \
     "${accepted}" "${rejected}" "${sample_index}" "${sample_id}" "$(date -Is)" \
     >"${RUN_ROOT}/progress.txt"
+  if ! kill -0 "${gpu_monitor_pid}" 2>/dev/null; then
+    infrastructure_failure=1
+    printf 'gpu monitor terminated before scheduler completion\n' >>"${RUN_ROOT}/scheduler.log"
+    break
+  fi
 done <"${UNIT_INVENTORY}"
 
+stop_gpu_monitor
 SERVICE_RUN_ROOT="${SERVICE_ROOT}" \
 CHAT_SESSION="${CHAT_SESSION}" \
 EMBED1024_SESSION="${EMBED1024_SESSION}" \

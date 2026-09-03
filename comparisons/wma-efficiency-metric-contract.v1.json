@@ -1,0 +1,29 @@
+{
+  "schema_version": "agentenhance.wma_efficiency_metric_contract.v1",
+  "status": "FROZEN_BEFORE_FULL_SPLIT_NUMERIC_RESULTS",
+  "benchmark": "WorldMemArena small",
+  "track_id": "wma-lifecycle-matched-v1",
+  "unit_of_analysis": "all 7906 QA records from 150 independently executed samples",
+  "latency": {
+    "retrieval_latency_p50_ms": "Hyndman-Fan type-7 50th percentile of per-QA eval.retrieval_seconds times 1000",
+    "retrieval_latency_p95_ms": "Hyndman-Fan type-7 95th percentile of per-QA eval.retrieval_seconds times 1000",
+    "end_to_end_latency_p50_ms": "Hyndman-Fan type-7 50th percentile of per-QA retrieval_seconds plus answer_seconds, times 1000",
+    "end_to_end_latency_p95_ms": "Hyndman-Fan type-7 95th percentile of per-QA retrieval_seconds plus answer_seconds, times 1000",
+    "end_to_end_seconds": "sum of official per-unit timing.pipeline_seconds",
+    "exclusion": "post-hoc evaluator and judge latency is excluded from user-facing latency but its tokens remain reported"
+  },
+  "resources": {
+    "memory_storage_bytes": "sum of regular-file sizes under every accepted unit baseline-storage directory",
+    "peak_driver_ram_gib": "maximum GNU time Maximum resident set size across accepted unit drivers, divided by 1024^2",
+    "peak_vram_gib": "maximum concurrent sum of nvidia-smi memory.used over allocated GPUs 1, 3, 4, and 5, divided by 1024",
+    "gpu_hours": "elapsed seconds between first and last complete five-second GPU monitor samples, times four allocated GPUs, divided by 3600",
+    "gpu_monitor_interval_seconds": 5,
+    "gpu_indices": [1, 3, 4, 5]
+  },
+  "comparability_rules": [
+    "All locally reproduced methods use the same server, model services, GPU assignment, monitor interval, sample inventory, and sequential execution policy.",
+    "A resource or latency cell remains NA if its raw evidence is missing or incomplete; it is never imputed from another run or an official paper.",
+    "The four allocated GPUs include answer and two embedding services, even when a method does not use every embedding endpoint.",
+    "GPU-hours are allocated service-window hours, not utilization-weighted compute hours."
+  ]
+}

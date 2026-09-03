@@ -39,6 +39,20 @@ def assert_finite(value: Any, path: str = "root") -> None:
         raise SystemExit(f"non-finite numeric value at {path}: {value}")
 
 
+def percentile(values: list[float], quantile: float) -> float:
+    """Return the linearly interpolated sample percentile (Hyndman-Fan type 7)."""
+    if not values:
+        raise SystemExit("cannot calculate a percentile over an empty sequence")
+    ordered = sorted(values)
+    position = (len(ordered) - 1) * quantile
+    lower = math.floor(position)
+    upper = math.ceil(position)
+    if lower == upper:
+        return ordered[lower]
+    weight = position - lower
+    return ordered[lower] * (1.0 - weight) + ordered[upper] * weight
+
+
 def verify_inventory(unit_root: Path) -> str:
     inventory = unit_root / "SHA256SUMS"
     for line in inventory.read_text(encoding="utf-8").splitlines():
@@ -137,6 +151,7 @@ def main() -> int:
     unit_manifest: list[dict[str, Any]] = []
     timing = {"pipeline_seconds": 0.0, "eval_seconds": 0.0, "total_seconds": 0.0}
     peak_rss_kib = 0
+    memory_storage_bytes = 0
 
     for row in inventory_rows:
         index = int(row["sample_index"])
@@ -164,6 +179,8 @@ def main() -> int:
         match = re.search(r"Maximum resident set size \(kbytes\):\s*(\d+)", resource_text)
         if match:
             peak_rss_kib = max(peak_rss_kib, int(match.group(1)))
+        storage_root = unit_root / "baseline-storage"
+        memory_storage_bytes += sum(path.stat().st_size for path in storage_root.rglob("*") if path.is_file())
         all_sessions.extend(sessions)
         all_qa.extend(qa)
         unit_manifest.append({
@@ -183,6 +200,43 @@ def main() -> int:
         qa_evaluations=[record["eval"] for record in all_qa],
     )
     aggregate["timing"] = {key: round(value, 2) for key, value in timing.items()}
+
+    retrieval_latencies = [float(record["eval"]["retrieval_seconds"]) for record in all_qa]
+    answer_latencies = [float(record["eval"]["answer_seconds"]) for record in all_qa]
+    pipeline_latencies = [retrieval + answer for retrieval, answer in zip(retrieval_latencies, answer_latencies)]
+    monitor_path = args.units_root.parent / "evidence" / "gpu-monitor.csv"
+    if not monitor_path.is_file():
+        raise SystemExit(f"missing scheduler GPU monitor: {monitor_path}")
+    monitored_memory: dict[int, dict[int, int]] = defaultdict(dict)
+    with monitor_path.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            timestamp = int(row["timestamp_unix"])
+            gpu_index = int(row["gpu_index"])
+            if gpu_index not in {1, 3, 4, 5}:
+                raise SystemExit(f"unexpected monitored GPU index: {gpu_index}")
+            monitored_memory[timestamp][gpu_index] = int(row["memory_used_mib"])
+    if not monitored_memory or any(set(values) != {1, 3, 4, 5} for values in monitored_memory.values()):
+        raise SystemExit("incomplete scheduler GPU monitor samples")
+    monitor_timestamps = sorted(monitored_memory)
+    peak_allocated_vram_mib = max(sum(values.values()) for values in monitored_memory.values())
+    monitoring_seconds = monitor_timestamps[-1] - monitor_timestamps[0]
+    aggregate["derived_runtime"] = {
+        "definition": "user-facing retrieval plus answer generation; post-hoc evaluator latency excluded",
+        "end_to_end_seconds": timing["pipeline_seconds"],
+        "retrieval_latency_p50_ms": percentile(retrieval_latencies, 0.50) * 1000.0,
+        "retrieval_latency_p95_ms": percentile(retrieval_latencies, 0.95) * 1000.0,
+        "end_to_end_latency_p50_ms": percentile(pipeline_latencies, 0.50) * 1000.0,
+        "end_to_end_latency_p95_ms": percentile(pipeline_latencies, 0.95) * 1000.0,
+    }
+    aggregate["derived_resources"] = {
+        "memory_storage_bytes": memory_storage_bytes,
+        "peak_driver_ram_gib": peak_rss_kib / 1024 / 1024,
+        "peak_allocated_vram_gib": peak_allocated_vram_mib / 1024,
+        "allocated_gpu_hours": monitoring_seconds * 4 / 3600,
+        "gpu_monitor_interval_seconds": 5,
+        "gpu_monitor_indices": [1, 3, 4, 5],
+        "gpu_monitor_observed_seconds": monitoring_seconds,
+    }
 
     sample_ids = {row["sample_id"] for row in inventory_rows}
     question_meta = load_question_metadata(args.dataset_root, sample_ids)
@@ -231,6 +285,9 @@ def main() -> int:
         "n_sessions": len(all_sessions),
         "n_qa": len(all_qa),
         "peak_driver_rss_gib": peak_rss_kib / 1024 / 1024,
+        "memory_storage_bytes": memory_storage_bytes,
+        "peak_allocated_vram_gib": peak_allocated_vram_mib / 1024,
+        "allocated_gpu_hours": monitoring_seconds * 4 / 3600,
         "inventory_sha256": args.inventory_sha256,
         "source_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
         "dataset_manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
