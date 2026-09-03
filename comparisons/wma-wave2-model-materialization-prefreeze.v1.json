@@ -1,0 +1,41 @@
+{
+  "schema_version": "agentenhance.model_materialization_prefreeze.v1",
+  "materialization_id": "wma-wave2-model-materialization-20260903-v1",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-03T23:10:00+08:00",
+  "source_manifest": "comparisons/wma-wave2-model-prefetch-manifest.v1.json",
+  "source_manifest_sha256": "348c9eb1078efb171e4d3b572a6e4b364ac04943f816ed996a1f4916cc12ff0c",
+  "downloader": "scripts/materialize_hf_model_snapshot.py",
+  "downloader_sha256": "f0625711e9847a184bff65470c817e9c338ab01f14dacfa5c0a6ea77c7404800",
+  "execution_order": [
+    {
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "target": "/data1/2026/ldh/AgentEnhance/cache/models/wma-r1-wave2-gme-20260903-v1",
+      "evidence_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave2-gme-model-materialization-20260903-v1"
+    },
+    {
+      "repository": "Qwen/Qwen3-VL-Embedding-8B",
+      "revision": "2c4565515e0f265c6511776e7193b22c0968ddc7",
+      "target": "/data1/2026/ldh/AgentEnhance/cache/models/wma-r1-wave2-qwen3-vl-embedding-8b-20260903-v1",
+      "evidence_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave2-qwen3-vl-embedding-8b-model-materialization-20260903-v1"
+    }
+  ],
+  "scheduler": {
+    "start_condition": "Wave-1 controller is terminal and all Wave-1 model services have stopped.",
+    "parallel_downloads": 1,
+    "direct_server_download": true,
+    "mac_to_server_transfer": "If direct download is unavailable, transfer only with sftp -l 4096 and preserve the same target/evidence identities.",
+    "gpu_loading_during_download": false
+  },
+  "acceptance": [
+    "Hugging Face resolves the exact immutable revision",
+    "repository file count equals the official expanded tree",
+    "repository byte total equals the official expanded tree",
+    "every repository file has a retained local SHA-256",
+    "the evidence manifest and model SHA list have their own retained SHA-256 inventory",
+    "the evidence root is TERMINAL_ACCEPTED and not TERMINAL_REJECTED"
+  ],
+  "failure": "Any exception seals a fresh TERMINAL_REJECTED evidence root, retains a partial target without cleanup authorization, and requires a separately prefrozen recovery target.",
+  "cleanup": "No successful or partial target may be deleted merely because the next step fails; comparisons/model-retention-policy.v1.json controls cleanup."
+}
