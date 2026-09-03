@@ -26,6 +26,7 @@ baseline-check:
 	python3 scripts/validate_wma_wave5_structmem_source_readiness.py
 	python3 scripts/validate_hf_model_materialization_successors.py
 	python3 scripts/validate_wma_postwave_release_sequence.py
+	python3 scripts/validate_wma_postwave_release_sequence_v2.py
 	python3 scripts/validate_wma_local_result_admission.py
 	python3 scripts/validate_wma_wave1_recovery2.py
 	python3 scripts/validate_wma_wave1_recovery2_closure.py
