@@ -1,0 +1,57 @@
+{
+  "schema_version": "agentenhance.wma_wave2_lifecycle_prefreeze.v1",
+  "gate_id": "wma-r1-wave2-lifecycle-20260903-v1",
+  "status": "FROZEN_BEFORE_WAVE2_LIFECYCLE_EXECUTION",
+  "frozen_at": "2026-09-03T22:35:00+08:00",
+  "scientific_role": "Implementation-fidelity and store-retrieve eligibility gate only; no lifecycle score is a paper result.",
+  "fixed_source": {
+    "repository": "https://github.com/UCSB-AI/WorldMemArena",
+    "commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "environment_lock_sha256": "8cf96ec2e711fe0bccdacfd8de676b704018a53d884e932af1753a5c0f8d2936"
+  },
+  "method_groups": [
+    {
+      "group": "wave2a-current-stack",
+      "methods": ["MGMemory", "A-Mem", "Omni-SimpleMem", "MIRIX"],
+      "gate": "Construct, ingest a fixed two-turn fact, finalize, snapshot, retrieve, and verify non-empty auditable evidence under the declared shared local stack.",
+      "special_checks": {
+        "MGMemory": "Exercise trigger, summarizer, recall, and archival encoder paths; record that this is the benchmark-bundled implementation.",
+        "A-Mem": "Require non-empty extracted metadata and retrieval; record the local OpenAI-compatible LLM and embedding substitutions.",
+        "Omni-SimpleMem": "Use a real image attachment in addition to text; verify a visual MAU or image-linked retrieval item rather than a text-only pass.",
+        "MIRIX": "Verify isolated MIRIX_DIR, all intended memory agents, configured embedding dimension, padded storage dimension, and retrieval without a silent fallback."
+      }
+    },
+    {
+      "group": "wave2b-gme-1536",
+      "methods": ["NGMemory", "AUGUSTUSMemory", "UniversalRAGMemory"],
+      "gate": "Requires the exact frozen GME revision and a verified 1536-dimensional multimodal endpoint before construction. Every method must ingest and retrieve both text and a real image.",
+      "model_repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "model_revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "required_dimension": 1536,
+      "prohibited_substitution": "The existing 1024- or 384-dimensional Qwen3 embedding services cannot be used as GME."
+    },
+    {
+      "group": "wave2c-embedding-control",
+      "methods": ["Qwen3-VL-Embedding-8B"],
+      "gate": "Requires the exact frozen 8B revision, image-and-text encode checks, correct served-model identity, and dimension consistency before a numerical run.",
+      "model_repository": "Qwen/Qwen3-VL-Embedding-8B",
+      "model_revision": "2c4565515e0f265c6511776e7193b22c0968ddc7"
+    }
+  ],
+  "breadth_controls_after_recent_methods": [
+    "Dummy",
+    "BaseModel",
+    "FUMemory",
+    "STMemory",
+    "LTMemory",
+    "GAMemory",
+    "RFMemory",
+    "MMMemory",
+    "MMFUMemory"
+  ],
+  "admission_rule": "A method may enter a full numerical prefreeze only after its method-specific lifecycle root is terminal-accepted, independently hashed, and reviewed for silent fallbacks and model-identity mismatches.",
+  "failure_rule": "Seal failed attempts as terminal-rejected; diagnose and prefreeze a fresh recovery root. Never repair or resume a terminal root in place.",
+  "scheduling_rule": "Do not run GPU lifecycle gates or model downloads that can perturb the active Wave-1 controller. Prepare manifests and code audits now; execute after Wave-1 releases the service stack.",
+  "comparison_boundary": "Only accepted full-split local runs populate numeric cells. Pending or failed methods stay visible with empty cells; official paper numbers remain in a separate evidence layer.",
+  "model_manifest": "comparisons/wma-wave2-model-prefetch-manifest.v1.json"
+}

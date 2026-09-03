@@ -1,0 +1,41 @@
+{
+  "schema_version": "agentenhance.model_prefetch_manifest.v1",
+  "manifest_id": "wma-wave2-model-prefetch-20260903-v1",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-03T22:35:00+08:00",
+  "source": "Hugging Face official repository API",
+  "models": [
+    {
+      "purpose": "Required 1536-dimensional multimodal encoder for NGMemory, AUGUSTUSMemory, and UniversalRAGMemory",
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "license": "apache-2.0",
+      "private": false,
+      "gated": false,
+      "allow_patterns": ["*"],
+      "expected_file_count": 24,
+      "expected_total_bytes": 8848245026,
+      "expected_local_path": "/data1/2026/ldh/AgentEnhance/cache/models/wma-r1-wave2-gme-20260903-v1",
+      "tree_api": "https://huggingface.co/api/models/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct/tree/9cfa6413f704a7c1cf5064d240748e10c876b286?recursive=true&expand=true"
+    },
+    {
+      "purpose": "Canonical WorldMemArena Qwen3-VL embedding-only control",
+      "repository": "Qwen/Qwen3-VL-Embedding-8B",
+      "revision": "2c4565515e0f265c6511776e7193b22c0968ddc7",
+      "license": "apache-2.0",
+      "private": false,
+      "gated": false,
+      "allow_patterns": ["*"],
+      "expected_file_count": 22,
+      "expected_total_bytes": 16305675665,
+      "expected_local_path": "/data1/2026/ldh/AgentEnhance/cache/models/wma-r1-wave2-qwen3-vl-embedding-8b-20260903-v1",
+      "tree_api": "https://huggingface.co/api/models/Qwen/Qwen3-VL-Embedding-8B/tree/2c4565515e0f265c6511776e7193b22c0968ddc7?recursive=true&expand=true"
+    }
+  ],
+  "download_policy": {
+    "transport": "Download directly on the server into the exact project-owned path; if transferred from the Mac, use rate-limited sftp.",
+    "concurrency_with_wave1": "Do not load either model or start a new GPU service while Wave-1 is active.",
+    "post_download": "Verify resolved revision, file count, byte count, and SHA-256 for every local file before any lifecycle test.",
+    "cleanup": "Deletion is forbidden until the associated reproduction is terminal-accepted and the retained evidence satisfies comparisons/model-retention-policy.v1.json."
+  }
+}

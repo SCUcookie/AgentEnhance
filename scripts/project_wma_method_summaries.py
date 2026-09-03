@@ -143,6 +143,22 @@ def read_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
         return list(reader.fieldnames or []), list(reader)
 
 
+def load_metadata_corrections(path: Path) -> tuple[dict[str, dict[str, str]], str]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("status") != "FROZEN_BIBLIOGRAPHIC_CORRECTION":
+        raise SystemExit(f"metadata correction file is not frozen: {path}")
+    corrections: dict[str, dict[str, str]] = {}
+    for item in payload.get("corrections", []):
+        implementation_id = str(item["implementation_id"])
+        if implementation_id in corrections:
+            raise SystemExit(f"duplicate metadata correction: {implementation_id}")
+        corrections[implementation_id] = {
+            str(field): str(value)
+            for field, value in item.get("main_table_overrides", {}).items()
+        }
+    return corrections, sha256_file(path)
+
+
 def write_csv(path: Path, fields: list[str], rows: list[dict[str, str]]) -> None:
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
@@ -155,11 +171,19 @@ def project_panel(
     output: Path,
     accepted: dict[str, dict[str, Any]],
     mapping: dict[str, str],
+    metadata_corrections: dict[str, dict[str, str]] | None = None,
 ) -> None:
     fields, rows = read_csv(template)
     matched: set[str] = set()
     for row in rows:
         implementation_id = row["implementation_id"]
+        if metadata_corrections and implementation_id in metadata_corrections:
+            for field, value in metadata_corrections[implementation_id].items():
+                if field not in fields:
+                    raise SystemExit(
+                        f"metadata correction field absent from {template.name}: {field}"
+                    )
+                row[field] = value
         payload = accepted.get(implementation_id)
         if payload is None:
             continue
@@ -217,9 +241,19 @@ def main() -> int:
     parser.add_argument("--comparisons-root", type=Path, required=True)
     parser.add_argument("--summary-root", type=Path, action="append", required=True)
     parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument(
+        "--metadata-corrections",
+        type=Path,
+        help="Frozen bibliographic-only correction file; defaults inside comparisons-root.",
+    )
     args = parser.parse_args()
     if args.output_root.exists():
         raise SystemExit(f"refusing existing output root: {args.output_root}")
+
+    corrections_path = args.metadata_corrections or (
+        args.comparisons_root / "wma-bibliographic-corrections.v1.json"
+    )
+    metadata_corrections, corrections_sha256 = load_metadata_corrections(corrections_path)
 
     accepted: dict[str, dict[str, Any]] = {}
     for root in args.summary_root:
@@ -245,6 +279,7 @@ def main() -> int:
         args.output_root / "wma-main-table.csv",
         accepted,
         MAIN_METRICS,
+        metadata_corrections,
     )
     project_panel(
         args.comparisons_root / "wma-retrieval-memory-table-template.v1.csv",
@@ -268,7 +303,12 @@ def main() -> int:
         "status": "TERMINAL_ACCEPTED",
         "accepted_implementations": sorted(accepted),
         "admission": "only terminal-accepted three-seed local summaries",
-        "official_values_used": false,
+        "official_values_used": False,
+        "bibliographic_corrections": {
+            "path": str(corrections_path),
+            "sha256": corrections_sha256,
+            "implementation_ids": sorted(metadata_corrections),
+        },
         "files": {},
     }
     for path in sorted(args.output_root.glob("*.csv")):
