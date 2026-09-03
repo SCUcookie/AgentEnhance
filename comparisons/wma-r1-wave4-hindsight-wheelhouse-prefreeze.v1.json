@@ -1,0 +1,86 @@
+{
+  "schema_version": "agentenhance.hindsight_wheelhouse_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-wheelhouse-20260904-v1",
+  "status": "FROZEN_AWAITING_WAVE1_RESOURCE_GATE",
+  "frozen_at": "2026-09-04T02:35:00+08:00",
+  "scientific_question": "Can every Linux CPython 3.11-active Hindsight dependency be acquired as a hash-matching compatible wheel from its exclusive frozen registry route?",
+  "decision_informed": "Whether a retained wheelhouse can support a later network-free Hindsight environment installation.",
+  "scientific_evidence_role": "Dependency acquisition evidence only; no package installation, model, service, lifecycle, numerical, superiority, or SOTA claim is eligible.",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-registry-routing-audit.v1.json",
+    "sha256": "c5298de053401d16cd6c803043f185e26b55e6b8eb9d0fe529bf8464f96728c3",
+    "required_status": "TERMINAL_ACCEPTED"
+  },
+  "frozen_toolchain": {
+    "python": "${AGENT_ENHANCE_PYTHON311}",
+    "python_sha256": "db8630b1dda55498c4d254878d144e04d3c6fd82115b700c00a13c9029fdbd02",
+    "python_version_prefix": "3.11.0 | packaged by conda-forge |",
+    "pip_version": "22.3.1",
+    "pip_init_bytes": 357,
+    "pip_init_sha256": "67685719132f99d8699a6aabd0e5b57c0d898def2d9e6534bb389b468505fb0f",
+    "materializer": "scripts/materialize_hindsight_wheelhouse.py",
+    "materializer_sha256": "d4ccb090ed39ac882ebafbdf3707a7d0dd72269844d4943c27245a532f5db589"
+  },
+  "target_platform": {
+    "implementation": "cpython",
+    "python_version": "3.11.0",
+    "platform": "linux-x86_64",
+    "soabi": "cpython-311-x86_64-linux-gnu",
+    "compatible_tag_count": 788,
+    "first_compatible_tag": "cp311-cp311-manylinux_2_31_x86_64",
+    "last_compatible_tag": "py30-none-any"
+  },
+  "inputs": {
+    "routing_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-registry-routing-20260904-v1",
+    "routing_record_bytes": 56233,
+    "routing_record_sha256": "e0d1fd83c638af9db40c12029d017dd422ad141c9964a496e8cd398bb19b885e",
+    "routes": [
+      {"id": "pypi", "url": "https://pypi.org/simple", "requirements_bytes": 251961, "requirements_sha256": "76c279b04db08fe3c32fae4fc317d79e5fd9a8a21d3735e835700659b9310fef", "active_rows": 198, "active_unique_names": 198},
+      {"id": "pytorch-cpu", "url": "https://download.pytorch.org/whl/cpu", "requirements_bytes": 4045, "requirements_sha256": "7b91727207eb7d7c2198ea8ed687719cecd2d09af3e7194299def5774e531ba9", "active_rows": 1, "active_unique_names": 1}
+    ],
+    "inactive_marker_rows": 9,
+    "expected_active_wheels": 199
+  },
+  "outputs": {
+    "wheelhouse_root": "${AGENT_ENHANCE_REMOTE_ROOT}/wheelhouses/wma-r1-wave4-hindsight-py311-linux-x86_64-20260904-v1",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-wheelhouse-20260904-v1",
+    "wheel_subdirectories": ["pypi", "pytorch-cpu"],
+    "wheel_count": 199,
+    "byte_ceiling": 6442450944
+  },
+  "download_contract": {
+    "command_template": "${AGENT_ENHANCE_PYTHON311} scripts/materialize_hindsight_wheelhouse.py --project-root ${AGENT_ENHANCE_REMOTE_ROOT} --python ${AGENT_ENHANCE_PYTHON311} --routing-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-registry-routing-20260904-v1 --wheelhouse-root ${AGENT_ENHANCE_REMOTE_ROOT}/wheelhouses/wma-r1-wave4-hindsight-py311-linux-x86_64-20260904-v1 --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-wheelhouse-20260904-v1",
+    "route_order": ["pypi", "pytorch-cpu"],
+    "pip_flags": ["--isolated", "--disable-pip-version-check", "--no-input", "--no-cache-dir", "--progress-bar off", "--retries 0", "--timeout 60", "--no-deps", "--require-hashes", "--only-binary=:all:"],
+    "explicit_single_index_per_route": true,
+    "extra_index_forbidden": true,
+    "parallel_downloads": 1,
+    "retry_count": 0,
+    "dependency_installations": 0,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 120,
+    "fresh_output_roots_required": true
+  },
+  "resource_gate": {
+    "start_condition": "Wave1 controller is independently TERMINAL_ACCEPTED, every Wave1 model service and evaluator has stopped, at least 10 GiB is free under the project volume, and no process references either fresh output root.",
+    "current_authorization": "NOT_AUTHORIZED_WHILE_WAVE1_IS_RUNNING",
+    "why": "This stage performs sustained network and disk I/O and must not perturb the sole active numerical comparison workload."
+  },
+  "acceptance": [
+    "All Python, pip, platform, routing-record, and routed-requirement identities match before download.",
+    "Exactly 198 PyPI and 1 PyTorch CPU active unique requirement names are selected under the frozen target marker environment.",
+    "Each route uses only its explicit HTTPS index with zero retries, no dependency resolution, required hashes, and binary-only acquisition.",
+    "Exactly 199 unique, target-compatible wheels are retained; their normalized distribution names exactly equal the active requirements and total bytes do not exceed 6 GiB.",
+    "Every wheel, log, and terminal record has retained size and SHA-256 evidence, and no dependency is installed."
+  ],
+  "failure": "Any collision, gate violation, toolchain/input identity mismatch, network or hash failure, missing wheel, sdist, incompatible tag, duplicate/missing distribution, count mismatch, byte-ceiling breach, or timeout seals the fresh evidence root TERMINAL_REJECTED and preserves the partial wheelhouse.",
+  "next_gate_after_acceptance": "Independently audit the complete wheelhouse, archive it, then freeze a fresh Python 3.11 environment installation using --no-index and only the retained two-route wheelhouse. Acquisition acceptance never authorizes installation or numerical execution.",
+  "prohibited_actions": [
+    "starting before Wave1 terminal acceptance and complete Wave1 service release",
+    "using pip configuration, a mirror, an extra index, cache, retry, dependency resolution, source distribution, or altered requirement",
+    "installing into or modifying the shared Python 3.11 environment",
+    "deleting a partial/rejected wheelhouse or any earlier evidence root",
+    "populating numerical comparison cells or making a SOTA claim from dependency acquisition"
+  ]
+}

@@ -33,6 +33,7 @@ SOURCE_AWARE_EXPORT_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsi
 SOURCE_AWARE_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-aware-export-failure-audit.v1.json"
 REGISTRY_ROUTING_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-prefreeze.v1.json"
 REGISTRY_ROUTING_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-audit.v1.json"
+WHEELHOUSE_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-wheelhouse-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -97,6 +98,9 @@ registry_routing_prefreeze = json.loads(
 )
 registry_routing_audit = json.loads(
     REGISTRY_ROUTING_AUDIT_PATH.read_text(encoding="utf-8")
+)
+wheelhouse_prefreeze = json.loads(
+    WHEELHOUSE_PREFREEZE_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -548,6 +552,33 @@ assert {row["id"]: row["requirement_blocks"] for row in registry_routing_audit["
 assert sum(row["bytes"] for row in registry_routing_audit["routes"]) == audit_export["bytes"]
 assert registry_routing_audit["server_evidence"]["inventory_entries_verified_after_transfer"] == 3
 serialized = REGISTRY_ROUTING_AUDIT_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert wheelhouse_prefreeze["status"] == "FROZEN_AWAITING_WAVE1_RESOURCE_GATE"
+assert wheelhouse_prefreeze["prior_gate"]["sha256"] == sha256_file(
+    ROOT / wheelhouse_prefreeze["prior_gate"]["path"]
+)
+assert wheelhouse_prefreeze["frozen_toolchain"]["materializer_sha256"] == sha256_file(
+    ROOT / wheelhouse_prefreeze["frozen_toolchain"]["materializer"]
+)
+assert wheelhouse_prefreeze["target_platform"]["soabi"] == "cpython-311-x86_64-linux-gnu"
+wheel_inputs = wheelhouse_prefreeze["inputs"]
+assert wheel_inputs["expected_active_wheels"] == 199
+assert {row["id"]: row["active_unique_names"] for row in wheel_inputs["routes"]} == {
+    "pypi": 198,
+    "pytorch-cpu": 1,
+}
+assert wheelhouse_prefreeze["outputs"]["wheel_count"] == 199
+assert wheelhouse_prefreeze["outputs"]["byte_ceiling"] == 6 * 1024**3
+download_contract = wheelhouse_prefreeze["download_contract"]
+assert download_contract["explicit_single_index_per_route"] is True
+assert download_contract["extra_index_forbidden"] is True
+assert download_contract["retry_count"] == 0
+assert download_contract["dependency_installations"] == 0
+assert wheelhouse_prefreeze["resource_gate"]["current_authorization"] == (
+    "NOT_AUTHORIZED_WHILE_WAVE1_IS_RUNNING"
+)
+serialized = WHEELHOUSE_PREFREEZE_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
