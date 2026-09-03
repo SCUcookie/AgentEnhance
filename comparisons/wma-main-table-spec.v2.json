@@ -84,6 +84,25 @@
     "retrieval_recall_at_10",
     "retrieval_ndcg_at_10"
   ],
+  "additional_slice_families": {
+    "inventory": "comparisons/wma-dataset-slice-inventory.v1.json",
+    "slice_denominator_sha256": "c72f5adc459388e88eaf9d35ba8bf6298221f48f217bebb285baed73f3dfe66c",
+    "scope": ["agent", "lifelong"],
+    "task_family": ["agent/embodied", "agent/gui", "lifelong/personal", "lifelong/project"],
+    "difficulty": ["easy", "medium", "hard"],
+    "evidence_modality": ["none", "memory", "image", "image+memory"],
+    "subcategory_policy": "Report all 27 pre-inventoried subcategories in the machine-readable appendix; never select a subset after results are observed.",
+    "metrics": [
+      "correct_ratio",
+      "hallucination_ratio",
+      "omission_ratio",
+      "answer_f1",
+      "answer_bleu1",
+      "retrieval_hit_rate",
+      "retrieval_recall_at_10",
+      "retrieval_ndcg_at_10"
+    ]
+  },
   "efficiency_and_reliability_panel": [
     "runtime.storage_seconds",
     "runtime.retrieval_seconds",
@@ -118,7 +137,7 @@
   "display_layout": {
     "main_table": "accepted local rows only: identity plus primary quality, R@10, nDCG@10, update, interference, total tokens, end-to-end p95, peak VRAM, and failures",
     "retrieval_and_memory_table": "all retrieval and memory fields",
-    "slice_table": "all eleven labeled question types plus the UNKNOWN bucket and all slice metrics",
+    "slice_table": "all eleven labeled question types plus UNKNOWN, scope, task family, difficulty, evidence modality, and all 27 subcategories under the frozen slice metrics",
     "efficiency_table": "all timing, token, storage, RAM, VRAM, GPU-hour, and reliability fields",
     "machine_readable_source": "comparisons/reproduced-results.v1.csv",
     "execution_inventory": "comparisons/wma-execution-matrix.v1.csv"

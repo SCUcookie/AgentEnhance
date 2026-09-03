@@ -1,0 +1,167 @@
+{
+  "difficulty_questions": {
+    "easy": 1450,
+    "hard": 3047,
+    "medium": 3409
+  },
+  "evidence_modality_questions": {
+    "image": 1891,
+    "image+memory": 4050,
+    "memory": 1323,
+    "none": 642
+  },
+  "family_questions": {
+    "agent/embodied": 3718,
+    "agent/gui": 3088,
+    "lifelong/personal": 440,
+    "lifelong/project": 660
+  },
+  "family_samples": {
+    "agent/embodied": 69,
+    "agent/gui": 61,
+    "lifelong/personal": 8,
+    "lifelong/project": 12
+  },
+  "prohibited_inputs": [
+    "answer text",
+    "model output",
+    "evaluation result"
+  ],
+  "question_count": 7906,
+  "question_type_questions": {
+    "CMR": 548,
+    "DU": 606,
+    "FR": 591,
+    "KR": 593,
+    "MB": 615,
+    "MC": 604,
+    "TR": 582,
+    "TTL": 582,
+    "UNKNOWN": 1356,
+    "VFR": 614,
+    "VS": 609,
+    "VU": 606
+  },
+  "sample_count": 150,
+  "schema_version": "agentenhance.wma_slice_inventory.v1",
+  "scope_questions": {
+    "agent": 6806,
+    "lifelong": 1100
+  },
+  "scope_samples": {
+    "agent": 130,
+    "lifelong": 20
+  },
+  "slice_denominator_sha256": "c72f5adc459388e88eaf9d35ba8bf6298221f48f217bebb285baed73f3dfe66c",
+  "status": "FROZEN_BEFORE_NUMERIC_RESULTS",
+  "subcategories": {
+    "agent/embodied/eb_alfred_base": {
+      "questions": 210,
+      "samples": 4
+    },
+    "agent/embodied/eb_alfred_common_sense": {
+      "questions": 212,
+      "samples": 4
+    },
+    "agent/embodied/eb_alfred_complex_instruction": {
+      "questions": 214,
+      "samples": 4
+    },
+    "agent/embodied/eb_alfred_long_horizon": {
+      "questions": 218,
+      "samples": 4
+    },
+    "agent/embodied/eb_alfred_visual_appearance": {
+      "questions": 161,
+      "samples": 3
+    },
+    "agent/embodied/eb_nav_base": {
+      "questions": 217,
+      "samples": 4
+    },
+    "agent/embodied/eb_nav_common_sense": {
+      "questions": 217,
+      "samples": 4
+    },
+    "agent/embodied/eb_nav_complex_instruction": {
+      "questions": 214,
+      "samples": 4
+    },
+    "agent/embodied/eb_nav_long_horizon": {
+      "questions": 262,
+      "samples": 5
+    },
+    "agent/embodied/eb_nav_visual_appearance": {
+      "questions": 216,
+      "samples": 4
+    },
+    "agent/embodied/minecraft": {
+      "questions": 709,
+      "samples": 13
+    },
+    "agent/embodied/omnigibson": {
+      "questions": 868,
+      "samples": 16
+    },
+    "agent/gui/css": {
+      "questions": 408,
+      "samples": 8
+    },
+    "agent/gui/excel": {
+      "questions": 311,
+      "samples": 6
+    },
+    "agent/gui/file_mgmt": {
+      "questions": 273,
+      "samples": 5
+    },
+    "agent/gui/image_edit": {
+      "questions": 364,
+      "samples": 7
+    },
+    "agent/gui/mobile": {
+      "questions": 289,
+      "samples": 8
+    },
+    "agent/gui/web": {
+      "questions": 327,
+      "samples": 6
+    },
+    "agent/gui/webarena_lite": {
+      "questions": 792,
+      "samples": 15
+    },
+    "agent/gui/word_docs": {
+      "questions": 324,
+      "samples": 6
+    },
+    "lifelong/personal": {
+      "questions": 440,
+      "samples": 8
+    },
+    "lifelong/project/academic": {
+      "questions": 110,
+      "samples": 2
+    },
+    "lifelong/project/education": {
+      "questions": 110,
+      "samples": 2
+    },
+    "lifelong/project/finance": {
+      "questions": 110,
+      "samples": 2
+    },
+    "lifelong/project/health": {
+      "questions": 110,
+      "samples": 2
+    },
+    "lifelong/project/software": {
+      "questions": 110,
+      "samples": 2
+    },
+    "lifelong/project/startup": {
+      "questions": 110,
+      "samples": 2
+    }
+  }
+}
