@@ -1,0 +1,77 @@
+{
+  "schema_version": "agentenhance.prospective_stage_audit.v1",
+  "stage_id": "cmi-r2-deterministic-full-recovery1-20260903-v1",
+  "parent_stage_id": "cmi-r2-deterministic-full-20260903-v1",
+  "audited_at": "2026-09-03T16:25:00+08:00",
+  "outcome": "ACCEPT",
+  "terminal_state": "TERMINAL_ACCEPTED",
+  "launcher_exit_code": 0,
+  "started_at": "2026-09-03T16:20:33+08:00",
+  "finished_at": "2026-09-03T16:20:43+08:00",
+  "wall_seconds": 10,
+  "source_commit": "65a66cb4347aeeb62a870132269e8a983211e036",
+  "dataset": {
+    "records": 87,
+    "valid": 87,
+    "errors": 0,
+    "task_family_counts": {
+      "temporal_memory_qa": 46,
+      "inferential_memory_qa": 14,
+      "multi_evidence_memory_qa": 25,
+      "factual_memory_qa": 2
+    }
+  },
+  "attempts": [
+    {
+      "attempt": "full1",
+      "examples": 87,
+      "methods": 7,
+      "predictions": 609,
+      "scores": 609,
+      "failures": 0,
+      "finite_numeric_values": 30798,
+      "api_cost_usd": 0.0
+    },
+    {
+      "attempt": "full2",
+      "examples": 87,
+      "methods": 7,
+      "predictions": 609,
+      "scores": 609,
+      "failures": 0,
+      "finite_numeric_values": 30798,
+      "api_cost_usd": 0.0
+    }
+  ],
+  "resolved_config": {
+    "openai_use_api": false,
+    "deterministic_only": true,
+    "skip_llm_judge": true,
+    "cache_used": false,
+    "network": "none",
+    "gpu": "none"
+  },
+  "score_records_byte_identical": true,
+  "resolved_configs_byte_identical": true,
+  "non_latency_aggregate_metrics_identical": true,
+  "score_records_sha256": "6fc674ef7f27fa3b52e2d2889c84a9eca4eebd1e6ce9482462763cd2f6e57de4",
+  "aggregate_metrics_sha256": "38ace533faa32c91429cd92ce6219099dfd235750aabb873572e9920c5cdf979",
+  "resolved_config_sha256": "0626dfc7a63f03d12747ee63559b02008b257d9c7a036558235b205a60cf1254",
+  "artifact_manifest_sha256": "7d873b85208e97982594e37e7af204e0c5c321659b0251e531b73de393d23dcd",
+  "server_run_bytes": 10426942,
+  "archive": {
+    "remote_path": "/data1/2026/ldh/AgentEnhance/archives/cmi-r2-deterministic-full-recovery1-20260903-v1.tar.gz",
+    "local_path": "artifacts/baseline-evidence/cmi-r2-deterministic-full-recovery1-20260903-v1.tar.gz",
+    "bytes": 1726704,
+    "sha256": "161e23ae467a789587c6267939a5863794f509d87a6dfdd8de37eafe0c6434dd",
+    "transfer": "rate-limited SFTP at 4096 Kbit/s with remote/local SHA verification"
+  },
+  "active_matching_containers_after_audit": 0,
+  "residual_tmux_session": false,
+  "model_files_downloaded": false,
+  "model_files_deleted": false,
+  "evidence_role": "development foundation only",
+  "main_comparison_eligible": false,
+  "scientific_interpretation": "The run proves completeness and determinism of the no-API fallback implementation. Since every method receives the same deterministic answer behavior and CMI selects no memories, these task scores cannot establish method quality or superiority.",
+  "next_allowed_gate": "Audit WorldMemArena data, dependencies, local model endpoints, and adapter construction without running AgentEnhance; then freeze a same-backbone small-split baseline stage."
+}
