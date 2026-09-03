@@ -13,6 +13,9 @@ PREFREEZE = ROOT / "comparisons/wma-r1-wave1-full-recovery2-prefreeze.v1.json"
 CAPABILITY_RECOVERY = (
     ROOT / "comparisons/wma-r1-wave1-recovery2-capability-recovery1-prefreeze.v1.json"
 )
+CAPABILITY_AUDIT = (
+    ROOT / "comparisons/wma-r1-wave1-recovery2-capability-recovery1-audit.v1.json"
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -66,6 +69,22 @@ def main() -> int:
         != expected["capability_script"]
     ):
         raise SystemExit("capability path recovery state mismatch")
+    capability_audit = json.loads(CAPABILITY_AUDIT.read_text(encoding="utf-8"))
+    if (
+        capability_audit.get("status") != "TERMINAL_ACCEPTED"
+        or capability_audit.get("main_comparison_eligible") is not False
+        or capability_audit.get("numeric_results_admitted") is not False
+        or capability_audit["frozen_input"]["sample_id"] != "css_03"
+        or capability_audit["frozen_input"]["sessions"] != 6
+        or capability_audit["frozen_input"]["qa"] != 52
+        or capability_audit["frozen_input"]["chat_gpu_memory_utilization"] != 0.90
+        or capability_audit["observed"]["cuda_oom_count"] != 0
+        or capability_audit["observed"]["http_500_count"] != 0
+        or capability_audit["observed"]["services_stopped"] is not True
+        or capability_audit["independent_verification"]["root_inventory_verified"] is not True
+        or capability_audit["independent_verification"]["unit_inventory_verified"] is not True
+    ):
+        raise SystemExit("capability acceptance audit mismatch")
     print(
         json.dumps(
             {
@@ -77,6 +96,7 @@ def main() -> int:
                 "fresh_full_runs": 12,
                 "parent_numeric_evidence_reused": False,
                 "capability_path_recovery_numeric_rows": 0,
+                "capability_status": "TERMINAL_ACCEPTED",
                 "numeric_rows_added": 0,
             },
             sort_keys=True,

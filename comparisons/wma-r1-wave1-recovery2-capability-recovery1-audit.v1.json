@@ -1,0 +1,50 @@
+{
+  "schema_version": "agentenhance.wma_wave1_recovery2_capability_recovery_audit.v1",
+  "capability_id": "wma-r1-oom-capability-css03-recovery2-recovery1-20260904-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "evidence_role": "infrastructure-capability-only",
+  "main_comparison_eligible": false,
+  "numeric_results_admitted": false,
+  "root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-oom-capability-css03-recovery2-recovery1-20260904-v1",
+  "frozen_input": {
+    "method": "MMFU_Single",
+    "seed": 0,
+    "sample_index": 72,
+    "sample_id": "css_03",
+    "sessions": 6,
+    "qa": 52,
+    "chat_gpu_memory_utilization": 0.90,
+    "chat_max_model_len": 131072,
+    "chat_max_num_seqs": 1
+  },
+  "observed": {
+    "unit_terminal_accepted": true,
+    "session_records": 6,
+    "qa_records": 52,
+    "pipeline_seconds": 918.59,
+    "evaluation_seconds": 182.77,
+    "total_seconds": 1104.82,
+    "chat_service_alive_after_unit": true,
+    "cuda_oom_count": 0,
+    "http_500_count": 0,
+    "services_stopped": true,
+    "project_tmux_sessions_after_exit": 0,
+    "allocated_gpu_memory_mib_after_exit": {
+      "1": 14,
+      "3": 14,
+      "4": 14,
+      "5": 14
+    }
+  },
+  "independent_verification": {
+    "root_inventory_verified": true,
+    "unit_inventory_verified": true,
+    "root_inventory_sha256": "de5598559b378777e317d104eeb03bf8a5ebd72fe3a7d9389cdfae0b820d87b6",
+    "run_audit_sha256": "ecc12859b770286cdb8ec0d2d6f2658f7155b9582776ace0f5101c0c0a10244b",
+    "unit_inventory_sha256": "413969cc6663810de017733712f47ff91a53a7eba62edc2fa8035e8b04969a34",
+    "chat_log_sha256": "9cd5e4faa45c9d99d1f91f1b5c142f043218083d6b230ad89f78094e06308966",
+    "chat_runtime_config_sha256": "ca4446c72b7d400ab9d044157ef205b3b0bb93e7d4535a2d3f32ba09661aaca8",
+    "post_unit_chat_models_sha256": "edb3ae869b616931cc9d36444f7696bf5fffc11cc0a69ce11d4a27c3a81b288f"
+  },
+  "decision": "Release the complete Wave1 recovery2 controller in fresh roots using CHAT_GPU_MEMORY_UTILIZATION=0.90. No artifact or score from this single-sample capability run may populate reproduced-results or a paper table."
+}
