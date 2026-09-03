@@ -1,0 +1,20 @@
+{
+  "schema_version": "agentenhance.wma_wave1_full_recovery_prefreeze.v1",
+  "study_id": "wma-r1-wave1-full-recovery1-20260903-v1",
+  "status": "FROZEN_BEFORE_RECOVERY_RUN",
+  "frozen_at": "2026-09-03T22:02:29+08:00",
+  "parent_study": "wma-r1-wave1-full-20260903-v1",
+  "parent_controller": "wma-r1-wave1-controller-20260903-v1",
+  "parent_status": "TERMINAL_REJECTED_BEFORE_FIRST_SEED",
+  "diagnosis": "comparisons/wma-r1-wave1-controller-audit.v1.json",
+  "single_authorized_change": "In the Wave-1 controller, compute session_slug=${slug//_/-} and use it only in SESSION_SUFFIX. The scientific method slug and run_id remain unchanged.",
+  "old_controller_sha256": "59c5fe32decb0895fc56b94fcf921cd30c78b47b47a4c802b5aca7597ca7b45f",
+  "new_controller_sha256": "cb657cdd1a5d18c23b095532397f0072b8e31b8c0327ef4e620d69cd07d339ad",
+  "new_controller_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery1-20260903-v1",
+  "new_control_package": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-full-recovery1-20260903-v1-control",
+  "unchanged_contract": "All fields of comparisons/wma-r1-wave1-full-prefreeze.v1.json remain active except the controller script SHA, controller root, and control package path explicitly superseded here.",
+  "reused_numeric_evidence": false,
+  "reason": "The parent produced no seed root or numeric output, so the recovery starts the original fixed 4-method by 3-seed plan from its first unit.",
+  "acceptance": "The recovery package verifies, the controller creates only the fresh recovery root, and the first scheduler passes static validation before services start.",
+  "failure_rule": "Any recovery failure is preserved under its fresh roots; another recovery requires a new diagnosis and prefreeze."
+}

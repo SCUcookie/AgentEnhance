@@ -71,11 +71,12 @@ slugs=(mmfu_single simplemem m2a vilomem)
 for method_index in "${!methods[@]}"; do
   method=${methods[method_index]}
   slug=${slugs[method_index]}
+  session_slug=${slug//_/-}
   for seed in 0 1 2; do
     run_id="wma-r1-full-${slug}-seed${seed}-20260903-v1"
     run_root="${RUN_BASE}/${run_id}"
     aggregate_root="${RUN_BASE}/${run_id}-aggregate"
-    session_suffix="full-${slug}-s${seed}-v1"
+    session_suffix="full-${session_slug}-s${seed}-v1"
 
     RUN_ROOT="${run_root}" \
     BASELINE="${method}" \

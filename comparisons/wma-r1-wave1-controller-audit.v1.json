@@ -1,0 +1,21 @@
+{
+  "schema_version": "agentenhance.wma_wave1_controller_audit.v1",
+  "controller_id": "wma-r1-wave1-controller-20260903-v1",
+  "status": "TERMINAL_REJECTED",
+  "failed_at": "2026-09-03T22:01:17+08:00",
+  "exit_code": 2,
+  "failure_stage": "full scheduler static validation before service start or first seed root creation",
+  "root_cause": "The Wave-1 controller passed session_suffix=full-mmfu_single-s0-v1, but the frozen full scheduler permits only lowercase letters, digits, and hyphens in session suffixes. The scientific method slug remains mmfu_single; only the tmux session label requires normalization.",
+  "observed_state": {
+    "controller_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-20260903-v1",
+    "controller_terminal_marker": "TERMINAL_REJECTED",
+    "first_seed_root_created": false,
+    "accepted_seed_rows": 0,
+    "project_services_remaining": 0,
+    "project_workers_remaining": 0,
+    "allocated_gpu_memory_mib": {"1": 14, "3": 14, "4": 14, "5": 14}
+  },
+  "scientific_impact": "none; no sample, model, evaluator, prediction, score, or numeric result was produced",
+  "authorized_recovery_change": "Derive session_slug by replacing underscore with hyphen for tmux labels only; preserve method slug, run IDs, data, model stack, seeds, order, metrics, and every other script.",
+  "parent_preservation": "The rejected controller root and original control package remain immutable."
+}
