@@ -1,0 +1,104 @@
+{
+  "schema_version": "agentenhance.dataset_integrity_prefreeze.v1",
+  "stage_id": "mem-gallery-data-integrity-af912dab-20260904-v1",
+  "status": "FROZEN_AWAITING_ACCEPTED_MATERIALIZATION",
+  "frozen_at": "2026-09-04T07:55:00+08:00",
+  "purpose": "Prove the exact Mem-Gallery file snapshot, JSON schema, official-runner traversal order, question denominator, stable question IDs, and all image references before any static-track numerical run.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-data-prefetch-manifest.v1.json",
+      "sha256": "58ebfee481bca010910705271ae992ee42b425d267cd2354a0d9982d35f5d045"
+    },
+    {
+      "path": "comparisons/memgallery-data-materialization-prefreeze.v1.json",
+      "sha256": "6c4bbcd59721a13237c280093dc4fdb8342dffe729c502657d26239632636fcf"
+    },
+    {
+      "path": "comparisons/memgallery-data-materialization-control-package-audit.v1.json",
+      "sha256": "4e02175eb62365e7e7020b694c3ac8a47406597d1b6d37cf0d731e14c4107eae"
+    },
+    {
+      "path": "scripts/audit_memgallery_dataset.py",
+      "sha256": "14a72e3b82841f2474ab957c39c924c806f2e376813c16108c8d5f4be014ae42"
+    },
+    {
+      "path": "tests/test_memgallery_dataset_audit.py",
+      "sha256": "c18132392643fceace81c70f25b657416e06a4d7cc88eb1a10ba98af28f908a5"
+    }
+  ],
+  "upstream_runner_alignment": {
+    "repository": "https://github.com/YuanchenBei/Mem-Gallery.git",
+    "commit": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+    "path": "benchmark/run/run_bench.py",
+    "dataset_order": "Sorted dialog filename stems, matching get_available_datasets().",
+    "question_order": "Zero-based enumerate order of the human-annotated QAs list within each sorted dialog file.",
+    "question_id_scheme": "<dialog filename stem>:<zero-based QA index>",
+    "conversation_image_resolution": "../image/<path> resolves beneath data/image; any other relative conversation path is interpreted beneath data and must still resolve beneath data/image.",
+    "question_image_resolution": "../image/<path> and other relative question image paths resolve beneath data/image.",
+    "strictness_delta": "The audit rejects absolute paths, traversal, symlinks, malformed image lists, missing referenced images, empty questions, and non-string answers that the upstream runner might otherwise skip or tolerate. It validates every image-list element even though the runner consumes the first element. This changes no method input; it prevents a denominator or path ambiguity before execution."
+  },
+  "dataset_identity": {
+    "repository": "Ethan-Bei/Mem-Gallery",
+    "revision": "af912daba984e896e253016b7c7e334ef92c2a6f",
+    "files": 1515,
+    "bytes": 545845389,
+    "dialog_files": 20,
+    "image_files": 1490,
+    "questions": 1711,
+    "sessions": "MEASURE_AFTER_MATERIALIZATION",
+    "dialogue_rounds": "MEASURE_AFTER_MATERIALIZATION",
+    "runner_consumed_dialogue_rounds": "MEASURE_AFTER_MATERIALIZATION"
+  },
+  "paths": {
+    "dataset_root": "/data1/2026/ldh/AgentEnhance/datasets/raw/mem-gallery-af912dab",
+    "materialization_evidence_root": "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-materialization-af912dab-20260904-v1",
+    "evidence_root": "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-integrity-af912dab-20260904-v1",
+    "freshness": "The integrity evidence root must be absent. A rejected audit is retained, and any recovery uses a separately frozen successor evidence root. The dataset root is read-only input and is never modified or deleted."
+  },
+  "execution": {
+    "working_directory": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-data-integrity-20260904-v1-control",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "argv": [
+      "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+      "scripts/audit_memgallery_dataset.py",
+      "--dataset-root",
+      "/data1/2026/ldh/AgentEnhance/datasets/raw/mem-gallery-af912dab",
+      "--manifest",
+      "comparisons/memgallery-data-prefetch-manifest.v1.json",
+      "--evidence-root",
+      "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-integrity-af912dab-20260904-v1",
+      "--required-marker",
+      "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-materialization-af912dab-20260904-v1/TERMINAL_ACCEPTED",
+      "--forbidden-marker",
+      "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-materialization-af912dab-20260904-v1/TERMINAL_REJECTED",
+      "--expected-questions",
+      "1711"
+    ],
+    "network_requests": 0,
+    "gpu_processes": 0,
+    "dataset_writes": 0,
+    "numeric_result_rows": 0
+  },
+  "stable_outputs": {
+    "dataset-integrity.json": "Aggregate file, schema, traversal, denominator, and semantic dataset identity.",
+    "question-index.jsonl": "One canonical row per question, including stable qid and hashes of question, answer, and canonical raw QA object.",
+    "QID_ORDER.txt": "Exact official-runner-compatible question order used by every matched static method.",
+    "image-references.json": "Every conversation and question image reference plus resolved, referenced, and unreferenced frozen image inventories.",
+    "EVIDENCE_SHA256SUMS": "SHA-256 identities for all four accepted evidence payloads.",
+    "TERMINAL_ACCEPTED": "Created only after every acceptance condition passes."
+  },
+  "acceptance_rule": "The materialization acceptance marker exists and its rejection marker is absent; the dataset has exactly the frozen 1515 paths and 545845389 bytes with every LFS SHA-256 or non-LFS Git blob SHA-1 verified; all 20 JSON files parse under the runner-aligned schema; exactly 1711 nonempty questions produce unique ordered qids; every image reference resolves to one of the frozen 1490 image paths without absolute paths, traversal, or symlinks; stable evidence files and their SHA-256 inventory exist; exactly one TERMINAL_ACCEPTED marker exists and no rejection marker exists.",
+  "failure_rule": "Any prerequisite, file identity, path inventory, JSON schema, denominator, qid uniqueness, image reference, symlink, or evidence-write failure rejects the audit. The dataset and failure evidence are retained without mutation or deletion; recovery requires a frozen successor.",
+  "downstream_gate": "No Mem-Gallery method may begin lifecycle ingestion, retrieval, generation, scoring, or result admission until this exact evidence root is TERMINAL_ACCEPTED and its semantic dataset identity and QID_ORDER hash are frozen into the method execution prefreeze.",
+  "scientific_boundary": "This audit establishes reusable dataset identity and matched ordering only. It accepts no method result, metric, ranking, superiority claim, or SOTA claim.",
+  "explicitly_prohibited": [
+    "using a different dataset revision or mutable branch",
+    "using upstream tolerance to silently skip malformed questions or images",
+    "filling session or dialogue-round counts from a webpage instead of measuring the frozen snapshot",
+    "starting a static numerical run before integrity acceptance",
+    "editing a rejected evidence root or retrying it in place",
+    "deleting or modifying the materialized dataset through any model cleanup stage"
+  ]
+}
