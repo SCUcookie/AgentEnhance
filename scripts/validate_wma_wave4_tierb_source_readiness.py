@@ -26,6 +26,8 @@ UV_TOOL_RECOVERY1_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-
 UV_TOOL_RECOVERY2_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery2-prefreeze.v1.json"
 UV_TOOL_RECOVERY2_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery2-audit.v1.json"
 LOCK_EXPORT_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-prefreeze.v1.json"
+LOCK_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-failure-audit.v1.json"
+LOCK_EXPORT_RECOVERY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lock-export-recovery1-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -71,6 +73,10 @@ uv_tool_recovery2_audit = json.loads(
 )
 lock_export_prefreeze = json.loads(
     LOCK_EXPORT_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+lock_export_failure = json.loads(LOCK_EXPORT_FAILURE_PATH.read_text(encoding="utf-8"))
+lock_export_recovery_prefreeze = json.loads(
+    LOCK_EXPORT_RECOVERY_PREFREEZE_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -379,6 +385,41 @@ assert "--offline" in export_contract["uv_export_flags"]
 assert "--no-emit-workspace" in export_contract["uv_export_flags"]
 serialized = LOCK_EXPORT_PREFREEZE_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert lock_export_failure["status"] == "TERMINAL_REJECTED"
+assert lock_export_failure["prefreeze_gate"]["sha256"] == sha256_file(
+    ROOT / lock_export_failure["prefreeze_gate"]["path"]
+)
+export_diagnosis = lock_export_failure["diagnosis"]
+assert export_diagnosis["differing_lines"] == [2]
+assert export_diagnosis["normalized_bodies_byte_identical"] is True
+assert export_diagnosis["normalized_body_bytes"] == 256006
+assert export_diagnosis["normalized_body_sha256_a"] == export_diagnosis["normalized_body_sha256_b"]
+assert export_diagnosis["requirement_head_count"] == 208
+assert export_diagnosis["network_connections"] == 0
+assert export_diagnosis["dependency_installations"] == 0
+
+assert lock_export_recovery_prefreeze["status"] == "FROZEN_BEFORE_OFFLINE_EXPORT"
+assert lock_export_recovery_prefreeze["failure_gate"]["sha256"] == sha256_file(
+    ROOT / lock_export_recovery_prefreeze["failure_gate"]["path"]
+)
+for row in lock_export_recovery_prefreeze["exporters"]:
+    assert row["sha256"] == sha256_file(ROOT / row["path"])
+normalization = lock_export_recovery_prefreeze["normalization_contract"]
+assert normalization["removed_line_count"] == 2
+assert normalization["whitespace_or_requirement_normalization"] is False
+assert normalization["expected_body_bytes"] == export_diagnosis["normalized_body_bytes"]
+assert normalization["expected_body_sha256"] == export_diagnosis["normalized_body_sha256_a"]
+assert normalization["expected_requirement_head_count"] == export_diagnosis["requirement_head_count"]
+recovery_export = lock_export_recovery_prefreeze["execution_contract"]
+assert recovery_export["independent_export_passes"] == 2
+assert recovery_export["network_connections"] == 0
+assert recovery_export["dependency_installations"] == 0
+assert recovery_export["retry_count"] == 0
+assert recovery_export["gpu_count"] == 0
+for path in (LOCK_EXPORT_FAILURE_PATH, LOCK_EXPORT_RECOVERY_PREFREEZE_PATH):
+    serialized = path.read_text(encoding="utf-8")
+    assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {
