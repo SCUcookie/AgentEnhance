@@ -15,5 +15,6 @@ baseline-check:
 	python3 scripts/validate_recent_method_reproduction_roadmap_v2.py
 	python3 scripts/validate_wma_wave3_source_audit.py
 	python3 scripts/validate_wma_wave3_adapter_and_models.py
+	python3 scripts/validate_wma_wave3_execution_source_audit.py
 
 check: validate test baseline-check

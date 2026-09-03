@@ -1,0 +1,98 @@
+{
+  "schema_version": "agentenhance.wma_wave3_execution_source_audit.v1",
+  "audit_id": "wma-r1-wave3-execution-source-audit-20260904-v1",
+  "audited_at": "2026-09-04T00:38:08+08:00",
+  "status": "TERMINAL_ACCEPTED",
+  "scientific_evidence_role": "engineering execution-source acceptance only; no lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave3-execution-source-prefreeze.v1.json",
+    "sha256": "0bb801717b0b227f19d7295e0f3dc56e9ba50ebc1bb7253112a3bdca3e89e303"
+  },
+  "control_package": {
+    "logical_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave3-execution-source-20260904-v1-control.tar.gz",
+    "sha256": "5a3e27b3601e38ca9db57236b3a645aff83fa2c038aec69aefbf9dbfac0e5a4a",
+    "sftp_rate_limit_kbit_per_second": 4096,
+    "internal_adapter_and_materializer_hashes_verified": true
+  },
+  "methods": [
+    {
+      "method_id": "memoryos",
+      "status": "TERMINAL_ACCEPTED_EXECUTION_SOURCE",
+      "source_revision": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+      "source_clean_after_copy": true,
+      "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-execution-source-20260904-v1/memoryos/memoryos_pkg",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memoryos-execution-source-20260904-v1",
+      "started_at": "2026-09-03T16:37:07.467708+00:00",
+      "finished_at": "2026-09-03T16:37:07.487543+00:00",
+      "file_count": 11,
+      "total_bytes": 105356,
+      "bytecode_file_count": 0,
+      "untracked_file_count_copied": 0,
+      "active_process_references_at_audit": 0,
+      "record_sha256": "f71792222ec3d173847079257ec0a9fb45e81193770168519168cd1cab543079",
+      "evidence_inventory_sha256": "9422b8a3fc95d9f9ff18b9299fcf3a85606d55fd57bd1b4e9f5d52f2a98ba1c9"
+    },
+    {
+      "method_id": "memgas",
+      "status": "TERMINAL_ACCEPTED_EXECUTION_SOURCE",
+      "source_revision": "c2d4e9fdc331074802a711baf4371197f9194399",
+      "source_clean_after_copy": true,
+      "destination": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave3-execution-source-20260904-v1/memgas/memgas_source",
+      "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave3-memgas-execution-source-20260904-v1",
+      "started_at": "2026-09-03T16:37:07.538882+00:00",
+      "finished_at": "2026-09-03T16:37:07.562410+00:00",
+      "file_count": 27,
+      "total_bytes": 762748,
+      "tracked_bytecode_files_in_official_source": 8,
+      "bytecode_file_count": 0,
+      "untracked_file_count_copied": 0,
+      "active_process_references_at_audit": 0,
+      "record_sha256": "b169c72739597474d49a10acaa9d9ebab68d4b9d297a88d1a060bf0b26b52953",
+      "evidence_inventory_sha256": "ca3ddcbd7ae493e8965da1a6fee49e28c1ba055fca69878acbc2e65aec0eb930"
+    }
+  ],
+  "adapter_overlay_identity": [
+    {"path": "scripts/wma_wave3_overlay/sitecustomize.py", "sha256": "0c50912aad443a55308c1203226059f6301ad4a8aade116bc723fb1824f0a26b"},
+    {"path": "scripts/wma_wave3_overlay/memoryos_wma_adapter.py", "sha256": "2211e7bb1c526276733d2305ebe4b01e06422db244e901764767bdaaf06037c6"},
+    {"path": "scripts/wma_wave3_overlay/memgas_wma_adapter.py", "sha256": "f1852395be38c094efea68551bf487e70d5a1f22808f186dac110d5ea2f826a6"}
+  ],
+  "resolved_memoryos_configuration_defect": {
+    "official_source_observation": "memoryos-pypi/updater.py _get_embedding_for_page calls get_embedding(text) without forwarding the configured embedding model, which would resolve the moving default name even when Memoryos.embedding_model_name is a frozen local path.",
+    "overlay_action": "The adapter redirects only Updater._get_embedding_for_page to the already configured mid_term_memory embedding name and kwargs. No vector function, normalization, threshold, capacity, prompt, or retrieval rule changes.",
+    "claim_boundary": "This is a reproducibility configuration-plumbing overlay and must be reported; it is not an AgentEnhance method contribution."
+  },
+  "resolved_memgas_observability": {
+    "model_loading": "Module-local AutoModel and AutoTokenizer proxies accept only facebook/contriever and load the frozen local path with local_files_only=True.",
+    "gmm_fallback": "A module-local GaussianMixture proxy records fit/predict exceptions and re-raises them, allowing the unchanged official _select_edges handler to return its original top-1 fallback.",
+    "claim_boundary": "Both overlays are reproducibility/observability controls and must not be described as algorithmic changes."
+  },
+  "audit_tooling_incident": {
+    "first_attempt": "The first read-only file verification command failed before hashing copied files because of a jq quoting error.",
+    "mutation_performed": false,
+    "second_attempt": "All copied file hashes, source revisions, source cleanliness, sentinels, evidence inventories, bytecode absence, and process references passed."
+  },
+  "wave1_non_interference_observation": {
+    "before_copy": {
+      "accepted_units": 29,
+      "rejected_units": 0,
+      "observed_at": "2026-09-04T00:26:12+08:00"
+    },
+    "after_independent_audit": {
+      "accepted_units": 31,
+      "rejected_units": 0,
+      "fatal_signals": 0,
+      "json_truncation_repair_events": 2,
+      "observed_at": "2026-09-04T00:38:08+08:00"
+    },
+    "interpretation": "Wave-1 advanced during the CPU-only copy and exposed no configured fatal signal. The two earlier JSON repair events remain a separate Wave-1 reliability audit item and were not caused or removed by this stage."
+  },
+  "decision": "ACCEPT both source-authoritative execution copies and the frozen adapter overlay identities for isolated environment design only.",
+  "next_allowed_gate": "Freeze isolated Python 3.9 dependency environments and lifecycle check code. Model download and lifecycle execution remain gated on Wave-1 terminal acceptance and service release.",
+  "prohibited_actions": [
+    "editing the accepted execution copies or official source checkouts in place",
+    "loading tracked bytecode from the MemGAS official checkout",
+    "silently omitting either reproducibility overlay from the method description",
+    "treating source-copy acceptance as lifecycle or numerical evidence",
+    "starting Wave3 model download or lifecycle execution while Wave-1 is active"
+  ]
+}
