@@ -34,6 +34,7 @@ SOURCE_AWARE_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsigh
 REGISTRY_ROUTING_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-prefreeze.v1.json"
 REGISTRY_ROUTING_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-audit.v1.json"
 WHEELHOUSE_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-wheelhouse-prefreeze.v1.json"
+WHEELHOUSE_AUDIT_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-wheelhouse-audit-design.v1.json"
 HINDSIGHT_ADAPTER_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-adapter-design-prefreeze.v1.json"
 HINDSIGHT_LIFECYCLE_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lifecycle-design-prefreeze.v1.json"
 
@@ -103,6 +104,9 @@ registry_routing_audit = json.loads(
 )
 wheelhouse_prefreeze = json.loads(
     WHEELHOUSE_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+wheelhouse_audit_design = json.loads(
+    WHEELHOUSE_AUDIT_DESIGN_PATH.read_text(encoding="utf-8")
 )
 hindsight_adapter_design = json.loads(
     HINDSIGHT_ADAPTER_DESIGN_PATH.read_text(encoding="utf-8")
@@ -587,6 +591,26 @@ assert wheelhouse_prefreeze["resource_gate"]["current_authorization"] == (
     "NOT_AUTHORIZED_WHILE_WAVE1_IS_RUNNING"
 )
 serialized = WHEELHOUSE_PREFREEZE_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert wheelhouse_audit_design["status"] == (
+    "FROZEN_DESIGN_AWAITING_MATERIALIZATION_RECORD_IDENTITY"
+)
+assert wheelhouse_audit_design["prior_gate"]["sha256"] == sha256_file(
+    ROOT / wheelhouse_audit_design["prior_gate"]["path"]
+)
+audit_implementation = wheelhouse_audit_design["frozen_implementation"]
+assert audit_implementation["auditor_sha256"] == sha256_file(
+    ROOT / audit_implementation["auditor"]
+)
+assert audit_implementation["unit_test_sha256"] == sha256_file(
+    ROOT / audit_implementation["unit_test"]
+)
+assert audit_implementation["unit_tests"] == 3
+assert wheelhouse_audit_design["audit_contract"]["expected_wheels"] == 199
+assert wheelhouse_audit_design["audit_contract"]["network_access"] is False
+assert wheelhouse_audit_design["audit_contract"]["dependency_installation"] is False
+serialized = WHEELHOUSE_AUDIT_DESIGN_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 
 assert hindsight_adapter_design["status"] == (

@@ -1,0 +1,57 @@
+{
+  "schema_version": "agentenhance.hindsight_wheelhouse_audit_design.v1",
+  "stage_id": "wma-r1-wave4-hindsight-wheelhouse-audit-design-20260904-v1",
+  "status": "FROZEN_DESIGN_AWAITING_MATERIALIZATION_RECORD_IDENTITY",
+  "frozen_at": "2026-09-04T03:23:00+08:00",
+  "scientific_question": "Did the gated Hindsight wheelhouse acquisition produce exactly the independently verifiable, source-routed Linux CPython 3.11 artifacts frozen by the accepted lock?",
+  "decision_informed": "Whether the wheelhouse is eligible to become the sole package source for a later isolated offline environment installation.",
+  "scientific_evidence_role": "Read-only dependency-integrity audit design only; no download, installation, import, model, service, lifecycle, numerical, superiority, or SOTA claim is eligible.",
+  "prior_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-wheelhouse-prefreeze.v1.json",
+    "sha256": "833393206cc7d7346a70684d8466f2c2508389c50dc27176f142a2edc566eab8",
+    "required_future_status": "The materialization root must first be independently observed as terminal with an exact immutable wheelhouse-materialization.json SHA-256."
+  },
+  "frozen_implementation": {
+    "auditor": "scripts/audit_hindsight_wheelhouse.py",
+    "auditor_sha256": "777961628ad9d0ac35feec83279763fe8e639b22178891f1b8ce15d98a2d3832",
+    "unit_test": "tests/test_hindsight_wheelhouse_audit.py",
+    "unit_test_sha256": "b97f52a6eab16b7ee8c37bdb56caf794f678904360986ab7b7a0827788b8083d",
+    "unit_tests": 3
+  },
+  "fixed_inputs": {
+    "python": "${AGENT_ENHANCE_PYTHON311}",
+    "python_sha256": "db8630b1dda55498c4d254878d144e04d3c6fd82115b700c00a13c9029fdbd02",
+    "routing_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-registry-routing-20260904-v1",
+    "routing_record_sha256": "e0d1fd83c638af9db40c12029d017dd422ad141c9964a496e8cd398bb19b885e",
+    "wheelhouse_root": "${AGENT_ENHANCE_REMOTE_ROOT}/wheelhouses/wma-r1-wave4-hindsight-py311-linux-x86_64-20260904-v1",
+    "materialization_record": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-wheelhouse-20260904-v1/wheelhouse-materialization.json",
+    "future_audit_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-wheelhouse-audit-20260904-v1"
+  },
+  "audit_contract": {
+    "network_access": false,
+    "dependency_installation": false,
+    "wheelhouse_mutation": false,
+    "expected_wheels": 199,
+    "expected_routes": {"pypi": 198, "pytorch-cpu": 1},
+    "byte_ceiling": 6442450944,
+    "checks": [
+      "the materialization record hash supplied by a successor prefreeze is exact and its terminal sentinels agree",
+      "every materialization evidence-inventory entry rehashes successfully",
+      "all 199 wheels have CPython 3.11/Linux-compatible tags and unique routed normalized distribution names",
+      "every version satisfies the active marker-evaluated locked requirement and every wheel digest occurs in that requirement's allowed SHA-256 set",
+      "every wheel path, route, distribution, version, byte size, and digest equals the materialization record",
+      "both download commands used exactly one frozen index, required hashes, binary-only mode, no dependency resolution, zero retry, and no extra index"
+    ]
+  },
+  "authorization_gate": "This design cannot execute because the wheelhouse materialization has not run. After Wave 1 terminal acceptance releases the resource gate, execute the existing wheelhouse prefreeze once; then create a separate audit-execution prefreeze binding the observed materialization record SHA-256, terminal state, fresh audit root, process count, and storage headroom.",
+  "acceptance": "The successor audit exits zero, writes TERMINAL_ACCEPTED without TERMINAL_REJECTED, and independently validates all fixed identities, routed requirements, wheel artifacts, commands, and evidence rows without network access or mutation.",
+  "failure": "Any missing, extra, duplicate, incompatible, wrong-route, wrong-version, unlisted-hash, altered-record, altered-evidence, retry, extra-index, or collision condition seals the fresh audit root TERMINAL_REJECTED; the wheelhouse and materialization root remain unchanged and retained.",
+  "next_gate_after_acceptance": "Freeze a project-owned Python 3.11 environment materialization that installs only from the accepted wheelhouse with --no-index, followed by an independent package/import audit.",
+  "prohibited_actions": [
+    "executing this design without a successor prefreeze containing the exact observed materialization record hash",
+    "accessing any package index or installing a dependency during audit",
+    "changing or deleting a wheel, lock route, materialization record, evidence row, or failed audit root",
+    "treating a successful download process as independent acceptance",
+    "populating a comparison-table numeric cell or making a superiority/SOTA claim"
+  ]
+}
