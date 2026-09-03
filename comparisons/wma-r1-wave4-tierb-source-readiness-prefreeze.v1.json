@@ -1,0 +1,92 @@
+{
+  "schema_version": "agentenhance.wma_wave4_tierb_source_readiness_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-tierb-source-readiness-20260904-v1",
+  "status": "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION",
+  "frozen_at": "2026-09-04T01:12:00+08:00",
+  "scientific_question": "Which additional 2026 Tier-B memory methods have source code whose identity can be frozen for a future same-protocol WMA adapter, without substituting similarly named projects?",
+  "decision_informed": "Whether Hindsight, Memory-R1, APEX-MEM, or ACL-2026 LightMem may enter source materialization and adapter-feasibility work.",
+  "scientific_evidence_role": "bibliographic identity and source-availability evidence only; no adapter, lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "observed_at": "2026-09-04T01:10:00+08:00",
+  "candidates": [
+    {
+      "method_id": "hindsight",
+      "paper": "https://aclanthology.org/2026.acl-demo.27/",
+      "paper_identity": "Hindsight: Structured Agent Memory that Retains, Recalls, and Reflects; ACL 2026 System Demonstrations",
+      "official_repository": "https://github.com/vectorize-io/hindsight.git",
+      "observed_head": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+      "paper_disclosed_license": "MIT",
+      "source_status": "ELIGIBLE_FOR_FROZEN_SOURCE_MATERIALIZATION",
+      "common_track_hypothesis": "Text/caption-mediated WMA lifecycle may map retain to completed sessions and recall to retrieval; reflect must not replace the common WMA answer generator.",
+      "unresolved_before_adapter": "The official system uses PostgreSQL/pgvector and multiple retrieval channels; exact embedded-versus-service deployment and model calls require source audit."
+    },
+    {
+      "method_id": "memory-r1",
+      "paper": "https://aclanthology.org/2026.acl-long.583/",
+      "official_repository": "https://github.com/yansikuan/memory-r1.git",
+      "observed_head": "9c413a2413c4fee160ec05445856c1529d63ac7a",
+      "source_status": "NOT_EXECUTABLE_CODE_COMING_SOON",
+      "evidence": "The repository README identifies the paper and authors but states that code is coming soon; the observed tree is not accepted as a runnable method implementation.",
+      "next_check": "A future discovery snapshot may re-evaluate a new immutable commit, but this record cannot be upgraded based on the paper's reported numbers."
+    },
+    {
+      "method_id": "apex-mem",
+      "paper": "https://aclanthology.org/2026.acl-long.749/",
+      "official_repository": null,
+      "source_status": "NO_VERIFIED_OFFICIAL_REPOSITORY",
+      "evidence": "The official ACL paper and its metadata expose no verifiable code repository in the audited source surface.",
+      "inference_boundary": "This is absence of a verified source at the observation time, not proof that no private or later repository exists."
+    },
+    {
+      "method_id": "lightmem-acl-2026",
+      "paper": "https://aclanthology.org/2026.acl-long.588/",
+      "paper_identity": "Lightweight LLM Agent Memory with Small Language Models; Jiaquan Zhang et al.; ACL 2026",
+      "official_repository": null,
+      "source_status": "NO_VERIFIED_MATCHING_REPOSITORY",
+      "rejected_name_collision": {
+        "repository": "https://github.com/zjunlp/LightMem.git",
+        "observed_head": "aa1c484cc6fd964c8ea1af897e36a0c3ba06d7db",
+        "repository_identity": "LightMem: Lightweight and Efficient Memory-Augmented Generation; Jizhan Fang et al.; ICLR 2026",
+        "reason": "The title, author list, venue, method description, and paper identity differ from the registered ACL-2026 method. A shared short name is not sufficient source provenance."
+      }
+    }
+  ],
+  "hindsight_source_materialization": {
+    "materializer": "scripts/materialize_hindsight_source.py",
+    "materializer_sha256": "6f0613feb7e25306c79759dfe5b6e8ed78f2957422006206570b9ce593b349ad",
+    "repository": "https://github.com/vectorize-io/hindsight.git",
+    "revision": "5e71494702bc050b6d58e783e6761f6c6cf3b74b",
+    "target": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-source-20260904-v1/hindsight",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-source-materialization-20260904-v1",
+    "command_template": "python3 scripts/materialize_hindsight_source.py --project-root ${AGENT_ENHANCE_REMOTE_ROOT}",
+    "execution": {
+      "gpu_count": 0,
+      "dependency_installation": false,
+      "model_download": false,
+      "llm_calls": 0,
+      "parallel_clones": 1,
+      "retry_count": 0,
+      "wall_time_ceiling_minutes": 30,
+      "tracked_worktree_byte_ceiling": 805306368,
+      "git_lfs_smudge": false
+    },
+    "wave1_non_interference": "Source-only acquisition may run while Wave-1 is active only after a read-only check confirms ample storage and no process references the fresh target or evidence root. It may not install, build, start PostgreSQL, load a model, call an API, or use a GPU."
+  },
+  "acceptance": [
+    "The checkout resolves exactly to the frozen Hindsight commit and official origin.",
+    "The worktree is clean, has no submodules, no Git LFS pointer, and no tracked model-like weight file.",
+    "Every tracked path is a regular non-symlink file with retained bytes and SHA-256.",
+    "At least one tracked license file identifies the MIT License.",
+    "The tracked worktree stays below the frozen byte ceiling.",
+    "The evidence root is TERMINAL_ACCEPTED without TERMINAL_REJECTED and its evidence inventory verifies."
+  ],
+  "failure": "Any collision, source identity mismatch, dirty tree, submodule, symlink, LFS pointer, model-like weight, missing MIT license, byte-ceiling violation, network error, or timeout seals TERMINAL_REJECTED and preserves the partial checkout. No in-place repair or automatic retry is allowed.",
+  "next_gate_after_acceptance": "Independently audit the Hindsight source tree, package/deployment boundary, retain/recall APIs, persistence, model calls, and license before designing an adapter. Source acceptance never authorizes environment, service, lifecycle, or numerical execution.",
+  "prohibited_actions": [
+    "using the Memory-R1 placeholder repository as runnable code",
+    "substituting zjunlp/LightMem for the distinct ACL-2026 LightMem identity",
+    "inventing an APEX-MEM repository or importing its reported scores into local-result cells",
+    "starting Hindsight dependencies, PostgreSQL, pgvector, models, API calls, lifecycle checks, or numerical evaluation",
+    "editing or deleting a terminal source root in place",
+    "populating a numerical comparison-table cell from this stage"
+  ]
+}
