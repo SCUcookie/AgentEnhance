@@ -1,0 +1,64 @@
+{
+  "schema_version": "agentenhance.uv_tool_materialization_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-uv-tool-recovery2-audit-20260904-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T01:52:56+08:00",
+  "scientific_evidence_role": "accepted dependency-tool identity only; no dependency export, package installation, model, service, lifecycle, numerical, superiority, or SOTA claim is eligible",
+  "prefreeze_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-recovery2-prefreeze.v1.json",
+    "sha256": "8619a00fbefeafaf4424cc71d1822b09d48020d49bd91f6b9ee2fda4f4cf1b23",
+    "required_status": "FROZEN_BEFORE_LOCAL_REEXTRACTION"
+  },
+  "accepted_evidence": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1-recovery2",
+    "record": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1-recovery2/uv-tool-materialization.json",
+    "record_bytes": 1508,
+    "record_sha256": "5ce569215dcbe08bf928c5587f209d83575713d7567b6dc5822e69cac40b1eeb",
+    "evidence_inventory_bytes": 613,
+    "evidence_inventory_sha256": "4e7e24a72549c7d757cbb9a41a3e00430dc5467cff7d8769af81725d96c62cdf",
+    "terminal_accepted_present": true,
+    "terminal_rejected_absent": true,
+    "evidence_inventory_verified": true
+  },
+  "release_artifacts": {
+    "archive_bytes": 19423276,
+    "archive_sha256": "ec7a99cd05e0cd7f80243f135ce1361c76835cb0ee60055d14d20eba8eba1460",
+    "checksum_bytes": 101,
+    "checksum_sha256": "18f88ae6a13764973e76d72c1a4ade28c70b53d8279f5b4715e48b2291c264a5",
+    "safe_members_verified": true
+  },
+  "accepted_tool": {
+    "path": "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery2",
+    "version_output": "uv 0.12.9 (x86_64-unknown-linux-gnu)",
+    "files": [
+      {"path": "uv", "bytes": 49313824, "sha256": "671793498fe0a545432e2524b6691ffb9eea4540d9fda43ca2f978df2dbf8426"},
+      {"path": "uvx", "bytes": 347072, "sha256": "5ae583120996d1daaad33d396e04c88d04431506986bbf36ea788e50dce6f76f"}
+    ],
+    "symlink_count": 0,
+    "active_process_references_after_audit": 0
+  },
+  "control_package": {
+    "path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave4-hindsight-uv-tool-20260904-v1-recovery2-control.tar.gz",
+    "sha256": "3663a62d0d610bda37037792e2392ab83f3b0cbae49446242b6fa8b80c317ddc",
+    "bytes": 5622
+  },
+  "preserved_rejected_history": [
+    "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1",
+    "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1-recovery1",
+    "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery1"
+  ],
+  "wave1_non_interference_observation": {
+    "accepted_units": 46,
+    "rejected_units": 0,
+    "current_unit": "047_minecraft_07"
+  },
+  "decision": "ACCEPT recovery2 as the only uv binary authorized for the Hindsight dependency-lock export stage.",
+  "next_allowed_gate": "Freeze and run an offline uv export against the accepted Hindsight source revision and uv.lock, with --frozen, --no-dev, --package hindsight-all, and --no-emit-workspace. No dependency installation or model acquisition is authorized.",
+  "prohibited_actions": [
+    "using the v1 or recovery1 rejected tools for downstream work",
+    "editing or deleting accepted or rejected evidence roots and targets",
+    "allowing uv to update uv.lock or access the network during export",
+    "installing dependencies, downloading models, or starting pg0/service/lifecycle/numerical work",
+    "populating any comparison-table numeric cell from this audit"
+  ]
+}

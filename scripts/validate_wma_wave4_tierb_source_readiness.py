@@ -24,6 +24,7 @@ UV_TOOL_TRANSFER_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-u
 UV_TOOL_RECOVERY_PREFREEZE_V2_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v2.json"
 UV_TOOL_RECOVERY1_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-failure-audit.v1.json"
 UV_TOOL_RECOVERY2_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery2-prefreeze.v1.json"
+UV_TOOL_RECOVERY2_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery2-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -63,6 +64,9 @@ uv_tool_recovery1_failure = json.loads(
 )
 uv_tool_recovery2_prefreeze = json.loads(
     UV_TOOL_RECOVERY2_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+uv_tool_recovery2_audit = json.loads(
+    UV_TOOL_RECOVERY2_AUDIT_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -331,6 +335,23 @@ assert uv_tool_recovery2_prefreeze["execution_contract"]["gpu_count"] == 0
 for path in (UV_TOOL_RECOVERY1_FAILURE_PATH, UV_TOOL_RECOVERY2_PREFREEZE_PATH):
     serialized = path.read_text(encoding="utf-8")
     assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert uv_tool_recovery2_audit["status"] == "TERMINAL_ACCEPTED"
+assert uv_tool_recovery2_audit["prefreeze_gate"]["sha256"] == sha256_file(
+    ROOT / uv_tool_recovery2_audit["prefreeze_gate"]["path"]
+)
+accepted_tool = uv_tool_recovery2_audit["accepted_tool"]
+assert accepted_tool["version_output"] == uv_tool_recovery2_prefreeze["release_identity"]["expected_version_output"]
+assert [row["path"] for row in accepted_tool["files"]] == ["uv", "uvx"]
+assert accepted_tool["symlink_count"] == 0
+assert accepted_tool["active_process_references_after_audit"] == 0
+accepted_evidence = uv_tool_recovery2_audit["accepted_evidence"]
+assert accepted_evidence["terminal_accepted_present"] is True
+assert accepted_evidence["terminal_rejected_absent"] is True
+assert accepted_evidence["evidence_inventory_verified"] is True
+assert len(uv_tool_recovery2_audit["preserved_rejected_history"]) == 3
+serialized = UV_TOOL_RECOVERY2_AUDIT_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(
         {
@@ -345,6 +366,7 @@ print(
             "accepted_hindsight_execution_source_files": copy["file_count"],
             "frozen_uv_tool_version": release["version"],
             "uv_tool_recovery_transport": "resumable-sftp-4096-kbit",
+            "accepted_uv_tool": accepted_tool["version_output"],
             "numeric_result_rows_added": 0,
         },
         sort_keys=True,
