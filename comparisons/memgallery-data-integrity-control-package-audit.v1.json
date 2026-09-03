@@ -1,0 +1,83 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "mem-gallery-data-integrity-20260904-v1-control",
+  "status": "TERMINAL_ACCEPTED_INERT",
+  "accepted_at": "2026-09-04T08:05:00+08:00",
+  "scientific_evidence_role": "Post-materialization dataset-integrity control package only. It freezes future dataset identity and question-order evidence but accepts no dataset, method run, metric, comparison, ranking, or SOTA claim.",
+  "bound_stage": {
+    "path": "comparisons/memgallery-data-integrity-prefreeze.v1.json",
+    "sha256": "ac1bfd11f9b24d4cd39ac8de3c0ea567ed7c8c10fac40eeaeb350c6dd1e9e29f",
+    "implementation_commit": "dbddbb9"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/mem-gallery-data-integrity-20260904-v1-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-data-integrity-20260904-v1-control.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-data-integrity-20260904-v1-control",
+    "bytes": 186829,
+    "sha256": "fcdb9c37e2f9b022aa2c5ad6389071888a7b9e4606342f68e4dab7b8deed818f",
+    "transport": "OpenSSH SFTP, resumable SHA-bound partial, limited to 4096 Kbit/s",
+    "fresh_before_extraction": true
+  },
+  "package_inventory": {
+    "path": "PACKAGE_SHA256SUMS",
+    "sha256": "9cab2960eecda00b00a5d63fe71f2eb81605b95ab453b4b11cf8e1e517ccd0f3",
+    "signed_regular_files": 7,
+    "regular_files_including_inventory": 8,
+    "regular_file_bytes_including_inventory": 622640,
+    "symlinks": 0,
+    "python_bytecode_files": 0,
+    "all_signed_files_verified_locally": true,
+    "all_signed_files_verified_remotely": true,
+    "inventory_excludes_itself": true
+  },
+  "remote_validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "environment_mutated": false,
+    "package_hashes_passed": true,
+    "integrity_contract_validator": "PASS",
+    "synthetic_tests_passed": 4,
+    "synthetic_tests_failed": 0,
+    "network_requests": 0,
+    "dataset_files_read": 0,
+    "dataset_files_written": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0
+  },
+  "negative_materialization_gate_test": {
+    "argv_identity": "Exact argv frozen in comparisons/memgallery-data-integrity-prefreeze.v1.json",
+    "required_marker_present": false,
+    "observed_exit_code": 1,
+    "observed_error": "materialization marker gate failed",
+    "dataset_target_present_before": false,
+    "dataset_target_present_after": false,
+    "integrity_evidence_present_before": false,
+    "integrity_evidence_present_after": false,
+    "network_requests_started": 0,
+    "numeric_result_rows_added": 0,
+    "status": "ACCEPTED_FAIL_CLOSED"
+  },
+  "runtime_observation_after_acceptance": {
+    "wave1_controller": "RUNNING",
+    "active_method_seed": "wma-mmfu-single seed 0 recovery2",
+    "accepted_units": 25,
+    "rejected_units": 0,
+    "active_or_created_unit_directories": 26,
+    "wave1_terminal_accepted": false,
+    "wave1_terminal_rejected": false,
+    "dataset_target_present": false,
+    "dataset_downloaded_bytes": 0,
+    "integrity_evidence_present": false,
+    "numeric_result_rows_added": 0
+  },
+  "execution_authorization": "The accepted control package remains inert. After the separately frozen materializer produces its exact TERMINAL_ACCEPTED marker with no rejection marker, the exact integrity argv may execute once against the immutable dataset root and fresh integrity evidence root. No static method can execute until that integrity evidence is itself TERMINAL_ACCEPTED.",
+  "retention_rule": "The control archive, extraction root, accepted package inventory, future accepted or rejected integrity evidence, and materialized dataset remain retained. A failed integrity audit cannot be edited, retried in place, or deleted; it requires a frozen successor.",
+  "mutation_summary": {
+    "control_package_uploaded_and_extracted": true,
+    "dataset_files_downloaded": 0,
+    "dataset_files_modified": 0,
+    "model_files_downloaded": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0,
+    "files_deleted": 0
+  }
+}
