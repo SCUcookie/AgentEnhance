@@ -9,6 +9,9 @@ INFER_PYTHON=${INFER_PYTHON:-/data1/anaconda3/envs/clo-infer/bin/python}
 CHAT_SESSION=${CHAT_SESSION:-agentenhance-wma-chat-r1}
 EMBED1024_SESSION=${EMBED1024_SESSION:-agentenhance-wma-embed1024-r1}
 EMBED384_SESSION=${EMBED384_SESSION:-agentenhance-wma-embed384-r1}
+CHAT_MAX_MODEL_LEN=${CHAT_MAX_MODEL_LEN:-32768}
+CHAT_MAX_NUM_SEQS=${CHAT_MAX_NUM_SEQS:-8}
+CHAT_GPU_MEMORY_UTILIZATION=${CHAT_GPU_MEMORY_UTILIZATION:-0.90}
 
 case "${SERVICE_RUN_ROOT}" in
   /data1/*/AgentEnhance/runs/*|/data2/*/AgentEnhance/runs/*) ;;
@@ -37,6 +40,18 @@ test -x "${INFER_PYTHON}"
 test -d "${CHAT_MODEL_PATH}"
 test -d "${EMBED_MODEL_PATH}"
 test ! -e "${SERVICE_RUN_ROOT}"
+[[ "${CHAT_MAX_MODEL_LEN}" =~ ^[0-9]+$ ]] || { echo "invalid CHAT_MAX_MODEL_LEN" >&2; exit 2; }
+(( CHAT_MAX_MODEL_LEN >= 32768 && CHAT_MAX_MODEL_LEN <= 131072 )) || {
+  echo "CHAT_MAX_MODEL_LEN must be in [32768, 131072]" >&2; exit 2;
+}
+[[ "${CHAT_MAX_NUM_SEQS}" =~ ^[0-9]+$ ]] || { echo "invalid CHAT_MAX_NUM_SEQS" >&2; exit 2; }
+(( CHAT_MAX_NUM_SEQS >= 1 && CHAT_MAX_NUM_SEQS <= 8 )) || {
+  echo "CHAT_MAX_NUM_SEQS must be in [1, 8]" >&2; exit 2;
+}
+case "${CHAT_GPU_MEMORY_UTILIZATION}" in
+  0.90|0.91|0.92|0.93|0.94|0.95) ;;
+  *) echo "CHAT_GPU_MEMORY_UTILIZATION must be one of 0.90..0.95" >&2; exit 2 ;;
+esac
 mkdir -p "${SERVICE_RUN_ROOT}/logs" "${SERVICE_RUN_ROOT}/evidence"
 
 launch() {
@@ -54,8 +69,10 @@ launch "${CHAT_SESSION}" "3,4" "${SERVICE_RUN_ROOT}/logs/chat.log" \
   "${INFER_PYTHON}" -m vllm.entrypoints.openai.api_server \
   --host 127.0.0.1 --port 18120 \
   --model "${CHAT_MODEL_PATH}" --served-model-name Qwen3-VL-8B-Instruct \
-  --tensor-parallel-size 2 --max-model-len 32768 --gpu-memory-utilization 0.90 \
-  --max-num-seqs 8 --limit-mm-per-prompt '{"image":5,"video":0}' --trust-remote-code
+  --tensor-parallel-size 2 --max-model-len "${CHAT_MAX_MODEL_LEN}" \
+  --gpu-memory-utilization "${CHAT_GPU_MEMORY_UTILIZATION}" \
+  --max-num-seqs "${CHAT_MAX_NUM_SEQS}" \
+  --limit-mm-per-prompt '{"image":5,"video":0}' --trust-remote-code
 
 launch "${EMBED1024_SESSION}" "1" "${SERVICE_RUN_ROOT}/logs/embed1024.log" \
   "${INFER_PYTHON}" -m vllm.entrypoints.openai.api_server \
@@ -117,6 +134,12 @@ for name, expected in (("embed1024-smoke.json", 1024), ("embed384-smoke.json", 3
     payload = json.loads((root / name).read_text())
     assert len(payload["data"][0]["embedding"]) == expected
 PY
+
+cat >"${SERVICE_RUN_ROOT}/evidence/chat-runtime-config.txt" <<EOF
+CHAT_MAX_MODEL_LEN=${CHAT_MAX_MODEL_LEN}
+CHAT_MAX_NUM_SEQS=${CHAT_MAX_NUM_SEQS}
+CHAT_GPU_MEMORY_UTILIZATION=${CHAT_GPU_MEMORY_UTILIZATION}
+EOF
 
 nvidia-smi --query-gpu=index,name,memory.used,memory.total,utilization.gpu \
   --format=csv,noheader >"${SERVICE_RUN_ROOT}/evidence/gpu-ready.csv"

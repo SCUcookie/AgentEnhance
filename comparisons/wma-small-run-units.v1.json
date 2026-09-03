@@ -1,0 +1,14 @@
+{
+  "dataset_manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+  "dataset_root_name": "rev-e2148757921fc7e2d66d8ed899823b763227c341",
+  "inventory_csv_sha256": "027f2c3f757d99cb098a6e1887ac7bc837f726031368a4c758970ee90db33f39",
+  "n_attachments": 5405,
+  "n_qa": 7906,
+  "n_samples": 150,
+  "n_sessions": 2761,
+  "n_turns": 24714,
+  "sample_order_rule": "sorted recursive JSON paths, then small_ids membership; matches pinned WMA loader",
+  "schema_version": "agentenhance.wma_run_unit_inventory.v1",
+  "small_ids_sha256": "002a8827b02c03d86fe8915bb6a58e51d332509289e075210dffbd2797a09087",
+  "status": "FROZEN_FROM_METADATA_ONLY"
+}
