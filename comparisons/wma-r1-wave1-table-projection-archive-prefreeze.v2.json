@@ -1,0 +1,58 @@
+{
+  "schema_version": "agentenhance.prospective_artifact_archive_prefreeze.v2",
+  "stage_id": "wma-r1-wave1-table-projection-archive-20260904-v2",
+  "status": "FROZEN_BEFORE_WAVE1_TERMINAL",
+  "frozen_at": "2026-09-04T04:25:49+08:00",
+  "purpose": "Retain the complete fixed 30-row Wave-1 projected comparison bundle as a small independent overlay after the original five raw-evidence archives are accepted.",
+  "relationship_to_raw_archive": {
+    "raw_archive_contract": "comparisons/wma-r1-wave1-archive-prefreeze.v1.json",
+    "raw_archive_contract_sha256": "24c09025e28636e90b3ea72a2ff97c08f6438fec402315f462e9a145b651cbea",
+    "raw_archive_is_unchanged": true,
+    "no_large_archive_duplication": true,
+    "overlay_contains": "the complete projection controller root, projected CSVs, manifests, SHA-256 inventories, and terminal marker"
+  },
+  "raw_archive_root": "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-20260903-v1",
+  "projection_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-table-projection-20260904-v2",
+  "destination_root": "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-table-projection-20260904-v2",
+  "implementation": {
+    "archiver": "scripts/remote_archive_wma_wave1_projection_v2.py",
+    "archiver_sha256": "483a7db27227e95263f1c742584d5d517f88616fcc482058c966df29e0f24331",
+    "test": "tests/test_wma_wave1_projection_control_v2.py",
+    "test_sha256": "824914afb6a79d1354ba5c40934c21a4e5f51236d154627c0588001d76ba2502",
+    "downloader": "scripts/sftp_download_limited.sh",
+    "downloader_sha256": "cca069f6c6bcedee6f21c70d32004567631aac97e06c76b4799ad4fba83dbca1"
+  },
+  "start_condition": [
+    "the original raw Wave-1 archive root is TERMINAL_ACCEPTED and its inventory validates",
+    "the v2 projection root is TERMINAL_ACCEPTED and its recursive inventory validates",
+    "the fresh overlay archive root is absent",
+    "data2 has at least projection source bytes plus 2 GiB free"
+  ],
+  "archive_format": {
+    "container": "GNU tar pax",
+    "compression": "zstd level 3, one thread",
+    "metadata_normalization": "sorted paths, mtime zero, numeric owner/group zero, atime/ctime omitted",
+    "server_io_priority": "nice 10 and ionice best-effort priority 7",
+    "archive_storage_ceiling": "1 GiB"
+  },
+  "transfer": {
+    "protocol": "SFTP only",
+    "rate_limit_kbit_per_second": 4096,
+    "resume": "get -p for a fresh partial and reget -p for an existing SHA-derived partial",
+    "acceptance": "the local archive SHA-256 must equal the remote manifest SHA-256 before partial promotion"
+  },
+  "acceptance": [
+    "the archive contains only the complete projection root",
+    "the archive listing is nonempty and every entry is beneath the frozen projection-root name",
+    "the archive and archive manifest SHA-256 values validate",
+    "both the raw evidence archive and source projection remain present"
+  ],
+  "failure_semantics": "Preserve the fresh overlay archive root and any partial file with TERMINAL_REJECTED; no failed archive authorizes source deletion.",
+  "cleanup_boundary": "This stage authorizes no deletion. Both Wave-1 models are shared pre-existing assets and remain permanently excluded from project cleanup.",
+  "prohibited": [
+    "replacing or mutating any of the original five raw-evidence archives",
+    "using SCP, rsync, HTTP, or an unthrottled payload transfer",
+    "deleting source runs, projected tables, archive partials, datasets, logs, manifests, or models",
+    "claiming SOTA from archive acceptance"
+  ]
+}

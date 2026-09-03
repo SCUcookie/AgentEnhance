@@ -1,0 +1,77 @@
+{
+  "schema_version": "agentenhance.prospective_experiment_prefreeze.v2",
+  "stage_id": "wma-r1-wave1-table-projection-20260904-v2",
+  "status": "FROZEN_BEFORE_WAVE1_TERMINAL",
+  "frozen_at": "2026-09-04T04:25:49+08:00",
+  "scientific_question": "What complete fixed 30-row WMA comparison bundle follows from projecting every accepted Wave-1 three-seed local summary without method or metric selection?",
+  "estimand": "For each of the four Wave-1 methods, project the already frozen arithmetic mean across seeds 0, 1, and 2 into every predeclared quality, retrieval, memory, efficiency, reliability, and slice field while preserving all 30 fixed method rows.",
+  "supersession": {
+    "relationship": "successor overlay; the accepted v1 three-seed postprocess remains immutable and required",
+    "prior_postprocess": "comparisons/wma-r1-wave1-postprocess-prefreeze.v1.json",
+    "prior_postprocess_sha256": "8ad90ea0de1888d4f5f3abc22183a32b3d304c06da0e35e143d063969ca6a4e4",
+    "reason": "The historical Wave-1 postprocess predates the complete 30-row WMA bundle and therefore does not bind the current v2 projection gate."
+  },
+  "evidence_observed_before_freeze": {
+    "wave1_controller_terminal": false,
+    "complete_seed_results": 0,
+    "three_seed_summaries": 0,
+    "numeric_rows_admitted": 0,
+    "last_runtime_observation": "wma-mmfu-single seed 0: 65 of 150 units accepted, 0 rejected; unit 66 active"
+  },
+  "inputs": {
+    "summary_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-three-seed-summaries-20260903-v1",
+    "implementation_ids": [
+      "wma-mmfu-single",
+      "wma-simplemem",
+      "wma-m2a",
+      "wma-vilomem"
+    ],
+    "required_seed_set": [0, 1, 2],
+    "required_samples_per_seed": 150,
+    "required_questions_per_seed": 7906,
+    "required_failed_units_per_seed": 0,
+    "source_bundle": "comparisons/wma-table-bundle-manifest.v3.json",
+    "source_bundle_sha256": "e7faa9d42e314b30d21542b90071bea4763014779b6674a00c234d7dc7d80914"
+  },
+  "implementation": {
+    "controller": "scripts/remote_wma_wave1_project_v2.py",
+    "controller_sha256": "241b43ec80615c1a7579c61a2f28eaf4144f2311f17d72eee1a373b14ddd68f2",
+    "projector": "scripts/project_wma_method_summaries_v2.py",
+    "projector_sha256": "c9a01b59ed3522b2aa3e7d1e5301f6b5dc183f0a2e08dea9de033a9cf200f1fa",
+    "projector_prefreeze": "comparisons/wma-table-projection-v2-prefreeze.v1.json",
+    "test": "tests/test_wma_wave1_projection_control_v2.py",
+    "test_sha256": "824914afb6a79d1354ba5c40934c21a4e5f51236d154627c0588001d76ba2502"
+  },
+  "output_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-table-projection-20260904-v2",
+  "start_condition": [
+    "the immutable v1 Wave-1 postprocess root is TERMINAL_ACCEPTED without TERMINAL_REJECTED",
+    "the v1 postprocess root and all four child inventories validate",
+    "all 12 aggregate roots named by the v1 manifest still validate",
+    "every aggregate audit declares the exact seed, 150 observed samples, 0 failed samples, and 7906 questions",
+    "the v2 output root is absent"
+  ],
+  "acceptance": [
+    "the accepted implementation set is exactly the four frozen Wave-1 methods",
+    "the projected panels contain 30, 30, 30, and 1590 rows with their frozen column counts",
+    "only the four accepted local rows receive numeric fields and every blocked, pending, and proposed row remains present",
+    "the child and controller inventories validate recursively",
+    "official_values_used and blocked_or_proposed_values_used are both false"
+  ],
+  "resources": {
+    "accelerators": "none",
+    "network": "none",
+    "wall_time_ceiling": "1 hour",
+    "new_output_storage_ceiling": "100 MiB",
+    "retry_count": 0
+  },
+  "failure_semantics": "Preserve the fresh controller root with TERMINAL_REJECTED. Do not repair or reuse it; diagnose read-only and freeze a successor.",
+  "next_gate_after_acceptance": "Create and validate the original five raw-evidence archives, then create the independent projection overlay archive before any cleanup decision.",
+  "prohibited": [
+    "dropping any method, seed, metric, slice, or failed record after observing values",
+    "editing the v1 postprocess or the frozen v3 table bundle",
+    "importing official paper values into local result cells",
+    "projecting AgentEnhance before its gate is opened",
+    "claiming SOTA from successful projection alone",
+    "deleting any source, run, result, model, dataset, log, manifest, or archive"
+  ]
+}
