@@ -1,0 +1,58 @@
+{
+  "schema_version": "agentenhance.control_package_prefreeze.v2",
+  "package_id": "wma-r1-wave2-exact-model-control-20260904-v2",
+  "status": "FROZEN_BEFORE_TRANSFER",
+  "frozen_at": "2026-09-04T04:50:00+08:00",
+  "implementation_commit": "45bc62367da71af7e5bd0720ce7342b61ce70a8f",
+  "purpose": "Prestage the exact-content, zero-retry Wave2 model acquisition controls and retain both raw official immutable-revision tree responses without downloading model payloads.",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave2-exact-model-control-20260904-v2.tar.gz",
+    "bytes": 13375,
+    "sha256": "1c6d929bb1e82dd13485d94596e015342004a0a4eae35fe35d34d49444da36e6",
+    "format": "tar.gz"
+  },
+  "members": {
+    "regular_files": 6,
+    "directories": 3,
+    "files": [
+      {"path": "comparisons/wma-wave2-model-materialization-prefreeze.v2.json", "sha256": "10a2bf4c516e43444036779a97ad09a1912d35403d0d2f94109accf4e6c8acff"},
+      {"path": "comparisons/wma-wave2-model-prefetch-manifest.v2.json", "sha256": "b86b62467296f6df19daadbe88e83d40e54872152dae48b1774798f9fd342230"},
+      {"path": "metadata/agentenhance-gme-tree-9cfa6413.json", "bytes": 23629, "sha256": "f7c499c2a1892eae93468926d55dd386f09ff91d95d3a9ac8c9299b81b333a7e"},
+      {"path": "metadata/agentenhance-qwen3-embed8b-tree-2c456551.json", "bytes": 22913, "sha256": "846e099825f635fc7ef2eaea2ab45b8ef89c2e98260db38acc048011dd675dc7"},
+      {"path": "scripts/materialize_hf_model_snapshot_v3.py", "sha256": "6bf3cd9b1458920d9a4e9accf11e9d3e3c1c9d710d627e88272810fa73d4dde9"},
+      {"path": "scripts/materialize_hf_model_snapshot_v4.py", "sha256": "3489fd20342b19816f24d67c7dafb3ed52b9ac2167770806ba5eded4522ac46b"}
+    ],
+    "symlinks": 0,
+    "hardlinks": 0,
+    "devices": 0,
+    "absolute_or_parent_paths": 0
+  },
+  "remote": {
+    "host_alias": "agent-enhance-gpu",
+    "archive_path": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave2-exact-model-control-20260904-v2.tar.gz",
+    "extraction_root": "${AGENT_ENHANCE_REMOTE_ROOT}/incoming/wma-r1-wave2-exact-model-control-20260904-v2",
+    "both_targets_must_be_absent": true
+  },
+  "transfer": {
+    "protocol": "OpenSSH SFTP",
+    "rate_limit_kbit_per_second": 4096,
+    "connections": 1,
+    "retries": 0,
+    "ordinary_put_exception": "Permitted only for this exact 13375-byte control-and-metadata archive; resumable SFTP remains mandatory for large payloads."
+  },
+  "validation": [
+    "verify remote archive bytes and SHA-256 before extraction",
+    "reject every member other than the exact six regular files and three directories",
+    "extract only into the fresh frozen extraction root",
+    "verify all six extracted file hashes and the two raw official API response byte counts",
+    "do not execute the downloader before Wave1 terminal acceptance and service release"
+  ],
+  "resource_noninterference": "Only a 13375-byte package is transferred and hashed; no model payload, dependency, API inference, pg0, or GPU access occurs.",
+  "failure": "Any collision, interruption, size mismatch, hash mismatch, unsafe member, extraction failure, or file mismatch rejects the package and preserves received artifacts.",
+  "prohibited": [
+    "starting either 8.8GB or 16.3GB model download while Wave1 is active",
+    "editing an extracted manifest, metadata response, or script",
+    "using the control package as model or numeric evidence",
+    "deleting any source, result, model, dataset, log, manifest, archive, or partial"
+  ]
+}
