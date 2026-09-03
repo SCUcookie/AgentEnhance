@@ -1,0 +1,48 @@
+{
+  "schema_version": "agentenhance.wma_execution_matrix_prefreeze.v1",
+  "matrix_id": "wma-lifecycle-matched-execution-20260903-v1",
+  "status": "FROZEN_BEFORE_NUMERIC_RESULTS",
+  "frozen_at": "2026-09-03T18:20:00+08:00",
+  "benchmark": "WorldMemArena",
+  "benchmark_source_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+  "dataset_revision": "e2148757921fc7e2d66d8ed899823b763227c341",
+  "execution_inventory": "comparisons/wma-execution-matrix.v1.csv",
+  "master_table_template": "comparisons/wma-main-table-template.v2.csv",
+  "registered_implementation_count_excluding_proposed": 21,
+  "registered_native_implementations": [
+    "AUGUSTUSMemory",
+    "FUMemory",
+    "GAMemory",
+    "LTMemory",
+    "MGMemory",
+    "MMFUMemory",
+    "MMFU_Single",
+    "MMMemory",
+    "NGMemory",
+    "RFMemory",
+    "STMemory",
+    "UniversalRAGMemory"
+  ],
+  "registered_external_implementations": [
+    "A-Mem",
+    "BaseModel",
+    "Dummy",
+    "M2A",
+    "MIRIX",
+    "Omni-SimpleMem",
+    "Qwen3-VL-Embedding-8B",
+    "SimpleMem",
+    "ViLoMem"
+  ],
+  "execution_waves": {
+    "wave_1_foundation": ["MMFU_Single", "SimpleMem", "M2A", "ViLoMem"],
+    "wave_2_breadth": "All remaining registered implementations after an implementation-specific adapter audit."
+  },
+  "result_policy": {
+    "main_numeric_source": "local reproduction only",
+    "source_reported_numbers": "kept separate and never used to fill a missing local cell",
+    "failed_or_pending_method": "kept visible in the internal master table with NA numeric fields",
+    "paper_projection": "accepted same-track local rows only",
+    "proposed_method_gate": "AgentEnhance-CEU remains locked until at least two recent non-control baselines have accepted complete local reproductions"
+  }
+}

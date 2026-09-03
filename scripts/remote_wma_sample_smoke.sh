@@ -8,6 +8,7 @@ set -euo pipefail
 : "${RUN_ROOT:?set RUN_ROOT to a new project-owned run directory}"
 : "${BASELINE:?set BASELINE}"
 : "${SAMPLE_INDEX:?set SAMPLE_INDEX to a 1-based frozen index}"
+: "${SAMPLE_ID_EXPECTED:?set SAMPLE_ID_EXPECTED for the frozen index}"
 : "${SIMPLEMEM_OVERLAY:?set SIMPLEMEM_OVERLAY}"
 : "${VILOMEM_OVERLAY:?set VILOMEM_OVERLAY}"
 
@@ -91,14 +92,20 @@ test -s "${method_root}/output/aggregate_metrics.json"
 test -s "${method_root}/output/session_records.jsonl"
 test -s "${method_root}/output/qa_records.jsonl"
 ! grep -q 'Traceback (most recent call last)' "${method_root}/run.log"
+[[ "$(jq -r '.sample_id' "${method_root}/output/session_records.jsonl" | sort -u)" == "${SAMPLE_ID_EXPECTED}" ]] || {
+  echo "session-record sample ID mismatch" >&2; exit 5;
+}
+[[ "$(jq -r '.sample_id' "${method_root}/output/qa_records.jsonl" | sort -u)" == "${SAMPLE_ID_EXPECTED}" ]] || {
+  echo "QA-record sample ID mismatch" >&2; exit 5;
+}
 if [[ "${BASELINE}" == "SimpleMem" ]]; then
   grep -q 'FTS index created' "${method_root}/run.log"
   ! grep -q 'Error during keyword search' "${method_root}/run.log"
 fi
 
 finished_at=$(date -Is)
-printf 'baseline\tsample_index\tstarted_at\tfinished_at\n%s\t%s\t%s\t%s\n' \
-  "${BASELINE}" "${SAMPLE_INDEX}" "${started_at}" "${finished_at}" >"${method_root}/timing.tsv"
+printf 'baseline\tsample_index\tsample_id\tstarted_at\tfinished_at\n%s\t%s\t%s\t%s\t%s\n' \
+  "${BASELINE}" "${SAMPLE_INDEX}" "${SAMPLE_ID_EXPECTED}" "${started_at}" "${finished_at}" >"${method_root}/timing.tsv"
 find "${method_root}" -type f ! -name SHA256SUMS -print0 \
   | sort -z | xargs -0 sha256sum >"${method_root}/SHA256SUMS"
 touch "${method_root}/TERMINAL_ACCEPTED"

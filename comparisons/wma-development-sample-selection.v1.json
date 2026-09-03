@@ -1,0 +1,43 @@
+{
+  "dataset_root": "/Users/spongebob/Documents/Projects/AgentEnhance/artifacts/datasets/worldmemarena-small/rev-e2148757921fc7e2d66d8ed899823b763227c341",
+  "question_type_counts": {
+    "CMR": 548,
+    "DU": 606,
+    "FR": 591,
+    "KR": 593,
+    "MB": 615,
+    "MC": 604,
+    "TR": 582,
+    "TTL": 582,
+    "UNKNOWN": 1356,
+    "VFR": 614,
+    "VS": 609,
+    "VU": 606
+  },
+  "sample_cost_inventory_sha256": "3b0a191d7a5afa2d9d73e10a706e3a9aa5d600599b8297df50bf94f23ba2625f",
+  "sample_count": 150,
+  "schema_version": "agentenhance.wma_development_sample_selection.v1",
+  "selected": {
+    "attachment_count": 21,
+    "evidence_count": 38,
+    "question_count": 13,
+    "relative_json_path": "agent/gui/mobile/mobile_05.json",
+    "sample_id": "mobile_05",
+    "sample_index": 100,
+    "session_count": 11,
+    "turn_count": 42
+  },
+  "selection_prohibited_inputs": [
+    "answer text",
+    "model output",
+    "evaluation metric",
+    "proposed-method result"
+  ],
+  "selection_rule": [
+    "min question_count",
+    "then min attachment_count",
+    "then min session_count",
+    "then lexicographic sample_id"
+  ],
+  "status": "SELECTED_WITHOUT_MODEL_OUTPUTS"
+}
