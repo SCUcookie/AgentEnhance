@@ -184,9 +184,12 @@ find "${RUN_ROOT}" -type f ! -name SCHEDULER_SHA256SUMS ! -name 'SCHEDULER_*' -p
   | sort -z | xargs -0 sha256sum >"${RUN_ROOT}/SCHEDULER_SHA256SUMS"
 if (( accepted == 150 && rejected == 0 && infrastructure_failure == 0 )); then
   touch "${RUN_ROOT}/SCHEDULER_EXECUTION_ACCEPTED"
+  scheduler_exit_code=0
 else
   touch "${RUN_ROOT}/SCHEDULER_EXECUTION_WITH_REJECTIONS"
+  scheduler_exit_code=5
 fi
 trap - EXIT
 printf 'scheduler finished baseline=%s seed=%s accepted=%s rejected=%s infrastructure_failure=%s\n' \
   "${BASELINE}" "${UNIT_SEED}" "${accepted}" "${rejected}" "${infrastructure_failure}"
+exit "${scheduler_exit_code}"
