@@ -1,0 +1,52 @@
+{
+  "schema_version": "agentenhance.uv_tool_materialization_failure_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-uv-tool-recovery1-failure-audit-20260904-v1",
+  "status": "TERMINAL_REJECTED",
+  "audited_at": "2026-09-04T01:49:02+08:00",
+  "prefreeze_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v2.json",
+    "sha256": "d0cc47615784a0753968a86c45617017dcd43bc6d560c41675a560dbfb0e980e",
+    "required_status": "FROZEN_BEFORE_RECOVERY_TRANSFER"
+  },
+  "rejected_evidence": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-uv-tool-materialization-20260904-v1-recovery1",
+    "failure_record_bytes": 553,
+    "failure_record_sha256": "c850764fd57abf548868cd508177d82bb76e3367b96b99d6b74ad50d220681f3",
+    "evidence_inventory_bytes": 206,
+    "evidence_inventory_sha256": "172bd8ab316bfa7db4789c07cf1eb9e95aa74095965abfa0f2dd3ed7e4eef355",
+    "terminal_rejected_present": true,
+    "terminal_accepted_absent": true,
+    "evidence_inventory_verified": true,
+    "active_process_references_after_exit": 0
+  },
+  "retained_partial_target": {
+    "path": "${AGENT_ENHANCE_REMOTE_ROOT}/tools/uv-0.12.9-x86_64-unknown-linux-gnu-recovery1",
+    "cleanup_authorized": false,
+    "files": [
+      {"path": "uv", "bytes": 49313824, "sha256": "671793498fe0a545432e2524b6691ffb9eea4540d9fda43ca2f978df2dbf8426"},
+      {"path": "uvx", "bytes": 347072, "sha256": "5ae583120996d1daaad33d396e04c88d04431506986bbf36ea788e50dce6f76f"}
+    ]
+  },
+  "diagnosis": {
+    "stage": "post-hash executable version assertion",
+    "archive_and_sidecar_identity_accepted": true,
+    "safe_archive_members_accepted": true,
+    "expected_output": "uv 0.12.9",
+    "observed_output": "uv 0.12.9 (x86_64-unknown-linux-gnu)",
+    "classification": "REJECT_TECHNICAL_VERSION_OUTPUT_FORMAT",
+    "unchanged_identity": "The semantic version and target triple exactly match the frozen release; only the assertion omitted the target-triple suffix."
+  },
+  "wave1_non_interference_observation": {
+    "accepted_units": 45,
+    "rejected_units": 0,
+    "current_unit": "046_minecraft_06"
+  },
+  "decision": "REJECT recovery1 and preserve its evidence and partial target. Freeze recovery2 with the identical staged assets and safe extraction checks, changing only the expected version output to the exact observed official string.",
+  "prohibited_actions": [
+    "editing, deleting, or relabeling the recovery1 evidence or target",
+    "accepting recovery1 despite its frozen assertion failure",
+    "changing archive, sidecar, binary, Hindsight source, or lock identities",
+    "retransferring assets that are already independently accepted on the server",
+    "installing dependencies or starting any downstream stage"
+  ]
+}

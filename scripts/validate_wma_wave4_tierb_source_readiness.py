@@ -22,6 +22,8 @@ UV_TOOL_FAILURE_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-t
 UV_TOOL_RECOVERY_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v1.json"
 UV_TOOL_TRANSFER_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-transfer-failure-audit.v1.json"
 UV_TOOL_RECOVERY_PREFREEZE_V2_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-prefreeze.v2.json"
+UV_TOOL_RECOVERY1_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery1-failure-audit.v1.json"
+UV_TOOL_RECOVERY2_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-uv-tool-recovery2-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -55,6 +57,12 @@ uv_tool_transfer_failure = json.loads(
 )
 uv_tool_recovery_prefreeze_v2 = json.loads(
     UV_TOOL_RECOVERY_PREFREEZE_V2_PATH.read_text(encoding="utf-8")
+)
+uv_tool_recovery1_failure = json.loads(
+    UV_TOOL_RECOVERY1_FAILURE_PATH.read_text(encoding="utf-8")
+)
+uv_tool_recovery2_prefreeze = json.loads(
+    UV_TOOL_RECOVERY2_PREFREEZE_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -297,6 +305,30 @@ assert transfer_v2["connections_consumed_by_v1_preflight"] == 1
 assert transfer_v2["connections_remaining"] == 2
 assert uv_tool_recovery_prefreeze_v2["execution_contract"]["gpu_count"] == 0
 for path in (UV_TOOL_TRANSFER_FAILURE_PATH, UV_TOOL_RECOVERY_PREFREEZE_V2_PATH):
+    serialized = path.read_text(encoding="utf-8")
+    assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert uv_tool_recovery1_failure["status"] == "TERMINAL_REJECTED"
+assert uv_tool_recovery1_failure["prefreeze_gate"]["sha256"] == sha256_file(
+    ROOT / uv_tool_recovery1_failure["prefreeze_gate"]["path"]
+)
+recovery1_diagnosis = uv_tool_recovery1_failure["diagnosis"]
+assert recovery1_diagnosis["archive_and_sidecar_identity_accepted"] is True
+assert recovery1_diagnosis["safe_archive_members_accepted"] is True
+assert recovery1_diagnosis["observed_output"] == "uv 0.12.9 (x86_64-unknown-linux-gnu)"
+assert uv_tool_recovery1_failure["retained_partial_target"]["cleanup_authorized"] is False
+
+assert uv_tool_recovery2_prefreeze["status"] == "FROZEN_BEFORE_LOCAL_REEXTRACTION"
+assert uv_tool_recovery2_prefreeze["failure_gate"]["sha256"] == sha256_file(
+    ROOT / uv_tool_recovery2_prefreeze["failure_gate"]["path"]
+)
+for row in uv_tool_recovery2_prefreeze["materializers"]:
+    assert row["sha256"] == sha256_file(ROOT / row["path"])
+assert uv_tool_recovery2_prefreeze["release_identity"]["expected_version_output"] == recovery1_diagnosis["observed_output"]
+assert uv_tool_recovery2_prefreeze["execution_contract"]["network_connections"] == 0
+assert uv_tool_recovery2_prefreeze["execution_contract"]["retry_count"] == 0
+assert uv_tool_recovery2_prefreeze["execution_contract"]["gpu_count"] == 0
+for path in (UV_TOOL_RECOVERY1_FAILURE_PATH, UV_TOOL_RECOVERY2_PREFREEZE_PATH):
     serialized = path.read_text(encoding="utf-8")
     assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
