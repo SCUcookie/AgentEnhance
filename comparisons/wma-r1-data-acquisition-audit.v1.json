@@ -1,0 +1,55 @@
+{
+  "schema_version": "agentenhance.dataset_acquisition_audit.v1",
+  "contract_id": "wma-r1-small-data-20260903-v1",
+  "status": "ACCEPTED_DATA_ACQUISITION",
+  "accepted_at": "2026-09-03T20:00:00+08:00",
+  "benchmark_id": "worldmemarena-2026",
+  "source": {
+    "repository": "LCZZZZ/WorldMemArena",
+    "revision": "e2148757921fc7e2d66d8ed899823b763227c341",
+    "split": "small"
+  },
+  "local_tree": {
+    "root": "artifacts/datasets/worldmemarena-small/rev-e2148757921fc7e2d66d8ed899823b763227c341",
+    "sample_count": 150,
+    "source_file_count": 5557,
+    "source_bytes": 3855814942,
+    "manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+    "independent_verification": "PASS"
+  },
+  "archive": {
+    "format": "deterministic uncompressed PAX tar",
+    "file_count_including_manifest": 5558,
+    "bytes": 3861770240,
+    "sha256": "0b6e43f5d84b17984c00986a32e7bbbc5b26c60b97f5da291aaa16e5f6feb653"
+  },
+  "transport": {
+    "protocol": "SFTP",
+    "rate_limit_kbit_per_second": 8192,
+    "remote_archive": "/data1/2026/ldh/AgentEnhance/incoming/worldmemarena-small-rev-e2148757921fc7e2d66d8ed899823b763227c341.tar",
+    "remote_archive_sha256": "0b6e43f5d84b17984c00986a32e7bbbc5b26c60b97f5da291aaa16e5f6feb653",
+    "interruption_history": [
+      "The initial transfer lost SSH connectivity after approximately 738 MB.",
+      "The same content-addressed partial was preserved.",
+      "After connectivity returned, reput resumed the same partial and the final whole-archive SHA-256 passed."
+    ]
+  },
+  "server_tree": {
+    "publish_strategy": "extract to a new content-addressed staging directory, verify every file, then atomic rename",
+    "final_root": "/data1/2026/ldh/AgentEnhance/datasets/raw/worldmemarena/rev-e2148757921fc7e2d66d8ed899823b763227c341",
+    "sample_count": 150,
+    "source_file_count": 5557,
+    "source_bytes": 3855814942,
+    "manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+    "full_extracted_tree_verification": "PASS",
+    "publication_status": "PUBLISHED"
+  },
+  "tool_sha256": {
+    "scripts/download_worldmemarena_small.py": "ef125dc8cab206370365291804d88a3237b313185dc256e1ac401d933f79c646",
+    "scripts/verify_dataset_manifest.py": "61715306655f4bd334a35b47b944000cba931a2d2b47721098df5e2c3ec8d5da",
+    "scripts/package_dataset_manifest.py": "c6d5c0bb152244dd38598342c96fea58f037fef9717eeab308ad0d7008c6dd2d",
+    "scripts/sftp_upload_limited.sh": "8630d0b1e7951edd2b10cfa999c8d0e7b94d414719d6e9aab8181bd50126f028",
+    "scripts/remote_publish_dataset.sh": "c04ef6ed665916f1840975bab465211c2a38106fc6dcd96e5a72c633b1383803"
+  },
+  "claim_boundary": "This audit accepts dataset acquisition and transport only; it contains no model, baseline, or paper-facing numeric result."
+}
