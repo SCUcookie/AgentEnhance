@@ -1,0 +1,79 @@
+{
+  "schema_version": "agentenhance.wma_wave1_full_recovery_prefreeze.v2",
+  "study_id": "wma-r1-wave1-full-recovery2-20260904-v1",
+  "status": "FROZEN_BEFORE_RECOVERY_CAPABILITY_AND_FULL_RUN",
+  "frozen_at": "2026-09-04T05:18:00+08:00",
+  "parent_study": "wma-r1-wave1-full-recovery1-20260903-v1",
+  "parent_controller": "wma-r1-wave1-controller-recovery1-20260903-v1",
+  "parent_status": "TERMINAL_REJECTED_DURING_FIRST_SEED",
+  "diagnosis": {
+    "path": "comparisons/wma-r1-wave1-recovery1-oom-audit.v1.json",
+    "sha256": "cf37e3ddc48d6bea1fcf460c4bc1a1e397240f8977483c408e8d9db8e1acf667"
+  },
+  "single_scientific_change": {
+    "field": "CHAT_GPU_MEMORY_UTILIZATION",
+    "old": 0.95,
+    "new": 0.90,
+    "reason": "Reserve about 1.2 GiB more physical memory per tensor-parallel chat GPU for transient multimodal visual-encoder activations; the observed failed allocation was 398 MiB.",
+    "unchanged": [
+      "Qwen3-VL-8B-Instruct revision",
+      "tensor parallel size 2 on physical GPUs 3 and 4",
+      "max model length 131072",
+      "max sequences 1",
+      "answer context 128000",
+      "temperature 0",
+      "embedding model and dimensions",
+      "dataset, sample order, methods, seeds, evaluator, prompts, top_k, metrics, denominators, and failure semantics"
+    ]
+  },
+  "parent_control": {
+    "package_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-full-recovery1-20260903-v1-control",
+    "package_manifest_sha256": "4d3433dd616b938e431c68e807358c4d9b55719345660f3f97bae293fb5ce361",
+    "full_scheduler_sha256": "8f83e3522c07bf9eaca7ab38b056723d7dbd9ac1ba1dc57223f7f08b7ab0bca9",
+    "controller_sha256": "cb657cdd1a5d18c23b095532397f0072b8e31b8c0327ef4e620d69cd07d339ad"
+  },
+  "recovery_control": {
+    "package_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-full-recovery2-20260904-v1-control",
+    "capability_script": {
+      "path": "scripts/remote_wma_oom_capability_recovery2.sh",
+      "sha256": "5a06bd2255d37b4171ce5e6adde8cada6869571b339dd921ac19623784e59cc7"
+    },
+    "full_scheduler_wrapper": {
+      "path": "scripts/remote_wma_full_method_recovery2.sh",
+      "sha256": "2df8a4eee3b0a3c121fea863e7f555d55ee2c50646c1cbf7d51700c6e0b1793b",
+      "rendered_scheduler_sha256": "db7bcdfbe3cdc9f72853de2520a0d2e7cb90b39dbc3f5c66c4ad9ee417db0958"
+    },
+    "controller_wrapper": {
+      "path": "scripts/remote_wma_wave1_controller_recovery2.sh",
+      "sha256": "4de657dd64da8d16df8164919aa7fd22a337f1c508a9b5dc02d52993d82f91ff",
+      "rendered_controller_sha256": "b67f34976709142f639cbed65c8b0f4cec241596db1f7d2ef11464d2dc1146be"
+    }
+  },
+  "capability_gate": {
+    "root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-oom-capability-css03-recovery2-20260904-v1",
+    "sample_index": 72,
+    "sample_id": "css_03",
+    "method": "MMFU_Single",
+    "seed": 0,
+    "role": "infrastructure capability only; no score enters reproduced-results or a paper table",
+    "acceptance": [
+      "the unit is TERMINAL_ACCEPTED with its full frozen sessions and QA denominator",
+      "the chat endpoint remains alive after the unit",
+      "the chat log contains no CUDA out-of-memory event",
+      "all project services stop after the check"
+    ]
+  },
+  "full_recovery": {
+    "start_condition": "The capability gate is independently TERMINAL_ACCEPTED, all capability services have stopped, GPUs 1/3/4/5 are free, and every recovery2 output root is absent.",
+    "controller_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1",
+    "run_id_pattern": "wma-r1-full-{method_slug}-seed{seed}-recovery2-20260904-v1",
+    "methods": ["MMFU_Single", "SimpleMem", "M2A", "ViLoMem"],
+    "seeds": [0, 1, 2],
+    "fresh_full_runs": 12,
+    "parent_numeric_evidence_reused": false,
+    "reason_for_full_restart": "All units within an accepted method seed must share one service configuration; mixing the 0.95 parent prefix with 0.90 recovery units is prohibited."
+  },
+  "admission": "Exactly the original Wave1 three-seed and denominator rules apply. No local result is admitted until each complete recovery2 method summary and archive is accepted.",
+  "failure_rule": "Any capability or full recovery failure is preserved under its fresh root. No in-place retry, partial-unit reuse, metric selection, or result admission is allowed.",
+  "model_retention": "Both Qwen snapshots are protected shared pre-existing assets and must never be deleted."
+}

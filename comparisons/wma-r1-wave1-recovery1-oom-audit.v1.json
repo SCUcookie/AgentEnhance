@@ -1,0 +1,40 @@
+{
+  "schema_version": "agentenhance.wma_wave1_recovery1_oom_audit.v1",
+  "controller_id": "wma-r1-wave1-controller-recovery1-20260903-v1",
+  "status": "TERMINAL_REJECTED",
+  "failed_at": "2026-09-04T05:06:32+08:00",
+  "failure_stage": "MMFU_Single seed 0, sample index 72 (css_03), after 71 accepted immutable units",
+  "root_cause": "The tensor-parallel Qwen3-VL visual encoder required one additional 398 MiB allocation while each 24 GiB chat GPU had only 101.62 MiB free under CHAT_GPU_MEMORY_UTILIZATION=0.95. The vLLM EngineCore terminated with CUDA out of memory, so subsequent answer and judge calls lost their endpoint.",
+  "parent_state": {
+    "controller_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery1-20260903-v1",
+    "controller_terminal_marker": "TERMINAL_REJECTED",
+    "controller_terminal_marker_sha256": "47379c68ae96846584e8383690e4ebfae36bc008af0d3ca5702e1c04739a9205",
+    "scheduler_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-full-mmfu_single-seed0-20260903-v1",
+    "scheduler_status": "SCHEDULER_EXECUTION_WITH_REJECTIONS",
+    "accepted_units": 71,
+    "rejected_units": 1,
+    "infrastructure_failure": 1,
+    "failed_unit_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-full-mmfu_single-seed0-20260903-v1/units/072_css_03",
+    "failed_unit_exit_code": 143,
+    "failed_unit_terminal_sha256": "6d80b3b3e9b9ffdeb97f2dc5e2c24429c50f6c99b2a2de80838e6b89918166da"
+  },
+  "evidence": {
+    "chat_log_sha256": "6768ede6dc09c1079682b2f3455de10df22cfbba37837d30fb50fc64df32e746",
+    "failed_unit_log_sha256": "050de1fb3b340f3ca7a0cbb03a572ade22626eddf967b803d5ea7729cc4b76ca",
+    "scheduler_summary_sha256": "7d675234db3f0c439bcbfcb410d30190d4d39cf1c5389138a37b198b1b28fc50",
+    "rejected_units_csv_sha256": "6d8f93f4822162d2291f44b0c869e4179545c97e6b1e9afe2a4ce04818130ae7",
+    "scheduler_inventory_sha256": "d839511624513e1bf6f65e41c7ff5f6aeef0c6e386a1707b90135b56d4de2ed9"
+  },
+  "operator_action": "After the chat service had already exited, the exact project-owned css_03 worker was terminated so the frozen unit, scheduler, and controller EXIT traps could seal the failure and stop the two remaining project embedding services.",
+  "post_failure_resources": {
+    "project_tmux_sessions": 0,
+    "gpu_memory_mib": {
+      "1": 14,
+      "3": 14,
+      "4": 14,
+      "5": 14
+    }
+  },
+  "scientific_impact": "No Wave1 seed or method result is accepted. The 71 successful unit roots and one rejected unit remain diagnostic evidence only and are never mixed with recovery2.",
+  "authorized_recovery": "First rerun only css_03 under the otherwise identical stack with CHAT_GPU_MEMORY_UTILIZATION reduced from 0.95 to 0.90. Only after that capability root is terminal-accepted may the complete 4-method by 3-seed Wave1 run restart from the first unit in entirely fresh roots."
+}
