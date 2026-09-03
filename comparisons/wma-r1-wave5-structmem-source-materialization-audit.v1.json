@@ -1,0 +1,82 @@
+{
+  "schema_version": "agentenhance.git_source_materialization_audit.v1",
+  "audit_id": "wma-r1-wave5-structmem-source-materialization-audit-20260904-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T09:45:00+08:00",
+  "scientific_evidence_role": "accepted engineering source-identity and preservation gate only; no method execution or numeric claim",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave5-structmem-source-materialization-prefreeze.v1.json",
+    "sha256": "f130fc3d8188b96457f9b19b3c6189eb489c69ca4348fa7cc278a791cd823699"
+  },
+  "control_package": {
+    "path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave5-structmem-source-20260904-v1-control.tar.gz",
+    "bytes": 4526,
+    "sha256": "14463b20be6795b8f77bdce052ba1a924862c4a6ef2c06eff24fa1730352764c",
+    "transport": "resumable-sftp",
+    "sftp_rate_limit_kbit_per_second": 4096
+  },
+  "source": {
+    "method_id": "structmem",
+    "repository": "https://github.com/zjunlp/LightMem.git",
+    "revision": "aa1c484cc6fd964c8ea1af897e36a0c3ba06d7db",
+    "git_tree": "da4212efaa196112988b89c2afd9813db27f1784",
+    "target": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave5-source-20260904-v1/structmem-lightmem",
+    "tracked_file_count": 609,
+    "tracked_total_bytes": 18846018,
+    "license": "MIT",
+    "license_path": "LICENSE",
+    "license_sha256": "5ec1877dbe08c6d6ee2213e44a64bc011bd21819b50b4172e3bca4acab4bf4e8",
+    "worktree_clean": true,
+    "submodule_count": 0,
+    "symlink_count": 0,
+    "git_lfs_pointer_count": 0,
+    "prohibited_weight_file_count": 0,
+    "active_process_references_at_audit": 0,
+    "method_identity_boundary": "StructMem is the method under audit. The containing repository name LightMem does not authorize using this source as the distinct ACL 2026 LightMem baseline."
+  },
+  "accepted_evidence": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-source-materialization-20260904-v1",
+    "terminal_accepted_present": true,
+    "terminal_rejected_absent": true,
+    "evidence_inventory_verified": true,
+    "source_materialization_json": {
+      "bytes": 119388,
+      "sha256": "e794865aabca0e58cceb043a496fd1a8caf26a8666889871c09f7c15f87fbf33"
+    },
+    "source_sha256sums": {
+      "bytes": 133233,
+      "sha256": "c21e52b031b8b4bcb3e95bdeb0ce4fa5548cfffd5f23a0cd0a41542cba1b0451"
+    },
+    "evidence_sha256sums": {
+      "bytes": 1068,
+      "sha256": "89bc71a78af706925b4647ccfdcbfe34fd6de8c984690adccbad6e16bbf33ac1"
+    }
+  },
+  "preservation": {
+    "remote_archive_root": "${AGENT_ENHANCE_REMOTE_ROOT}/archives/wma-r1-wave5-structmem-source-20260904-v1",
+    "source_archive": {
+      "remote_name": "structmem-source-aa1c484.tar.gz",
+      "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/structmem-source-aa1c484.tar.gz",
+      "bytes": 9334060,
+      "sha256": "508eba8fe6bd6c1d651153e2c0b0fed6ad72c0eceba9e2adf457c5ec911f7a55"
+    },
+    "evidence_archive": {
+      "remote_name": "structmem-source-evidence.tar.gz",
+      "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/structmem-source-evidence.tar.gz",
+      "bytes": 60444,
+      "sha256": "a5293eac742b242637f87851efeea76940aacb759321f096e76a746095929377"
+    },
+    "transport": "resumable-sftp-4096-kbit",
+    "local_hashes_equal_remote_hashes": true
+  },
+  "wave1_non_interference_observation": {
+    "before_source_stage_accepted_units": 57,
+    "after_archive_accepted_units": 57,
+    "before_source_stage_rejected_units": 0,
+    "after_archive_rejected_units": 0,
+    "gpu_processes_started_by_stage": 0,
+    "models_or_datasets_downloaded": 0
+  },
+  "decision": "StructMem source identity is accepted and preserved. Adapter feasibility inspection may begin; dependency installation, model acquisition, lifecycle execution, and numerical execution remain unauthorized.",
+  "numeric_result_rows_added": 0
+}
