@@ -1,0 +1,70 @@
+{
+  "schema_version": "agentenhance.wma_table_bundle_manifest.v1",
+  "bundle_id": "wma-comparison-tables-20260903-v1",
+  "status": "FROZEN_BEFORE_MAIN_COMPARISON_RESULTS",
+  "frozen_at": "2026-09-03T21:10:00+08:00",
+  "claim_supported": "A complete, predeclared same-protocol comparison surface exists before AgentEnhance is evaluated, preventing post-result method, metric, or slice selection.",
+  "method_corpus": {
+    "rows": 22,
+    "accepted_local_rows_only_in_paper_projection": true,
+    "internal_master_keeps_all_rows": true,
+    "execution_matrix": "comparisons/wma-execution-matrix.v1.csv",
+    "execution_matrix_sha256": "cab992e42b45d83714bebdd962b222252cf7051ff72f87afd01f40651cb78c44"
+  },
+  "panels": [
+    {
+      "name": "main_quality",
+      "path": "comparisons/wma-main-table-template.v2.csv",
+      "sha256": "2e2aa6156cecd4d29f3b6f3a78dbb1c00aa7e3a520ec0b010bc18be6275a07e1",
+      "rows": 22,
+      "columns": 28
+    },
+    {
+      "name": "retrieval_and_memory",
+      "path": "comparisons/wma-retrieval-memory-table-template.v1.csv",
+      "sha256": "4a5f124071c37b9c1c974b2fcff24268f8b31c86ff61f434b6dadf06054c5016",
+      "rows": 22,
+      "columns": 28
+    },
+    {
+      "name": "efficiency_and_reliability",
+      "path": "comparisons/wma-efficiency-reliability-table-template.v1.csv",
+      "sha256": "6ca481b995ed6d4690413b1dae79e21ba9fd0b156975266a1db64e0b7a595b22",
+      "rows": 22,
+      "columns": 38
+    },
+    {
+      "name": "all_frozen_slices_long_form",
+      "path": "comparisons/wma-slice-table-template.v1.csv",
+      "sha256": "1f0dd02cf6ed17e12ccb11b6332e04f1f961c232d0154a0431e8aa9626954c1e",
+      "rows": 1166,
+      "columns": 17,
+      "slice_values_per_method": 53
+    }
+  ],
+  "slice_surface": {
+    "overall": 1,
+    "question_type": 12,
+    "scope": 2,
+    "task_family": 4,
+    "difficulty": 3,
+    "evidence_modality": 4,
+    "subcategory": 27,
+    "total_values_per_method": 53,
+    "slice_inventory": "comparisons/wma-dataset-slice-inventory.v1.json",
+    "slice_inventory_sha256": "a00203cef36e8ad619ea71889b5b5501b64b3632d76f72bf5213638079cac993"
+  },
+  "metric_coverage": {
+    "quality": ["correct", "hallucination", "omission", "F1", "BLEU-1"],
+    "retrieval": ["hit rate", "R@1", "R@5", "R@10", "nDCG@1", "nDCG@5", "nDCG@10", "covered and gold counts"],
+    "memory": ["recall", "weighted recall", "pooled weighted recall", "correctness", "hallucination", "irrelevance", "itemwise correctness", "itemwise hallucination", "update handling", "interference rejection", "memory count"],
+    "efficiency": ["stage and end-to-end time", "p50 and p95 latency", "stage token counts", "storage bytes", "RAM", "VRAM", "GPU-hours"],
+    "reliability": ["expected", "observed", "failed", "failure rate"]
+  },
+  "source_data_policy": "All numeric cells remain empty until admitted from comparisons/reproduced-results.v1.csv after an accepted same-track local audit; official numbers never fill missing cells.",
+  "generator": {
+    "path": "scripts/materialize_wma_table_templates.py",
+    "sha256": "eb3d808f649c1726559f7a63ed82cb680c3d4c9c1404a33323ebf701a1060961"
+  },
+  "layout_note": "These CSVs are the internal source-of-truth bundle. A paper-ready LaTeX projection is deferred until a venue and manuscript width are fixed; no result is missing because of that formatting deferral."
+}
