@@ -35,6 +35,7 @@ REGISTRY_ROUTING_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight
 REGISTRY_ROUTING_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-audit.v1.json"
 WHEELHOUSE_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-wheelhouse-prefreeze.v1.json"
 WHEELHOUSE_AUDIT_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-wheelhouse-audit-design.v1.json"
+HINDSIGHT_ENVIRONMENT_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-environment-design-prefreeze.v1.json"
 HINDSIGHT_ADAPTER_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-adapter-design-prefreeze.v1.json"
 HINDSIGHT_LIFECYCLE_DESIGN_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-lifecycle-design-prefreeze.v1.json"
 
@@ -107,6 +108,9 @@ wheelhouse_prefreeze = json.loads(
 )
 wheelhouse_audit_design = json.loads(
     WHEELHOUSE_AUDIT_DESIGN_PATH.read_text(encoding="utf-8")
+)
+hindsight_environment_design = json.loads(
+    HINDSIGHT_ENVIRONMENT_DESIGN_PATH.read_text(encoding="utf-8")
 )
 hindsight_adapter_design = json.loads(
     HINDSIGHT_ADAPTER_DESIGN_PATH.read_text(encoding="utf-8")
@@ -611,6 +615,27 @@ assert wheelhouse_audit_design["audit_contract"]["expected_wheels"] == 199
 assert wheelhouse_audit_design["audit_contract"]["network_access"] is False
 assert wheelhouse_audit_design["audit_contract"]["dependency_installation"] is False
 serialized = WHEELHOUSE_AUDIT_DESIGN_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert hindsight_environment_design["status"] == (
+    "FROZEN_DESIGN_AWAITING_ACCEPTED_WHEELHOUSE_AUDIT"
+)
+for gate in hindsight_environment_design["prior_gates"]:
+    assert gate["sha256"] == sha256_file(ROOT / gate["path"])
+environment_implementation = hindsight_environment_design["frozen_implementation"]
+assert environment_implementation["materializer_sha256"] == sha256_file(
+    ROOT / environment_implementation["materializer"]
+)
+assert environment_implementation["unit_test_sha256"] == sha256_file(
+    ROOT / environment_implementation["unit_test"]
+)
+assert environment_implementation["unit_tests"] == 3
+install_contract = hindsight_environment_design["installation_contract"]
+assert install_contract["active_locked_distributions"] == 199
+assert install_contract["network_access"] is False
+assert install_contract["source_install"] is False
+assert install_contract["model_download_or_load"] is False
+serialized = HINDSIGHT_ENVIRONMENT_DESIGN_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 
 assert hindsight_adapter_design["status"] == (

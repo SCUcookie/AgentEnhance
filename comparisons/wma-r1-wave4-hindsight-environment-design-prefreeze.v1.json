@@ -1,0 +1,77 @@
+{
+  "schema_version": "agentenhance.hindsight_environment_design_prefreeze.v1",
+  "stage_id": "wma-r1-wave4-hindsight-environment-design-20260904-v1",
+  "status": "FROZEN_DESIGN_AWAITING_ACCEPTED_WHEELHOUSE_AUDIT",
+  "frozen_at": "2026-09-04T03:39:00+08:00",
+  "scientific_question": "Can Hindsight 0.9.2 be reconstructed in a fresh project-owned Python 3.11 environment solely from the accepted routed wheelhouse, with every active locked distribution and runtime import independently checkable?",
+  "decision_informed": "Whether a deterministic offline Hindsight runtime is eligible for an independent environment audit and then the frozen embedded-pg0 lifecycle.",
+  "scientific_evidence_role": "Offline environment reconstruction design only; no model load, service, lifecycle, benchmark, superiority, comparison-table number, or SOTA claim is eligible.",
+  "prior_gates": [
+    {
+      "path": "comparisons/wma-r1-wave4-hindsight-wheelhouse-audit-design.v1.json",
+      "sha256": "8bbdb3ba8f7fb1c37372263a632edf9f0fe05943d2456ece46f7ebb4e8cd87af",
+      "required_future_evidence": "A separately frozen audit execution must produce an independently TERMINAL_ACCEPTED wheelhouse-audit.json with an exact SHA-256."
+    },
+    {
+      "path": "comparisons/wma-r1-wave4-hindsight-execution-source-audit.v1.json",
+      "sha256": "d2da9f895227a55f25859578e273421baed3e91336b2d322af7e0ddbf50bd69c",
+      "required_status": "TERMINAL_ACCEPTED"
+    }
+  ],
+  "frozen_implementation": {
+    "materializer": "scripts/materialize_hindsight_environment.py",
+    "materializer_sha256": "5dfdea7c5bd47e84c6615083c9fbf3e10b3dee88bd1087607cd3d83a6db2b8a0",
+    "unit_test": "tests/test_hindsight_environment_materializer.py",
+    "unit_test_sha256": "622c30020bf202b08d82236167cd6868bd4aa36ca781bdf0021197f944715da3",
+    "unit_tests": 3
+  },
+  "fixed_inputs": {
+    "source_python": "${AGENT_ENHANCE_PYTHON311}",
+    "source_python_sha256": "db8630b1dda55498c4d254878d144e04d3c6fd82115b700c00a13c9029fdbd02",
+    "source_python_version_prefix": "3.11.0 | packaged by conda-forge |",
+    "source_pip_version": "22.3.1",
+    "routing_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-registry-routing-20260904-v1",
+    "wheelhouse_root": "${AGENT_ENHANCE_REMOTE_ROOT}/wheelhouses/wma-r1-wave4-hindsight-py311-linux-x86_64-20260904-v1",
+    "future_wheelhouse_audit_record": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-wheelhouse-audit-20260904-v1/wheelhouse-audit.json",
+    "source_root": "${AGENT_ENHANCE_REMOTE_ROOT}/third_party/wma-r1-wave4-execution-source-20260904-v1/hindsight",
+    "environment_root": "${AGENT_ENHANCE_REMOTE_ROOT}/environments/wma-r1-wave4-hindsight-py311-20260904-v1",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-environment-20260904-v1"
+  },
+  "installation_contract": {
+    "venv_mode": "python -m venv --copies",
+    "indexes": 0,
+    "find_links_roots": 2,
+    "active_locked_distributions": 199,
+    "pip_flags": ["--isolated", "--no-cache-dir", "--no-index", "--no-deps", "--require-hashes", "--only-binary=:all:"],
+    "network_access": false,
+    "source_install": false,
+    "model_download_or_load": false,
+    "gpu_load": false,
+    "cpu_threads_ceiling": 2,
+    "wall_time_ceiling_minutes": 60,
+    "environment_byte_ceiling": 10737418240,
+    "retry_count": 0,
+    "fresh_roots_required": true
+  },
+  "acceptance": [
+    "The future accepted wheelhouse audit record hash and terminal sentinels match the successor execution prefreeze.",
+    "All 199 wheel files still match the accepted audit path, route, byte size, and SHA-256 before installation.",
+    "The shared source Python remains byte-identical and is never modified.",
+    "The fresh environment is created with copied launchers and installs from only the two accepted local wheel directories.",
+    "All 199 target-marker-active locked distributions are installed at satisfying exact versions; extras are limited to venv bootstrap distributions and are fully inventoried.",
+    "pip check passes and Hindsight, Hindsight API/client/embed, pg0, and CPU torch imports pass using only the accepted execution-source overlay.",
+    "The evidence root retains commands, exit codes, timings, pip freeze, installed distribution inventory, record hashes, and one agreeing terminal sentinel."
+  ],
+  "authorization_gate": "This design is not executable. After the wheelhouse is materialized and independently accepted, create a separate environment-execution prefreeze binding the exact wheelhouse-audit record SHA-256, fresh-root observations, free-space ceiling, process count, and the unchanged materializer hash.",
+  "failure": "Any collision, source-Python drift, wheel/audit drift, attempted index access, missing or wrong package, pip-check/import failure, byte/time ceiling breach, or nonzero command seals TERMINAL_REJECTED and retains the partial environment and evidence root without in-place repair.",
+  "next_gate_after_acceptance": "Independently revalidate package identities, offline imports, environment evidence, absence of background processes, and filesystem size; only then bind the accepted environment record into the Hindsight lifecycle-execution prefreeze.",
+  "prohibited_actions": [
+    "executing without a successor prefreeze that binds an accepted wheelhouse-audit record hash",
+    "installing into or modifying the shared Python 3.11 environment",
+    "using an index, cache substitution, dependency resolution, source distribution, mutable requirement, or retry",
+    "installing the Hindsight source as a mutable package instead of using the accepted source overlay",
+    "loading either Hindsight model, starting pg0, binding a port, or calling an LLM",
+    "deleting or repairing a partial environment or failed evidence root in place",
+    "populating a comparison-table numeric cell or making a superiority/SOTA claim"
+  ]
+}
