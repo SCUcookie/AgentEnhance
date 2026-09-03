@@ -32,6 +32,7 @@ LOCK_EXPORT_RECOVERY_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight
 SOURCE_AWARE_EXPORT_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-aware-export-prefreeze.v1.json"
 SOURCE_AWARE_EXPORT_FAILURE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-source-aware-export-failure-audit.v1.json"
 REGISTRY_ROUTING_PREFREEZE_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-prefreeze.v1.json"
+REGISTRY_ROUTING_AUDIT_PATH = ROOT / "comparisons" / "wma-r1-wave4-hindsight-registry-routing-audit.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -93,6 +94,9 @@ source_aware_export_failure = json.loads(
 )
 registry_routing_prefreeze = json.loads(
     REGISTRY_ROUTING_PREFREEZE_PATH.read_text(encoding="utf-8")
+)
+registry_routing_audit = json.loads(
+    REGISTRY_ROUTING_AUDIT_PATH.read_text(encoding="utf-8")
 )
 assert payload["status"] == "FROZEN_BEFORE_HINDSIGHT_SOURCE_MATERIALIZATION"
 assert "no adapter, lifecycle, numerical" in payload["scientific_evidence_role"]
@@ -522,6 +526,28 @@ assert routing_execution["network_connections"] == 0
 assert routing_execution["dependency_installations"] == 0
 assert routing_execution["retry_count"] == 0
 serialized = REGISTRY_ROUTING_PREFREEZE_PATH.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+
+assert registry_routing_audit["status"] == "TERMINAL_ACCEPTED"
+assert registry_routing_audit["prefreeze_gate"]["sha256"] == sha256_file(
+    ROOT / registry_routing_audit["prefreeze_gate"]["path"]
+)
+assert registry_routing_audit["independent_auditor"]["sha256"] == sha256_file(
+    ROOT / registry_routing_audit["independent_auditor"]["path"]
+)
+reconstruction = registry_routing_audit["body_reconstruction"]
+assert reconstruction["reference_bytes"] == audit_export["bytes"]
+assert reconstruction["reference_sha256"] == audit_export["sha256"]
+assert reconstruction["ordered_blocks_verified"] == 208
+assert reconstruction["per_block_hashes_verified"] == 208
+assert reconstruction["ordered_manifest_reconstructs_reference"] is True
+assert {row["id"]: row["requirement_blocks"] for row in registry_routing_audit["routes"]} == {
+    "pypi": 206,
+    "pytorch-cpu": 2,
+}
+assert sum(row["bytes"] for row in registry_routing_audit["routes"]) == audit_export["bytes"]
+assert registry_routing_audit["server_evidence"]["inventory_entries_verified_after_transfer"] == 3
+serialized = REGISTRY_ROUTING_AUDIT_PATH.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
 print(
     json.dumps(

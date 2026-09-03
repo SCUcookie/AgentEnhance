@@ -1,0 +1,77 @@
+{
+  "schema_version": "agentenhance.hindsight_registry_routing_audit.v1",
+  "audit_id": "wma-r1-wave4-hindsight-registry-routing-audit-20260904-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T02:27:51+08:00",
+  "prefreeze_gate": {
+    "path": "comparisons/wma-r1-wave4-hindsight-registry-routing-prefreeze.v1.json",
+    "sha256": "bdcc9c3378df2ee8c053e619da2dbe128188adcdd387879af0535243215582c4",
+    "required_status": "FROZEN_BEFORE_OFFLINE_SPLIT"
+  },
+  "independent_auditor": {
+    "path": "scripts/audit_hindsight_registry_routing.py",
+    "sha256": "f188de347b3d059a5bc5b3742d70424e441b1c90ff34735bbdb4bf6942deff6d",
+    "execution_host": "local-mac-copy-of-server-evidence"
+  },
+  "execution": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave4-hindsight-registry-routing-20260904-v1",
+    "started_at": "2026-09-03T18:25:05.016153+00:00",
+    "finished_at": "2026-09-03T18:25:05.061453+00:00",
+    "network_enabled": false,
+    "dependency_install_performed": false,
+    "gpu_count": 0,
+    "terminal_accepted_present": true,
+    "terminal_rejected_absent": true,
+    "active_process_references_after_exit": 0
+  },
+  "body_reconstruction": {
+    "reference_bytes": 256006,
+    "reference_sha256": "6f0836431e1a0ba74bdc92732ffb0a81a1c72691bdab2bc3fba43c4a1e3716c6",
+    "ordered_blocks_verified": 208,
+    "byte_ranges_contiguous": true,
+    "per_block_hashes_verified": 208,
+    "ordered_manifest_reconstructs_reference": true
+  },
+  "routes": [
+    {
+      "id": "pypi",
+      "url": "https://pypi.org/simple",
+      "requirement_blocks": 206,
+      "bytes": 251961,
+      "sha256": "76c279b04db08fe3c32fae4fc317d79e5fd9a8a21d3735e835700659b9310fef"
+    },
+    {
+      "id": "pytorch-cpu",
+      "url": "https://download.pytorch.org/whl/cpu",
+      "requirement_blocks": 2,
+      "bytes": 4045,
+      "sha256": "7b91727207eb7d7c2198ea8ed687719cecd2d09af3e7194299def5774e531ba9"
+    }
+  ],
+  "server_evidence": {
+    "record_bytes": 56233,
+    "record_sha256": "e0d1fd83c638af9db40c12029d017dd422ad141c9964a496e8cd398bb19b885e",
+    "inventory_bytes": 529,
+    "inventory_sha256": "7bb808acccd589ff9dabf8f661f6285e5751eab2c752744df4e3931bc0c2aa5b",
+    "inventory_entries_verified_on_server": 3,
+    "inventory_entries_verified_after_transfer": 3,
+    "uv_lock_sha256_after": "ce0966c58ac9018c77b8aa1d7d93fe9f405deb6c0fadb54e52608fe10a992063",
+    "source_clean_after": true
+  },
+  "local_archive": {
+    "path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave4-hindsight-registry-routing-20260904-v1-evidence.tar.gz",
+    "bytes": 251167,
+    "sha256": "02db24a740ea2bb4233d52ceba9a3ec89f71fdae65160d1303dbd95871a1b8d4",
+    "contents": "complete server evidence plus the accepted dependency-body reference used by the independent local audit"
+  },
+  "decision": "Accept the two-route dependency specification as operational evidence. The exact routed files are eligible inputs for a separately frozen wheelhouse acquisition after Wave1 releases the resource gate.",
+  "scientific_evidence_role": "No numeric result and no SOTA evidence. This audit proves only byte-complete registry routing for Hindsight dependencies.",
+  "next_gate": "Freeze sequential PyPI and PyTorch CPU wheel acquisition using --no-deps, --require-hashes, and --only-binary=:all:, but do not start it until Wave1 is terminally accepted and all Wave1 model services stop.",
+  "prohibited_actions": [
+    "editing, deleting, or relabeling the routing evidence or its upstream accepted/rejected roots",
+    "routing non-torch packages through the PyTorch index or torch through PyPI",
+    "changing any requirement byte, hash, marker, version, or source URL",
+    "downloading or installing dependencies before a separately frozen and authorized gate",
+    "populating numerical comparison cells or making a paper claim from this audit"
+  ]
+}
