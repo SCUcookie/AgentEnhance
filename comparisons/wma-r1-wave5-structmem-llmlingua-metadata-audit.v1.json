@@ -1,0 +1,57 @@
+{
+  "schema_version": "agentenhance.structmem_llmlingua_metadata_audit.v1",
+  "audit_id": "wma-r1-wave5-structmem-llmlingua-metadata-audit-20260904-v1",
+  "status": "TERMINAL_ACCEPTED",
+  "audited_at": "2026-09-04T11:50:00+08:00",
+  "scientific_evidence_role": "accepted immutable model metadata only; no model payload or numeric evidence",
+  "prefreeze": {
+    "path": "comparisons/wma-r1-wave5-structmem-llmlingua-metadata-prefreeze.v1.json",
+    "sha256": "ad2dd984508f35b71e24d5d69a32c16203763f5f1edffc69652c461e1a264694"
+  },
+  "control_package": {
+    "path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave5-structmem-llmlingua-metadata-20260904-v1-control.tar.gz",
+    "bytes": 4167,
+    "sha256": "cd03ab380a409448c3069849ec51b9802fb3a448f7b538cef73c50e162538343",
+    "transport": "resumable-sftp-4096-kbit"
+  },
+  "metadata": {
+    "repository": "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank",
+    "revision": "5f0c82792b7ea14c6484e015b6a072009496b7f2",
+    "tree_file_count": 8,
+    "lfs_pointer_count": 1,
+    "git_metadata_bytes": 6946119,
+    "worktree_payload_file_count": 0,
+    "model_payload_materialized": false,
+    "model_safetensors": {
+      "git_blob": "1e8b896e18a70eea3d3e3335ffc06acbf26eda55",
+      "pointer_bytes": 134,
+      "pointer_sha256": "21631124aa1f94f7d690a024cbea58e908e0a8c8433b468bc9b1ce0c7bab09ba",
+      "payload_bytes": 709388104,
+      "payload_sha256": "22b9ecde52fec5c97e8c54a293be768727df95a81c6c8dccb03f262a50c58324"
+    }
+  },
+  "accepted_evidence": {
+    "root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-llmlingua-metadata-20260904-v1",
+    "terminal_accepted_present": true,
+    "terminal_rejected_absent": true,
+    "evidence_inventory_verified": true,
+    "model_metadata_json": {
+      "bytes": 2770,
+      "sha256": "bfb9be076620299be5d659150f65fb1ec81ef2c754e3699724d63de51b7f1c59"
+    },
+    "evidence_sha256sums": {
+      "bytes": 516,
+      "sha256": "5b6bf8c6ac225d60dcf86cc49d131ee34081853f0e1d06a1e591e8c0372837d0"
+    }
+  },
+  "wave1_non_interference_observation": {
+    "before_metadata_accepted_units": 60,
+    "after_audit_accepted_units": 61,
+    "before_metadata_rejected_units": 0,
+    "after_audit_rejected_units": 0,
+    "gpu_processes_started_by_stage": 0,
+    "model_payload_bytes_downloaded": 0
+  },
+  "decision": "The exact file and LFS payload identities are sufficient to freeze a strict model allowlist. Actual model materialization remains separately gated.",
+  "numeric_result_rows_added": 0
+}

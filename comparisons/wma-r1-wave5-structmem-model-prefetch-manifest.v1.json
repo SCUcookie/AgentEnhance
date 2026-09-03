@@ -1,0 +1,52 @@
+{
+  "schema_version": "agentenhance.model_prefetch_manifest.v1",
+  "manifest_id": "wma-r1-wave5-structmem-model-prefetch-20260904-v1",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-04T11:55:00+08:00",
+  "source": "Accepted immutable Git tree and LFS pointer metadata from comparisons/wma-r1-wave5-structmem-llmlingua-metadata-audit.v1.json",
+  "models": [
+    {
+      "purpose": "StructMem official LLMLingua-2 precompression and topic segmentation model",
+      "method_id": "structmem",
+      "component": "precompressor-and-topic-segmenter",
+      "repository": "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank",
+      "revision": "5f0c82792b7ea14c6484e015b6a072009496b7f2",
+      "license": "apache-2.0",
+      "private": false,
+      "gated": false,
+      "allow_patterns": [
+        "README.md",
+        "config.json",
+        "model.safetensors",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "vocab.txt"
+      ],
+      "expected_files": [
+        {"path": "README.md", "bytes": 3309, "sha256": "ab01af377c6285e0bd040661569238aba5f66f842dcecaa4c2fc704f40c7402b"},
+        {"path": "config.json", "bytes": 875, "sha256": "e6c33ec2f099e659e125efaa8b7bb07a6e65b7d9fc36211c6fa3206e1c399085"},
+        {"path": "model.safetensors", "bytes": 709388104, "sha256": "22b9ecde52fec5c97e8c54a293be768727df95a81c6c8dccb03f262a50c58324", "upstream_lfs_sha256": "22b9ecde52fec5c97e8c54a293be768727df95a81c6c8dccb03f262a50c58324"},
+        {"path": "special_tokens_map.json", "bytes": 125, "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"},
+        {"path": "tokenizer.json", "bytes": 2919362, "sha256": "bf1b59b7b11c95f194f51708d918eea378e09d05f84c0e1656dc5180e8117088"},
+        {"path": "tokenizer_config.json", "bytes": 1191, "sha256": "214f78f6c5d034a8b405632d301ee3710eb6f075b3f5faf8241a273a13908746"},
+        {"path": "vocab.txt", "bytes": 995526, "sha256": "fe0fda7c425b48c516fc8f160d594c8022a0808447475c1a7c6d6479763f310c"}
+      ],
+      "expected_file_count": 7,
+      "expected_total_bytes": 713308492,
+      "excluded_files": [".gitattributes"],
+      "expected_local_path": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave5-structmem-llmlingua2-meetingbank-20260904-v1",
+      "load_policy": "Load only from the immutable local snapshot with HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 and trust_remote_code=false. Default lifecycle device is CPU until a separate resource gate changes it."
+    }
+  ],
+  "download_policy": {
+    "scheduler_gate": "Do not download until the Wave1 controller is terminal, all Wave1 model services have stopped, and an independent process audit reports no references to the new target.",
+    "transport": "Download directly on the server into the exact project-owned path; if transferred from the Mac use resumable sftp limited to 4096 Kbit/s.",
+    "parallel_downloads": 1,
+    "network_retries": 0,
+    "post_download": "Require exact revision selected paths per-file bytes and SHA-256 for all seven files before import.",
+    "offline_execution": "All later imports and runs deny network model resolution.",
+    "cleanup": "The project-owned snapshot is eligible for deletion only under comparisons/model-retention-policy.v2.json after accepted numerical evidence and archive verification."
+  },
+  "evidence_role": "immutable model acquisition design only; no downloaded model bytes, import success, lifecycle result, numerical result, superiority, or SOTA claim"
+}

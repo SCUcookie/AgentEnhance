@@ -18,6 +18,9 @@ ADAPTER_DESIGN = ROOT / "comparisons" / "wma-r1-wave5-structmem-adapter-design-p
 EXECUTION_SOURCE_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-execution-source-prefreeze.v1.json"
 EXECUTION_SOURCE_AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-execution-source-audit.v1.json"
 MODEL_METADATA_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-llmlingua-metadata-prefreeze.v1.json"
+MODEL_METADATA_AUDIT = ROOT / "comparisons" / "wma-r1-wave5-structmem-llmlingua-metadata-audit.v1.json"
+MODEL_MANIFEST = ROOT / "comparisons" / "wma-r1-wave5-structmem-model-prefetch-manifest.v1.json"
+MODEL_MATERIALIZATION_PREFREEZE = ROOT / "comparisons" / "wma-r1-wave5-structmem-model-materialization-prefreeze.v1.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -173,4 +176,42 @@ assert model_contract["model_payload_byte_ceiling"] == 0
 assert "GIT_LFS_SKIP_SMUDGE=1" in model_contract["git_mode"]
 serialized = MODEL_METADATA_PREFREEZE.read_text(encoding="utf-8")
 assert "/data1/" not in serialized and "/data2/" not in serialized
-print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "numeric_rows_added": 0}, sort_keys=True))
+model_audit = json.loads(MODEL_METADATA_AUDIT.read_text(encoding="utf-8"))
+assert model_audit["status"] == "TERMINAL_ACCEPTED"
+assert model_audit["prefreeze"]["sha256"] == sha256_file(ROOT / model_audit["prefreeze"]["path"])
+metadata = model_audit["metadata"]
+assert metadata["tree_file_count"] == 8
+assert metadata["lfs_pointer_count"] == 1
+assert metadata["worktree_payload_file_count"] == 0
+assert metadata["model_payload_materialized"] is False
+assert metadata["model_safetensors"]["payload_bytes"] == 709388104
+assert metadata["model_safetensors"]["payload_sha256"] == "22b9ecde52fec5c97e8c54a293be768727df95a81c6c8dccb03f262a50c58324"
+manifest = json.loads(MODEL_MANIFEST.read_text(encoding="utf-8"))
+assert manifest["status"] == "FROZEN_BEFORE_DOWNLOAD"
+assert len(manifest["models"]) == 1
+frozen_model = manifest["models"][0]
+assert frozen_model["revision"] == metadata["revision"]
+assert frozen_model["expected_file_count"] == len(frozen_model["expected_files"]) == 7
+assert sum(row["bytes"] for row in frozen_model["expected_files"]) == frozen_model["expected_total_bytes"] == 713308492
+assert frozen_model["expected_files"][2]["sha256"] == metadata["model_safetensors"]["payload_sha256"]
+assert manifest["download_policy"]["network_retries"] == 0
+assert "Wave1 controller is terminal" in manifest["download_policy"]["scheduler_gate"]
+for path in (MODEL_METADATA_AUDIT, MODEL_MANIFEST):
+    serialized = path.read_text(encoding="utf-8")
+    assert "/data1/" not in serialized and "/data2/" not in serialized
+model_materialization = json.loads(MODEL_MATERIALIZATION_PREFREEZE.read_text(encoding="utf-8"))
+assert model_materialization["status"] == "FROZEN_AWAITING_WAVE1_RESOURCE_GATE"
+for gate in model_materialization["prior_gates"]:
+    assert gate["sha256"] == sha256_file(ROOT / gate["path"])
+model_materializer = model_materialization["implementation"]
+assert model_materializer["downloader_sha256"] == sha256_file(ROOT / model_materializer["downloader"])
+assert model_materializer["unit_test_sha256"] == sha256_file(ROOT / model_materializer["unit_test"])
+assert model_materializer["unit_tests"] == 4
+assert "exact per-file SHA-256" in model_materializer["difference_from_v1"]
+assert model_materialization["model"]["expected_file_count"] == frozen_model["expected_file_count"]
+assert model_materialization["model"]["expected_total_bytes"] == frozen_model["expected_total_bytes"]
+assert model_materialization["execution_contract"]["network_retry_count"] == 0
+assert model_materialization["execution_contract"]["logical_requests_per_file"] == 1
+serialized = MODEL_MATERIALIZATION_PREFREEZE.read_text(encoding="utf-8")
+assert "/data1/" not in serialized and "/data2/" not in serialized
+print(json.dumps({"status": "PASS", "method_id": source["method_id"], "revision": source["revision"], "tracked_files": accepted["tracked_file_count"], "adapter_design_eligible": True, "feasibility_revision": 2, "mock_boundary_tests": implementation["mock_boundary_tests"], "execution_source_files": checks["observed_file_count"], "model_metadata_ready": True, "model_files": frozen_model["expected_file_count"], "model_bytes": frozen_model["expected_total_bytes"], "model_materialization_gate": model_materialization["status"], "model_materializer_tests": model_materializer["unit_tests"], "numeric_rows_added": 0}, sort_keys=True))

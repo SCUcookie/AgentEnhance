@@ -1,0 +1,78 @@
+{
+  "schema_version": "agentenhance.model_materialization_prefreeze.v2",
+  "materialization_id": "wma-r1-wave5-structmem-model-materialization-20260904-v1",
+  "status": "FROZEN_AWAITING_WAVE1_RESOURCE_GATE",
+  "frozen_at": "2026-09-04T12:25:00+08:00",
+  "scientific_evidence_role": "prospective acquisition contract only; no downloaded model bytes, import result, lifecycle result, numerical result, superiority, or SOTA claim",
+  "prior_gates": [
+    {
+      "path": "comparisons/wma-r1-wave5-structmem-llmlingua-metadata-audit.v1.json",
+      "sha256": "ace41dc132d5faf2190227be44d777c876696a90849ccf9f5af0aa8d96c34f3b",
+      "required_status": "TERMINAL_ACCEPTED"
+    },
+    {
+      "path": "comparisons/wma-r1-wave5-structmem-model-prefetch-manifest.v1.json",
+      "sha256": "5d67ff68a6baaf50d815abc8d978fea630b378ed63bba1eb8a18b78b84e51a36",
+      "required_status": "FROZEN_BEFORE_DOWNLOAD"
+    }
+  ],
+  "implementation": {
+    "downloader": "scripts/materialize_hf_model_snapshot_v2.py",
+    "downloader_sha256": "b009d7135b0e8d756e38898a24f3a2498a6bb08da6d25997135c20250d8056f3",
+    "unit_test": "tests/test_hf_model_materializer_v2.py",
+    "unit_test_sha256": "4db203d071bc2c3b7a36651224a0620e23198713325ddf2c13220b8accb8a942",
+    "unit_tests": 4,
+    "network_client": "Python urllib.request with one logical request per file and no application retry loop",
+    "difference_from_v1": "v2 requires exact per-file SHA-256 in addition to paths, byte sizes, file count, and total bytes, and does not call snapshot_download."
+  },
+  "model": {
+    "repository": "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank",
+    "revision": "5f0c82792b7ea14c6484e015b6a072009496b7f2",
+    "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave5-structmem-llmlingua2-meetingbank-20260904-v1",
+    "evidence_root": "${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-llmlingua2-model-materialization-20260904-v1",
+    "expected_file_count": 7,
+    "expected_total_bytes": 713308492,
+    "largest_file": {
+      "path": "model.safetensors",
+      "bytes": 709388104,
+      "sha256": "22b9ecde52fec5c97e8c54a293be768727df95a81c6c8dccb03f262a50c58324"
+    }
+  },
+  "scheduler": {
+    "start_condition": "Wave1 controller is terminal, all Wave1 model services have stopped, and an independent read-only process audit reports no references to the new target.",
+    "parallel_downloads": 1,
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "direct_server_download": true,
+    "mac_to_server_transfer": "If direct server download is unavailable, use only resumable sftp limited to 4096 Kbit/s and retain the identical target and evidence identities."
+  },
+  "execution_contract": {
+    "server_root_injection": "Set AGENT_ENHANCE_REMOTE_ROOT immediately before execution; it must resolve to a writable project root named AgentEnhance on an approved high-capacity volume.",
+    "command_template": "python3.11 scripts/materialize_hf_model_snapshot_v2.py --prefetch-manifest comparisons/wma-r1-wave5-structmem-model-prefetch-manifest.v1.json --repository microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank --evidence-root ${AGENT_ENHANCE_REMOTE_ROOT}/runs/wma-r1-wave5-structmem-llmlingua2-model-materialization-20260904-v1 --timeout-seconds 120",
+    "wall_time_ceiling_minutes": 90,
+    "network_retry_count": 0,
+    "logical_requests_per_file": 1,
+    "redirects_allowed": true,
+    "fresh_target_and_evidence_roots_required": true,
+    "partial_files_retained_on_failure": true
+  },
+  "acceptance": [
+    "The scheduler start condition is independently observed before the command starts.",
+    "Exactly the seven frozen allowlisted files are materialized from the immutable revision.",
+    "Every observed file byte size and SHA-256 exactly matches its frozen manifest row.",
+    "The observed file count is 7 and total bytes are 713308492.",
+    "The evidence record reports network_retry_count=0 and every attempt reports logical_request_attempt=1 and retry_count=0.",
+    "The evidence root contains TERMINAL_ACCEPTED, lacks TERMINAL_REJECTED, and its evidence inventory verifies independently."
+  ],
+  "failure": "Any premature start, path collision, timeout, HTTP error, unsafe path, byte overflow, byte mismatch, SHA-256 mismatch, allowlist mismatch, or evidence mismatch seals the fresh evidence root as TERMINAL_REJECTED. The partial target is retained and never repaired or deleted in place.",
+  "next_gate_after_acceptance": "Independently audit the immutable snapshot, then freeze and materialize an isolated Python 3.11 environment. Model acceptance does not authorize import, lifecycle, or benchmark execution.",
+  "prohibited_actions": [
+    "starting while Wave1 or any Wave1 model service remains active",
+    "using a moving model revision or accepting ETag as a content hash",
+    "accepting paths or byte sizes without exact per-file SHA-256",
+    "adding application retries after a network failure",
+    "repairing, resuming, deleting, or overwriting a rejected target in place",
+    "loading the model or installing dependencies during this acquisition-only stage",
+    "populating a comparison-table numeric cell from this gate"
+  ]
+}
