@@ -11,7 +11,7 @@ usage() {
 local_file=$1
 ssh_target=$2
 remote_file=$3
-rate_limit=${4:-8192}
+rate_limit=${4:-4096}
 
 [[ -f "$local_file" ]] || { echo "local file does not exist: $local_file" >&2; exit 66; }
 [[ "$ssh_target" =~ ^[A-Za-z0-9._-]+$ ]] || { echo "unsafe SSH alias" >&2; exit 65; }
