@@ -1,0 +1,81 @@
+{
+  "schema_version": "agentenhance.wma_wave1_failure_history_archive_prefreeze.v1",
+  "archive_id": "wma-r1-wave1-failure-history-20260904-v1",
+  "status": "FROZEN_AWAITING_RECOVERY2_TERMINAL_QUIESCENCE",
+  "frozen_at": "2026-09-04T06:10:55+08:00",
+  "purpose": "Preserve all known Wave1 controller failures, the failed recovery1 seed, the rejected wrong-path capability attempt, and the accepted corrected capability gate in an archive that is separate from accepted comparison results.",
+  "implementation": {
+    "path": "scripts/remote_archive_wma_wave1_failure_history.py",
+    "sha256": "0fe543cd1809564858cb2b290f726ddd68afe1f52b2cf2b02aed65ce39d47ade"
+  },
+  "gate": {
+    "recovery2_controller": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1",
+    "required_state": "exactly one of TERMINAL_ACCEPTED or TERMINAL_REJECTED",
+    "project_tmux_sessions_required": 0,
+    "reason": "Avoid data1/data2 archive I/O while the multi-GPU comparison is active."
+  },
+  "sources": {
+    "initial_controller_rejection": {
+      "root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-20260903-v1",
+      "required_marker": "TERMINAL_REJECTED",
+      "regular_files_at_freeze": 3,
+      "bytes_at_freeze": 384
+    },
+    "recovery1_controller_rejection": {
+      "root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery1-20260903-v1",
+      "required_marker": "TERMINAL_REJECTED",
+      "regular_files_at_freeze": 3,
+      "bytes_at_freeze": 394
+    },
+    "recovery1_failed_seed": {
+      "root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-full-mmfu_single-seed0-20260903-v1",
+      "required_marker": "SCHEDULER_EXECUTION_WITH_REJECTIONS",
+      "accepted_units": 71,
+      "rejected_units": 1,
+      "regular_files_at_freeze": 1669,
+      "bytes_at_freeze": 437715238,
+      "inventory": "SCHEDULER_SHA256SUMS"
+    },
+    "recovery2_wrong_path_capability": {
+      "root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-oom-capability-css03-recovery2-20260904-v1",
+      "required_marker": "TERMINAL_REJECTED",
+      "regular_files_at_freeze": 21,
+      "bytes_at_freeze": 85586,
+      "numeric_artifacts_required_absent": true
+    },
+    "recovery2_accepted_capability": {
+      "root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-oom-capability-css03-recovery2-recovery1-20260904-v1",
+      "required_marker": "TERMINAL_ACCEPTED",
+      "regular_files_at_freeze": 46,
+      "bytes_at_freeze": 2453077,
+      "inventory": "SHA256SUMS",
+      "evidence_role": "infrastructure capability only"
+    }
+  },
+  "frozen_source_totals": {
+    "roots": 5,
+    "regular_files": 1742,
+    "bytes": 440254679,
+    "symlinks": 0,
+    "storage_ceiling_bytes": 2147483648
+  },
+  "output": {
+    "root": "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-failure-history-20260904-v1",
+    "must_be_fresh": true,
+    "required": [
+      "evidence/",
+      "manifest.json",
+      "SHA256SUMS",
+      "TERMINAL_ACCEPTED"
+    ],
+    "copy_validation": "For every source root, regular-file count, byte count, and path-plus-content tree SHA-256 must match the copied root."
+  },
+  "claim_boundary": "The archive supports failure diagnosis and infrastructure provenance only. No contained metric may enter reproduced-results or a superiority/SOTA claim.",
+  "retention_and_cleanup": {
+    "source_deletion_authorized": false,
+    "archive_deletion_authorized": false,
+    "model_deletion_authorized": false,
+    "future_source_cleanup_requires": "a separate explicit cleanup audit after both accepted-result and failure-history archives are independently accepted"
+  },
+  "failure_rule": "Any gate, marker, inventory, count, byte, tree-hash, symlink, ceiling, or copy mismatch seals the fresh output TERMINAL_REJECTED; recovery uses a new contract and root."
+}

@@ -30,5 +30,6 @@ baseline-check:
 	python3 scripts/validate_wma_wave1_recovery2.py
 	python3 scripts/validate_wma_wave1_recovery2_closure.py
 	python3 scripts/validate_wma_wave1_recovery2_result_admission.py
+	python3 scripts/validate_wma_wave1_failure_history_archive.py
 
 check: validate test baseline-check
