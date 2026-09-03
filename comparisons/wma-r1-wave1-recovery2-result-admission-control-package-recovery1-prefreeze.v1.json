@@ -1,0 +1,39 @@
+{
+  "schema_version": "agentenhance.control_package_recovery_prefreeze.v1",
+  "package_id": "wma-r1-wave1-recovery2-result-admission-20260904-v1-control-recovery1",
+  "status": "FROZEN_BEFORE_RECOVERY_TRANSFER",
+  "frozen_at": "2026-09-04T06:07:31+08:00",
+  "parent_failure": {
+    "path": "comparisons/wma-r1-wave1-recovery2-result-admission-control-package-failure-audit.v1.json",
+    "status": "TERMINAL_REJECTED_CONTROL_PACKAGE"
+  },
+  "source_revision": "883228279aa78242b51cb7ef85ec36f1b4fc5df1",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave1-recovery2-result-admission-20260904-v1-control-recovery1.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-recovery2-result-admission-20260904-v1-control-recovery1.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-recovery2-result-admission-20260904-v1-control-recovery1",
+    "bytes": 26242,
+    "sha256": "38e93f339369065fc6d28cc78aef856ee952fdc5b51d72143856208d804e6887",
+    "regular_files": 18,
+    "symlinks": 0
+  },
+  "only_changes_from_parent_package": {
+    "added_files": {
+      "comparisons/wma-r1-wave1-full-recovery2-prefreeze.v1.json": "8861cf34367ce4fe82a3601c8f3d673a29b966e274cb648c65054b958452f49e",
+      "comparisons/wma-r1-wave1-recovery2-closure-prefreeze.v1.json": "b52b6e50cc400eaa0d1e9b4d1b7ca161e31ce4fc6f75b78f6ea74e6aab367b05",
+      "comparisons/wma-r1-wave1-recovery2-closure-control-package-audit.v1.json": "5db8181927f45380e6b44b63150850a874faf3958f3332b643cebc96c029cbdb"
+    },
+    "validation_interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "code_changes": 0,
+    "identity_changes": 0,
+    "numeric_gate_changes": 0
+  },
+  "validation": [
+    "verify remote archive byte count and SHA-256 before extraction",
+    "extract into the fresh recovery1 root only",
+    "require exactly 18 regular files and zero symlinks",
+    "run validate_wma_wave1_recovery2_result_admission.py with the designated Python 3.11 interpreter",
+    "run the successor unit tests with unittest discovery rooted at tests"
+  ],
+  "execution_boundary": "Acceptance stages an inert result-admission controller only. Do not run result promotion until every upstream terminal and archive gate in the result-admission contract is satisfied."
+}

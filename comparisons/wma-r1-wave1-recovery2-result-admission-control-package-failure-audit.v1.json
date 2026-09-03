@@ -1,0 +1,40 @@
+{
+  "schema_version": "agentenhance.control_package_failure_audit.v1",
+  "audit_id": "wma-r1-wave1-recovery2-result-admission-20260904-v1-control",
+  "status": "TERMINAL_REJECTED_CONTROL_PACKAGE",
+  "observed_at": "2026-09-04T06:06:00+08:00",
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/wma-r1-wave1-recovery2-result-admission-20260904-v1-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-recovery2-result-admission-20260904-v1-control.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/wma-r1-wave1-recovery2-result-admission-20260904-v1-control",
+    "bytes": 21684,
+    "sha256": "9da1805957c8f279954c490b85e99c1e123eedb4d62b8b466db6119ddbbd28f3",
+    "regular_files": 15,
+    "symlinks": 0,
+    "transfer_rate_limit_kbit_per_second": 4096
+  },
+  "failure_sequence": [
+    {
+      "attempt": 1,
+      "interpreter": "server default python3",
+      "failure": "The default interpreter predates Python 3.9 and cannot evaluate tuple[str, str, int] in frozen_source_successor.py.",
+      "mutation": "none"
+    },
+    {
+      "attempt": 2,
+      "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+      "failure": "The package omitted three parent contract files resolved by the offline validator.",
+      "first_missing_path": "comparisons/wma-r1-wave1-full-recovery2-prefreeze.v1.json",
+      "mutation": "none"
+    }
+  ],
+  "scientific_effect": {
+    "models_loaded": 0,
+    "gpu_processes_started": 0,
+    "result_admission_attempted": false,
+    "numeric_rows_written": 0,
+    "scores_inspected": false
+  },
+  "retention": "Preserve the archive and extracted directory as failed transport/control evidence. Do not edit, reuse, or delete either path.",
+  "recovery_rule": "A recovery requires a fresh archive name and extraction root, adds only the three missing frozen parents, and invokes validation with the already designated Python 3.11 interpreter."
+}
