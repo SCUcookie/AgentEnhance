@@ -1,0 +1,99 @@
+{
+  "schema_version": "agentenhance.baseline_model_ownership_ledger.v2",
+  "ledger_id": "baseline-model-ownership-20260904-v2",
+  "status": "FROZEN_BEFORE_SIGLIP2_MATERIALIZATION_AND_ANY_MODEL_CLEANUP",
+  "frozen_at": "2026-09-04T11:35:00+08:00",
+  "supersedes": {
+    "path": "comparisons/baseline-model-ownership-ledger.v1.json",
+    "sha256": "3b855e216f8eca4d39d18bade4bcdda91136df7d8a06333fcfd6d93067ff0613",
+    "reason": "Mem-Gallery adds one project-owned SigLIP2 snapshot and additional cross-track dependents for the already registered GME and MiniLM snapshots."
+  },
+  "inheritance_rule": "All v1 protected assets, project-owned candidates, targets, identities, state transitions, retention requirements, and prohibitions remain effective except for the exact additive dependent expansions and new candidate below.",
+  "protected_shared_assets_unchanged": [
+    {
+      "repository": "Qwen/Qwen3-VL-8B-Instruct",
+      "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+      "cleanup_eligible": false,
+      "new_memgallery_dependents": [
+        "memgallery-a-mem", "memgallery-memoryos", "memgallery-universalrag",
+        "memgallery-ngm", "memgallery-augustus", "memgallery-m2a",
+        "memgallery-v-mem", "memgallery-no-memory", "memgallery-full-memory-text",
+        "memgallery-full-memory-mm", "memgallery-fifo-recent", "memgallery-bm25",
+        "memgallery-naive-rag", "memgallery-hybrid-rag"
+      ]
+    },
+    {
+      "repository": "Qwen/Qwen3-VL-Embedding-2B",
+      "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "cleanup_eligible": false,
+      "new_memgallery_dependents": ["memgallery-m2a", "memgallery-hybrid-rag"]
+    }
+  ],
+  "expanded_project_owned_dependents": [
+    {
+      "model_id": "wave2-gme-qwen2-vl-2b",
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave2-gme-20260903-v1",
+      "inherited_required_dependents": ["wma-ngmemory", "wma-augustus", "wma-universalrag"],
+      "inherited_conservative_endpoint_dependents": ["wma-mirix"],
+      "new_required_dependents": [
+        "memgallery-naive-rag", "memgallery-ngm", "memgallery-augustus", "memgallery-universalrag"
+      ],
+      "cleanup_eligible": false
+    },
+    {
+      "model_id": "wave3-all-minilm-l6-v2",
+      "repository": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/wma-r1-wave3-all-minilm-l6-v2-20260904-v1",
+      "inherited_required_dependents": ["wma-memoryos"],
+      "new_required_dependents": ["memgallery-a-mem", "memgallery-memoryos", "memgallery-v-mem"],
+      "cleanup_eligible": false
+    }
+  ],
+  "new_project_owned_candidates": [
+    {
+      "model_id": "memgallery-vmem-siglip2-base-patch16-384",
+      "repository": "google/siglip2-base-patch16-384",
+      "revision": "f775b65a79762255128c981547af89addcfe0f88",
+      "target": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/memgallery-vmem-siglip2-base-patch16-384-20260904-v1",
+      "prefetch_manifest": "comparisons/memgallery-siglip2-model-prefetch-manifest.v1.json",
+      "prefetch_manifest_sha256": "4a4ce353eb7a2f59ed6420a77adfb130b9c41074313e2721908f4375a422c7e1",
+      "expected_files": 9,
+      "expected_bytes": 1540625721,
+      "required_dependents": ["memgallery-m2a", "memgallery-v-mem"],
+      "conservative_endpoint_dependents": [],
+      "ownership_state": "PROJECT_OWNED_CANDIDATE_IF_CREATED_BY_FROZEN_MATERIALIZER",
+      "current_state": "NOT_MATERIALIZED_NOT_CLEANUP_ELIGIBLE",
+      "cleanup_eligible": false
+    }
+  ],
+  "effective_aggregate": {
+    "project_owned_candidate_models": 8,
+    "project_owned_expected_files": 99,
+    "project_owned_expected_bytes": 28164467445,
+    "protected_shared_models": 2,
+    "new_candidate_models": 1,
+    "expanded_existing_candidates": 2,
+    "currently_cleanup_eligible_models": 0
+  },
+  "materialization_authorization": "This ownership successor satisfies only the SigLIP2 ownership prerequisite. Actual acquisition still requires every scheduler observation in comparisons/memgallery-siglip2-model-materialization-prefreeze.v1.json and an accepted inert control package.",
+  "cleanup_authorization": "None. A future cleanup-controller successor must resolve the v1 base plus this v2 delta and must retain the existing three-track global completion gate before any preflight, quarantine, or deletion.",
+  "retention_rule": "Every new or expanded dependent must reach its terminal state, all accepted and rejected evidence must be archived and verified, and no live process or pending track may reference a candidate before cleanup can even become dry-run eligible.",
+  "current_state": {
+    "siglip2_materialized": false,
+    "memgallery_complete": false,
+    "all_three_tracks_complete": false,
+    "cleanup_eligible_models": 0,
+    "mutation_performed": false
+  },
+  "explicitly_prohibited": [
+    "using the v1 ownership ledger alone for any cleanup decision after this successor",
+    "materializing SigLIP2 at another target or revision and treating it as owned by this ledger",
+    "cleaning GME or MiniLM after WMA while a Mem-Gallery dependent remains pending",
+    "cleaning SigLIP2 after only one of M2A or V-Mem is terminal",
+    "cleaning either protected shared Qwen model",
+    "treating this additive ledger as permission to invoke the v1 or v2 cleanup controller"
+  ]
+}

@@ -14,6 +14,7 @@ baseline-check:
 	python3 scripts/validate_foundation_results.py
 	python3 scripts/validate_model_retention_policy_v2.py
 	python3 scripts/validate_baseline_model_ownership_ledger.py
+	python3 scripts/validate_baseline_model_ownership_ledger_v2.py
 	python3 scripts/validate_model_cleanup_controller.py
 	python3 scripts/validate_model_cleanup_controller_v2.py
 	python3 scripts/validate_model_cleanup_control_package_v2.py
