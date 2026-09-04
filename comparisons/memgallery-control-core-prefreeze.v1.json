@@ -1,0 +1,97 @@
+{
+  "schema_version": "agentenhance.memgallery_control_core_prefreeze.v1",
+  "stage_id": "memgallery-control-core-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_ONLY_AWAITING_DATA_MODELS_AND_NUMERICAL_AUTHORIZATION",
+  "frozen_at": "2026-09-04T08:37:24+08:00",
+  "purpose": "Freeze the deterministic retrieval, tie-breaking, and evidence-packing semantics for all seven Mem-Gallery control methods before any real question, answer, prediction, or score is observed.",
+  "scientific_boundary": "This artifact validates an algorithmic control core on synthetic fixtures. It contains no endpoint client, dataset traversal, answer prompt, numerical run authorization, prediction, metric, ranking, or SOTA evidence.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-static-method-entry-prefreeze.v1.json",
+      "sha256": "99ccf8b0c992b0c4a90efe3788d7801c87a8d8e12b9455d5670e66eaeae3ddb4"
+    },
+    {
+      "path": "comparisons/memgallery-run-reconciliation-prefreeze.v1.json",
+      "sha256": "52698bc8edac6a4ce8989f17eb820f5804bcf2f4b63c70b36d00b1adb286c437"
+    },
+    {
+      "path": "scripts/memgallery_control_core.py",
+      "sha256": "999828c3e3e77127017e4af7929426bc93630d2ba84394500aa9dda3b4bd39f8"
+    },
+    {
+      "path": "tests/test_memgallery_control_core.py",
+      "sha256": "caccdbbe1bb114d7175d8fd7987b98e1b9698572edc264e54b27afcf09aae245"
+    }
+  ],
+  "registered_controls": [
+    "no-memory",
+    "full-memory-text",
+    "full-memory-mm",
+    "fifo-recent",
+    "bm25",
+    "naive-rag",
+    "hybrid-rag"
+  ],
+  "record_contract": {
+    "required_fields": ["memory_id", "chronological_index", "text", "image_ids"],
+    "identity_rule": "memory_id is a unique nonempty string and chronological_index is a unique nonnegative integer within one scenario.",
+    "image_rule": "image_ids is a duplicate-free list of nonempty frozen dataset image identities.",
+    "source_rule": "The future dataset adapter must derive every record from a frozen dialogue round without rewriting the source authority."
+  },
+  "retrieval_contract": {
+    "no-memory": "Return no evidence.",
+    "full-memory-text": "Return all caption-folded records in chronological order before newest-preserving budget packing.",
+    "full-memory-mm": "Return all multimodal records in chronological order before newest-preserving budget packing and the 20-image cap.",
+    "fifo-recent": "Return the 10 most recent records, presented in chronological order.",
+    "bm25": "One record per document; Python Unicode word tokens after casefold; BM25Okapi k1=1.5, b=0.75, epsilon=0.25; descending score then ascending chronological_index.",
+    "naive-rag": "Cosine top 10 using the frozen GME document and query vectors; descending score then ascending chronological_index.",
+    "hybrid-rag": "Take BM25 top 20 and dense top 20, apply equal-weight reciprocal-rank fusion with constant 60, then sort by descending fused score, best component rank, and ascending chronological_index; retain top 10."
+  },
+  "evidence_budget_contract": {
+    "formula": "N_text + 256*N_images <= 4096",
+    "atomicity": "A record is either included whole or excluded; partial record truncation is prohibited.",
+    "ranked_methods": "Preserve method rank and greedily include whole records within the budget.",
+    "full_memory_methods": "Traverse newest to oldest for selection, then restore chronological prompt order.",
+    "full_memory_mm_image_cap": 20,
+    "tokenizer_binding": "The future runner must use the exact frozen Qwen answer-model tokenizer; whitespace token counts are synthetic-test fixtures only."
+  },
+  "failure_semantics": [
+    "Reject duplicate or malformed record identities.",
+    "Reject missing dense vectors, dimension drift, zero-norm vectors, or non-finite vectors/scores.",
+    "Reject negative budgets and invalid tokenizer counts.",
+    "Never replace a failed retriever with another method or an official result."
+  ],
+  "validation": {
+    "synthetic_tests_passed": 9,
+    "covered_invariants": [
+      "Unicode casefolded word tokenization",
+      "BM25 relevance and chronological tie-break",
+      "deterministic no-memory and recent controls",
+      "cosine dense ranking",
+      "two-lane reciprocal-rank fusion",
+      "newest-preserving selection with chronological prompt restoration",
+      "joint text-image budget and image cap",
+      "non-finite dense input rejection"
+    ],
+    "real_dataset_rows_read": 0,
+    "network_requests": 0,
+    "gpu_processes": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0
+  },
+  "downstream_requirements": [
+    "Accept the exact Mem-Gallery materialization and semantic integrity roots.",
+    "Accept offline inventories for the required GME model and the protected Qwen answer model.",
+    "Freeze and validate dataset-to-record and endpoint-client overlays without editing upstream checkouts.",
+    "Run no-score lifecycle fixtures in fresh roots.",
+    "Freeze the 42-run numerical authorization and exact resource/retry limits before observing complete predictions or scores."
+  ],
+  "authorization": "No real Mem-Gallery lifecycle, embedding, answer generation, scoring, claim admission, model download, service launch, or cleanup is authorized by this artifact.",
+  "explicitly_prohibited": [
+    "treating synthetic algorithm tests as a reproduced baseline result",
+    "using whitespace token counts in a real run",
+    "changing tie-breaks, top-k, RRF constant, image cost, or packing order after score observation",
+    "launching this core directly as a numerical runner",
+    "claiming quality, efficiency, superiority, or SOTA from this implementation-only stage"
+  ]
+}
