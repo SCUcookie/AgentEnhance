@@ -1,0 +1,103 @@
+{
+  "schema_version": "agentenhance.memgallery_embedding_client_prefreeze.v1",
+  "stage_id": "memgallery-dense-control-embedding-client-20260904-v1",
+  "status": "FROZEN_MOCK_ONLY_AWAITING_MODEL_SERVICE_AND_LIFECYCLE_GATES",
+  "frozen_at": "2026-09-04T21:40:00+08:00",
+  "purpose": "Freeze a one-attempt, order-preserving, result-free local embedding transport for the two Mem-Gallery dense controls before any real embedding service, dataset vector, prediction, or score is observed.",
+  "scientific_boundary": "This artifact validates transport and accounting invariants on synthetic responses. It estimates no retrieval or answer quality and authorizes no numerical baseline result.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-static-model-prefetch-manifest.v1.json",
+      "sha256": "648b150ccf773c2e303e690b79f3f50497842d73b9c7654cc5fef0d30439c6a4"
+    },
+    {
+      "path": "comparisons/memgallery-control-runner-prefreeze.v1.json",
+      "sha256": "4f84c7faf4630b7667831bd1d93b5ea6e98ec1888d7fd415f9f2f9a2f819d0ba"
+    },
+    {
+      "path": "scripts/memgallery_embedding_client.py",
+      "sha256": "da5bb90228e825746970343716751896f4d017bbea0ae30cc8fa1dc9c7e8bf40"
+    },
+    {
+      "path": "tests/test_memgallery_embedding_client.py",
+      "sha256": "2d4d28885ba45e07f95eaff35927f1936f5b5110367723d5dac95be9c3f968d1"
+    }
+  ],
+  "method_profiles": {
+    "naive-rag": {
+      "profile": "gme1536",
+      "model": "gme-Qwen2-VL-2B-Instruct",
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "dimensions": 1536
+    },
+    "hybrid-rag": {
+      "profile": "qwen1024",
+      "model": "Qwen3-VL-Embedding-2B",
+      "repository": "Qwen/Qwen3-VL-Embedding-2B",
+      "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "dimensions": 1024
+    }
+  },
+  "transport_contract": {
+    "endpoint": "http://127.0.0.1:<high-port>/v1/embeddings",
+    "methods": ["naive-rag", "hybrid-rag"],
+    "seeds": [0, 1, 2],
+    "input_roles": ["document", "query"],
+    "maximum_batch_items": 64,
+    "maximum_request_bytes": 8388608,
+    "maximum_response_bytes": 33554432,
+    "encoding_format": "float",
+    "attempts_per_batch": 1,
+    "automatic_retries": 0,
+    "response_order": "The response must contain exactly the requested item count with consecutive indices 0..N-1 in request order.",
+    "vector_validation": "Every vector must have the method-bound exact dimension, contain only finite numeric non-boolean values, and have a finite nonzero L2 norm.",
+    "usage_validation": "prompt_tokens and total_tokens are required nonnegative integers; completion_tokens may be omitted but is interpreted as zero, must equal zero if present, and prompt_tokens must equal total_tokens.",
+    "normalization": "Returned vectors are preserved. The already frozen retrieval core computes cosine similarity and performs its own norm handling."
+  },
+  "failure_contract": {
+    "preflight": "The entire text surface and batch size are validated before the first multi-batch call.",
+    "single_batch": "Any HTTP, JSON, identity, count, order, dimension, numeric, norm, usage, byte-ceiling, or clock failure raises one EndpointCallError with one FAILED call record.",
+    "multi_batch": "Stop at the first failed batch without retry and raise EmbeddingBatchError retaining every prior ACCEPTED call record, the FAILED record, and only the already returned partial vectors.",
+    "same_root_retry": false
+  },
+  "call_record_contract": {
+    "schema_version": "agentenhance.memgallery_embedding_call.v1",
+    "identity_fields": ["method_id", "seed", "input_role", "profile", "model", "endpoint", "call_category"],
+    "request_fields": ["input_items", "request_sha256", "request_bytes", "attempts", "retry_count"],
+    "response_fields": ["status", "http_status", "response_id", "response_sha256", "response_bytes", "dimensions", "prompt_tokens", "completion_tokens", "total_tokens", "wall_seconds", "error_type", "error"],
+    "batch_fields": ["batch_index", "input_offset"],
+    "raw_text_retained": false,
+    "raw_vectors_in_call_record": false
+  },
+  "validation": {
+    "mock_tests_passed": 11,
+    "covered_invariants": [
+      "naive-rag to GME-1536 binding",
+      "hybrid-rag to protected-Qwen-1024 binding",
+      "ordered batching and exact offsets",
+      "full-surface validation before the first request",
+      "prior success plus failed-attempt retention",
+      "response model, count, index, dimension, numeric, finite, and nonzero-norm rejection",
+      "embedding usage accounting with zero completion tokens",
+      "method, input, seed, role, batch, and loopback endpoint rejection",
+      "no raw text in durable call records"
+    ],
+    "real_dataset_texts_read": 0,
+    "real_endpoint_calls": 0,
+    "network_requests": 0,
+    "vectors_observed": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "After WMA Wave 1 is terminal-released, accept the exact Mem-Gallery dataset and both method-bound model inventories, then freeze separate real service receipts and a fresh-root lifecycle successor that persists these call records alongside document/query vector identities.",
+  "authorization": "This mock-only artifact authorizes no real dataset read, model load, endpoint service, embedding call, prediction, scoring, table admission, SOTA claim, or cleanup.",
+  "explicitly_prohibited": [
+    "substituting the protected Qwen encoder for the method-prescribed GME encoder in naive-rag",
+    "substituting GME or another encoder for the protected Qwen encoder in hybrid-rag",
+    "accepting reordered, truncated, padded, zero, non-finite, or dimension-drifted vectors",
+    "retrying a failed batch automatically or discarding the failed call record",
+    "persisting raw input text in the call-accounting record",
+    "treating synthetic response validation as a reproduced baseline result"
+  ]
+}
