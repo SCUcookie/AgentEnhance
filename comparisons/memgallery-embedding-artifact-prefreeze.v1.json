@@ -1,0 +1,119 @@
+{
+  "schema_version": "agentenhance.memgallery_embedding_artifact_prefreeze.v1",
+  "stage_id": "memgallery-dense-vector-artifact-20260904-v1",
+  "status": "FROZEN_SYNTHETIC_ONLY_AWAITING_REAL_DATA_MODEL_AND_SERVICE_GATES",
+  "frozen_at": "2026-09-04T22:20:00+08:00",
+  "purpose": "Freeze the append-only evidence format and reload gate that bind every Mem-Gallery dense-control vector to its exact answer-free source text, scenario, memory_id or qid, method, seed, encoder identity, request, batch offset, and durable endpoint call record.",
+  "scientific_boundary": "This artifact establishes provenance and denominator integrity for future dense retrieval. It uses synthetic vectors only, observes no real retrieval result or answer, and estimates no method quality.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-embedding-client-prefreeze.v1.json",
+      "sha256": "4a758b9061d18654b174af44a3f21aa7be5e7562b299fa0563c8a96343599fae"
+    },
+    {
+      "path": "comparisons/memgallery-dataset-projection-loader-prefreeze.v1.json",
+      "sha256": "732c8da2fa25b5ac4068c80530b125511400218e9809da5c5f5bad5bba274a25"
+    },
+    {
+      "path": "comparisons/memgallery-control-runner-prefreeze.v1.json",
+      "sha256": "4f84c7faf4630b7667831bd1d93b5ea6e98ec1888d7fd415f9f2f9a2f819d0ba"
+    },
+    {
+      "path": "scripts/memgallery_embedding_artifact.py",
+      "sha256": "c5ff5e85715b9355c88a2cdace147c24036f0007e286aa4408f415e35a4d3f8a"
+    },
+    {
+      "path": "tests/test_memgallery_embedding_artifact.py",
+      "sha256": "e7d63d9d3518ad121c9dcc083b3d4f912ea9bb0d59d5d0ed759ece8dcd567bd7"
+    }
+  ],
+  "registered_surface": {
+    "methods": ["naive-rag", "hybrid-rag"],
+    "seeds": [0, 1, 2],
+    "future_method_seed_artifacts": 6,
+    "roles": ["document", "query"],
+    "questions_per_method_seed": 1711,
+    "document_count": "Derived without omission from every ordered memory_record in the accepted 20-scenario projection.",
+    "batch_size_range": [1, 64]
+  },
+  "method_profiles": {
+    "naive-rag": {
+      "profile": "gme1536",
+      "model": "gme-Qwen2-VL-2B-Instruct",
+      "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+      "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "dimensions": 1536
+    },
+    "hybrid-rag": {
+      "profile": "qwen1024",
+      "model": "Qwen3-VL-Embedding-2B",
+      "repository": "Qwen/Qwen3-VL-Embedding-2B",
+      "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "dimensions": 1024
+    }
+  },
+  "surface_identity": {
+    "document": "Global projection order over scenario, memory record order, memory_id, chronological index, and SHA-256 of the exact captioned-text encoder input.",
+    "query": "Global accepted order over scenario, qid, query position, and SHA-256 of the exact retrieval_query_text encoder input.",
+    "projection_hash": "Canonical SHA-256 over both ordered identity surfaces; raw text and vectors are excluded.",
+    "raw_answer_key_allowed": false,
+    "duplicate_scenario_memory_or_qid_allowed": false
+  },
+  "writer_contract": {
+    "root": "An absent non-symlink exact child of an explicitly allowed run scope.",
+    "start": "Create RUNNING metadata plus empty append-only document, query, call, and event files before embedding evidence is accepted.",
+    "accepted_batch": "Require the next exact role offset, batch index, method, seed, profile, model, dimension, single attempt, zero retry, loopback endpoint, finite duration, exact usage, response evidence, and request SHA-256/byte length reconstructed from the frozen raw-text slice before appending vectors.",
+    "vectors": "Persist finite numeric non-boolean exact-dimensional nonzero vectors with only hashed text identity, never raw source text.",
+    "complete": "Only the full document and query surfaces can create TERMINAL_EMBEDDINGS_COMPLETE and a seven-file SHA-256 inventory.",
+    "reject": "Retain accepted prefix vectors, all appended calls including a terminal failed call, failure metadata, inventory, and TERMINAL_REJECTED; same-root retry is false.",
+    "overwrite": false,
+    "resume": false,
+    "same_root_retry": false
+  },
+  "reload_contract": {
+    "hash_gate": "Require complete terminal state, no rejection marker, exactly seven signed files, no symlinks, and matching SHA-256 for every signed member.",
+    "semantic_gate": "Independently recompute projection identity, model/method/seed/dataset bindings, start/identity/summary denominators, every request-to-text hash, call order, response evidence, token usage, and every vector invariant even if an artifact was maliciously re-signed.",
+    "runner_output": "Return scenario-to-ordered-document-vector and qid-to-query-vector mappings plus accepted call records for direct injection into the already frozen control runner.",
+    "failed_or_partial_load": false
+  },
+  "artifact_files": [
+    "artifact-record.json",
+    "artifact-identity.json or artifact-failure.json",
+    "artifact-summary.json on completion",
+    "document-vectors.jsonl",
+    "query-vectors.jsonl",
+    "embedding-calls.jsonl",
+    "events.jsonl",
+    "EVIDENCE_SHA256SUMS",
+    "one terminal marker"
+  ],
+  "validation": {
+    "synthetic_tests_passed": 8,
+    "covered_invariants": [
+      "complete write, hash inventory, semantic reload, and exact runner surface",
+      "request hash binding to the next frozen raw-text slice",
+      "batch index, input offset, and vector dimension rejection before append",
+      "partial accepted vectors and failed call retention",
+      "byte tamper rejection despite a complete terminal marker",
+      "malicious call re-signing rejected by semantic request reconstruction",
+      "projection order, duplicate identity, and raw-answer leak rejection",
+      "existing and nested output-root rejection"
+    ],
+    "real_dataset_texts_read": 0,
+    "real_vectors_observed": 0,
+    "real_endpoint_calls": 0,
+    "real_artifact_roots_created": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "Freeze a real service receipt and real control-family lifecycle successor that composes the accepted dataset projection, one-shot embedding client, this append-only artifact, exact tokenizer, matched answer endpoint, raw-run writer, and reconciliation without exposing scores before the numerical authorization boundary.",
+  "authorization": "This synthetic-only artifact authorizes no real dataset read, vector generation, model load, service launch, endpoint call, prediction, score, comparison, SOTA claim, or cleanup.",
+  "explicitly_prohibited": [
+    "reusing a vector artifact across method or seed without a separately frozen rule",
+    "embedding any text other than the exact captioned memory text or retrieval_query_text bound by the accepted projection",
+    "loading a partial, rejected, reordered, hash-drifted, dimension-drifted, or semantically re-signed artifact",
+    "dropping a failed embedding call or selectively repairing vectors in the same root",
+    "persisting raw memory or query text in the vector rows",
+    "treating synthetic vector persistence as a reproduced result"
+  ]
+}

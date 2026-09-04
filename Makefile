@@ -67,6 +67,7 @@ baseline-check:
 	python3 scripts/validate_memgallery_answer_contract_prefreeze.py
 	python3 scripts/validate_memgallery_endpoint_client_prefreeze.py
 	python3 scripts/validate_memgallery_embedding_client_prefreeze.py
+	python3 scripts/validate_memgallery_embedding_artifact_prefreeze.py
 	python3 scripts/validate_memgallery_control_runner_prefreeze.py
 	python3 scripts/validate_memgallery_raw_run_writer_prefreeze.py
 	python3 scripts/validate_memgallery_lifecycle_controller_prefreeze.py
