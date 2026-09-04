@@ -1,0 +1,53 @@
+{
+  "schema_version": "agentenhance.causal_locomo_lifecycle_controller_proposal.v1",
+  "proposal_id": "causal-locomo-synthetic-lifecycle-20260904-v1",
+  "state": "PROPOSED_SYNTHETIC_ONLY_REAL_MODE_DENIED",
+  "proposed_at": "2026-09-04T19:20:00+08:00",
+  "parents": [
+    {
+      "path": "comparisons/causal-locomo-real-model-integrity-prefreeze.v1.json",
+      "sha256": "6843b5f0301b6f4fb43dbe88afe5d84d3fcfbf5e1457939e5aae4c56610d817d"
+    },
+    {
+      "path": "comparisons/causal-locomo-five-method-overlay-proposal.v1.json",
+      "sha256": "ad444dc86c8ec02a2c93db6cea0ab3dd9b4506d02e71288d6c379254664dd41a"
+    },
+    {
+      "path": "comparisons/causal-locomo-endpoint-client-proposal.v1.json",
+      "sha256": "de580a9468c0cbb1b7d2f697765abb9dda084afcefe8d92802ca548911bfac5d"
+    },
+    {
+      "path": "comparisons/causal-locomo-raw-writer-proposal.v1.json",
+      "sha256": "de6ef5393db874caf00dff91ee94d39a3e1d249a764ac9cd34388c5465b5096f"
+    }
+  ],
+  "implementation": "scripts/causal_locomo_lifecycle_controller.py",
+  "composition": [
+    "Validate a unique source-record order before creating output_root.",
+    "Build a fresh inference-blind projection for every record without mutating authority.",
+    "For seeds 0,1,2 and qid-major seven-method order, execute five injected mock controls and emit two protocol-blocked rows.",
+    "Finalize every seed root independently with exact row counts, append-only events, SHA256SUMS and TERMINAL_ACCEPTED.",
+    "Write one top-level lifecycle summary and inventory only after all three seed roots are accepted."
+  ],
+  "synthetic_acceptance": {
+    "seeds": [0, 1, 2],
+    "methods": 7,
+    "accepted_methods_per_qid_seed": 5,
+    "protocol_blocked_methods_per_qid_seed": 2,
+    "real_mode_implemented": false,
+    "real_mode_creates_paths": false,
+    "gold_fields_in_model_prompts": 0,
+    "automatic_retries": 0
+  },
+  "current_observations": {
+    "synthetic_test_cases": 5,
+    "real_roots": 0,
+    "real_answer_calls": 0,
+    "real_embedding_calls": 0,
+    "real_prediction_rows": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "After WMA release, audit current model/service state, bind implementation hashes and the exact 87-qid identity, then freeze a new synthetic lifecycle control package. This proposal itself cannot be launched remotely.",
+  "authorization": "Local temporary-directory fixtures only. Real mode is unimplemented and denied before path creation. No server mutation, endpoint request, numerical execution, score inspection, table admission, SOTA claim, archive deletion, or model cleanup is authorized."
+}
+
