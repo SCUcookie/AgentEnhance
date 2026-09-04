@@ -1,0 +1,189 @@
+{
+  "schema_version": "agentenhance.memgallery_shared_qwen_services_prefreeze.v1",
+  "stage_id": "memgallery-shared-qwen-services-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_ONLY_AWAITING_WAVE1_RELEASE",
+  "frozen_at": "2026-09-04T13:24:18+08:00",
+  "purpose": "Freeze a project-owned lifecycle for the protected shared Qwen chat and 1024-dimensional embedding services needed by all matched Mem-Gallery runs, without starting either service while WMA Wave1 is active.",
+  "scientific_question": "Can every future Mem-Gallery method use the same hash-verified answer and shared embedding services with exact endpoints, accelerator topology, health checks, process ownership, and terminal stop evidence?",
+  "estimand_boundary": "This is service identity and lifecycle evidence only. It estimates no memory-method quality, does not read a benchmark example, and cannot establish a comparison or SOTA claim.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/wma-r1-wave1-release-gate-prefreeze.v1.json",
+      "sha256": "d9d467a4a910e184aac60d041d548f05aa7a7b70451b583d139144bfa2f6cbd8"
+    },
+    {
+      "path": "comparisons/memgallery-static-model-prefetch-manifest.v1.json",
+      "sha256": "648b150ccf773c2e303e690b79f3f50497842d73b9c7654cc5fef0d30439c6a4"
+    },
+    {
+      "path": "comparisons/memgallery-lifecycle-controller-prefreeze.v1.json",
+      "sha256": "b30fda2c7767ff740aff9e26bc13608527d2ae203dee408482618b8a77f820cb"
+    },
+    {
+      "path": "comparisons/memgallery-answer-contract-prefreeze.v1.json",
+      "sha256": "4897672183caf2a29a7d291c4e1f12bd6d2c921a48eb1212c10ed482ce51bef9"
+    },
+    {
+      "path": "comparisons/memgallery-embedding-client-prefreeze.v1.json",
+      "sha256": "4a758b9061d18654b174af44a3f21aa7be5e7562b299fa0563c8a96343599fae"
+    },
+    {
+      "path": "scripts/manage_memgallery_shared_qwen_services.py",
+      "sha256": "b5f5f3f5ac12530e05b902e242c34938b31482da93e4928f4685ba327957baf2"
+    },
+    {
+      "path": "tests/test_memgallery_shared_qwen_services.py",
+      "sha256": "2dab00a7f26b27f1515dfa255c47512ff99c56da0425ca3f0e7fda50f3439eed"
+    }
+  ],
+  "protected_models": {
+    "chat": {
+      "repository": "Qwen/Qwen3-VL-8B-Instruct",
+      "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+      "path": "/data1/2026/ldh/AgentEnhance/checkpoints/base-models/qwen3-vl-8b-instruct/rev-5d854aab08710c16b980ec6d603d863b3821b915",
+      "placement_manifest_sha256": "47a7e166264f2e2b10a9180c82cf3e2399157672eeba60d3bfe81d9bb49bac79",
+      "model_inventory_sha256": "a9246eb726bbc0f09a388d27a989a5c1c483915508ee38cb8b1c41e435914dbb",
+      "model_files": 18,
+      "model_bytes": 17545916927,
+      "directory_files_including_two_manifests": 20,
+      "symlinks": 0,
+      "cleanup_eligible": false
+    },
+    "embedding": {
+      "repository": "Qwen/Qwen3-VL-Embedding-2B",
+      "revision": "c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "path": "/data1/2026/ldh/AgentEnhance/checkpoints/base-models/qwen3-vl-embedding-2b/rev-c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "placement_manifest_sha256": "f8768171271284a4e032c5fc82f1d8624007195c66dfebd40765c9e39b7ec10f",
+      "model_inventory_sha256": "7c91bdd2cdf46e9f0e112bcf3f1dcc45a35076e1543ab109629ca57d665f5b33",
+      "model_files": 20,
+      "model_bytes": 4271069478,
+      "directory_files_including_two_manifests": 22,
+      "symlinks": 0,
+      "cleanup_eligible": false
+    },
+    "runtime_validation": "Before creating the service root, rehash every one of the 38 signed model files, require the exact two signed placement/inventory files per model, reject every extra file or symlink, and recompute the two snapshot identities.",
+    "observation_role": "The 2026-09-04 read-only count/hash observation binds current small manifests only. It is not a substitute for the future complete runtime rehash."
+  },
+  "release_and_fresh_root_gate": {
+    "required_release_schema": "agentenhance.wma_wave1_release_gate_audit.v1",
+    "required_release_status": "TERMINAL_ACCEPTED",
+    "accepted_units": 1800,
+    "accepted_qa": 94872,
+    "blocked_processes": 0,
+    "blocked_ports": [],
+    "blocked_tmux_sessions": [],
+    "future_root_collisions": [],
+    "root": "An absent non-symlink exact child of an existing exact AgentEnhance/runs directory.",
+    "root_collision_checked_before_model_rehash": true,
+    "overwrite": false,
+    "resume": false,
+    "same_root_retry": false,
+    "exact_python": "/data1/anaconda3/envs/clo-infer/bin/python3.11"
+  },
+  "service_profiles": {
+    "chat": {
+      "served_model": "Qwen3-VL-8B-Instruct",
+      "endpoint": "http://127.0.0.1:18320/v1/chat/completions",
+      "models_endpoint": "http://127.0.0.1:18320/v1/models",
+      "physical_gpu_indices": [3, 4],
+      "tensor_parallel_size": 2,
+      "dtype": "bfloat16",
+      "max_model_len": 32768,
+      "gpu_memory_utilization": 0.9,
+      "max_num_seqs": 1,
+      "limit_mm_per_prompt": {"image": 21, "video": 0},
+      "image_capacity_rationale": "At most 20 registered memory images plus one question image."
+    },
+    "embedding": {
+      "served_model": "Qwen3-VL-Embedding-2B",
+      "endpoint": "http://127.0.0.1:18321/v1/embeddings",
+      "models_endpoint": "http://127.0.0.1:18321/v1/models",
+      "physical_gpu_indices": [1],
+      "tensor_parallel_size": 1,
+      "dtype": "bfloat16",
+      "runner": "pooling",
+      "convert": "embed",
+      "dimensions": 1024,
+      "normalize": true,
+      "max_model_len": 8192,
+      "gpu_memory_utilization": 0.9,
+      "max_num_seqs": 8,
+      "limit_mm_per_prompt": {"image": 1, "video": 0}
+    },
+    "maximum_prestart_memory_used_mib_per_required_gpu": 100,
+    "required_gpus_observed_exactly_once": [1, 3, 4],
+    "offline_environment": {
+      "TRANSFORMERS_OFFLINE": "1",
+      "HF_HUB_OFFLINE": "1"
+    }
+  },
+  "readiness": {
+    "launch_order": ["chat", "embedding"],
+    "separate_isolated_process_groups": true,
+    "maximum_polls_per_service": 180,
+    "seconds_between_polls": 5,
+    "accepted_models_response": "Exactly one OpenAI model object with the role-specific served-model id.",
+    "chat_smoke": "One non-benchmark temperature-zero request with nonempty content and exact additive token usage.",
+    "embedding_smoke": "One non-benchmark request returning exactly one ordered finite nonzero 1024-dimensional vector and exact prompt/total usage.",
+    "smoke_attempts_per_service": 1,
+    "automatic_retries": 0,
+    "ready_status": "READY_FOR_MEMGALLERY"
+  },
+  "ownership_and_stop": {
+    "process_identity": "Each ready role binds its positive PID, isolated PGID=PID, live /proc command-line SHA-256, exact command SHA-256, GPU mapping, endpoint, models response, and smoke response.",
+    "pre_signal_revalidation": "Reload and validate the entire ready receipt, exact commands, role/model identities, models-response hashes and contents, smoke-request/response hashes and contents, then revalidate every live PID/PGID/cmdline before signaling.",
+    "stop_order": ["embedding", "chat"],
+    "initial_signal": "SIGTERM to only the exact owned process group",
+    "sigterm_timeout_seconds": 120,
+    "fallback_signal": "SIGKILL to the same exact owned process group only after timeout",
+    "postcondition": "Both PIDs are absent and ports 18320 and 18321 bind free.",
+    "other_users_processes_may_be_signaled": false,
+    "terminal_status": "TERMINAL_ACCEPTED_STOPPED"
+  },
+  "evidence_protocol": {
+    "accepted_stop_inventory_members": 12,
+    "accepted_stop_files": [
+      "service-record.json",
+      "commands.json",
+      "chat-readiness-attempts.jsonl",
+      "embedding-readiness-attempts.jsonl",
+      "chat-models-response.json",
+      "embedding-models-response.json",
+      "chat-smoke-response.json",
+      "embedding-smoke-response.json",
+      "service-ready.json",
+      "chat.log",
+      "embedding.log",
+      "service-stop.json"
+    ],
+    "startup_failure": "Attempt ownership-checked cleanup for every process created by this invocation, retain and sign every durable file created, add service-failure.json, and mark TERMINAL_REJECTED.",
+    "stop_failure": "Attempt both roles even if one fails, retain successful stop outcomes and exact errors, sign service-stop-failure.json with the ready evidence, and mark TERMINAL_REJECTED.",
+    "same_root_retry": false
+  },
+  "validation": {
+    "synthetic_tests_passed": 11,
+    "covered_invariants": [
+      "complete signed model snapshot rehash and file tamper rejection",
+      "exact two-service launch profiles and multimodal image capacity",
+      "complete unique GPU observation",
+      "models and smoke response parsing with zero/nonfinite rejection",
+      "active Wave1 denial before root creation",
+      "root collision denial before model rehash or GPU observation",
+      "ready receipt response-tampering rejection",
+      "two-process ready lifecycle with four diagnostic HTTP calls",
+      "startup exit cleanup plus signed retained failure evidence",
+      "two-process ownership-validated terminal stop with twelve signed files",
+      "one-role ownership failure while still attempting the other role"
+    ],
+    "real_model_files_rehashed_by_this_freeze": 0,
+    "real_gpu_processes_started": 0,
+    "real_endpoint_requests": 0,
+    "benchmark_examples_read": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0,
+    "numeric_result_rows_added": 0,
+    "official_values_used": false
+  },
+  "next_gate": "After Wave1 terminal acceptance, use the accepted release receipt to run this exact service lifecycle only as part of a separately frozen result-free Mem-Gallery adapter-family lifecycle or numerical controller. Combine it with accepted dataset integrity, the NaiveRAG parity branch, and method-specific model receipts before any 42-run authorization.",
+  "authorization": "This implementation freeze authorizes no current model rehash, service start, GPU allocation, endpoint request, dataset access, prediction, score, comparison, claim, cleanup, or table mutation."
+}
