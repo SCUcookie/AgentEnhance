@@ -1,0 +1,164 @@
+{
+  "schema_version": "agentenhance.memgallery_naiverag_float32_service_prefreeze.v1",
+  "stage_id": "memgallery-naiverag-float32-service-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_ONLY_AWAITING_WAVE1_RELEASE_AND_GME_MATERIALIZATION",
+  "frozen_at": "2026-09-04T12:38:24+08:00",
+  "purpose": "Freeze a project-owned single-GPU float32 vLLM service lifecycle whose ready receipt is the only endpoint-service identity accepted by the NaiveRAG parity probe capture.",
+  "scientific_boundary": "This is infrastructure and provenance evidence only. It neither runs a memory method nor observes a benchmark example, answer, prediction, metric, comparison, or SOTA result.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/wma-r1-wave1-release-gate-prefreeze.v1.json",
+      "sha256": "d9d467a4a910e184aac60d041d548f05aa7a7b70451b583d139144bfa2f6cbd8"
+    },
+    {
+      "path": "comparisons/wma-wave2-model-materialization-prefreeze.v2.json",
+      "sha256": "10a2bf4c516e43444036779a97ad09a1912d35403d0d2f94109accf4e6c8acff"
+    },
+    {
+      "path": "comparisons/memgallery-naiverag-encoder-probe-capture-prefreeze.v1.json",
+      "sha256": "3e63c214d1c56fc41e543fcfcd88436194f340ef08abbe4d5718b305cdc73115"
+    },
+    {
+      "path": "scripts/run_vllm_gme_guarded.py",
+      "sha256": "232da2e5837a4d1e1536566569002c540b52d95c57f5f39fc3a09f9060a0f787"
+    },
+    {
+      "path": "scripts/manage_memgallery_naiverag_float32_service.py",
+      "sha256": "6a4abb5bc1ef81ae4a76411ff29fc4f8e2f37fd96070eff0f51e8f893ecd21ad"
+    },
+    {
+      "path": "tests/test_memgallery_naiverag_float32_service.py",
+      "sha256": "a528f67a5787828fd46dd81b339bc4df3a4a0c0be6b6ed07e7addfc1a31b85cb"
+    }
+  ],
+  "start_gate": {
+    "wave1_release_receipt": {
+      "schema_version": "agentenhance.wma_wave1_release_gate_audit.v1",
+      "status": "TERMINAL_ACCEPTED",
+      "method_seed_runs": 12,
+      "accepted_units": 1800,
+      "accepted_qa": 94872,
+      "unit_hashes_verified": true,
+      "blocked_processes": 0,
+      "blocked_ports": [],
+      "blocked_tmux_sessions": [],
+      "future_root_collisions": [],
+      "scores_observed": 0,
+      "official_values_used": false,
+      "mutation_performed": false
+    },
+    "model_snapshot": "Re-run the full 24-file, 8,848,245,026-byte signed GME validation from the accepted capture implementation before creating the service root.",
+    "python": "/data1/anaconda3/envs/clo-infer/bin/python3.11 as an executable regular non-symlink file",
+    "launcher_sha256": "232da2e5837a4d1e1536566569002c540b52d95c57f5f39fc3a09f9060a0f787",
+    "allowed_physical_gpu_indices": [1, 3, 4, 5],
+    "selected_gpu_max_used_mib": 100,
+    "port": 18322,
+    "port_must_bind_free_before_start": true,
+    "output_root": "Absent non-symlink exact child of an explicitly allowed AgentEnhance run scope."
+  },
+  "launch_profile": {
+    "bind_host": "127.0.0.1",
+    "port": 18322,
+    "endpoint": "http://127.0.0.1:18322/v1/embeddings",
+    "models_endpoint": "http://127.0.0.1:18322/v1/models",
+    "served_model": "gme-Qwen2-VL-2B-Instruct",
+    "model_repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+    "model_revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+    "runner": "pooling",
+    "convert": "embed",
+    "dtype": "float32",
+    "tensor_parallel_size": 1,
+    "max_model_len": 8192,
+    "gpu_memory_utilization": 0.9,
+    "max_num_seqs": 1,
+    "limit_mm_per_prompt": {
+      "image": 1,
+      "video": 0
+    },
+    "trust_remote_code": true,
+    "environment": {
+      "TRANSFORMERS_OFFLINE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "CUDA_VISIBLE_DEVICES": "the single preflight-accepted physical GPU index"
+    },
+    "shell": false,
+    "isolated_process_group": true
+  },
+  "readiness": {
+    "maximum_polls": 180,
+    "seconds_between_polls": 5,
+    "timeout_seconds_per_poll": 5,
+    "maximum_response_bytes": 1048576,
+    "accepted_response": "OpenAI object=list containing exactly one object=model whose id is gme-Qwen2-VL-2B-Instruct.",
+    "every_poll_retained": true,
+    "ready_receipt_schema": "agentenhance.memgallery_naiverag_float32_service_ready.v1",
+    "ready_status": "READY_FOR_PARITY_PROBE",
+    "receipt_binds": [
+      "model path and complete snapshot identity",
+      "materialization identity",
+      "Wave1 release receipt",
+      "launch command and guarded launcher",
+      "physical GPU and pre-start memory",
+      "PID, isolated process-group id, and live /proc command line",
+      "models response and readiness poll count"
+    ],
+    "automatic_retries": 0
+  },
+  "ownership_and_stop": {
+    "stop_target": "Only the positive PID whose process-group id equals its PID and whose current /proc command-line SHA-256 equals the ready receipt.",
+    "initial_signal": "SIGTERM to the exact owned process group",
+    "sigterm_timeout_seconds": 120,
+    "fallback_signal": "SIGKILL to the same exact owned process group only after the SIGTERM timeout",
+    "postcondition": "The PID is absent and loopback port 18322 binds free.",
+    "other_users_processes_may_be_signaled": false,
+    "stop_receipt_schema": "agentenhance.memgallery_naiverag_float32_service_stop.v1",
+    "terminal_status": "TERMINAL_ACCEPTED_STOPPED"
+  },
+  "evidence_protocol": {
+    "ready_nonterminal_files": [
+      "service-record.json",
+      "command.json",
+      "readiness-attempts.jsonl",
+      "models-response.json",
+      "service-ready.json",
+      "service.log",
+      "READY_FOR_PARITY_PROBE"
+    ],
+    "accepted_stop_additions": [
+      "service-stop.json",
+      "EVIDENCE_SHA256SUMS covering the seven durable evidence files",
+      "TERMINAL_ACCEPTED_STOPPED"
+    ],
+    "startup_failure": "Stop only a child process created by this invocation, retain record/command/polls/log/failure, sign all five files, and mark TERMINAL_REJECTED.",
+    "overwrite": false,
+    "resume": false,
+    "same_root_retry": false
+  },
+  "validation": {
+    "synthetic_tests_passed": 10,
+    "covered_invariants": [
+      "complete Wave1 release acceptance plus active-state and storage rejection",
+      "exact float32 loopback single-GPU launch argv",
+      "GPU observation parsing and missing/ambiguous GPU rejection",
+      "one exact served model in the models response",
+      "service-ready receipt accepted directly by the probe capture",
+      "PID/process-group and live command-line ownership",
+      "guarded launcher byte identity",
+      "one-poll successful ready-root creation",
+      "early process exit rejection with five-file signed failure evidence",
+      "owned-process stop, postcondition, seven-file inventory, and no second stop"
+    ],
+    "real_release_receipts_consumed": 0,
+    "real_model_files_read": 0,
+    "real_model_loads": 0,
+    "real_gpu_processes_started": 0,
+    "real_endpoint_requests": 0,
+    "real_vectors_observed": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0,
+    "numeric_result_rows_added": 0,
+    "official_values_used": false
+  },
+  "next_gate": "Freeze a fresh-root composition controller that runs direct capture, starts this service, runs endpoint capture, stops and signs this service even on failure, executes the frozen parity audit, and accepts either prospective parity branch without benchmark scoring.",
+  "authorization": "This implementation freeze authorizes no service start, model read or load, GPU allocation, endpoint request, vector capture, dataset access, prediction, score, comparison, claim, cleanup, or table mutation."
+}
