@@ -1,0 +1,73 @@
+{
+  "schema_version": "agentenhance.causal_locomo_five_method_overlay_proposal.v1",
+  "proposal_id": "causal-locomo-five-method-blind-overlay-20260904-v1",
+  "state": "PROPOSED_RESULT_FREE_NOT_FROZEN_NOT_AUTHORIZED",
+  "proposed_at": "2026-09-04T18:35:00+08:00",
+  "purpose": "Implement and test, without endpoint access, the five upstream Causal-LoCoMo controls that can operate on the frozen inference-blind view.",
+  "parent_contract": {
+    "path": "comparisons/causal-locomo-real-model-integrity-prefreeze.v1.json",
+    "sha256": "6843b5f0301b6f4fb43dbe88afe5d84d3fcfbf5e1457939e5aae4c56610d817d"
+  },
+  "upstream_revision": "65a66cb4347aeeb62a870132269e8a983211e036",
+  "upstream_file_identities": {
+    "src/agents/no_memory_agent.py": "e341e302bb19cba031762f88090729b48572ab02c84eda232a792dabf70b0fc6",
+    "src/agents/full_history_agent.py": "69d52c408efe820bfb2bb7549070e92eb58e65079762e736a9c817bfedbd9867",
+    "src/agents/vector_memory_agent.py": "49ecc1940026ceb4818a871568d4dbc6353b1211221c7be166d4c7410fc95b93",
+    "src/agents/summary_memory_agent.py": "d74666735de688ba1a9871a113dcb5094ddea148bff37008f32b32b0d8f70d6a",
+    "src/agents/graph_memory_agent.py": "6e7876e34fa935d62d4ab83f680452595e2f8d9d30b91c9d5a06dd51f2064d32",
+    "src/memory/graph_memory.py": "2eee675529ca3297e3a7cdd7db34cdf7bb79abc2e0d2a4ae2600ca48e10f2277",
+    "src/memory/summarizer.py": "673a59033b8f317bd2db1b1eac83bbdfdcaba49749e733d4c1c253bf2eab34bd",
+    "src/utils/text_utils.py": "f4a8d41e1a3f4c6fa459d28ce4d98fb4bbd4e921e5d70da635c6e397a839c377"
+  },
+  "implementation": "scripts/causal_locomo_five_method_overlay.py",
+  "eligible_method_order": [
+    "cmi-no-memory",
+    "cmi-full-history",
+    "cmi-vector-memory",
+    "cmi-summary-memory",
+    "cmi-graph-memory"
+  ],
+  "selection_contract": {
+    "cmi-no-memory": "No memory or history is placed in the answer prompt.",
+    "cmi-full-history": "All inference-visible past sessions are rendered chronologically; selected IDs retain the upstream all-memory accounting convention.",
+    "cmi-vector-memory": "Embed the query once and every inference-visible memory separately with the frozen 1024-dimensional endpoint; cosine rank top 5, descending score then original memory order; any endpoint, shape, non-finite or zero-norm error is terminal with no deterministic fallback.",
+    "cmi-summary-memory": "Join the first eight inference-visible memory contents in source order into one summary evidence item, while accounting all original memory IDs as selected to preserve upstream behavior.",
+    "cmi-graph-memory": "Reproduce upstream concept-token and Jaccard scoring over content, omitting scope nodes because scope is evaluator-leaking in the released artifact; rank top 5, descending score then original memory order."
+  },
+  "matched_calls": {
+    "answer_model": "Qwen/Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "answer_temperature": 0.0,
+    "answer_max_output_tokens": 600,
+    "embedding_model": "Qwen/Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+    "embedding_dimensions": 1024,
+    "attempts_per_call": 1,
+    "automatic_retries": 0,
+    "transport": "Not implemented or authorized in this proposal; a later frozen lifecycle successor must inject loopback-only endpoints."
+  },
+  "future_denominator": {
+    "examples": 87,
+    "eligible_methods": 5,
+    "seeds": [0, 1, 2],
+    "eligible_rows_per_seed": 435,
+    "eligible_rows_total": 1305,
+    "blocked_method_rows_total": 522,
+    "full_registered_rows": 1827,
+    "row_rule": "Each requested eligible method/example/seed emits exactly one ACCEPTED or FAILED row. The two protocol-blocked methods require separate blocker receipts for all registered rows."
+  },
+  "known_fidelity_boundaries": [
+    "Graph scope nodes are removed because one released scope value encodes synthetic_adversarial and scope is excluded by the frozen inference firewall.",
+    "Vector retrieval fails closed instead of using upstream deterministic_embedding after any exception.",
+    "Stable source-order tie breaks are explicit because upstream tuple sorting has no safe equal-score MemoryCard ordering.",
+    "No method sees label, type, expected_effect, gold IDs, bad IDs, scoring criteria, expected answer, or evaluator metadata."
+  ],
+  "current_observations": {
+    "real_answer_calls": 0,
+    "real_embedding_calls": 0,
+    "real_prediction_rows": 0,
+    "scores_observed": 0,
+    "official_values_used": false
+  },
+  "next_gate": "Only after WMA release: bind the implementation hash, package a synthetic-only lifecycle conformance stage, create all 522 blocked-row receipts, and freeze fresh remote roots before any real call.",
+  "authorization": "This proposal permits local mock tests only. It authorizes no server file creation, endpoint call, model service, dataset materialization, numerical execution, score reading, table admission, SOTA claim, or cleanup."
+}
+
