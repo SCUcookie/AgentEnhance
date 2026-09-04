@@ -1,0 +1,145 @@
+{
+  "schema_version": "agentenhance.recent_method_model_retirement_coverage_audit.v1",
+  "audit_id": "recent-method-model-retirement-coverage-20260905-v1",
+  "status": "TERMINAL_ACCEPTED_RESULT_FREE_NO_CLEANUP_ELIGIBILITY",
+  "audited_at": "2026-09-04T10:42:00+08:00",
+  "purpose": "Prove that every recent same-protocol numeric route has an explicit model-retention disposition and that completing recent methods alone cannot omit control or cross-track dependents when project-owned weights are eventually retired.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/recent-method-execution-coverage-audit.v1.json",
+      "sha256": "b714eb6818b257aeae9b5cf7c46fde5c2fcc58b4d3d8ecd840b8977463e246ca"
+    },
+    {
+      "path": "comparisons/baseline-model-ownership-ledger.v1.json",
+      "sha256": "3b855e216f8eca4d39d18bade4bcdda91136df7d8a06333fcfd6d93067ff0613"
+    },
+    {
+      "path": "comparisons/baseline-model-ownership-ledger.v2.json",
+      "sha256": "8ba9c463309b15b7ba087dae6882e43cab734f432d75dde3ec41dbfcaa922064"
+    },
+    {
+      "path": "comparisons/model-retention-policy.v2.json",
+      "sha256": "196c83d19320f406b5ca4a1d124ef025d8dbf6672d9e538dd3d2795464dbfec7"
+    },
+    {
+      "path": "comparisons/model-cleanup-controller-prefreeze.v3.json",
+      "sha256": "4c84102b574ca24238eb647631721b2675a9d0b0bbba3b648102ee8e1fac1776"
+    },
+    {
+      "path": "comparisons/model-cleanup-controller-control-package-audit.v3.json",
+      "sha256": "2ef68b36199e050afd053689d577ade13b42df55b17ba5ad95f0bd6fe9120363"
+    }
+  ],
+  "effective_model_surface": {
+    "project_owned_candidate_models": 8,
+    "project_owned_expected_files": 99,
+    "project_owned_expected_bytes": 28164467445,
+    "effective_track_method_dependency_edges": 19,
+    "protected_shared_models": 2,
+    "cleanup_eligible_now": 0,
+    "real_model_files_deleted": 0
+  },
+  "recent_edge_to_method": {
+    "wave2-gme-qwen2-vl-2b|wma-ngmemory": "ngm",
+    "wave2-gme-qwen2-vl-2b|wma-augustus": "augustus",
+    "wave2-gme-qwen2-vl-2b|wma-universalrag": "universalrag",
+    "wave2-gme-qwen2-vl-2b|wma-mirix": "mirix",
+    "wave2-gme-qwen2-vl-2b|memgallery-ngm": "ngm",
+    "wave2-gme-qwen2-vl-2b|memgallery-augustus": "augustus",
+    "wave2-gme-qwen2-vl-2b|memgallery-universalrag": "universalrag",
+    "wave3-all-minilm-l6-v2|wma-memoryos": "memoryos",
+    "wave3-all-minilm-l6-v2|memgallery-a-mem": "a-mem",
+    "wave3-all-minilm-l6-v2|memgallery-memoryos": "memoryos",
+    "wave3-all-minilm-l6-v2|memgallery-v-mem": "v-mem",
+    "memgallery-vmem-siglip2-base-patch16-384|memgallery-m2a": "m2a",
+    "memgallery-vmem-siglip2-base-patch16-384|memgallery-v-mem": "v-mem",
+    "wave3-contriever|wma-memgas": "memgas",
+    "wave4-hindsight-bge-small-en-v1.5|wma-hindsight": "hindsight",
+    "wave4-hindsight-ms-marco-minilm-l6-v2|wma-hindsight": "hindsight",
+    "wave5-structmem-llmlingua2-meetingbank|wma-structmem": "structmem"
+  },
+  "recent_route_coverage": {
+    "same_protocol_numeric_methods": 15,
+    "effective_recent_track_method_model_edges": 17,
+    "methods_with_project_owned_weight_dependencies": [
+      "a-mem",
+      "memoryos",
+      "universalrag",
+      "ngm",
+      "augustus",
+      "mirix",
+      "m2a",
+      "v-mem",
+      "memgas",
+      "hindsight",
+      "structmem"
+    ],
+    "methods_with_project_owned_weight_dependencies_count": 11,
+    "shared_protected_or_no_standalone_weight_only": [
+      "mgmemory",
+      "simplemem",
+      "omni-simplemem",
+      "vilomem"
+    ],
+    "shared_protected_or_no_standalone_weight_only_count": 4,
+    "uncovered_recent_numeric_methods": []
+  },
+  "non_recent_control_edges_that_still_block_cleanup": [
+    "wave2-gme-qwen2-vl-2b|memgallery-naive-rag",
+    "wave2-qwen3-vl-embedding-8b|wma-qwen3-vl-embedding-8b"
+  ],
+  "protected_shared_assets": [
+    {
+      "model": "Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+      "disposition": "PERMANENTLY_PROTECTED_NEVER_DELETE"
+    },
+    {
+      "model": "Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "disposition": "PERMANENTLY_PROTECTED_NEVER_DELETE"
+    }
+  ],
+  "retirement_rule": {
+    "per_method_completion_is_sufficient": false,
+    "per_track_completion_is_sufficient": false,
+    "all_three_tracks_and_all_effective_edges_required": true,
+    "dependent_receipts_required": 19,
+    "fresh_project_reference_audit_required": true,
+    "active_process_references_allowed": 0,
+    "pending_run_references_allowed": 0,
+    "two_phase_quarantine_then_delete_required": true
+  },
+  "retained_after_weight_deletion": [
+    "datasets and source-unit order",
+    "immutable source checkouts and overlays",
+    "environment locks and resolved configurations",
+    "prompts seeds and launch receipts",
+    "all accepted and failed predictions and raw metric records",
+    "method seed slice and paired statistical summaries",
+    "stdout stderr timing and resource logs",
+    "pre-download and post-download per-file model manifests",
+    "accepted and rejected archives with SHA-256 and transfer receipts",
+    "global completion retirement no-reference and cleanup records"
+  ],
+  "deletion_scope": {
+    "allowed_future_target": "one exact project-owned candidate weight root beneath data1 or data2 cache/models after DRY_RUN_ELIGIBLE_V3",
+    "datasets": "NEVER_DELETE",
+    "results": "NEVER_DELETE",
+    "logs": "NEVER_DELETE",
+    "environments": "NEVER_DELETE",
+    "source": "NEVER_DELETE",
+    "manifests": "NEVER_DELETE",
+    "archives": "NEVER_DELETE",
+    "shared_models": "NEVER_DELETE"
+  },
+  "current_state": {
+    "all_three_tracks_complete": false,
+    "dependent_retirement_receipts": 0,
+    "project_reference_audits": 0,
+    "cleanup_eligible_models": 0,
+    "quarantined_models": 0,
+    "deleted_models": 0,
+    "mutation_performed": false
+  },
+  "claim_boundary": "This is a dependency and retention audit, not evidence of model quality or reproduction success.",
+  "authorization": "No materialization, quarantine, deletion, server mutation, result access, or model cleanup is authorized. The already accepted inert v3 cleanup package must not be rebuilt or rerun."
+}
