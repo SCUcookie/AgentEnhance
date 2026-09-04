@@ -1,0 +1,99 @@
+{
+  "schema_version": "agentenhance.memgallery_control_runner_prefreeze.v1",
+  "stage_id": "memgallery-control-runner-composition-20260904-v1",
+  "status": "FROZEN_COMPOSITION_ONLY_AWAITING_REAL_LIFECYCLE_AUTHORIZATION",
+  "frozen_at": "2026-09-04T09:00:00+08:00",
+  "purpose": "Freeze the complete per-scenario composition for all seven Mem-Gallery controls from accepted projection through retrieval, evidence packing, matched answer request, prediction row, retrieval trace, and call accounting without executing a real model.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-control-core-prefreeze.v1.json",
+      "sha256": "ff3425496bcf2084b9e29f629680bfa997b092e807a83b2109fa5e47cc740a37"
+    },
+    {
+      "path": "comparisons/memgallery-control-adapter-prefreeze.v1.json",
+      "sha256": "d6b7703bd6165aad7ade2c9984f89b30aa85945d3ac7bfd826a3a72dd10a91f4"
+    },
+    {
+      "path": "comparisons/memgallery-answer-contract-prefreeze.v1.json",
+      "sha256": "4897672183caf2a29a7d291c4e1f12bd6d2c921a48eb1212c10ed482ce51bef9"
+    },
+    {
+      "path": "comparisons/memgallery-endpoint-client-prefreeze.v1.json",
+      "sha256": "3de51ee30c59ad03371190eb16b0719f9a4d16082a848e115430f96f8ac74806"
+    },
+    {
+      "path": "comparisons/memgallery-run-reconciliation-prefreeze.v1.json",
+      "sha256": "52698bc8edac6a4ce8989f17eb820f5804bcf2f4b63c70b36d00b1adb286c437"
+    },
+    {
+      "path": "scripts/memgallery_control_runner.py",
+      "sha256": "17523def7b698ed65004cd43732817095b74425e8a56a84b6c9374f0c69abbff"
+    },
+    {
+      "path": "tests/test_memgallery_control_runner.py",
+      "sha256": "fc30a5a0214729fc1e264efe70daf8b3a6131d3a77bab10859c34e535b7f315f"
+    }
+  ],
+  "registered_controls": [
+    "no-memory",
+    "full-memory-text",
+    "full-memory-mm",
+    "fifo-recent",
+    "bm25",
+    "naive-rag",
+    "hybrid-rag"
+  ],
+  "composition_contract": [
+    "Consume one already identity-validated, answer-free scenario projection.",
+    "Retrieve with the frozen method-specific K, tie behavior, and optional dense vectors.",
+    "Pack whole records under N_text + 256*N_images <= 4096 using the exact injected Qwen tokenizer count.",
+    "For full-memory controls select newest-preserving evidence and restore chronological prompt order; full-memory-mm additionally caps memory images at 20.",
+    "Build the one matched Qwen request with seed 0, 1, or 2 and call the injected single-attempt answer transport.",
+    "Emit exactly one reconciliation-compatible prediction row, one retrieval trace, and only the call records for calls actually attempted."
+  ],
+  "dense_contract": {
+    "naive-rag": "Require one frozen GME vector per memory record and one frozen query vector per question.",
+    "hybrid-rag": "Require one protected shared-Qwen dense vector per memory record and one query vector per question, then combine with frozen BM25 through RRF.",
+    "document_embedding_failure": "An upstream document-embedding failure is an ingestion failure for the method-seed raw run and must be handled by the future filesystem controller before this per-scenario function.",
+    "query_embedding_failure": "Emit a FAILED question row with failure_stage=retrieval; do not fabricate a final_answer call record."
+  },
+  "failure_contract": {
+    "question_failure": "Retain a FAILED prediction row with empty prediction and nonempty error_type/error; continue to later registered questions without retry.",
+    "answer_failure": "Retain exactly the attached single-attempt FAILED final_answer call record and the FAILED prediction row.",
+    "pre_answer_failure": "Retain the failed prediction and retrieval trace but record no final_answer call because none occurred.",
+    "denominator": "Every input query yields exactly one ordered prediction row regardless of success or failure.",
+    "same_root_retry": false
+  },
+  "output_contract": {
+    "scenario_status": "TERMINAL_SCENARIO_COMPLETE means all registered query rows were emitted, not that every query succeeded.",
+    "prediction_schema": "agentenhance.memgallery_prediction.v1",
+    "retrieval_trace_fields": ["qid", "method_id", "seed", "status", "retrieved_memory_ids", "retrieval_count", "budget", "retrieval_seconds", "answer_seconds", "failure_stage"],
+    "call_identity_fields": ["qid", "method_id", "seed", "call_category", "status", "attempts", "retry_count"],
+    "scores_observed": 0
+  },
+  "validation": {
+    "synthetic_composition_tests_passed": 6,
+    "covered_invariants": [
+      "BM25 retrieval through packed matched-answer prediction",
+      "answer failure retained in denominator while later questions continue",
+      "full multimodal raw-text and image-budget path",
+      "missing dense surface rejection before execution",
+      "dense vector flow through the same prediction schema",
+      "retrieval failure produces no fabricated answer-call record"
+    ],
+    "real_scenarios_read": 0,
+    "real_questions_read": 0,
+    "real_model_calls": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "Implement a fresh-root filesystem controller that verifies the accepted dataset evidence, exact tokenizer/model/embedding inventories, 20-scenario and 1711-QID order, numerical authorization, resource ceilings, endpoint service receipt, append-only JSONL writes, terminal markers, and reconciliation handoff. Its first real execution must be a separately frozen no-score lifecycle case after Wave 1 releases resources.",
+  "authorization": "This composition-only stage authorizes no real dataset access, tokenizer/model load, embedding, endpoint call, prediction, scoring, numerical run, result admission, claim, SOTA language, or cleanup.",
+  "explicitly_prohibited": [
+    "using a whitespace or approximate tokenizer in a real run",
+    "calling a dense control without its prescribed frozen encoder",
+    "counting a failed retrieval or request build as an attempted answer call",
+    "dropping failed questions or selectively rerunning them in place",
+    "treating synthetic lifecycle output as a reproduced baseline result"
+  ]
+}
