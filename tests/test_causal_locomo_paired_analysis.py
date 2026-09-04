@@ -5,6 +5,10 @@ import unittest
 from pathlib import Path
 
 from scripts.causal_locomo_paired_analysis import (
+    COST_METRICS,
+    METHOD_ORDER,
+    QUALITY_METRICS,
+    analyze_score_rows,
     benjamini_hochberg_adjust,
     holm_adjust,
     paired_statistics,
@@ -12,7 +16,43 @@ from scripts.causal_locomo_paired_analysis import (
 )
 
 
+def complete_score_surface() -> list[dict]:
+    rows = []
+    all_methods = (
+        "cmi-no-memory", "cmi-full-history", "cmi-vector-memory",
+        "cmi-summary-memory", "cmi-reflection-memory", "cmi-graph-memory", "cmi",
+    )
+    values = {method: (index + 1) / 10 for index, method in enumerate(METHOD_ORDER)}
+    for seed in (0, 1, 2):
+        for qid_index in range(87):
+            for method in all_methods:
+                blocked = method in {"cmi-reflection-memory", "cmi"}
+                rows.append({
+                    "example_id": f"e{qid_index:03d}",
+                    "method_id": method,
+                    "seed": seed,
+                    "metrics": None if blocked else {metric: values[method] for metric in QUALITY_METRICS},
+                    "cost_metrics": {metric: 0.0 if blocked else 1.0 + values[method] for metric in COST_METRICS},
+                })
+    return rows
+
+
 class CausalLocomoPairedAnalysisTests(unittest.TestCase):
+    def test_complete_1827_row_surface_produces_all_predeclared_contrasts(self) -> None:
+        quality, cost = analyze_score_rows(
+            complete_score_surface(), bootstrap_replicates=25, permutation_replicates=50,
+        )
+        self.assertEqual(len(quality), 130)
+        self.assertEqual(len(cost), 80)
+        self.assertEqual(len({(row["method_a"], row["method_b"], row["metric"]) for row in quality}), 130)
+        self.assertTrue(all(row["n_qids"] == 87 and row["n_seed_qid_pairs"] == 261 for row in quality + cost))
+        self.assertTrue(all(row["wins_a"] + row["ties"] + row["losses_a"] == 87 for row in quality + cost))
+        task_rows = [row for row in quality if row["metric"] == "task_score"]
+        self.assertEqual(len(task_rows), 10)
+        self.assertTrue(all(row["adjustment"] == "holm_within_primary_task_score_10" for row in task_rows))
+        self.assertTrue(all(row["p_adjusted"] >= row["p_unadjusted"] for row in quality))
+        self.assertTrue(all(row["p_adjusted"] is None and row["adjustment"] == "none_descriptive" for row in cost))
+
     def test_cluster_paired_effect_is_deterministic_and_direction_aware(self) -> None:
         first = paired_statistics(
             [1.0, 0.9, 0.8, 0.7], [0.2, 0.3, 0.4, 0.5],

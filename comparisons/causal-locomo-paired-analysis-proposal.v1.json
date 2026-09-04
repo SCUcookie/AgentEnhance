@@ -95,7 +95,7 @@
     "sota_claim_emitted": false
   },
   "current_observations": {
-    "synthetic_math_test_cases": 4,
+    "synthetic_math_test_cases": 5,
     "real_evaluation_roots_analyzed": 0,
     "real_quality_rows": 0,
     "real_cost_rows": 0,

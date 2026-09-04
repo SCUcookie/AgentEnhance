@@ -1,0 +1,153 @@
+{
+  "schema_version": "agentenhance.recent_method_execution_coverage_audit.v1",
+  "audit_id": "recent-2025-2026-execution-coverage-20260904-v1",
+  "status": "TERMINAL_ACCEPTED_RESULT_FREE_COVERAGE_AUDIT",
+  "audited_at": "2026-09-04T23:55:00+08:00",
+  "purpose": "Distinguish bibliographic breadth from independently executable same-protocol coverage before any local main result is admitted, and keep every non-executable recent method visible without replacing it with an official score.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/baseline-register.v3.csv",
+      "sha256": "ac0a96da3ad98fae135e3b23f4426e334367f3fae93cac705cd052b2eb108759"
+    },
+    {
+      "path": "comparisons/recent-method-reproduction-roadmap.v3.json",
+      "sha256": "5184b8a05c4a6af278d6a7cfe44f3b2ebe402f63ef0a1f1e322c53a524bf2482"
+    },
+    {
+      "path": "comparisons/wma-execution-matrix.v3.csv",
+      "sha256": "244759bf0eb55418fbdae0f840e913f4361d49ba9ba036ced99df84f20ce4331"
+    },
+    {
+      "path": "comparisons/wma-table-bundle-manifest.v3.json",
+      "sha256": "e7faa9d42e314b30d21542b90071bea4763014779b6674a00c234d7dc7d80914"
+    },
+    {
+      "path": "comparisons/memgallery-static-method-entry-prefreeze.v1.json",
+      "sha256": "99ccf8b0c992b0c4a90efe3788d7801c87a8d8e12b9455d5670e66eaeae3ddb4"
+    },
+    {
+      "path": "comparisons/causal-locomo-real-model-integrity-prefreeze.v1.json",
+      "sha256": "6843b5f0301b6f4fb43dbe88afe5d84d3fcfbf5e1457939e5aae4c56610d817d"
+    },
+    {
+      "path": "comparisons/recent-2026-source-discovery-audit.v1.json",
+      "sha256": "3ac6b84145db52a3655ce1b9c3a65fad4ea9e1b9aea17c69edbded771fbb164e"
+    },
+    {
+      "path": "comparisons/reproduced-results.v1.csv",
+      "sha256": "050e9149d286ce3ecd1819ccbf7fab41fd5441043233e0d2b0ed649f924d297e"
+    }
+  ],
+  "scope": {
+    "publication_years": [2025, 2026],
+    "external_registry_rows": 29,
+    "agentenhance_excluded_from_external_count": true,
+    "source_reported_rows_read_for_selection": 0,
+    "local_main_result_rows_at_audit": 0
+  },
+  "exhaustive_partition": {
+    "same_protocol_numeric_route": [
+      "a-mem",
+      "memoryos",
+      "universalrag",
+      "mgmemory",
+      "ngm",
+      "augustus",
+      "mirix",
+      "m2a",
+      "v-mem",
+      "simplemem",
+      "omni-simplemem",
+      "vilomem",
+      "memgas",
+      "hindsight",
+      "structmem"
+    ],
+    "same_protocol_numeric_route_count": 15,
+    "protocol_blocked_gold_or_label_leak": [
+      "cmi"
+    ],
+    "source_or_license_blocked": [
+      "memory-r1",
+      "apex-mem",
+      "lightmem",
+      "hela-mem"
+    ],
+    "deprecated_alias_no_separate_numeric_entity": {
+      "omnimem-agent": "omni-simplemem"
+    },
+    "different_task_separate_report": [
+      "reme",
+      "mem2evolve"
+    ],
+    "different_benchmark_separate_report": [
+      "m3-agent",
+      "mm-mem",
+      "mma"
+    ],
+    "literature_only_no_local_claim": [
+      "leanmem",
+      "pmmc",
+      "ns-mem"
+    ],
+    "partition_rows_total": 29
+  },
+  "numeric_route_maturity": {
+    "lifecycle_accepted_before_numeric_execution": [
+      "m2a",
+      "simplemem",
+      "vilomem"
+    ],
+    "result_free_dependency_or_adapter_preparation_exists": [
+      "memoryos",
+      "memgas",
+      "hindsight",
+      "structmem"
+    ],
+    "registered_source_or_native_protocol_route_not_yet_lifecycle_accepted": [
+      "a-mem",
+      "universalrag",
+      "mgmemory",
+      "ngm",
+      "augustus",
+      "mirix",
+      "v-mem",
+      "omni-simplemem"
+    ],
+    "maturity_partition_total": 15,
+    "accepted_local_numeric_methods": 0
+  },
+  "track_coverage": {
+    "wma_registered_recent_numeric_routes": 14,
+    "memgallery_registered_recent_numeric_routes": 7,
+    "union_unique_numeric_routes": 15,
+    "causal_recent_method_numeric_routes": 0,
+    "causal_recent_method_protocol_blockers": 1,
+    "note": "Methods may be registered on both WMA and Mem-Gallery. Union counts refer to unique method identities, not method-track executions. Causal-LoCoMo retains five deployable controls, but the recent CMI method identity itself is protocol-blocked from a main numeric cell."
+  },
+  "blocked_method_policy": {
+    "memory-r1": "Keep visible as CODE_NOT_RELEASED until an official immutable revision contains executable method code.",
+    "apex-mem": "Keep visible as OFFICIAL_CODE_UNVERIFIED until an author-controlled implementation is verified.",
+    "lightmem": "Keep visible as OFFICIAL_CODE_UNVERIFIED; never substitute the unrelated zjunlp repository.",
+    "hela-mem": "Keep visible as LICENSE_BLOCKED until explicit permission or a compatible license is verified.",
+    "cmi": "Keep the 261 registered rows as PROTOCOL_BLOCKED with blank numeric cells; never relabel an oracle or label-aware run as a deployable result."
+  },
+  "result_policy": {
+    "same_protocol_local_values_required": true,
+    "official_values_fill_missing_cells": false,
+    "development_values_fill_missing_cells": false,
+    "blocked_rows_removed_from_internal_master": false,
+    "different_tasks_or_benchmarks_pooled": false,
+    "alias_duplicate_numeric_rows": false,
+    "future_method_removal_based_on_score": false
+  },
+  "next_actions": [
+    "Finish and independently accept the active WMA recovery2 sequence before starting competing server work.",
+    "Execute the 15 numeric-route methods only through their registered track-specific gates; a method on two tracks requires separate matched evidence on each track.",
+    "Re-audit the four source/license blockers only when new upstream evidence exists; do not pollute local tables with official values meanwhile.",
+    "Keep the eight different-task, different-benchmark, or literature-only methods in separate disclosure tables.",
+    "Run AgentEnhance only after each target track satisfies its predeclared recent-baseline gate."
+  ],
+  "claim_boundary": "This audit proves registry accounting and route coverage only. It is not a reproduction, does not establish method quality, and authorizes no superiority or SOTA claim.",
+  "cleanup_boundary": "No model becomes cleanup-eligible from registry accounting. Cleanup remains denied until every dependent track execution is terminal, accepted evidence and failures are archived, and the v3 ownership/no-reference gates pass."
+}
