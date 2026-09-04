@@ -1,0 +1,108 @@
+{
+  "schema_version": "agentenhance.causal_locomo_paired_analysis_proposal.v1",
+  "analysis_id": "causal-locomo-cluster-paired-baselines-20260904-v1",
+  "state": "PROPOSED_RESULT_FREE_REAL_USE_NOT_AUTHORIZED",
+  "proposed_at": "2026-09-04T23:35:00+08:00",
+  "scientific_question": "Under one frozen local answer backbone and evaluator, how do the five inference-blind Causal-LoCoMo controls differ in task quality, evidence selection, harmful-memory behavior, and resource cost on the same examples and seeds?",
+  "estimand": "For every predeclared unordered method pair and metric, the mean method-A-minus-method-B difference over 87 example-level clusters after averaging seeds 0,1,2 within each example.",
+  "decision_informed": "Describe the local baseline landscape and uncertainty before AgentEnhance is run; do not select a favorable comparator or authorize a superiority claim.",
+  "parents": [
+    {
+      "path": "comparisons/causal-locomo-table-projection-proposal.v1.json",
+      "sha256": "5b21382928cd93c7f2d90d2cb70ffbddab3b3d935101ae47609d59b8f58656fe"
+    },
+    {
+      "path": "comparisons/causal-locomo-offline-evaluator-proposal.v1.json",
+      "sha256": "4b57dcf84d3e6889ab6d0eaa6abcad0e75fedb44f17488d90b023ef6edce31c6"
+    }
+  ],
+  "implementation": "scripts/causal_locomo_paired_analysis.py",
+  "implementation_sha256": "6a16bd4bf0bf9bbf46e3f7c6acaf172dbdc21a8d9f7d4cbac185a5977b5f4cf3",
+  "comparison_surface": {
+    "eligible_methods": [
+      "cmi-no-memory",
+      "cmi-full-history",
+      "cmi-vector-memory",
+      "cmi-summary-memory",
+      "cmi-graph-memory"
+    ],
+    "unordered_method_pairs": 10,
+    "quality_metrics": 13,
+    "cost_metrics": 8,
+    "quality_rows": 130,
+    "cost_rows": 80,
+    "protocol_blocked_methods_excluded_from_numeric_tests": [
+      "cmi-reflection-memory",
+      "cmi"
+    ],
+    "agentenhance_included": false
+  },
+  "analysis_unit": {
+    "independent_cluster": "example_id",
+    "clusters": 87,
+    "paired_seed_example_rows_per_method": 261,
+    "within_cluster_rule": "Average seeds 0,1,2 for each method, example, and metric before computing a paired method difference.",
+    "prohibited_pseudoreplication": "Do not treat 261 seed-example rows as 261 independent observations."
+  },
+  "uncertainty": {
+    "interval": "two-sided 95% percentile cluster bootstrap interval on the mean paired difference",
+    "bootstrap_replicates": 10000,
+    "bootstrap_resampling_unit": "example_id cluster with all seed information retained through its precomputed mean",
+    "test": "two-sided paired random-sign permutation test on the 87 example-level differences",
+    "permutation_replicates": 100000,
+    "monte_carlo_p_value": "(extreme+1)/(replicates+1)",
+    "randomization_namespace": "agentenhance-causal-locomo-paired-20260904-v1",
+    "per_contrast_seed": "first eight bytes of SHA-256(namespace|method_a|method_b|metric|procedure)",
+    "deterministic_tie_tolerance": 1e-12
+  },
+  "multiplicity": {
+    "primary_metric": "task_score",
+    "primary_family": "all ten predeclared unordered method pairs",
+    "primary_adjustment": "Holm family-wise error control",
+    "secondary_quality_metrics": 12,
+    "secondary_adjustment": "Benjamini-Hochberg separately within each metric's ten method pairs",
+    "cost_metrics": "descriptive paired means and bootstrap intervals only; no p-values",
+    "post_result_comparator_selection": false
+  },
+  "reported_statistics": [
+    "method means",
+    "raw method-A-minus-method-B mean difference",
+    "median example-level paired difference",
+    "95% cluster-bootstrap interval",
+    "direction-aware wins ties and losses",
+    "unadjusted and adjusted p-values for quality metrics",
+    "IMPROVEMENT DEGRADATION or INCONCLUSIVE from the direction-aware interval"
+  ],
+  "failure_and_null_rules": {
+    "eligible_execution_failures": "Use the evaluator's prospectively frozen conservative imputed values; never drop the example or seed.",
+    "protocol_blocked_rows": "Remain visible in the main table but do not enter numeric pairwise tests.",
+    "interval_crosses_zero": "Report INCONCLUSIVE without adding seeds metrics or subgroups.",
+    "direction_reversed": "Report DEGRADATION without relabeling the comparison.",
+    "technical_integrity_failure": "Reject the fresh analysis root and preserve all input and output evidence."
+  },
+  "output_contract": {
+    "fresh_absolute_root": true,
+    "files": [
+      "pairwise-quality.csv",
+      "pairwise-cost.csv",
+      "analysis-manifest.json",
+      "SHA256SUMS",
+      "TERMINAL_ACCEPTED"
+    ],
+    "input": "one independently reconciled terminal real evaluator root",
+    "official_values_used": false,
+    "ranking_or_best_method_selection": false,
+    "sota_claim_emitted": false
+  },
+  "current_observations": {
+    "synthetic_math_test_cases": 4,
+    "real_evaluation_roots_analyzed": 0,
+    "real_quality_rows": 0,
+    "real_cost_rows": 0,
+    "official_values_used": false,
+    "agentenhance_values_observed": 0,
+    "claims_emitted": 0
+  },
+  "next_gate": "After WMA release and terminal acceptance of a separately frozen Causal-LoCoMo real evaluator root, freeze a successor binding that root and run this analysis once in a fresh output root.",
+  "authorization": "Synthetic mathematical tests and static validation only. This proposal authorizes no real result access, statistical analysis of real scores, server mutation, table admission, comparator selection, superiority or SOTA claim, archive deletion, or model cleanup."
+}
