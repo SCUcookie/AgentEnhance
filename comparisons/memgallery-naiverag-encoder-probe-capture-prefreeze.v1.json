@@ -1,0 +1,152 @@
+{
+  "schema_version": "agentenhance.memgallery_naiverag_encoder_probe_capture_prefreeze.v1",
+  "stage_id": "memgallery-naiverag-encoder-probe-capture-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_ONLY_AWAITING_WAVE1_RELEASE_AND_MODEL_MATERIALIZATION",
+  "frozen_at": "2026-09-04T12:20:32+08:00",
+  "purpose": "Freeze the real but result-free capture implementation for the two inputs to the NaiveRAG encoder parity decision before loading the model, starting a service, collecting a vector, or reading any benchmark score.",
+  "scientific_boundary": "The future capture observes only twelve fixed diagnostic text embeddings. It does not read Mem-Gallery examples or answers, run a memory method, produce a prediction, evaluate a metric, or select a favorable comparison.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-naiverag-encoder-parity-prefreeze.v1.json",
+      "sha256": "15dfd2faa69ea65ef156b4129aadcf326f05d0fb37877436ade75f3ff01f1ff6"
+    },
+    {
+      "path": "comparisons/wma-wave2-model-prefetch-manifest.v2.json",
+      "sha256": "b86b62467296f6df19daadbe88e83d40e54872152dae48b1774798f9fd342230"
+    },
+    {
+      "path": "scripts/memgallery_embedding_client.py",
+      "sha256": "da5bb90228e825746970343716751896f4d017bbea0ae30cc8fa1dc9c7e8bf40"
+    },
+    {
+      "path": "scripts/audit_memgallery_naiverag_encoder_parity.py",
+      "sha256": "6d336d9aedfa03a4eb4c7945f120e755f60a10cd85022952be3930bdf9063609"
+    },
+    {
+      "path": "scripts/capture_memgallery_naiverag_encoder_probes.py",
+      "sha256": "bcaa1b5f08949ff534e6fc722f1f5e76cb96a6c5bbc99a8b41c527cc4dab5ea5"
+    },
+    {
+      "path": "tests/test_memgallery_naiverag_encoder_probe_capture.py",
+      "sha256": "62b119db361fe31f0d0b50e6b6a9687d074cbd5d5ad154a52e33398665ffadf3"
+    }
+  ],
+  "model_preflight": {
+    "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+    "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+    "expected_files": 24,
+    "expected_bytes": 8848245026,
+    "materialization_schema": "agentenhance.hf_model_materialization.v4",
+    "materialization_status": "TERMINAL_ACCEPTED",
+    "materialization_network_retries": 0,
+    "materialization_requests_per_file": 1,
+    "fresh_validation": "Before each future capture, require the signed materialization record and inventories, reject symlinks/path escapes/additions/omissions, and recompute SHA-256 for all 24 current model files rather than trusting size or a stale receipt.",
+    "config_sha256": "dd18f3c69154bc6ccd1f55a6e0d0831c7edde2e29fee19d7ee91ad0e2e9f24c4",
+    "pooling_config_sha256": "f25c114f765f96fb30c843ec709c35ee6e92f24a782b8f37d95e29a32a7da5d6"
+  },
+  "direct_capture": {
+    "backend": "official_direct_lmencoder",
+    "source_revision": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+    "source_encoder_sha256": "eb22409edf03b64eb209731afda809f56fb1f744039d034664d5f094caf2f4f7",
+    "offline_environment_required": [
+      "TRANSFORMERS_OFFLINE=1",
+      "HF_HUB_OFFLINE=1"
+    ],
+    "device": "CUDA required",
+    "load": "AutoTokenizer.from_pretrained(local_model_path); AutoModel.from_pretrained(local_model_path).to(torch.device('cuda')); model.eval()",
+    "per_probe_operation": "tokenizer(raw_text, return_tensors='pt').to(device), torch.no_grad(), model(**inputs).last_hidden_state[:, -1, :]",
+    "batch_size": 1,
+    "model_dtype": "torch.float32 required",
+    "output_dtype": "torch.float32 required",
+    "normalization_during_capture": false,
+    "automatic_retries": 0,
+    "network_requests": 0
+  },
+  "endpoint_capture": {
+    "backend": "vllm_openai_input",
+    "endpoint": "http://127.0.0.1:18322/v1/embeddings",
+    "request_field": "input",
+    "served_model": "gme-Qwen2-VL-2B-Instruct",
+    "batch_size": 12,
+    "requests": 1,
+    "automatic_retries": 0,
+    "timeout_seconds": 300,
+    "required_service_ready": {
+      "schema_version": "agentenhance.memgallery_naiverag_float32_service_ready.v1",
+      "status": "READY_FOR_PARITY_PROBE",
+      "dtype": "float32",
+      "runner": "pooling",
+      "convert": "embed",
+      "tensor_parallel_size": 1,
+      "same_model_path_and_snapshot_identity": true,
+      "positive_pid_and_models_response_hash": true
+    },
+    "failure_call_record_retained": true
+  },
+  "probe_evidence": {
+    "probe_set_sha256": "2fc67baee9a5e78274b9ed1a2f4981db079220c628facac8cc0cf1c2a2b3761b",
+    "probes": 12,
+    "dimensions_per_vector": 1536,
+    "finite_numeric_nonzero_vectors_required": true,
+    "raw_vectors_retained": true,
+    "raw_probe_text_in_call_record": false,
+    "direct_output_is_valid_input_to_parity_auditor": true,
+    "endpoint_output_is_valid_input_to_parity_auditor": true
+  },
+  "fresh_root_protocol": {
+    "root": "An absent non-symlink exact child of an explicitly allowed project run scope.",
+    "start_file": "capture-record.json",
+    "success_files": [
+      "capture-record.json",
+      "probe-evidence.json",
+      "capture-summary.json",
+      "EVIDENCE_SHA256SUMS",
+      "TERMINAL_ACCEPTED"
+    ],
+    "failure_files": [
+      "capture-record.json",
+      "capture-failure.json",
+      "EVIDENCE_SHA256SUMS",
+      "TERMINAL_REJECTED"
+    ],
+    "overwrite": false,
+    "resume": false,
+    "same_root_retry": false,
+    "partial_failure_retained": true
+  },
+  "validation": {
+    "synthetic_tests_passed": 10,
+    "covered_invariants": [
+      "complete signed model snapshot acceptance followed by current-byte tamper rejection",
+      "both capture payloads are directly accepted by the frozen parity auditor",
+      "probe denominator, dimension, numeric, finite, and nonzero checks",
+      "complete signed direct capture root with zero scores",
+      "endpoint service identity binding and persistence",
+      "float16 or otherwise drifted service rejection",
+      "terminal failure evidence and no same-root retry",
+      "one-shot endpoint failure call-record retention",
+      "backend/service cross-binding rejection before output creation",
+      "existing, nested, and incomplete-identity output rejection"
+    ],
+    "real_model_files_read": 0,
+    "real_model_loads": 0,
+    "gpu_processes_started": 0,
+    "real_endpoint_calls": 0,
+    "real_vectors_observed": 0,
+    "dataset_examples_read": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0,
+    "numeric_result_rows_added": 0,
+    "official_values_used": false
+  },
+  "execution_order_after_resource_release": [
+    "accept the WMA Wave 1 release receipt and prove its GPU processes, ports, and tmux sessions are absent",
+    "materialize and independently accept the frozen 24-file GME snapshot",
+    "capture direct LMEncoder probes in a fresh root, then terminate the direct process and release its GPU",
+    "start a separately frozen float32 loopback vLLM service and emit its READY_FOR_PARITY_PROBE receipt",
+    "capture the endpoint probes in one request, stop the service, and emit a stop receipt",
+    "run the already frozen parity auditor in a third fresh root and follow exactly its accepted branch"
+  ],
+  "next_gate": "Freeze the float32 service start/stop receipt generator and the controller that composes the two capture roots with the already frozen parity audit; execute only after the WMA release and GME materialization gates accept.",
+  "authorization": "This implementation freeze authorizes no model acquisition, model read, model load, GPU process, service, endpoint request, dataset access, prediction, score, comparison, claim, cleanup, or table mutation."
+}
