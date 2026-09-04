@@ -1,0 +1,110 @@
+{
+  "schema_version": "agentenhance.memgallery_dataset_projection_loader_prefreeze.v1",
+  "stage_id": "memgallery-dataset-projection-loader-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_SYNTHETIC_ONLY_NO_REAL_DATA_ACCESSED",
+  "frozen_at": "2026-09-04T11:40:00+08:00",
+  "purpose": "Close the missing bridge between an accepted Mem-Gallery dataset audit and real method execution by deterministically loading all 20 source dialogs into the frozen answer-free 1711-QID projection while revalidating source and image identities.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-data-integrity-prefreeze.v1.json",
+      "sha256": "ac1bfd11f9b24d4cd39ac8de3c0ea567ed7c8c10fac40eeaeb350c6dd1e9e29f"
+    },
+    {
+      "path": "comparisons/memgallery-static-method-entry-prefreeze.v1.json",
+      "sha256": "99ccf8b0c992b0c4a90efe3788d7801c87a8d8e12b9455d5670e66eaeae3ddb4"
+    },
+    {
+      "path": "scripts/audit_memgallery_dataset.py",
+      "sha256": "14a72e3b82841f2474ab957c39c924c806f2e376813c16108c8d5f4be014ae42"
+    },
+    {
+      "path": "scripts/memgallery_control_adapter.py",
+      "sha256": "0d89f8228edae0815cbbe703a0c2ea6c4e1a812d213c0b3ad3ca88bf02f8dd3c"
+    },
+    {
+      "path": "scripts/memgallery_lifecycle_controller.py",
+      "sha256": "f93200a83223b2947e8950e30dd08eeed1a3b0d4a1e57e4f6acb1c91dd182606"
+    }
+  ],
+  "implementation": {
+    "path": "scripts/memgallery_dataset_projection_loader.py",
+    "sha256": "5a2d88a2b1820d38a5729616998af3c94d618019192b5d4196e56c2439820e7f",
+    "mode": "read-only library",
+    "network_requests": 0,
+    "endpoint_requests": 0,
+    "filesystem_mutations": 0,
+    "real_dataset_accesses_at_freeze": 0
+  },
+  "synthetic_test": {
+    "path": "tests/test_memgallery_dataset_projection_loader.py",
+    "sha256": "e42bb9c797e1448a20a8e2c93886c638a358346f70da3b86fc77cf343a80b98e",
+    "tests": 6,
+    "full_synthetic_surface": {
+      "scenarios": 20,
+      "questions": 1711,
+      "ordered_qids": 1711
+    },
+    "negative_cases": [
+      "dialog bytes drift after accepted integrity evidence",
+      "source-manifest byte drift",
+      "resigned scenario reordering",
+      "resigned referenced/unreferenced image partition drift",
+      "image bytes drift after accepted integrity evidence"
+    ]
+  },
+  "fixed_dataset_identity": {
+    "repository": "Ethan-Bei/Mem-Gallery",
+    "revision": "af912daba984e896e253016b7c7e334ef92c2a6f",
+    "scenarios": 20,
+    "questions": 1711,
+    "image_files": 1490,
+    "scenario_order": "accepted dataset-integrity.json scenarios order",
+    "question_order": "accepted question-index.jsonl and QID_ORDER.txt byte order"
+  },
+  "preflight_and_projection_rules": [
+    "require the accepted non-symlink dataset and evidence roots",
+    "rehash all four accepted evidence payloads through EVIDENCE_SHA256SUMS",
+    "require the dataset root recorded by the accepted evidence to equal the supplied root",
+    "rehash the exact source manifest and recompute its canonical identity",
+    "require the exact repository revision and frozen path inventory",
+    "resolve every scenario only beneath data/dialog without traversal or symlinks",
+    "rehash every consumed dialog against its Git blob or LFS identity",
+    "adapt all scenarios in the accepted order and validate each query against the frozen answer/question/canonical hashes",
+    "reject any returned projection containing a raw answer key",
+    "require flattened projection QIDs to equal the accepted 1711-QID order",
+    "require projected memory-record count to equal the accepted runner-consumed dialogue-round count",
+    "require referenced and unreferenced image partitions to be disjoint complete manifest partitions",
+    "rehash all 1490 image files against frozen LFS SHA-256 before returning their allowlist"
+  ],
+  "accepted_bundle": {
+    "status": "ACCEPTED_ANSWER_FREE_PROJECTION",
+    "contains": [
+      "dataset semantic identity SHA-256",
+      "QID-order and question-index SHA-256",
+      "20 ordered scenario projections",
+      "1711 frozen question identity rows and QIDs",
+      "1490-path image SHA-256 allowlist",
+      "measured scenario question memory-record and image denominators"
+    ],
+    "raw_answers_returned": 0,
+    "scores_observed": 0,
+    "filesystem_mutations": 0
+  },
+  "current_state": {
+    "real_dataset_materialized": false,
+    "real_projection_bundle_created": false,
+    "real_run_roots_created": 0,
+    "real_predictions_written": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "After WMA release, Mem-Gallery data materialization, and dataset-integrity acceptance, execute this exact loader once inside a separately frozen control package; bind its returned identities into a real adapter-family lifecycle successor before any answer endpoint call.",
+  "claim_boundary": "The projection loader produces reusable input identity only. It is not a method run, score, comparison, superiority result, or SOTA result.",
+  "explicitly_prohibited": [
+    "returning raw answer text to a retrieval or answering component",
+    "using a different scenario or QID order",
+    "trusting mutable dialog or image bytes after the integrity audit",
+    "silently skipping a missing malformed reordered or hash-drifted scenario question or image",
+    "starting a model service or numerical run from this result-free prefreeze",
+    "editing a frozen upstream checkout dataset evidence root or terminal run root"
+  ]
+}

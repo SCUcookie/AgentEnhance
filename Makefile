@@ -63,6 +63,7 @@ baseline-check:
 	python3 scripts/validate_memgallery_siglip2_gate_control_package.py
 	python3 scripts/validate_memgallery_control_core_prefreeze.py
 	python3 scripts/validate_memgallery_control_adapter_prefreeze.py
+	python3 scripts/validate_memgallery_dataset_projection_loader_prefreeze.py
 	python3 scripts/validate_memgallery_answer_contract_prefreeze.py
 	python3 scripts/validate_memgallery_endpoint_client_prefreeze.py
 	python3 scripts/validate_memgallery_control_runner_prefreeze.py
