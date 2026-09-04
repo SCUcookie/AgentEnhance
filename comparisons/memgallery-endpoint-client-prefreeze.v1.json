@@ -1,0 +1,80 @@
+{
+  "schema_version": "agentenhance.memgallery_endpoint_client_prefreeze.v1",
+  "stage_id": "memgallery-local-endpoint-client-20260904-v1",
+  "status": "FROZEN_MOCK_ONLY_AWAITING_DATA_MODEL_AND_LIFECYCLE_GATES",
+  "frozen_at": "2026-09-04T08:50:00+08:00",
+  "purpose": "Freeze a fail-closed local OpenAI-compatible answer transport with byte-exact image provenance and complete single-attempt accounting before any real Mem-Gallery request.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-answer-contract-prefreeze.v1.json",
+      "sha256": "4897672183caf2a29a7d291c4e1f12bd6d2c921a48eb1212c10ed482ce51bef9"
+    },
+    {
+      "path": "comparisons/memgallery-data-prefetch-manifest.v1.json",
+      "sha256": "58ebfee481bca010910705271ae992ee42b425d267cd2354a0d9982d35f5d045"
+    },
+    {
+      "path": "scripts/memgallery_endpoint_client.py",
+      "sha256": "4953c4c5d27c9ffefc11349a1726518d4172537474116263d26763e57cd90049"
+    },
+    {
+      "path": "tests/test_memgallery_endpoint_client.py",
+      "sha256": "62bb2fcc0ea3e93b910d4835e3b6abbfac8cd0f09f55004d122c3b504701bda5"
+    }
+  ],
+  "transport_contract": {
+    "endpoint_scope": "Only http://127.0.0.1:<1024-65535>/v1/chat/completions is accepted. The exact unused port is deferred to and must be frozen by the future lifecycle package.",
+    "network_scope": "Loopback only; no DNS, remote host, HTTPS proxy, query parameters, fragments, or embedded credentials.",
+    "attempts_per_question": 1,
+    "automatic_retries": 0,
+    "timeout": "Must be a finite positive value and must be frozen by the numerical authorization before any real request.",
+    "maximum_response_bytes": 16777216,
+    "response_rule": "HTTP 200, one nonempty response id, exactly one textual nonempty choice, nonempty finish reason, and nonnegative prompt/completion/total token counts with exact addition.",
+    "failure_rule": "Timeout, connection, HTTP, byte ceiling, JSON, schema, empty-answer, usage, or clock failure raises one terminal EndpointCallError containing a retained FAILED call record; the client never retries or substitutes a result."
+  },
+  "image_contract": {
+    "identity_scope": "Only safe data/image/... POSIX identities already present in the frozen dataset manifest are accepted.",
+    "root_scope": "The dataset root must be absolute, existing, and not a symlink; every path component and final image must be non-symlink and resolve beneath it.",
+    "byte_identity": "The image bytes must match the manifest LFS SHA-256 before encoding.",
+    "supported_mime_types": ["image/bmp", "image/gif", "image/jpeg", "image/png", "image/webp"],
+    "encoding": "Standard base64 data URL in the same structured-content position as the abstract image_ref.",
+    "retained_evidence": ["content position", "source identity", "byte count", "SHA-256", "MIME type"],
+    "request_identities": "Record canonical SHA-256 both before image expansion and for the transmitted request."
+  },
+  "call_record_contract": [
+    "schema version and final_answer call category",
+    "loopback endpoint without credentials",
+    "canonical request SHA-256",
+    "attempts=1 and retry_count=0",
+    "status, HTTP status, response SHA-256 and response byte count",
+    "wall seconds, response id, finish reason",
+    "prompt, completion, and total tokens",
+    "nonempty error type/error for terminal failure and null error fields for acceptance"
+  ],
+  "validation": {
+    "mock_tests_passed": 8,
+    "covered_invariants": [
+      "image path, manifest hash, MIME, base64 position, and byte ledger",
+      "image traversal, symlink, and hash-drift rejection",
+      "accepted response identity, usage, and elapsed-time accounting",
+      "one-attempt timeout and malformed-JSON failures with retry_count zero",
+      "empty prediction and token-sum rejection",
+      "loopback-only endpoint denial"
+    ],
+    "real_dataset_files_read": 0,
+    "real_image_bytes_read": 0,
+    "real_endpoint_calls": 0,
+    "network_requests": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "Build a fresh control-runner lifecycle package binding the accepted dataset identity, exact model inventory, exact loopback port, tokenizer, timeout, resource ceiling, raw-run schema, and a synthetic no-score endpoint. Do not contact the real Qwen service until that successor is frozen and accepted after Wave 1 releases resources.",
+  "authorization": "This mock-only stage authorizes no real dataset read, image read, endpoint request, model service, prediction, retry, scoring, result admission, claim, SOTA language, or cleanup.",
+  "explicitly_prohibited": [
+    "using a remote or mutable endpoint",
+    "sending an image not bound to the accepted dataset manifest",
+    "automatic or manual same-root retry after any endpoint failure",
+    "accepting absent, empty, malformed, multi-choice, or unaccounted responses",
+    "logging authorization credentials or treating mock transport tests as a reproduced result"
+  ]
+}
