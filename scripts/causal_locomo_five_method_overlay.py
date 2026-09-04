@@ -243,6 +243,7 @@ def run_method(
             "rejected_memory_ids": [memory_id for memory_id in all_ids if memory_id not in selected_set],
             "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
             "calls": calls,
+            "failure_kind": None,
             "error_type": None,
             "error": None,
         }
@@ -259,6 +260,37 @@ def run_method(
             "rejected_memory_ids": [memory["memory_id"] for memory in view["memory_bank"]],
             "prompt_sha256": None,
             "calls": calls,
+            "failure_kind": "METHOD_EXECUTION",
             "error_type": type(exc).__name__,
             "error": str(exc),
         }
+
+
+def protocol_blocked_row(view: Mapping[str, Any], *, method_id: str, seed: int) -> dict[str, Any]:
+    """Represent a registered but evaluator-leaking method without executing it."""
+    assert_blind_view(view)
+    if method_id not in BLOCKED_METHODS:
+        raise OverlayError(f"method is not protocol-blocked: {method_id}")
+    if seed not in {0, 1, 2}:
+        raise OverlayError("seed must be one of 0, 1, or 2")
+    reasons = {
+        "cmi-reflection-memory": "upstream reflection_memory consumes memory.label",
+        "cmi": "upstream cmi consumes gold IDs, memory labels, and answer scoring criteria",
+    }
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "example_id": view["example_id"],
+        "task_family": view["task_family"],
+        "method_id": method_id,
+        "seed": seed,
+        "status": "FAILED",
+        "response": "",
+        "selected_memory_ids": [],
+        "retrieved_memory_ids": [],
+        "rejected_memory_ids": [memory["memory_id"] for memory in view["memory_bank"]],
+        "prompt_sha256": None,
+        "calls": [],
+        "failure_kind": "PROTOCOL_BLOCKED",
+        "error_type": "ProtocolBlockedGoldLeak",
+        "error": reasons[method_id],
+    }

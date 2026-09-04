@@ -1,0 +1,59 @@
+{
+  "schema_version": "agentenhance.causal_locomo_raw_writer_proposal.v1",
+  "proposal_id": "causal-locomo-append-only-raw-writer-20260904-v1",
+  "state": "PROPOSED_SYNTHETIC_ONLY_NOT_FROZEN_NOT_AUTHORIZED",
+  "proposed_at": "2026-09-04T19:05:00+08:00",
+  "parents": [
+    {
+      "path": "comparisons/causal-locomo-real-model-integrity-prefreeze.v1.json",
+      "sha256": "6843b5f0301b6f4fb43dbe88afe5d84d3fcfbf5e1457939e5aae4c56610d817d"
+    },
+    {
+      "path": "comparisons/causal-locomo-endpoint-client-proposal.v1.json",
+      "sha256": "de580a9468c0cbb1b7d2f697765abb9dda084afcefe8d92802ca548911bfac5d"
+    }
+  ],
+  "implementation": "scripts/causal_locomo_raw_run_writer.py",
+  "ordering": {
+    "major": "example_id in the frozen dataset order",
+    "minor_method_order": [
+      "cmi-no-memory",
+      "cmi-full-history",
+      "cmi-vector-memory",
+      "cmi-summary-memory",
+      "cmi-reflection-memory",
+      "cmi-graph-memory",
+      "cmi"
+    ],
+    "rows_per_seed": 609,
+    "rows_across_seeds": 1827
+  },
+  "row_semantics": {
+    "accepted": "One nonempty answer, a 64-character prompt hash, null failure fields and only one-shot call records.",
+    "method_execution_failed": "Empty answer, no prompt hash, a nonempty error, and every available failed call record; remains in the denominator.",
+    "protocol_blocked": "Exactly reflection_memory or cmi, no endpoint calls, explicit ProtocolBlockedGoldLeak, and one row for every example and seed.",
+    "protocol_blocked_rows_per_seed": 174,
+    "protocol_blocked_rows_total": 522
+  },
+  "filesystem_contract": {
+    "fresh_absolute_root": true,
+    "append_only_predictions": "predictions.jsonl",
+    "append_only_events": "events.jsonl",
+    "identity": "identity.json",
+    "summary": "summary.json",
+    "inventory": "SHA256SUMS",
+    "accepted_sentinel": "TERMINAL_ACCEPTED",
+    "inventory_members": 4,
+    "automatic_retry": false,
+    "partial_root_reuse": false
+  },
+  "current_observations": {
+    "synthetic_temp_root_cases": 5,
+    "real_seed_roots": 0,
+    "real_rows": 0,
+    "scores_observed": 0,
+    "official_values_used": false
+  },
+  "next_gate": "After WMA release, bind exact implementation hashes and the 87-ID order into a separately frozen synthetic lifecycle package before any real model call.",
+  "authorization": "Synthetic temporary-directory tests only. This proposal authorizes no server root, real endpoint, dataset execution, scoring, table admission, SOTA claim, archive deletion, or model cleanup."
+}

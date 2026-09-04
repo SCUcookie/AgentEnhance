@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from scripts.causal_locomo_five_method_overlay import OverlayError, run_method
+from scripts.causal_locomo_five_method_overlay import OverlayError, protocol_blocked_row, run_method
 
 
 def blind_view(memory_count: int = 6) -> dict:
@@ -112,6 +112,14 @@ class FiveMethodOverlayTests(unittest.TestCase):
                 run_method(blind_view(), method_id=method, seed=0, answer=calls.answer)
         self.assertEqual(calls.answers, [])
 
+    def test_blocked_methods_have_explicit_denominator_rows(self) -> None:
+        for method in ("cmi-reflection-memory", "cmi"):
+            row = protocol_blocked_row(blind_view(), method_id=method, seed=2)
+            self.assertEqual(row["status"], "FAILED")
+            self.assertEqual(row["failure_kind"], "PROTOCOL_BLOCKED")
+            self.assertEqual(row["error_type"], "ProtocolBlockedGoldLeak")
+            self.assertEqual(row["calls"], [])
+
     def test_answer_failure_preserves_one_denominator_row(self) -> None:
         def failed_answer(request: dict) -> dict:
             return {
@@ -127,4 +135,3 @@ class FiveMethodOverlayTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
