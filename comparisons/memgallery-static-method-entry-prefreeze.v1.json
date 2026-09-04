@@ -1,0 +1,255 @@
+{
+  "schema_version": "agentenhance.memgallery_static_method_entry_prefreeze.v1",
+  "stage_id": "memgallery-static-method-entry-20260904-v1",
+  "status": "FROZEN_SOURCE_MAPPING_ONLY_AWAITING_WAVE1_DATA_AND_MODELS",
+  "frozen_at": "2026-09-04T10:40:00+08:00",
+  "purpose": "Bind all 14 registered Mem-Gallery methods to immutable sources, explicit adapters, one matched evidence budget, and complete call accounting before lifecycle or numerical execution.",
+  "scientific_question": "Under one local answer model and one 1711-question surface, which memory mechanisms improve answer and evidence quality, and which occupy a useful quality-efficiency or quality-safety Pareto point?",
+  "bound_inputs": [
+    {
+      "path": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json",
+      "sha256": "f32a8803fc1448e9e6adbaf7a9ba6747dce47b80cde9dcd30eb75007db7ef1f4"
+    },
+    {
+      "path": "comparisons/memgallery-data-integrity-prefreeze.v1.json",
+      "sha256": "ac1bfd11f9b24d4cd39ac8de3c0ea567ed7c8c10fac40eeaeb350c6dd1e9e29f"
+    },
+    {
+      "path": "comparisons/memgallery-run-reconciliation-prefreeze.v1.json",
+      "sha256": "52698bc8edac6a4ce8989f17eb820f5804bcf2f4b63c70b36d00b1adb286c437"
+    },
+    {
+      "path": "comparisons/r1-static-entry-audit.v1.json",
+      "sha256": "5284cff89ba59deafa165021c1e08cfe45f9d41ff9bd2f1dbf2f4a3d848eeefe"
+    },
+    {
+      "path": "comparisons/memgallery-static-model-prefetch-manifest.v1.json",
+      "sha256": "648b150ccf773c2e303e690b79f3f50497842d73b9c7654cc5fef0d30439c6a4"
+    }
+  ],
+  "source_bindings": [
+    {
+      "source_id": "mem-gallery-official",
+      "repository": "YuanchenBei/Mem-Gallery",
+      "revision": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+      "entrypoint": "benchmark/run/run_bench.py",
+      "entrypoint_sha256": "1c92b38ade1613ad699f297bb3f1ac346bbdfa5889828d1d3ac92e6c4fb7ac3e",
+      "adapter_boundary": "Use a project overlay; do not edit the checkout. Replace source placeholders with frozen local endpoints, emit stable qids and call traces, and convert swallowed storage/retrieval/answer exceptions into explicit retained failures."
+    },
+    {
+      "source_id": "a-mem-official",
+      "repository": "agiresearch/A-mem",
+      "revision": "ceffb860f0712bbae97b184d440df62bc910ca8d",
+      "entrypoint": "agentic_memory/memory_system.py",
+      "entrypoint_sha256": "fa58c3ed405e37d298a3d11e5cd69459bc9709004461c0e01fc0c497c77c949b",
+      "adapter_boundary": "Caption each Mem-Gallery round using dataset-provided captions, call add_note in chronology order, call search_agentic with the frozen K, and preserve A-MEM note analysis, linking, and evolution calls."
+    },
+    {
+      "source_id": "memoryos-official",
+      "repository": "BAI-LAB/MemoryOS",
+      "revision": "587ed7755c7aed179965792830ff1b5ad9a6fa92",
+      "entrypoint": "memoryos-chromadb/memoryos.py",
+      "entrypoint_sha256": "6f57a1bf66937d7c9b49743f3370351efbae85bbecded582dd4df3cc09e930d1",
+      "adapter_boundary": "Caption each round, preserve chronological user-assistant pairs and hierarchical updates, expose retrieve_context rather than MemoryOS answer generation, and leave final answering to the matched answer wrapper."
+    },
+    {
+      "source_id": "m2a-official",
+      "repository": "Little-Fridge/M2A",
+      "revision": "edd8c3b75bae8b2c9c1a0ac8ed67e38c2c2723f8",
+      "entrypoint": "agent/m2a.py",
+      "entrypoint_sha256": "dd1d7ffa03533fd3f69e39188d06a2b0f6155ec26ce6f93835dd9e7f93d13948",
+      "adapter_boundary": "Preserve raw and semantic stores plus the memory-manager loop, route text and image embeddings to frozen local endpoints, cap returned evidence prospectively, and use a fresh database root for every method-seed run."
+    },
+    {
+      "source_id": "v-mem-official",
+      "repository": "Dingyi-Kang/V-Mem",
+      "revision": "36916b14dc5241e04acbf5cd0f3c40799bc09550",
+      "entrypoint": "run_memgallery_final.py",
+      "entrypoint_sha256": "e5c4a185679dc2aaacb28452619fa29871c2cac1d0d27b6e6ff58deeb8911a39",
+      "adapter_boundary": "Preserve the four query-modality routes, caption folding, SigLIP2 visual lane, MiniLM text lane, generated anchors, round collapse, and neighbor windows; parameterize paths/model/endpoints and emit exact retrieved round ids."
+    }
+  ],
+  "matched_protocol": {
+    "dataset_questions": 1711,
+    "qid_order": "the accepted Mem-Gallery QID_ORDER.txt byte-for-byte",
+    "seeds": [0, 1, 2],
+    "answer_model": "Qwen/Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "answer_temperature": 0.0,
+    "answer_max_output_tokens": 128,
+    "retrieved_evidence_k": 10,
+    "answer_memory_budget": "Qwen tokenizer N_text + 256*N_images <= 4096, applied after method retrieval and before the shared answer call",
+    "truncation_tie_break": "Preserve method rank first, then chronological round id; full-memory controls retain newest content when the budget is exceeded.",
+    "method_internal_llm": "The same frozen Qwen answer model is used for method-required extraction, routing, mutation, reflection, and anchor generation, but every call is accounted separately from the final answer call.",
+    "official_values_allowed": false,
+    "post_score_method_or_budget_dropping_allowed": false
+  },
+  "methods": [
+    {
+      "method_id": "a-mem",
+      "source_id": "a-mem-official",
+      "entry_class": "OFFICIAL_THIN_ADAPTER",
+      "memory_modality": "captioned_text",
+      "frozen_budget": "search_agentic k=10 followed by the shared 4096-token answer-memory cap",
+      "method_internal_calls": ["note analysis", "linking/evolution when triggered"],
+      "fidelity_companion": "none"
+    },
+    {
+      "method_id": "memoryos",
+      "source_id": "memoryos-official",
+      "entry_class": "OFFICIAL_THIN_ADAPTER",
+      "memory_modality": "captioned_text",
+      "frozen_budget": "retrieval_queue_capacity=10 followed by the shared 4096-token answer-memory cap",
+      "method_internal_calls": ["session/page summarization", "keyword/profile/knowledge updates"],
+      "fidelity_companion": "Record the upstream-default queue capacity 7 as a secondary non-primary reproduction only if resources permit."
+    },
+    {
+      "method_id": "universalrag",
+      "source_id": "mem-gallery-official",
+      "entry_class": "NATIVE_HARNESS_OVERLAY",
+      "native_memory_name": "UniversalRAGMemory",
+      "memory_modality": "multimodal",
+      "frozen_budget": "top_k=10 followed by the shared 4096-token answer-memory cap",
+      "method_internal_calls": ["per-query modality routing"]
+    },
+    {
+      "method_id": "ngm",
+      "source_id": "mem-gallery-official",
+      "entry_class": "NATIVE_HARNESS_OVERLAY",
+      "native_memory_name": "NGMemory",
+      "memory_modality": "multimodal_graph",
+      "frozen_budget": "max_nodes=10 followed by the shared 4096-token answer-memory cap",
+      "method_internal_calls": []
+    },
+    {
+      "method_id": "augustus",
+      "source_id": "mem-gallery-official",
+      "entry_class": "NATIVE_HARNESS_OVERLAY",
+      "native_memory_name": "AUGUSTUSMemory",
+      "memory_modality": "concept_tagged_multimodal_graph",
+      "frozen_budget": "max_nodes=10 followed by the shared 4096-token answer-memory cap",
+      "method_internal_calls": ["LLM concept extraction during storage"]
+    },
+    {
+      "method_id": "m2a",
+      "source_id": "m2a-official",
+      "entry_class": "OFFICIAL_THIN_ADAPTER",
+      "memory_modality": "raw_plus_semantic_multimodal",
+      "frozen_budget": "maximum 10 returned evidence ids followed by the shared 4096-token answer-memory cap",
+      "method_internal_calls": ["memory-manager tool loop and semantic-memory updates"]
+    },
+    {
+      "method_id": "v-mem",
+      "source_id": "v-mem-official",
+      "entry_class": "OFFICIAL_BENCHMARK_ADAPTER",
+      "memory_modality": "routed_text_and_visual",
+      "frozen_budget": "top_k=10, neighbor window=1, merged overlapping windows, followed by the shared 4096-token answer-memory cap",
+      "method_internal_calls": ["hypothetical caption for eligible text-to-image queries", "image keyword anchor for image-to-text queries"],
+      "fidelity_companion": "The upstream top_k=12 configuration may be run only as a secondary source-fidelity companion and cannot replace the matched K=10 primary result."
+    },
+    {
+      "method_id": "no-memory",
+      "source_id": "project-control",
+      "entry_class": "PROJECT_CONTROL",
+      "memory_modality": "none",
+      "frozen_budget": "K=0 and zero memory tokens",
+      "method_internal_calls": []
+    },
+    {
+      "method_id": "full-memory-text",
+      "source_id": "mem-gallery-official",
+      "entry_class": "NATIVE_HARNESS_OVERLAY",
+      "native_memory_name": "FUMemory",
+      "memory_modality": "captioned_text",
+      "frozen_budget": "all chronological rounds with newest-preserving truncation to the shared 4096-token cap",
+      "method_internal_calls": []
+    },
+    {
+      "method_id": "full-memory-mm",
+      "source_id": "mem-gallery-official",
+      "entry_class": "NATIVE_HARNESS_OVERLAY",
+      "native_memory_name": "MMFUMemory",
+      "memory_modality": "multimodal",
+      "frozen_budget": "all chronological rounds with newest-preserving N_text + 256*N_images <= 4096 and at most 20 memory images",
+      "method_internal_calls": []
+    },
+    {
+      "method_id": "fifo-recent",
+      "source_id": "mem-gallery-official",
+      "entry_class": "NATIVE_HARNESS_OVERLAY",
+      "native_memory_name": "STMemory",
+      "memory_modality": "captioned_text",
+      "frozen_budget": "10 most recent rounds followed by the shared 4096-token cap",
+      "method_internal_calls": []
+    },
+    {
+      "method_id": "bm25",
+      "source_id": "project-control",
+      "entry_class": "PROJECT_CONTROL",
+      "memory_modality": "captioned_text",
+      "frozen_budget": "BM25 top_k=10 followed by the shared 4096-token cap",
+      "control_definition": "One document per round; lowercase Unicode word tokens; rank_bm25 BM25Okapi defaults; descending score then chronological round-id tie break.",
+      "method_internal_calls": []
+    },
+    {
+      "method_id": "naive-rag",
+      "source_id": "mem-gallery-official",
+      "entry_class": "NATIVE_HARNESS_OVERLAY",
+      "native_memory_name": "LTMemory",
+      "memory_modality": "captioned_text_dense",
+      "frozen_budget": "cosine top_k=10 with the frozen GME encoder followed by the shared 4096-token cap",
+      "method_internal_calls": []
+    },
+    {
+      "method_id": "hybrid-rag",
+      "source_id": "project-control",
+      "entry_class": "PROJECT_CONTROL",
+      "memory_modality": "captioned_text_sparse_plus_dense",
+      "frozen_budget": "BM25 top20 and dense top20 fused to final top_k=10, followed by the shared 4096-token cap",
+      "control_definition": "One document per round; the frozen BM25 and shared-Qwen dense control definitions; equal-weight reciprocal-rank fusion with constant 60; descending fused score then best component rank then chronological round-id tie break.",
+      "method_internal_calls": []
+    }
+  ],
+  "required_call_accounting": [
+    "final_answer calls and prompt/completion/total tokens",
+    "memory_write_llm calls and prompt/completion/total tokens",
+    "memory_recall_llm calls and prompt/completion/total tokens",
+    "router_or_anchor_llm calls and prompt/completion/total tokens",
+    "text_embedding calls, input items, dimensions, and seconds",
+    "image_embedding calls, input items, dimensions, and seconds",
+    "storage, retrieval, answer, and end-to-end wall seconds",
+    "peak CPU RAM, peak GPU VRAM by device, persistent memory bytes, and all failed calls"
+  ],
+  "failure_semantics": {
+    "ingestion_failure": "Reject the method-seed raw run because all subsequent questions may depend on corrupted memory state; retain the failed root and logs.",
+    "question_failure": "Emit one FAILED prediction row with nonempty error_type/error and retain it in the 1711-question denominator.",
+    "process_exit_zero": "Never sufficient: exact qid order, row count, failure count, configuration identity, and evidence hashes must also pass.",
+    "retry": "Any recovery uses a separately frozen fresh run root; no in-place overwrite or selective rerun after score observation."
+  },
+  "stage_order": [
+    "accept WMA Wave 1 and stop its services",
+    "accept Mem-Gallery data materialization and semantic integrity",
+    "materialize and inventory every required model under the frozen ownership policy",
+    "implement and hash project overlays without editing upstream checkouts",
+    "run one no-score lifecycle case per adapter family in fresh roots and retain failures",
+    "freeze method-seed numerical authorization before any complete score is observed",
+    "execute 42 raw runs, reconcile 71862 rows, score, aggregate, archive, and only then admit claims"
+  ],
+  "current_state": {
+    "data_integrity_accepted": false,
+    "required_models_ready": false,
+    "adapter_lifecycle_runs_started": 0,
+    "numerical_runs_started": 0,
+    "prediction_rows_observed": 0,
+    "scores_observed": 0,
+    "official_values_used": false
+  },
+  "authorization": "This artifact freezes source mapping and budgets only. It does not authorize lifecycle execution, numerical execution, scoring, table admission, AgentEnhance execution, SOTA language, or model cleanup.",
+  "explicitly_prohibited": [
+    "editing a frozen upstream checkout instead of using a hashed overlay",
+    "silently skipping a failed memory write, retrieval, route, anchor, answer, qid, method, or seed",
+    "using the upstream V-Mem K=12 result as the matched K=10 primary cell",
+    "pooling method-internal LLM cost into the answer-only cost field",
+    "dropping an expensive method or unfavorable metric after score observation",
+    "claiming SOTA from official values, cross-protocol values, incomplete runs, or a single favorable slice"
+  ]
+}
