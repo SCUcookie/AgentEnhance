@@ -1,0 +1,81 @@
+{
+  "schema_version": "agentenhance.memgallery_control_adapter_prefreeze.v1",
+  "stage_id": "memgallery-control-adapter-20260904-v1",
+  "status": "FROZEN_PROJECTION_ONLY_AWAITING_ACCEPTED_DATASET",
+  "frozen_at": "2026-09-04T08:37:24+08:00",
+  "purpose": "Freeze the source-faithful Mem-Gallery dialogue-to-record and answer-isolating question projection used by the seven control methods before the real dataset is materialized.",
+  "upstream_authority": {
+    "repository": "YuanchenBei/Mem-Gallery",
+    "revision": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+    "path": "benchmark/run/run_bench.py",
+    "sha256": "1c92b38ade1613ad699f297bb3f1ac346bbdfa5889828d1d3ac92e6c4fb7ac3e",
+    "audited_functions": ["process_conversation", "DialogueAgent.memory_store", "DialogueAgent.memory_recall", "run_mm_bench"]
+  },
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-static-method-entry-prefreeze.v1.json",
+      "sha256": "99ccf8b0c992b0c4a90efe3788d7801c87a8d8e12b9455d5670e66eaeae3ddb4"
+    },
+    {
+      "path": "comparisons/memgallery-control-core-prefreeze.v1.json",
+      "sha256": "ff3425496bcf2084b9e29f629680bfa997b092e807a83b2109fa5e47cc740a37"
+    },
+    {
+      "path": "scripts/memgallery_control_adapter.py",
+      "sha256": "0d89f8228edae0815cbbe703a0c2ea6c4e1a812d213c0b3ad3ca88bf02f8dd3c"
+    },
+    {
+      "path": "tests/test_memgallery_control_adapter.py",
+      "sha256": "e15af1217436cdc1681118d8eb02ddcf771bd2d1ccf6fe361fd59c6c91d549fa"
+    }
+  ],
+  "dialogue_projection": {
+    "ordering": "Sorted scenario files are handled by the accepted dataset identity; within one scenario preserve session list order and dialogue list order, skipping only rounds where both user and assistant strings are empty as the official runner does.",
+    "speaker_a": "user (<character_profile.name>) when a nonempty name exists, otherwise user",
+    "speaker_b": "assistant",
+    "raw_text": "Join nonempty '<speaker>: <content>' segments with a newline.",
+    "image_selection": "Use only input_image[0], image_caption[0], and image_id[0], matching the official runner; the accepted dataset audit still validates every listed image reference.",
+    "captioned_text": "For text controls append exactly '\nimage:\nimage_id: <id>\nimage_caption: <caption>' when the selected image has a nonempty source id or caption.",
+    "multimodal_text": "For full-memory-mm retain raw_text separately and attach the first frozen image path rather than folding its caption into the text.",
+    "memory_id": "<scenario>:session-<zero-based source session index>:round-<zero-based source round index>",
+    "chronological_index": "Dense zero-based index over official-runner-consumed nonempty rounds."
+  },
+  "question_projection": {
+    "qid": "<scenario>:<zero-based QA index>",
+    "answer_isolation": "The adapter returns no raw answer field. It returns answer_sha256 and qa_canonical_sha256 solely to bind the projection to the accepted question index.",
+    "textual_retrieval_query": "Append exactly '\nquestion's image:\nimage_caption: <caption>' only when both a question image and caption exist, matching official text-memory recall.",
+    "answer_query": "Keep the original question separate; the future answer wrapper owns speaker/category formatting and question-image attachment.",
+    "identity_check": "qid, scenario, qa_index, question_sha256, answer_sha256, and qa_canonical_sha256 must exactly match the accepted question-index row in order."
+  },
+  "strictness_delta": [
+    "Reject path traversal, absolute paths, malformed image metadata, and non-string dialogue/question fields instead of warning and continuing.",
+    "Reject any query projection carrying a raw answer field.",
+    "Reject denominator, order, or identity drift against the accepted question index."
+  ],
+  "validation": {
+    "synthetic_tests_passed": 5,
+    "covered_invariants": [
+      "official speaker naming and caption folding",
+      "official first-image selection and safe path normalization",
+      "empty-round skipping with source-index-stable memory ids",
+      "question-image caption used only for retrieval projection",
+      "raw-answer omission and frozen question identity validation",
+      "malformed image metadata and traversal rejection"
+    ],
+    "real_dataset_rows_read": 0,
+    "raw_answers_emitted": 0,
+    "network_requests": 0,
+    "gpu_processes": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "After accepted dataset integrity, run this exact adapter over all 20 scenarios in a fresh no-score lifecycle root, verify 1711 ordered query identities and the measured consumed-round count, and archive the projection hashes before endpoint or numerical execution.",
+  "authorization": "This artifact does not authorize reading the real dataset before its integrity acceptance, model service launch, embeddings, answer generation, numerical runs, scoring, result admission, claims, or cleanup.",
+  "explicitly_prohibited": [
+    "passing raw answers into retrieval, prompting, logging, or model-visible structures",
+    "silently consuming more than the first conversation image while claiming official-runner fidelity",
+    "reindexing memory ids after a skipped source round",
+    "changing folding, speaker, image, or identity semantics after score observation",
+    "using synthetic projection tests as baseline quality evidence"
+  ]
+}
