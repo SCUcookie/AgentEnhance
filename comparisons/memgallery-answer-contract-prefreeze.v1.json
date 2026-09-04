@@ -1,0 +1,88 @@
+{
+  "schema_version": "agentenhance.memgallery_answer_contract_prefreeze.v1",
+  "stage_id": "memgallery-matched-answer-contract-20260904-v1",
+  "status": "FROZEN_REQUEST_ASSEMBLY_ONLY_AWAITING_ENDPOINT_LIFECYCLE",
+  "frozen_at": "2026-09-04T08:37:24+08:00",
+  "purpose": "Freeze one answer-model identity, decoding policy, official prompt family, evidence ordering, image placement, and answer-leak guard shared by all 14 Mem-Gallery methods.",
+  "matched_model": {
+    "repository": "Qwen/Qwen3-VL-8B-Instruct",
+    "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+    "served_model": "Qwen3-VL-8B-Instruct",
+    "temperature": 0.0,
+    "max_output_tokens": 128,
+    "seeds": [0, 1, 2],
+    "cleanup_eligible": false
+  },
+  "upstream_authority": {
+    "repository": "YuanchenBei/Mem-Gallery",
+    "revision": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+    "runner_path": "benchmark/run/run_bench.py",
+    "runner_sha256": "1c92b38ade1613ad699f297bb3f1ac346bbdfa5889828d1d3ac92e6c4fb7ac3e",
+    "normalized_prompt_sha256": {
+      "sys_prompt.txt": "6af20bdc80bf5683ac9966886489b72813d61f37c37013d3432df53d9a6ed47c",
+      "ar_prompt.txt": "da6381ac3fdccb029389e96f28dd7c37c416a2fdccc80645470311216d66d6da",
+      "cd_prompt.txt": "fa5b1f1961f7a0bd3575371f5d1100197644bd62307d9fc927458a7368c6eab3",
+      "vs_prompt.txt": "340f461de7fba952c39a9fc4f82b36edb60bc17ec7cd076307f868941bb70f52"
+    },
+    "normalization": "UTF-8 text after the official loader's strip()."
+  },
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-control-adapter-prefreeze.v1.json",
+      "sha256": "d6b7703bd6165aad7ade2c9984f89b30aa85945d3ac7bfd826a3a72dd10a91f4"
+    },
+    {
+      "path": "scripts/memgallery_answer_contract.py",
+      "sha256": "f7510c023cb776ded5d229d16a64131d2778ac1c57b089d58d81dc4f8a5d6c2a"
+    },
+    {
+      "path": "tests/test_memgallery_answer_contract.py",
+      "sha256": "0220fc9608accb2a7d7f7420dfb9cb2101adeda0fdb9583df88a9577fa2fd81e"
+    }
+  ],
+  "request_contract": {
+    "system_message": "The normalized frozen upstream sys_prompt.txt.",
+    "user_content_order": [
+      "memory header",
+      "selected evidence in frozen rank/prompt order",
+      "official speaker-aware question prompt plus category constraint",
+      "optional question-image marker and question image"
+    ],
+    "text_memory": "Join whole caption-folded records in their selected order after the memory header.",
+    "multimodal_memory": "For each record emit raw dialogue text, then its source image id and image-content marker, then at most one frozen image reference.",
+    "image_transport_boundary": "The pure builder emits image_ref identities only. A later hashed endpoint client must resolve and base64-encode bytes beneath the accepted dataset root while retaining byte hashes.",
+    "category_constraints": ["AR", "CD", "VS"],
+    "answer_leak_guard": "Reject answer, gold, reference_answer, or original_answer fields before request construction."
+  },
+  "accounting_requirements_for_future_client": [
+    "request identity and canonical request SHA-256 before image byte expansion",
+    "prompt, completion, and total tokens reported by the endpoint",
+    "wall time, HTTP status, response id, finish reason, and failed-call exception",
+    "all image source identities, byte sizes, and SHA-256 values",
+    "one final_answer call category distinct from memory-write, recall, router, and anchor calls"
+  ],
+  "validation": {
+    "synthetic_tests_passed": 5,
+    "covered_invariants": [
+      "model, temperature, output-token, and seed binding",
+      "category constraint injection",
+      "multimodal evidence and question-image order",
+      "empty-memory request shape",
+      "raw-answer field rejection",
+      "one-image-per-official-round enforcement"
+    ],
+    "endpoint_calls": 0,
+    "image_bytes_read": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "Implement a standard-library endpoint client and byte-safe image resolver, then run only mocked response/timeout/malformed-response tests. Real endpoint lifecycle remains blocked until Wave 1, dataset integrity, model inventory, and a fresh lifecycle prefreeze are all accepted.",
+  "authorization": "This request-assembly contract authorizes no model service, real endpoint call, real image read, prediction, scoring, result admission, superiority claim, SOTA claim, or cleanup.",
+  "explicitly_prohibited": [
+    "method-specific answer prompts or decoding changes in the matched table",
+    "passing raw answers into the builder or downstream client",
+    "silently omitting an evidence or question image after request construction",
+    "using a malformed or empty model response as an accepted prediction",
+    "treating request-shape tests as a reproduced baseline result"
+  ]
+}

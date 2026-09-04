@@ -49,6 +49,7 @@ baseline-check:
 	python3 scripts/validate_memgallery_siglip2_gate_control_package.py
 	python3 scripts/validate_memgallery_control_core_prefreeze.py
 	python3 scripts/validate_memgallery_control_adapter_prefreeze.py
+	python3 scripts/validate_memgallery_answer_contract_prefreeze.py
 	python3 scripts/validate_wma_local_result_admission.py
 	python3 scripts/validate_wma_wave1_recovery2.py
 	python3 scripts/validate_wma_wave1_recovery2_closure.py
