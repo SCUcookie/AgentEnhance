@@ -1,0 +1,143 @@
+{
+  "schema_version": "agentenhance.model_cleanup_controller_prefreeze.v3",
+  "controller_id": "baseline-project-owned-model-cleanup-20260904-v3",
+  "status": "FROZEN_IMPLEMENTATION_ONLY_NO_CURRENT_ELIGIBILITY",
+  "frozen_at": "2026-09-04T16:25:00+08:00",
+  "purpose": "Provide the only future cleanup path that resolves ownership ledger v1 plus the v2 Mem-Gallery delta, preserves the three-track completion gate, and deletes only an exact project-owned weight root after every effective dependent is archived and retired.",
+  "supersedes": {
+    "path": "comparisons/model-cleanup-controller-prefreeze.v2.json",
+    "sha256": "69df5362e514e8c52af2c2496fc4f26075a20d839672760c62ae38631aa5a547",
+    "reason": "The v2 cleanup gate checks all three tracks globally but delegates to a WMA-only dependency validator and cannot resolve the additive ownership-ledger v2 or its SigLIP2 candidate."
+  },
+  "bound_inputs": [
+    {
+      "path": "comparisons/model-retention-policy.v2.json",
+      "sha256": "196c83d19320f406b5ca4a1d124ef025d8dbf6672d9e538dd3d2795464dbfec7"
+    },
+    {
+      "path": "comparisons/baseline-model-ownership-ledger.v1.json",
+      "sha256": "3b855e216f8eca4d39d18bade4bcdda91136df7d8a06333fcfd6d93067ff0613"
+    },
+    {
+      "path": "comparisons/baseline-model-ownership-ledger.v2.json",
+      "sha256": "8ba9c463309b15b7ba087dae6882e43cab734f432d75dde3ec41dbfcaa922064"
+    },
+    {
+      "path": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json",
+      "sha256": "f32a8803fc1448e9e6adbaf7a9ba6747dce47b80cde9dcd30eb75007db7ef1f4"
+    },
+    {
+      "path": "comparisons/wma-main-table-spec.v4.json",
+      "sha256": "f3a233b6e62419fa054557e18a326d7b2ba59210184bf782556dd1920f8c4937"
+    },
+    {
+      "path": "scripts/model_cleanup_controller.py",
+      "sha256": "afb8e950941e7b23399a4d6aa744e589f2423fb869c4d28dc31ca64d5783693d"
+    },
+    {
+      "path": "scripts/model_cleanup_controller_v2.py",
+      "sha256": "92c1314ba7f7285b5c0ea5b78a2940eadb4fd6bc836eb8f2872c00982bcebe40"
+    },
+    {
+      "path": "scripts/model_cleanup_controller_v3.py",
+      "sha256": "9ab48aaadce49a7718ab9800a7358983ee7eb2c062ef36d19897a28882583d8d"
+    },
+    {
+      "path": "tests/test_model_cleanup_controller_v3.py",
+      "sha256": "333163616d59e7fb3c8082862533183ebfbae64e32cc730b0563a81b938e0290"
+    }
+  ],
+  "effective_ownership": {
+    "merge": "Resolve all seven v1 candidates, apply the exact GME and MiniLM dependent expansions from v2, then add the exact v2 SigLIP2 candidate.",
+    "project_owned_candidates": 8,
+    "project_owned_expected_files": 99,
+    "project_owned_expected_bytes": 28164467445,
+    "effective_dependency_relations": 19,
+    "protected_shared_models": 2,
+    "cleanup_eligible_now": 0
+  },
+  "global_completion_gate": {
+    "record": "/data1/2026/ldh/AgentEnhance/runs/baseline-cross-track-completion-20260904-v1/cross-track-completion.json",
+    "required_tracks": [
+      {"track_id": "wma-lifecycle-matched-v1", "registered_methods": 29},
+      {"track_id": "memgallery-static-matched-v1", "registered_methods": 14},
+      {"track_id": "causal-locomo-safety-v1", "registered_methods": 7}
+    ],
+    "registered_method_surface": 50,
+    "requirements": [
+      "TERMINAL_ACCEPTED_COMPLETE_SURFACE with no contradictory rejection marker",
+      "inventory-signed completion record and terminal-accepted track archives",
+      "every registered method belongs to exactly one accepted or terminal-blocked-or-failed partition",
+      "all denominators reconciled and all accepted and rejected evidence archived",
+      "official_values_used=false"
+    ]
+  },
+  "dependent_retirement_contract": {
+    "coverage": "One unique receipt for every effective (track_id, method_id) relation of the candidate after resolving both ownership ledgers.",
+    "receipt": "An inventory-signed dependent-retirement.json in a terminal-accepted root.",
+    "required_state": "TERMINAL_ACCEPTED_RETIRED with outcome matching the global accepted/terminal partition, exact global-completion hash, exact track-archive identity, zero pending runs, zero active process references, model_reference_retired=true, and official_values_used=false.",
+    "new_v2_edges_cannot_be_omitted": true
+  },
+  "project_reference_contract": {
+    "receipt": "An inventory-signed project-reference-audit.json in a terminal-accepted root.",
+    "required_state": "TERMINAL_ACCEPTED_NO_ACTIVE_OR_PENDING_REFERENCES",
+    "requirements": [
+      "exact model ID and absolute target",
+      "exact global-completion hash and complete sorted effective-dependent set",
+      "active_process_references=[] and pending_run_references=[]",
+      "datasets_results_logs_archives_retained=true"
+    ]
+  },
+  "weight_only_two_phase_boundary": {
+    "preflight": "Read-only verification of policy, both ledgers, global completion, every dependent retirement, project references, immutable repository access, materialization record, complete model inventory, live tree hash, exact path and lsof state.",
+    "quarantine": "Atomically rename only the exact non-symlink, non-mount model target to a unique same-filesystem quarantine sibling and write an exclusive v3 phase-1 record.",
+    "delete": "Revalidate the quarantined bytes, all gates and the phase-1 evidence identity, delete only the explicit quarantine path, then verify the original and quarantine are absent while every retained path still exists.",
+    "eligible_roots": [
+      "/data1/2026/ldh/AgentEnhance/cache/models/<exact-child>",
+      "/data2/2026/ldh/AgentEnhance/cache/models/<exact-child>"
+    ],
+    "globs_or_unresolved_variables_allowed": false
+  },
+  "retained_after_deletion": [
+    "all datasets and immutable source checkouts",
+    "all environments, configurations, prompts, seeds and launch receipts",
+    "all predictions, raw metrics, summaries, tables, logs and failure records",
+    "all model manifests, materialization records, complete per-file SHA-256 inventories and repository-access audits",
+    "all accepted and rejected evidence archives, global completion, retirement receipts, project-reference audit and cleanup records"
+  ],
+  "validation": {
+    "synthetic_tests_passed": 6,
+    "covered_invariants": [
+      "read-only preflight after exact v1+v2 dependent merge",
+      "missing global completion rejects without model mutation",
+      "a Mem-Gallery dependent introduced by v2 cannot be omitted",
+      "pending project references reject before mutation",
+      "two-phase deletion removes only temporary fixture weights and retains every evidence root",
+      "an active open-file reference rejects before mutation"
+    ],
+    "server_model_files_quarantined": 0,
+    "server_model_files_deleted": 0,
+    "datasets_deleted": 0,
+    "results_deleted": 0
+  },
+  "current_state": {
+    "wma_complete": false,
+    "memgallery_complete": false,
+    "causal_locomo_complete": false,
+    "global_completion_record_present": false,
+    "dependent_retirement_receipts_present": 0,
+    "project_owned_models_cleanup_eligible": 0,
+    "mutation_performed": false
+  },
+  "authorization": "No current cleanup is authorized. scripts/model_cleanup_controller_v3.py becomes the only candidate future entrypoint only after a separately built, hash-inventoried, remotely validated inert control package and fully rendered DRY_RUN_ELIGIBLE_V3 record pass every frozen gate. Any quarantine and delete phase still requires explicit execution authority at that future time.",
+  "explicitly_prohibited": [
+    "directly invoking model_cleanup_controller.py or model_cleanup_controller_v2.py for a future cleanup decision",
+    "deleting GME or MiniLM before every Mem-Gallery dependent added by ownership v2 is retired",
+    "deleting SigLIP2 before both M2A and V-Mem are terminal, archived and retired",
+    "deleting either protected shared Qwen model",
+    "using official values, development-only values or missing rows to satisfy a completion surface",
+    "deleting a dataset, result, log, environment, source, manifest, evidence root or archive",
+    "performing a server preflight, quarantine or deletion from this implementation-only freeze"
+  ],
+  "next_gate": "Build and independently validate a fresh inert remote control package for v3 without creating an eligibility record or touching any model. Actual eligibility remains impossible until all three comparison tracks and all model dependents are terminal and archived."
+}

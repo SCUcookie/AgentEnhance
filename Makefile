@@ -18,6 +18,7 @@ baseline-check:
 	python3 scripts/validate_model_cleanup_controller.py
 	python3 scripts/validate_model_cleanup_controller_v2.py
 	python3 scripts/validate_model_cleanup_control_package_v2.py
+	python3 scripts/validate_model_cleanup_controller_v3.py
 	python3 scripts/validate_recent_method_reproduction_roadmap_v2.py
 	python3 scripts/validate_recent_method_reproduction_roadmap_v3.py
 	python3 scripts/validate_wma_table_bundle_v2.py --require-no-admitted-results
