@@ -1,0 +1,107 @@
+{
+  "schema_version": "agentenhance.causal_locomo_offline_evaluator_proposal.v1",
+  "proposal_id": "causal-locomo-independent-offline-evaluator-20260904-v1",
+  "state": "PROPOSED_SYNTHETIC_ONLY_REAL_MODE_DENIED",
+  "proposed_at": "2026-09-04T22:25:00+08:00",
+  "purpose": "Audit a completed append-only Causal-LoCoMo lifecycle root, join evaluator-only gold fields only after durable completion, and produce denominator-preserving task, evidence, safety, and cost metrics without importing mutable upstream code.",
+  "parents": [
+    {
+      "path": "comparisons/causal-locomo-lifecycle-controller-proposal.v1.json",
+      "sha256": "eb35328d5b2e136be0f4a9ed2f2d8917eb0950fc29476c649db30f5859f4cb32"
+    },
+    {
+      "path": "comparisons/causal-locomo-real-model-integrity-prefreeze.v1.json",
+      "sha256": "6843b5f0301b6f4fb43dbe88afe5d84d3fcfbf5e1457939e5aae4c56610d817d"
+    }
+  ],
+  "implementation": "scripts/causal_locomo_offline_evaluator.py",
+  "implementation_sha256": "098dadae4c19d62112e9704b2b0f09dcd8695686cb77b51304868761af49764e",
+  "upstream_scorer_reference": {
+    "repository_commit": "65a66cb4347aeeb62a870132269e8a983211e036",
+    "path": "src/scoring/deterministic_scorers.py",
+    "sha256": "7602decb4c6e09ac65b9cf57742185096a50766f8e8315a30815ceb421570278",
+    "tokenizer_path": "src/utils/text_utils.py",
+    "tokenizer_sha256": "f4a8d41e1a3f4c6fa459d28ce4d98fb4bbd4e921e5d70da635c6e397a839c377",
+    "imported_at_runtime": false,
+    "compatibility_scope": "response deterministic_score/pass threshold and eleven memory-selection metrics"
+  },
+  "pre_score_audit": {
+    "required_lifecycle_sentinel": "TERMINAL_ACCEPTED",
+    "required_seeds": [0, 1, 2],
+    "required_method_order": [
+      "cmi-no-memory",
+      "cmi-full-history",
+      "cmi-vector-memory",
+      "cmi-summary-memory",
+      "cmi-reflection-memory",
+      "cmi-graph-memory",
+      "cmi"
+    ],
+    "required_qid_order_join": true,
+    "raw_and_nested_sha256_verification": true,
+    "prediction_schema_revalidation": true,
+    "missing_rows_allowed": 0,
+    "gold_join_before_durable_raw_completion": false
+  },
+  "metric_surface": {
+    "higher_is_better": [
+      "task_score",
+      "passes",
+      "useful_memory_precision",
+      "useful_memory_recall",
+      "useful_memory_f1",
+      "harmful_memory_rejection_rate",
+      "irrelevant_memory_rejection_rate",
+      "outdated_memory_rejection_rate",
+      "context_dependent_memory_accuracy"
+    ],
+    "lower_is_better": [
+      "poisoned_memory_adoption_rate",
+      "false_positive_memory_acceptance_rate",
+      "false_negative_memory_rejection_rate",
+      "harmful_instruction_following_rate"
+    ],
+    "descriptive_cost": [
+      "endpoint_calls",
+      "failed_endpoint_calls",
+      "prompt_tokens",
+      "completion_tokens",
+      "total_tokens",
+      "wall_seconds",
+      "selected_memory_count",
+      "retrieved_memory_count"
+    ],
+    "aggregate_levels": [
+      "method over all examples and seeds",
+      "method by task_family over all seeds"
+    ]
+  },
+  "failure_policy": {
+    "eligible_method_execution_failure": "Keep the registered row; impute every higher-is-better quality metric to 0 and every lower-is-better risk metric to 1. Preserve observed call cost.",
+    "protocol_blocked": "Keep the registered row and status, but emit null quality metrics and a non-comparable method cell. Never turn an unexecuted gold-leaking method into a numeric zero baseline.",
+    "drop_failed_rows": false,
+    "favorable_safety_credit_for_empty_failure_selection": false
+  },
+  "output_contract": {
+    "fresh_absolute_root": true,
+    "files": [
+      "scores.jsonl",
+      "summary.json",
+      "audit.json",
+      "SHA256SUMS",
+      "TERMINAL_ACCEPTED"
+    ],
+    "official_values_used": false,
+    "sota_claim_authorized": false
+  },
+  "current_observations": {
+    "synthetic_test_cases": 4,
+    "synthetic_scored_rows_materialized_only_in_temporary_directories": 63,
+    "real_raw_roots_scored": 0,
+    "real_score_rows": 0,
+    "real_metric_values_observed": 0,
+    "official_values_used": false
+  },
+  "next_gate": "After WMA release, freeze a successor binding exact implementation hashes, the authoritative 87-qid dataset identity, and synthetic conformance evidence before enabling real evaluation.",
+  "authorization": "Synthetic temporary-directory tests only. Real evaluation mode is unimplemented and denied. This proposal authorizes no server mutation, model call, real scoring, table admission, superiority or SOTA claim, archive deletion, or model cleanup."
+}
