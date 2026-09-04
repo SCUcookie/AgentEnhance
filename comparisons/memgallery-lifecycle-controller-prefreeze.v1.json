@@ -1,0 +1,116 @@
+{
+  "schema_version": "agentenhance.memgallery_lifecycle_controller_prefreeze.v1",
+  "stage_id": "memgallery-filesystem-lifecycle-controller-20260904-v1",
+  "status": "FROZEN_SYNTHETIC_ONLY_AWAITING_WAVE1_RELEASE",
+  "frozen_at": "2026-09-04T16:05:00+08:00",
+  "purpose": "Freeze the fail-closed prerequisite and filesystem lifecycle around the existing Mem-Gallery control runner and append-only writer without authorizing a real model, endpoint, numerical run, or score.",
+  "scientific_question": "Can every future matched Mem-Gallery run be forced onto the same released scheduler state, accepted dataset identity, complete offline model surface, exact service identity, 20-scenario order, 1711-QID denominator, fresh root, and retained terminal evidence before any method quality is observed?",
+  "estimand_boundary": "This synthetic lifecycle estimates no method quality. It proves only control-flow and evidence invariants on injected mock answers.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-data-integrity-prefreeze.v1.json",
+      "sha256": "ac1bfd11f9b24d4cd39ac8de3c0ea567ed7c8c10fac40eeaeb350c6dd1e9e29f"
+    },
+    {
+      "path": "comparisons/memgallery-static-method-entry-prefreeze.v1.json",
+      "sha256": "99ccf8b0c992b0c4a90efe3788d7801c87a8d8e12b9455d5670e66eaeae3ddb4"
+    },
+    {
+      "path": "comparisons/memgallery-raw-run-writer-prefreeze.v1.json",
+      "sha256": "e36cb36732ca7af63b432d622bb393f083b0e5b25036770dc0f7130519e3ee94"
+    },
+    {
+      "path": "scripts/memgallery_lifecycle_controller.py",
+      "sha256": "f93200a83223b2947e8950e30dd08eeed1a3b0d4a1e57e4f6acb1c91dd182606"
+    },
+    {
+      "path": "tests/test_memgallery_lifecycle_controller.py",
+      "sha256": "6a91b158d250e6c023bd09e366659f0c73a5ba54d98d0345b330adf30e5cdb9b"
+    }
+  ],
+  "registered_surface": {
+    "dataset_repository": "Ethan-Bei/Mem-Gallery",
+    "dataset_revision": "af912daba984e896e253016b7c7e334ef92c2a6f",
+    "dataset_files": 1515,
+    "dataset_bytes": 545845389,
+    "image_files": 1490,
+    "scenarios": 20,
+    "questions": 1711,
+    "models": 5,
+    "methods": 14,
+    "seeds": [0, 1, 2]
+  },
+  "preflight_order": [
+    "require a separately signed WMA Wave-1 TERMINAL_ACCEPTED closure receipt with zero project processes, tmux sessions, and model services",
+    "require the exact Mem-Gallery TERMINAL_ACCEPTED dataset evidence root with no rejection marker and verify all four inventory hashes",
+    "recompute the dataset semantic identity and bind the exact 20 scenarios, 1711 ordered QIDs, and question-index bytes",
+    "require all five exact-revision model receipts, hash inventories, symlink-free snapshots, and network-free offline-load proofs",
+    "bind the inert injected-mock answer and tokenizer identity to the accepted protected Qwen inventory",
+    "require synthetic-only lifecycle authorization with zero network, zero GPU processes, bounded wall time and disk",
+    "validate every answer-free query projection against the accepted question-index identity before creating a run root"
+  ],
+  "filesystem_contract": {
+    "root": "An absent non-symlink exact child of an explicitly supplied allowed run scope.",
+    "start": "The previously frozen RawRunWriter creates the root and immutable RUNNING evidence before the first injected answer call.",
+    "append": "Exactly 20 scenario results append in accepted dataset order; their flattened QIDs equal the frozen 1711-QID sequence byte-for-byte.",
+    "accept": "Only the complete denominator can create TERMINAL_RAW_COMPLETE and EVIDENCE_SHA256SUMS.",
+    "reject": "Any post-root exception creates TERMINAL_REJECTED, retains partial evidence, and disables same-root recovery.",
+    "resume": false,
+    "same_root_retry": false
+  },
+  "model_and_service_contract": {
+    "models": [
+      "Qwen/Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+      "Qwen/Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+      "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct@9cfa6413f704a7c1cf5064d240748e10c876b286",
+      "sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "google/siglip2-base-patch16-384@f775b65a79762255128c981547af89addcfe0f88"
+    ],
+    "offline_only": true,
+    "all_inventory_hashes_required": true,
+    "symlinks_allowed": 0,
+    "synthetic_service": "injected_mock",
+    "endpoint_requests": 0,
+    "real_service_receipt_validation": "A future successor must add the exact local endpoint, process, physical/logical GPU map, tokenizer inventory, launch receipt, and health response. This v1 has no real-service execution branch."
+  },
+  "authorization": {
+    "accepted_state": "AUTHORIZED_SYNTHETIC_LIFECYCLE",
+    "real_mode_implemented": false,
+    "real_model_calls": false,
+    "network_requests": 0,
+    "gpu_processes": 0,
+    "scoring": false,
+    "official_values_used": false,
+    "table_admission": false,
+    "cleanup": false
+  },
+  "validation": {
+    "synthetic_tests_passed": 6,
+    "covered_invariants": [
+      "active Wave-1 denial before run-root creation",
+      "missing acceptance marker and evidence-hash drift denial before run-root creation",
+      "existing output-root collision denial",
+      "unconditional real-mode denial",
+      "model or service identity drift denial",
+      "complete 20-scenario and 1711-QID synthetic lifecycle accepted by the existing reconciliation core"
+    ],
+    "real_run_roots_created": 0,
+    "real_model_calls": 0,
+    "real_predictions_written": 0,
+    "scores_observed": 0
+  },
+  "transition_rule": {
+    "current": "FROZEN_SYNTHETIC_ONLY_AWAITING_WAVE1_RELEASE",
+    "next_allowed_gate": "After independently accepting Wave 1 and stopping its services, execute the already frozen Mem-Gallery data materialization and integrity stages. Then accept all exact model inventories and separately freeze a real adapter-family lifecycle successor.",
+    "not_unlocked": "No data download, model download, live service, real lifecycle, 42-run numerical surface, scoring, comparison, SOTA claim, or cleanup is unlocked by this artifact."
+  },
+  "explicitly_prohibited": [
+    "using a RUNNING, REJECTED, ambiguous, or still-serving WMA state as a release receipt",
+    "creating a real Mem-Gallery run root through this synthetic-only controller",
+    "calling localhost, the network, a GPU process, or a model from the injected synthetic answer surface",
+    "accepting missing, extra, duplicate, reordered, hash-drifted, or answer-leaking queries",
+    "falling back to another model, mutable revision, online download, or symlinked snapshot",
+    "scoring synthetic answers or admitting them to the baseline table",
+    "editing, resuming, overwriting, or deleting a terminal or partial evidence root"
+  ]
+}
