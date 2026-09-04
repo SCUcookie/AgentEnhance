@@ -1,0 +1,51 @@
+{
+  "schema_version": "agentenhance.causal_locomo_endpoint_client_proposal.v1",
+  "proposal_id": "causal-locomo-loopback-endpoint-client-20260904-v1",
+  "state": "PROPOSED_MOCK_ONLY_NOT_FROZEN_NOT_AUTHORIZED",
+  "proposed_at": "2026-09-04T18:50:00+08:00",
+  "parent": {
+    "path": "comparisons/causal-locomo-five-method-overlay-proposal.v1.json",
+    "sha256": "ad444dc86c8ec02a2c93db6cea0ab3dd9b4506d02e71288d6c379254664dd41a"
+  },
+  "implementation": "scripts/causal_locomo_endpoint_client.py",
+  "surface": {
+    "chat_endpoint_shape": "http://127.0.0.1:<high-port>/v1/chat/completions",
+    "chat_model": "Qwen3-VL-8B-Instruct",
+    "chat_temperature": 0.0,
+    "chat_max_tokens": 600,
+    "embedding_endpoint_shape": "http://127.0.0.1:<high-port>/v1/embeddings",
+    "embedding_model_alias": "text-embedding-3-small",
+    "embedding_model_revision": "Qwen/Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+    "embedding_dimensions": 1024,
+    "inputs_per_embedding_call": 1,
+    "attempts_per_call": 1,
+    "automatic_retries": 0,
+    "max_response_bytes": 16777216
+  },
+  "fail_closed_checks": [
+    "loopback HTTP, exact endpoint path and high port only",
+    "exact request model, decoding parameters, seed and message shape",
+    "HTTP 200, nonempty bounded UTF-8 JSON response",
+    "exact response model identity and one response item",
+    "nonempty chat answer and internally consistent token usage",
+    "exact 1024-dimensional finite nonzero embedding",
+    "one durable FAILED call record with no retry or local fallback"
+  ],
+  "existing_compatibility_evidence": {
+    "role": "service-shape evidence only; not a Causal-LoCoMo call",
+    "wma_embed1024_smoke_keys": ["created", "data", "id", "model", "object", "usage"],
+    "wma_embed1024_data_keys": ["embedding", "index", "object"],
+    "wma_embed1024_usage": {"prompt_tokens": 4, "completion_tokens": 0, "total_tokens": 4},
+    "wma_embed1024_dimensions": 1024
+  },
+  "current_observations": {
+    "mock_chat_calls": 3,
+    "mock_embedding_calls": 4,
+    "real_chat_calls": 0,
+    "real_embedding_calls": 0,
+    "prediction_rows": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "After WMA release, bind this client and the five-method overlay into a fresh synthetic-only lifecycle package; real endpoints remain separately unauthorized.",
+  "authorization": "Mock-only proposal. It authorizes no real endpoint request, service start, server mutation, dataset execution, numerical result, score inspection, table admission, SOTA claim, or model cleanup."
+}

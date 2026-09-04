@@ -38,6 +38,7 @@ baseline-check:
 	python3 scripts/validate_post_wma_cross_track_completion.py
 	python3 scripts/validate_causal_locomo_real_model_integrity_prefreeze.py
 	python3 scripts/validate_causal_locomo_five_method_overlay_proposal.py
+	python3 scripts/validate_causal_locomo_endpoint_client_proposal.py
 	python3 scripts/validate_memgallery_data_prefetch_manifest.py
 	python3 scripts/validate_memgallery_data_materialization_prefreeze.py
 	python3 scripts/validate_memgallery_data_control_package.py

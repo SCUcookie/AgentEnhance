@@ -247,6 +247,9 @@ def run_method(
             "error": None,
         }
     except Exception as exc:  # one retained denominator row, no fallback or retry
+        failure_record = getattr(exc, "record", None)
+        if isinstance(failure_record, Mapping):
+            calls.append(dict(failure_record))
         return {
             **base,
             "status": "FAILED",
@@ -259,4 +262,3 @@ def run_method(
             "error_type": type(exc).__name__,
             "error": str(exc),
         }
-
