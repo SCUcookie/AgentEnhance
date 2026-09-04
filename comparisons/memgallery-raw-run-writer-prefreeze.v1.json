@@ -1,0 +1,83 @@
+{
+  "schema_version": "agentenhance.memgallery_raw_run_writer_prefreeze.v1",
+  "stage_id": "memgallery-raw-run-writer-20260904-v1",
+  "status": "FROZEN_SYNTHETIC_ONLY_AWAITING_FILESYSTEM_LIFECYCLE_CONTROLLER",
+  "frozen_at": "2026-09-04T09:10:00+08:00",
+  "purpose": "Freeze a fresh-root, append-only evidence writer whose accepted output passes the existing Mem-Gallery reconciliation core and whose failures remain immutable.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-control-runner-prefreeze.v1.json",
+      "sha256": "4f84c7faf4630b7667831bd1d93b5ea6e98ec1888d7fd415f9f2f9a2f819d0ba"
+    },
+    {
+      "path": "comparisons/memgallery-run-reconciliation-prefreeze.v1.json",
+      "sha256": "52698bc8edac6a4ce8989f17eb820f5804bcf2f4b63c70b36d00b1adb286c437"
+    },
+    {
+      "path": "scripts/memgallery_raw_run_writer.py",
+      "sha256": "b1c3628e7295d67d656bc4aa0932caeac7601c53dbf9820e89a3033421eeea30"
+    },
+    {
+      "path": "tests/test_memgallery_raw_run_writer.py",
+      "sha256": "10bf8966a315d90cca4fcfbc00ad4b389615a7f324ddbfe47552b92fb35d2431"
+    }
+  ],
+  "root_contract": {
+    "scope": "The output root must be an absent, non-symlink exact child of one explicitly supplied /data1 or /data2 project run scope; tests use a temporary explicit scope only.",
+    "collision": "Any existing path rejects before mutation.",
+    "overwrite": "Every non-JSONL evidence file is created exactly once through link-based no-replace publication.",
+    "append_only": ["raw-predictions.jsonl", "retrieval-traces.jsonl", "call-records.jsonl", "events.jsonl"],
+    "resume": false,
+    "same_root_retry": false
+  },
+  "start_contract": {
+    "first_evidence": "Create the fresh root, four empty append-only streams, immutable RUNNING run-record.json, and one STARTED event before any model or endpoint side effect.",
+    "bound_identity": [
+      "track, method, seed, output root",
+      "dataset semantic identity, QID order SHA-256, question-index SHA-256",
+      "question denominator, official_values_used=false, cleanup_authorized=false"
+    ]
+  },
+  "append_contract": {
+    "order": "Each terminal scenario's prediction QIDs must equal the next exact slice of the frozen global QID order.",
+    "denominator": "Prediction and retrieval-trace cardinalities must match the scenario question count.",
+    "prediction": "Every row must use agentenhance.memgallery_prediction.v1 and the run method/seed identity.",
+    "call": "Only actual final_answer calls may appear; each must bind a scenario QID, method, seed, accepted/failed state, attempts=1, and retry_count=0.",
+    "durability": "Flush and fsync every append before emitting the SCENARIO_APPENDED event."
+  },
+  "terminal_acceptance": {
+    "precondition": "Observed QIDs equal the full frozen order exactly.",
+    "identity": "Write one reconciliation-compatible TERMINAL_RAW_COMPLETE run-identity.json with the protected Qwen model, temperature 0, max output 128, frozen source and memory budget, and official_values_used=false.",
+    "summary": "Record prediction, trace, final-answer-call and failed-prediction counts with scores_observed=0 and cleanup_authorized=false.",
+    "inventory": "Hash the immutable start record, terminal identity, summary, all four JSONL streams, then create TERMINAL_RAW_COMPLETE.",
+    "reconciliation_proof": "A synthetic terminal output is passed directly into scripts/reconcile_memgallery_method_run.py::reconcile and accepted with the exact denominator."
+  },
+  "terminal_rejection": {
+    "rule": "On controller-caught failure, preserve every appended byte, record error type/text and retained row count, hash the partial evidence, and create TERMINAL_REJECTED.",
+    "recovery": "A rejected root cannot be finalized or reused. Any justified recovery requires a separately frozen successor root."
+  },
+  "validation": {
+    "synthetic_tests_passed": 6,
+    "covered_invariants": [
+      "complete accepted root, hashes, denominator and failed-row count",
+      "existing-root collision denial",
+      "out-of-order QID rejection before append",
+      "incomplete finalization followed by retained terminal rejection",
+      "call identity and retry drift rejection",
+      "direct acceptance by the existing reconciliation core"
+    ],
+    "resource_warnings": 0,
+    "real_run_roots_created": 0,
+    "real_predictions_written": 0,
+    "scores_observed": 0
+  },
+  "next_gate": "Wrap this writer and the control runner in a separately frozen filesystem lifecycle controller that verifies Wave 1 release, accepted data evidence, exact offline model/tokenizer inventories, exact service receipt, 20 scenarios, 1711 QIDs, time/disk/GPU ceilings, and a lifecycle-only authorization before invoking any real component.",
+  "authorization": "This synthetic writer stage authorizes no real run root, dataset access, tokenizer or model load, embedding, endpoint request, prediction, scoring, result admission, claim, SOTA language, or cleanup.",
+  "explicitly_prohibited": [
+    "creating or reusing a real server run root from this library without a successor controller",
+    "editing JSONL or terminal evidence after append",
+    "finalizing an incomplete, duplicate, missing, extra, or reordered QID surface",
+    "using an accepted process exit without the hash inventory and terminal marker",
+    "deleting a rejected or partial root"
+  ]
+}

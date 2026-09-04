@@ -52,6 +52,7 @@ baseline-check:
 	python3 scripts/validate_memgallery_answer_contract_prefreeze.py
 	python3 scripts/validate_memgallery_endpoint_client_prefreeze.py
 	python3 scripts/validate_memgallery_control_runner_prefreeze.py
+	python3 scripts/validate_memgallery_raw_run_writer_prefreeze.py
 	python3 scripts/validate_wma_local_result_admission.py
 	python3 scripts/validate_wma_wave1_recovery2.py
 	python3 scripts/validate_wma_wave1_recovery2_closure.py
