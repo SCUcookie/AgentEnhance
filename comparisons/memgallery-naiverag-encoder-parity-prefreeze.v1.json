@@ -1,0 +1,132 @@
+{
+  "schema_version": "agentenhance.memgallery_naiverag_encoder_parity_prefreeze.v1",
+  "stage_id": "memgallery-naiverag-encoder-parity-20260904-v1",
+  "status": "FROZEN_SYNTHETIC_ONLY_AWAITING_WAVE1_MODEL_AND_SERVICE_RELEASE",
+  "frozen_at": "2026-09-04T12:04:51+08:00",
+  "purpose": "Prospectively decide whether the standard vLLM OpenAI embedding input path is numerically and retrieval-equivalent to Mem-Gallery's pinned official direct LMEncoder implementation for NaiveRAG, before any real benchmark vector or score is observed.",
+  "scientific_question": "Can the operationally convenient endpoint reproduce the official encoder's normalized vectors, pairwise retrieval scores, and complete deterministic rankings closely enough to preserve the registered NaiveRAG intervention?",
+  "estimand_boundary": "This gate estimates implementation equivalence on frozen diagnostic probes. It does not estimate NaiveRAG quality, compare memory methods, select a reported metric, or authorize a SOTA claim.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-static-method-entry-prefreeze.v1.json",
+      "sha256": "99ccf8b0c992b0c4a90efe3788d7801c87a8d8e12b9455d5670e66eaeae3ddb4"
+    },
+    {
+      "path": "comparisons/memgallery-embedding-client-prefreeze.v1.json",
+      "sha256": "4a758b9061d18654b174af44a3f21aa7be5e7562b299fa0563c8a96343599fae"
+    },
+    {
+      "path": "comparisons/memgallery-embedding-artifact-prefreeze.v1.json",
+      "sha256": "3650a1291f36808e071c1f83afd697bd9c5acc3ca45b82d017340cca5d872a46"
+    },
+    {
+      "path": "scripts/audit_memgallery_naiverag_encoder_parity.py",
+      "sha256": "6d336d9aedfa03a4eb4c7945f120e755f60a10cd85022952be3930bdf9063609"
+    },
+    {
+      "path": "tests/test_memgallery_naiverag_encoder_parity.py",
+      "sha256": "44185c00b17478906057969fc25806a15b5d5e621a98c50a947595bbf77df566"
+    }
+  ],
+  "official_implementation_identity": {
+    "repository": "YuanchenBei/Mem-Gallery",
+    "revision": "a93959e1e978a6a7d77798ae92c2ffe41c538c62",
+    "encoder_path": "benchmark/memengine/function/Encoder.py",
+    "encoder_sha256": "eb22409edf03b64eb209731afda809f56fb1f744039d034664d5f094caf2f4f7",
+    "function_config_path": "benchmark/default_config/DefaultFunctionConfig.py",
+    "function_config_sha256": "b33dd3be9c7d2f655bf59afb0b31027f2a6505e96675bf944d2f5fb020c71f37",
+    "observed_behavior": "LMEncoder tokenizes raw text, runs the model in evaluation mode, returns last_hidden_state[:, -1, :], and TextRetrieval cosine-normalizes the resulting tensor."
+  },
+  "model_identity": {
+    "repository": "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+    "revision": "9cfa6413f704a7c1cf5064d240748e10c876b286",
+    "model_config_sha256": "dd18f3c69154bc6ccd1f55a6e0d0831c7edde2e29fee19d7ee91ad0e2e9f24c4",
+    "pooling_config_sha256": "f25c114f765f96fb30c843ec709c35ee6e92f24a782b8f37d95e29a32a7da5d6",
+    "dimensions": 1536,
+    "pooling": "last_token",
+    "normalization": "cosine_after_encoding",
+    "precision": "float32"
+  },
+  "probe_surface": {
+    "probe_set_sha256": "2fc67baee9a5e78274b9ed1a2f4981db079220c628facac8cc0cf1c2a2b3761b",
+    "probe_count": 12,
+    "document_probes": 8,
+    "query_probes": 4,
+    "coverage": [
+      "dialogue formatting and newline boundaries",
+      "attribute collision and temporal update language",
+      "Chinese Unicode",
+      "accented Latin text",
+      "numeric and symbolic tokens",
+      "caption-like visual memory text"
+    ],
+    "real_dataset_texts_used": 0,
+    "real_answers_used": 0
+  },
+  "matched_execution": {
+    "direct_backend": "official_direct_lmencoder",
+    "direct_batch_size": 1,
+    "endpoint_backend": "vllm_openai_input",
+    "endpoint_batch_size": 12,
+    "endpoint_route": "/v1/embeddings",
+    "endpoint_input_field": "input",
+    "retry_count": 0,
+    "separate_evidence_files": true,
+    "raw_vectors_retained": true
+  },
+  "acceptance_rule": {
+    "minimum_same_probe_cosine": 0.9999,
+    "maximum_normalized_component_delta": 0.01,
+    "maximum_query_document_cosine_score_delta": 0.0001,
+    "complete_eight_document_ranking_exact_for_all_four_queries": true,
+    "all_conditions_required": true,
+    "post_observation_threshold_changes_allowed": false
+  },
+  "terminal_branches": {
+    "ENDPOINT_EQUIVALENT": "Only this branch permits the separately frozen real NaiveRAG lifecycle to use the vLLM input endpoint.",
+    "DIRECT_ENCODER_REQUIRED": "This is an accepted informative terminal result, not a failed experiment; the separately frozen lifecycle must use the official direct LMEncoder path.",
+    "neither_branch_authorizes": [
+      "real dataset execution",
+      "benchmark scoring",
+      "method comparison",
+      "metric selection",
+      "claim promotion",
+      "model deletion"
+    ]
+  },
+  "artifact_contract": {
+    "output_root": "An absent non-symlink exact child of an explicitly allowed run scope.",
+    "inputs": "Absolute regular non-symlink UTF-8 JSON files whose source, model, pooling, precision, batch, probe identity, order, dimension, finiteness, and nonzero norms must match exactly.",
+    "output_files": [
+      "parity-audit.json",
+      "EVIDENCE_SHA256SUMS",
+      "one terminal decision marker"
+    ],
+    "overwrite": false,
+    "resume": false,
+    "same_root_retry": false,
+    "malformed_input_creates_output_root": false
+  },
+  "validation": {
+    "synthetic_tests_passed": 8,
+    "covered_invariants": [
+      "identical vectors accept endpoint equivalence",
+      "small retrieval-score drift selects the direct encoder",
+      "ranking drift selects the direct encoder",
+      "identity, order, dimension, and non-finite vector rejection",
+      "endpoint-equivalent terminal marker and signed audit creation",
+      "direct-required terminal marker creation",
+      "existing, nested, and symlink output-root rejection",
+      "malformed evidence rejection before output creation"
+    ],
+    "real_model_loads": 0,
+    "real_endpoint_calls": 0,
+    "real_vectors_observed": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0,
+    "numeric_result_rows_added": 0,
+    "official_values_used": false
+  },
+  "next_gate": "After WMA Wave 1 releases the GPUs, freeze and execute one direct probe capture and one float32 vLLM probe capture at the pinned model revision, audit them in a fresh root, then freeze the selected real NaiveRAG lifecycle branch before reading any Mem-Gallery score.",
+  "authorization": "This synthetic-only gate authorizes no real model load, service launch, endpoint call, dataset read, prediction, score, comparison, claim, or cleanup."
+}
