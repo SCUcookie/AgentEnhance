@@ -1,0 +1,69 @@
+{
+  "schema_version": "agentenhance.model_materialization_prefreeze.v4",
+  "materialization_id": "memgallery-siglip2-model-materialization-20260904-v1",
+  "status": "FROZEN_AWAITING_WAVE1_DATA_AND_OWNERSHIP_GATES",
+  "frozen_at": "2026-09-04T11:10:00+08:00",
+  "scientific_evidence_role": "prospective model-acquisition contract only; no downloaded bytes, lifecycle result, benchmark result, superiority, or SOTA claim",
+  "prefetch_manifest": {
+    "path": "comparisons/memgallery-siglip2-model-prefetch-manifest.v1.json",
+    "sha256": "4a4ce353eb7a2f59ed6420a77adfb130b9c41074313e2721908f4375a422c7e1",
+    "required_status": "FROZEN_BEFORE_DOWNLOAD"
+  },
+  "implementation": {
+    "downloader": "scripts/materialize_hf_model_snapshot_v4.py",
+    "downloader_sha256": "3489fd20342b19816f24d67c7dafb3ed52b9ac2167770806ba5eded4522ac46b",
+    "unit_test": "tests/test_hf_model_materializer_v4.py",
+    "unit_test_sha256": "54ac66e1216b8ad17610fcc67ce528d68de3ac0e05b0740d913d98f1f6f14575",
+    "unit_tests": 3,
+    "identity_rule": "Every file has exactly one frozen upstream identity: LFS SHA-256 or regular-file Git blob SHA-1.",
+    "network_client": "Python urllib.request; one logical request per file and no application retry loop"
+  },
+  "model": {
+    "repository": "google/siglip2-base-patch16-384",
+    "revision": "f775b65a79762255128c981547af89addcfe0f88",
+    "target": "/data1/2026/ldh/AgentEnhance/cache/models/memgallery-vmem-siglip2-base-patch16-384-20260904-v1",
+    "evidence_root": "/data1/2026/ldh/AgentEnhance/runs/memgallery-siglip2-model-materialization-20260904-v1",
+    "expected_file_count": 9,
+    "expected_total_bytes": 1540625721,
+    "lfs_sha256_files": 3,
+    "git_blob_sha1_files": 6
+  },
+  "scheduler": {
+    "required_observations": [
+      "WMA Wave-1 controller and all child method processes are absent",
+      "ports 18120, 18113, and 18114 are closed and no Wave-1 vLLM service remains",
+      "Mem-Gallery dataset-integrity root is TERMINAL_ACCEPTED and hash-inventoried",
+      "a successor ownership ledger contains the exact model repository, revision, target, and both m2a and v-mem dependents",
+      "the target and evidence root are absent and no running process references the target"
+    ],
+    "gpu_count": 0,
+    "cpu_threads_ceiling": 2,
+    "parallel_downloads": 1,
+    "mac_to_server_transport": "Only resumable sftp limited to 4096 Kbit/s if direct server acquisition fails."
+  },
+  "execution_contract": {
+    "command_template": "AGENT_ENHANCE_REMOTE_ROOT=/data1/2026/ldh/AgentEnhance /data1/anaconda3/envs/clo-infer/bin/python3.11 scripts/materialize_hf_model_snapshot_v4.py --prefetch-manifest comparisons/memgallery-siglip2-model-prefetch-manifest.v1.json --repository google/siglip2-base-patch16-384 --evidence-root /data1/2026/ldh/AgentEnhance/runs/memgallery-siglip2-model-materialization-20260904-v1 --timeout-seconds 600",
+    "wall_time_ceiling_minutes": 90,
+    "network_retry_count": 0,
+    "logical_requests_per_file": 1,
+    "fresh_target_and_evidence_roots_required": true,
+    "partial_files_retained_on_failure": true
+  },
+  "acceptance": [
+    "All scheduler observations are recorded before the command starts.",
+    "Exactly 9 allowlisted files and 1540625721 bytes are present.",
+    "All three LFS SHA-256 and six Git blob SHA-1 identities match the manifest.",
+    "The evidence root is TERMINAL_ACCEPTED, lacks TERMINAL_REJECTED, and its inventories verify independently.",
+    "No model import, service start, lifecycle, prediction, scoring, or cleanup occurs in this stage."
+  ],
+  "failure": "Any premature start, path collision, HTTP failure, unsafe path, byte overflow, identity mismatch, file-set mismatch, or evidence mismatch seals the fresh root TERMINAL_REJECTED with the partial target retained.",
+  "authorization": "This freeze does not authorize execution until every scheduler observation passes, especially the not-yet-created successor ownership ledger.",
+  "current_state": {
+    "ownership_successor_accepted": false,
+    "scheduler_gate_open": false,
+    "downloaded_files": 0,
+    "downloaded_bytes": 0,
+    "network_requests": 0,
+    "numeric_rows": 0
+  }
+}

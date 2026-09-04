@@ -1,0 +1,53 @@
+{
+  "schema_version": "agentenhance.model_prefetch_manifest.v1",
+  "manifest_id": "memgallery-siglip2-model-prefetch-20260904-v1",
+  "status": "FROZEN_BEFORE_DOWNLOAD",
+  "frozen_at": "2026-09-04T11:05:00+08:00",
+  "source": "Hugging Face official repository API at the immutable model revision; LFS objects use upstream SHA-256 and regular files use Git blob SHA-1.",
+  "parent_model_surface": {
+    "path": "comparisons/memgallery-static-model-prefetch-manifest.v1.json",
+    "sha256": "648b150ccf773c2e303e690b79f3f50497842d73b9c7654cc5fef0d30439c6a4"
+  },
+  "models": [
+    {
+      "purpose": "V-Mem official visual lane and M2A multimodal embedding endpoint on the matched Mem-Gallery track",
+      "method_ids": ["m2a", "v-mem"],
+      "repository": "google/siglip2-base-patch16-384",
+      "revision": "f775b65a79762255128c981547af89addcfe0f88",
+      "license": "apache-2.0",
+      "private": false,
+      "gated": false,
+      "expected_files": [
+        {"path": ".gitattributes", "bytes": 1570, "git_blob_sha1": "52373fe24473b1aa44333d318f578ae6bf04b49b"},
+        {"path": "README.md", "bytes": 3375, "git_blob_sha1": "ba11c982b6b05ed5cee8da73bceae331dec8c061"},
+        {"path": "config.json", "bytes": 276, "git_blob_sha1": "a0b7bd2d2dba42cf27078f5597f4701ec30d5ffb"},
+        {"path": "model.safetensors", "bytes": 1501968264, "sha256": "ed72c0ace85020ae610fc817c2538b9cae5a477b012a50859c60af5b3ad30857"},
+        {"path": "preprocessor_config.json", "bytes": 394, "git_blob_sha1": "e9e084ab5a0d74573432f1dcf11c1bdd8d9b3655"},
+        {"path": "special_tokens_map.json", "bytes": 636, "git_blob_sha1": "8d6368f7e735fbe4781bf6e956b7c6ad0586df80"},
+        {"path": "tokenizer.json", "bytes": 34363039, "sha256": "cb9140fae3ac5122c972d37adf83e1248471a38147ad76f8215c8872c6fd8322"},
+        {"path": "tokenizer.model", "bytes": 4241003, "sha256": "61a7b147390c64585d6c3543dd6fc636906c9af3865a5548f27f31aee1d4c8e2"},
+        {"path": "tokenizer_config.json", "bytes": 47164, "git_blob_sha1": "d97c5412159422c3b56fbc99076b1dcc25dd7856"}
+      ],
+      "expected_file_count": 9,
+      "expected_total_bytes": 1540625721,
+      "expected_local_path": "${AGENT_ENHANCE_REMOTE_ROOT}/cache/models/memgallery-vmem-siglip2-base-patch16-384-20260904-v1",
+      "tree_api": "https://huggingface.co/api/models/google/siglip2-base-patch16-384/tree/f775b65a79762255128c981547af89addcfe0f88?recursive=true&expand=true",
+      "load_policy": "Serve only this immutable local snapshot with the frozen V-Mem chat template; set HF_HUB_OFFLINE=1 and TRANSFORMERS_OFFLINE=1 for lifecycle and numerical runs."
+    }
+  ],
+  "download_policy": {
+    "scheduler_gate": "Do not download until WMA Wave 1 is terminal, all WMA Wave-1 services are stopped, Mem-Gallery data integrity is accepted, and a successor ownership ledger covers this exact target and both M2A/V-Mem dependents.",
+    "parallel_downloads": 1,
+    "network_retries": 0,
+    "logical_requests_per_file": 1,
+    "transport": "Direct server download to data1. If a Mac-to-server transfer becomes necessary, only resumable sftp limited to 4096 Kbit/s is permitted.",
+    "failure": "Retain the fresh target, partial files, request ledger, logs, and terminal-rejected evidence root; never repair, overwrite, resume, or delete it in place."
+  },
+  "current_state": {
+    "downloaded_files": 0,
+    "downloaded_bytes": 0,
+    "network_requests": 0,
+    "numeric_rows": 0,
+    "official_values_used": false
+  }
+}
