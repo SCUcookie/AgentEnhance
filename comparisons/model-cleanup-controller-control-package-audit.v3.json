@@ -1,0 +1,98 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v3",
+  "audit_id": "baseline-model-cleanup-controller-20260904-v3-control",
+  "status": "TERMINAL_ACCEPTED_INERT",
+  "accepted_at": "2026-09-04T16:55:00+08:00",
+  "scientific_evidence_role": "Cleanup safety control evidence only. It accepts no reproduction result, model eligibility, quarantine, deletion, metric, comparison, ranking or SOTA claim.",
+  "bound_stage": {
+    "path": "comparisons/model-cleanup-controller-control-package-prefreeze.v3.json",
+    "sha256": "375ba88973819786f5544e0bd4ee7ca87f936880f1785ca9160e2b6fe4103366",
+    "prefreeze_commit": "882d58d",
+    "controller_commit": "9a760cf"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/baseline-model-cleanup-controller-20260904-v3-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v3-control.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v3-control",
+    "bytes": 28239,
+    "sha256": "ca768a0147639187f3de257aa7dcfa35d9dba653ffe75fe143719e538f40bfb7",
+    "transport": "OpenSSH SFTP with SHA-bound resumable partial, limited to 4096 Kbit/s",
+    "fresh_before_extraction": true,
+    "remote_sha256_verified": true
+  },
+  "package_inventory": {
+    "path": "PACKAGE_SHA256SUMS",
+    "sha256": "264370203c6e5e9b93d183984429c018dfab0d085c406f36d15ebabc67c98b39",
+    "signed_regular_files": 13,
+    "regular_files_including_inventory": 14,
+    "regular_file_bytes_including_inventory": 116548,
+    "symlinks": 0,
+    "python_bytecode_files": 0,
+    "all_signed_files_verified_locally": true,
+    "all_signed_files_verified_remotely": true,
+    "inventory_excludes_itself": true
+  },
+  "remote_validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "environment_mutated": false,
+    "controller_validator": "PASS",
+    "effective_project_owned_candidates": 8,
+    "effective_dependency_relations": 19,
+    "registered_method_surface": 50,
+    "tests_passed": 6,
+    "tests_failed": 0,
+    "test_model_scope": "TemporaryDirectory roots below /tmp only",
+    "temporary_fixture_weight_files_deleted": 1,
+    "real_model_file_content_reads": 0,
+    "real_model_top_level_metadata_before_after_equal": true,
+    "network_requests": 0,
+    "gpu_processes_started": 0
+  },
+  "negative_gate": {
+    "record": "/data1/2026/ldh/AgentEnhance/runs/model-cleanup-v3-inert-negative-20260904-v1/missing.json",
+    "record_parent_absent_before": true,
+    "record_parent_absent_after": true,
+    "observed_exit_code": 1,
+    "observed_error_type": "FileNotFoundError",
+    "model_target_resolved": false,
+    "process_scan_started": false,
+    "cleanup_output_created": false,
+    "real_model_files_quarantined": 0,
+    "real_model_files_deleted": 0,
+    "status": "ACCEPTED_FAIL_CLOSED"
+  },
+  "effective_future_entry": {
+    "control_root": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v3-control",
+    "script": "scripts/model_cleanup_controller_v3.py",
+    "phases": ["preflight", "quarantine", "delete"],
+    "ownership_inputs": [
+      "comparisons/baseline-model-ownership-ledger.v1.json",
+      "comparisons/baseline-model-ownership-ledger.v2.json"
+    ],
+    "older_direct_entrypoints_prohibited": true,
+    "current_real_execution_authorized": false
+  },
+  "current_state": {
+    "tracks_required": 3,
+    "registered_method_surface": 50,
+    "global_completion_present": false,
+    "dependent_retirement_receipts_present": 0,
+    "cleanup_eligible_models": 0,
+    "real_models_quarantined": 0,
+    "real_models_deleted": 0
+  },
+  "retention_boundary": "All datasets, predictions, metrics, logs, environments, source checkouts, manifests, failures, evidence roots and archives remain protected. Both shared Qwen models remain permanently protected.",
+  "mutation_summary": {
+    "control_archive_uploaded": true,
+    "control_root_extracted": true,
+    "real_model_files_read": 0,
+    "real_model_files_quarantined": 0,
+    "real_model_files_deleted": 0,
+    "dataset_files_modified": 0,
+    "result_files_modified": 0,
+    "numeric_result_rows_added": 0,
+    "eligibility_records_created": 0
+  },
+  "authorization": "The v3 inert control package is accepted as reusable code and safety evidence only. No real preflight, eligibility, quarantine or deletion is authorized until all three tracks, every denominator, every archive, every effective dependent retirement and a fresh no-reference audit are terminal-accepted, followed by explicit future execution authority.",
+  "next_gate": "Continue WMA Wave 1 without interference. After all three comparison tracks are complete, render one candidate-specific DRY_RUN_ELIGIBLE_V3 record and audit it read-only before requesting any quarantine authority."
+}
