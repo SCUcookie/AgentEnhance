@@ -1,0 +1,183 @@
+{
+  "schema_version": "agentenhance.causal_locomo_real_model_integrity_prefreeze.v1",
+  "stage_id": "causal-locomo-real-model-integrity-20260904-v1",
+  "state": "FROZEN_STATIC_ONLY_AWAITING_WMA_RELEASE",
+  "frozen_at": "2026-09-04T18:15:00+08:00",
+  "scientific_question": "Under one inference-blind Causal-LoCoMo view and one frozen local answer backbone, how do deployable memory policies change task quality, evidence selection, harmful-memory rejection, and cost relative to no-memory and full-history controls?",
+  "estimand": "For each registered method, the paired method-minus-control effect over all 87 examples and seeds 0,1,2; every example-method failure remains in the denominator.",
+  "decision_informed": "Which Causal-LoCoMo implementations are eligible for a same-protocol local comparison and which upstream implementations must remain development-only because they consume evaluator-only information.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json",
+      "sha256": "f32a8803fc1448e9e6adbaf7a9ba6747dce47b80cde9dcd30eb75007db7ef1f4"
+    },
+    {
+      "path": "comparisons/cmi-r2-full-recovery1-audit.v1.json",
+      "sha256": "f0bdfb536a0148af980fee7571cf5aa7886c231699d797e2582c879c8dc4b054"
+    },
+    {
+      "path": "comparisons/baseline-evidence-policy.v2.json",
+      "sha256": "c9d3697c917c82bc939078cf47922403f20332b62bc4d07f6561fc6355541453"
+    }
+  ],
+  "source_identity": {
+    "repository_id": "cmi",
+    "revision": "65a66cb4347aeeb62a870132269e8a983211e036",
+    "dataset_path": "causal_locomo_final_with_history.jsonl",
+    "dataset_sha256": "413b490d77ac971dd33a3781dfa3e20c208e2486d920718655e590f736baa3eb",
+    "records": 87,
+    "unique_example_ids": 87,
+    "example_id_order_sha256": "d97ad01180c998454c413ee26f1229c4ae115f082bf30664f8318836e3a10021",
+    "audited_source_files": {
+      "src/agents/base_agent.py": "25cb86a67c48c8220607934a4c9c9ef6867a039f78ae32e32caa31a24b63e9ba",
+      "src/agents/cmi_agent.py": "db92ba2bab7ea33e0556fe5d512f569c719ee4a2e77967317022306922351b7e",
+      "src/memory/retrievers.py": "18aa367b4734bdfe8c906935ab0a374663203c12820c6da2585f4d1aaf14181f",
+      "src/scoring/deterministic_scorers.py": "7602decb4c6e09ac65b9cf57742185096a50766f8e8315a30815ceb421570278",
+      "src/experiments/run_experiment.py": "b054112156a87bd18e736071230b9cc006eda8140b172b965ea81ac601744623"
+    }
+  },
+  "observed_development_evidence": {
+    "stage": "cmi-r2-deterministic-full-recovery1-20260903-v1",
+    "role": "development foundation only",
+    "complete_attempts": 2,
+    "rows_per_attempt": 609,
+    "main_comparison_eligible": false,
+    "reason": "The deterministic fallback gave every method the same answer behavior and CMI selected no memories. No value from this stage may enter a local main-comparison cell."
+  },
+  "inference_firewall": {
+    "builder": "scripts/causal_locomo_inference_view.py",
+    "allowed_top_level": [
+      "schema_version",
+      "example_id",
+      "task_family",
+      "past_sessions",
+      "current_task",
+      "memory_bank"
+    ],
+    "allowed_memory_fields": [
+      "memory_id",
+      "content",
+      "timestamp",
+      "source_session_id"
+    ],
+    "evaluator_only_top_level": [
+      "bad_memory_ids",
+      "context_dependent_memory_ids",
+      "gold_behavior",
+      "gold_memory_ids",
+      "intervention_tests",
+      "metadata",
+      "quality_status",
+      "scoring_criteria"
+    ],
+    "evaluator_only_memory_fields": [
+      "causal_role",
+      "derivation",
+      "expected_effect",
+      "label",
+      "scope",
+      "source_candidate_ids",
+      "source_dia_ids",
+      "source_session_ids",
+      "synthetic",
+      "type"
+    ],
+    "evaluator_access": "The frozen evaluator may join predictions to the authoritative record by example_id only after the prediction row is durably written."
+  },
+  "matched_protocol": {
+    "method_order": [
+      "cmi-no-memory",
+      "cmi-full-history",
+      "cmi-vector-memory",
+      "cmi-summary-memory",
+      "cmi-reflection-memory",
+      "cmi-graph-memory",
+      "cmi"
+    ],
+    "examples": 87,
+    "seeds": [0, 1, 2],
+    "method_example_pairs_per_seed": 609,
+    "registered_prediction_rows": 1827,
+    "answer_model": "Qwen/Qwen3-VL-8B-Instruct@5d854aab08710c16b980ec6d603d863b3821b915",
+    "embedding_model": "Qwen/Qwen3-VL-Embedding-2B@c35dddf20620fe32745cb3d01f87ba64ae316313",
+    "answer_temperature": 0.0,
+    "answer_max_output_tokens": 600,
+    "retrieval_top_k": 5,
+    "automatic_retries": 0,
+    "failure_denominator": "Each of the 1827 registered method-example-seed rows must be ACCEPTED or FAILED; missing rows are a terminal integrity failure.",
+    "official_or_development_values_allowed": false
+  },
+  "method_integrity": [
+    {
+      "method_id": "cmi-no-memory",
+      "upstream_agent": "no_memory",
+      "main_status": "ELIGIBLE_AFTER_BLIND_OVERLAY",
+      "required_overlay": "Render the current task from the inference view and issue exactly one shared answer call."
+    },
+    {
+      "method_id": "cmi-full-history",
+      "upstream_agent": "full_history",
+      "main_status": "ELIGIBLE_AFTER_BLIND_OVERLAY",
+      "required_overlay": "Render past_sessions and current_task from the inference view; do not expose the memory-bank labels."
+    },
+    {
+      "method_id": "cmi-vector-memory",
+      "upstream_agent": "vector_memory",
+      "main_status": "ELIGIBLE_AFTER_BLIND_FAIL_CLOSED_OVERLAY",
+      "required_overlay": "Replace EmbeddingRetriever._embedding's catch-all deterministic fallback with a terminal recorded embedding failure."
+    },
+    {
+      "method_id": "cmi-summary-memory",
+      "upstream_agent": "summary_memory",
+      "main_status": "ELIGIBLE_AFTER_BLIND_OVERLAY",
+      "required_overlay": "Summarize only content and chronology from the inference view, then use the shared answer call."
+    },
+    {
+      "method_id": "cmi-reflection-memory",
+      "upstream_agent": "reflection_memory",
+      "main_status": "BLOCKED_UPSTREAM_LABEL_LEAK",
+      "evidence": "src/memory/reflector.py branches on memory.label == useful and harmful/poisoned before retrieval.",
+      "main_cell_rule": "A source-fidelity real-model run is diagnostic only. It may not populate the matched main table."
+    },
+    {
+      "method_id": "cmi-graph-memory",
+      "upstream_agent": "graph_memory",
+      "main_status": "ELIGIBLE_AFTER_BLIND_OVERLAY",
+      "required_overlay": "Build the graph from inference-visible content and chronology only."
+    },
+    {
+      "method_id": "cmi",
+      "upstream_agent": "cmi",
+      "main_status": "BLOCKED_UPSTREAM_GOLD_AND_LABEL_LEAK",
+      "evidence": "src/agents/cmi_agent.py calls score_text with the full BenchmarkExample for intervention utility and reads gold_memory_ids, bad_memory_ids and memory.label; deterministic_scorers.py reads expected_answer and other scoring criteria.",
+      "main_cell_rule": "The upstream source-fidelity result is an oracle/development diagnostic. A blinded counterfactual proxy would be a new named method and requires a separate prospective successor before any score is observed."
+    }
+  ],
+  "outcome_branches": {
+    "five_eligible_methods": "After WMA release, freeze and accept one synthetic lifecycle/conformance stage for the blind, fail-closed overlay before any numerical authorization.",
+    "two_blocked_methods": "Record the immutable blocker in the comparison ledger. Do not fill their main cells with official, deterministic-development, oracle, or source-fidelity values.",
+    "blinded_successor": "If a result-independent utility/reflection proxy is designed, register it under a new method identity and freeze its formula, prompt, thresholds and controls before execution.",
+    "technical_failure": "Retain the full fresh root and emit FAILED rows; no in-place repair or favorable subset rerun.",
+    "null_or_reversed_result": "Retain and report it under the frozen paired analysis; it does not authorize changing methods, seeds, examples, or metrics."
+  },
+  "current_state": {
+    "wma_release_accepted": false,
+    "real_model_lifecycle_runs_started": 0,
+    "real_model_prediction_rows_observed": 0,
+    "real_model_scores_observed": 0,
+    "main_eligible_methods": 5,
+    "blocked_upstream_methods": 2
+  },
+  "authorization": "This is a static integrity freeze only. It authorizes no server materialization, endpoint start, lifecycle execution, numerical execution, scoring, table admission, AgentEnhance execution, SOTA claim, or model cleanup while WMA Wave 1 is active.",
+  "next_allowed_gate": "After the frozen WMA v3 release sequence is terminal-accepted and its services are stopped, freeze a fresh synthetic-only lifecycle package for the five eligible blind overlays and separate terminal-blocker receipts for reflection_memory and cmi.",
+  "explicitly_prohibited": [
+    "passing gold behavior, scoring criteria, gold/bad/context IDs, memory label/type/expected effect, or derived label metadata to any method or answer model",
+    "using the upstream deterministic answer fallback in a real-model main cell",
+    "allowing an embedding exception to fall back to deterministic_embedding",
+    "renaming an oracle or label-aware CMI execution as a deployable matched comparison",
+    "dropping failed example-method-seed rows from the denominator",
+    "reading a completed method score before the numerical authorization is frozen",
+    "claiming superiority or SOTA from blocked, incomplete, development-only, official, or cross-protocol values"
+  ]
+}
+
