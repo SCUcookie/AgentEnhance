@@ -1,0 +1,104 @@
+{
+  "schema_version": "agentenhance.causal_locomo_table_projection_proposal.v1",
+  "proposal_id": "causal-locomo-result-free-table-projection-20260904-v1",
+  "state": "PROPOSED_RESULT_FREE_REAL_USE_NOT_AUTHORIZED",
+  "proposed_at": "2026-09-04T23:05:00+08:00",
+  "purpose": "Mechanically reconcile a future terminal local evaluator root and populate only the five comparable baseline rows in the fixed Causal-LoCoMo table without manual column selection, result copying, ranking, or claim generation.",
+  "parents": [
+    {
+      "path": "comparisons/causal-locomo-main-table-spec-proposal.v1.json",
+      "sha256": "d0efa3664fdda0878a795891b1568ab44f693c0b00fc411f7655f09de6b4ba8c"
+    },
+    {
+      "path": "comparisons/causal-locomo-offline-evaluator-proposal.v1.json",
+      "sha256": "4b57dcf84d3e6889ab6d0eaa6abcad0e75fedb44f17488d90b023ef6edce31c6"
+    }
+  ],
+  "implementation": "scripts/project_causal_locomo_main_table.py",
+  "implementation_sha256": "e086d85d2dd814304b4fd782e5f2acaa0d1bf995ffc1c8be6b4a4df60f6157ad",
+  "template": {
+    "path": "comparisons/causal-locomo-main-table-template.v1.csv",
+    "sha256": "ad20a4864932d60a944ac4c42546afac4460b27973cb1a42723efd389427d0ae",
+    "methods": 8,
+    "metric_columns": 21,
+    "populated_metric_cells_after_valid_baseline_projection": 105
+  },
+  "input_gate": {
+    "required_mode": "real",
+    "terminal_sentinel": "TERMINAL_ACCEPTED",
+    "rejected_sentinel_allowed": false,
+    "evaluation_inventory_members": [
+      "audit.json",
+      "scores.jsonl",
+      "summary.json"
+    ],
+    "nested_hash_verification": true,
+    "expected_qid_order_sha256": "d97ad01180c998454c413ee26f1229c4ae115f082bf30664f8318836e3a10021",
+    "seeds": [0, 1, 2],
+    "qids": 87,
+    "methods": 7,
+    "score_rows": 1827,
+    "rows_per_method": 261,
+    "protocol_blocked_rows": 522,
+    "missing_rows": 0,
+    "dropped_failed_rows": 0,
+    "official_values_used": false,
+    "required_reconciliation": [
+      "score row order is seed then qid then the seven frozen methods",
+      "qid order hash is identical across all seeds",
+      "each score identity is unique",
+      "task_family is stable across methods and seeds",
+      "all 13 quality and 8 cost values are finite and range-valid",
+      "by_method aggregates exactly equal recomputed score-row aggregates",
+      "by_method_and_task_family aggregates exactly equal recomputed score-row aggregates"
+    ]
+  },
+  "projection_policy": {
+    "numeric_rows": [
+      "cmi-no-memory",
+      "cmi-full-history",
+      "cmi-vector-memory",
+      "cmi-summary-memory",
+      "cmi-graph-memory"
+    ],
+    "blank_protocol_blocker_rows": [
+      "cmi-reflection-memory",
+      "cmi"
+    ],
+    "blank_locked_rows": [
+      "agentenhance-ceu"
+    ],
+    "task_success_rate_source": "passes",
+    "manual_metric_selection": false,
+    "manual_result_entry": false,
+    "ranking_or_best_value_highlighting": false,
+    "superiority_or_sota_claim_generation": false
+  },
+  "output_contract": {
+    "fresh_absolute_root": true,
+    "files": [
+      "causal-locomo-main-table.csv",
+      "projection-manifest.json",
+      "SHA256SUMS",
+      "TERMINAL_ACCEPTED"
+    ],
+    "required_evidence_identities": [
+      "template_sha256",
+      "evaluation_inventory_sha256",
+      "evidence_archive_sha256"
+    ],
+    "official_values_used": false,
+    "source_reported_results_read": false,
+    "agentenhance_rows_admitted": 0
+  },
+  "current_observations": {
+    "synthetic_test_cases": 5,
+    "real_evaluation_roots_loaded": 0,
+    "real_rows_projected": 0,
+    "real_metric_cells_populated": 0,
+    "official_values_used": false,
+    "superiority_claims_emitted": 0
+  },
+  "next_gate": "After WMA release, freeze and accept the Causal-LoCoMo lifecycle/evaluator package and its real execution before creating a separate projection authorization bound to the accepted evidence archive.",
+  "authorization": "Synthetic temporary-directory tests and static validation only. This proposal authorizes no real evaluator input, table admission, model call, server mutation, result inspection, superiority or SOTA claim, archive deletion, or model cleanup."
+}
