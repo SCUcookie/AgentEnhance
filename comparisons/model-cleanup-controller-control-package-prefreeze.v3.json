@@ -1,0 +1,75 @@
+{
+  "schema_version": "agentenhance.model_cleanup_control_package_prefreeze.v3",
+  "package_id": "baseline-model-cleanup-controller-20260904-v3-control",
+  "status": "FROZEN_BEFORE_INERT_PACKAGE_TRANSFER",
+  "frozen_at": "2026-09-04T16:45:00+08:00",
+  "purpose": "Transfer and independently validate the ownership-v2-aware cleanup controller as an inert control package while proving that no real eligibility, quarantine, deletion, model access, or numerical execution occurs.",
+  "payload": [
+    {"path": "comparisons/model-cleanup-controller-prefreeze.v3.json", "sha256": "4c84102b574ca24238eb647631721b2675a9d0b0bbba3b648102ee8e1fac1776"},
+    {"path": "comparisons/model-cleanup-controller-prefreeze.v2.json", "sha256": "69df5362e514e8c52af2c2496fc4f26075a20d839672760c62ae38631aa5a547"},
+    {"path": "comparisons/model-retention-policy.v2.json", "sha256": "196c83d19320f406b5ca4a1d124ef025d8dbf6672d9e538dd3d2795464dbfec7"},
+    {"path": "comparisons/baseline-model-ownership-ledger.v1.json", "sha256": "3b855e216f8eca4d39d18bade4bcdda91136df7d8a06333fcfd6d93067ff0613"},
+    {"path": "comparisons/baseline-model-ownership-ledger.v2.json", "sha256": "8ba9c463309b15b7ba087dae6882e43cab734f432d75dde3ec41dbfcaa922064"},
+    {"path": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json", "sha256": "f32a8803fc1448e9e6adbaf7a9ba6747dce47b80cde9dcd30eb75007db7ef1f4"},
+    {"path": "comparisons/wma-main-table-spec.v4.json", "sha256": "f3a233b6e62419fa054557e18a326d7b2ba59210184bf782556dd1920f8c4937"},
+    {"path": "scripts/model_cleanup_controller.py", "sha256": "afb8e950941e7b23399a4d6aa744e589f2423fb869c4d28dc31ca64d5783693d"},
+    {"path": "scripts/model_cleanup_controller_v2.py", "sha256": "92c1314ba7f7285b5c0ea5b78a2940eadb4fd6bc836eb8f2872c00982bcebe40"},
+    {"path": "scripts/model_cleanup_controller_v3.py", "sha256": "9ab48aaadce49a7718ab9800a7358983ee7eb2c062ef36d19897a28882583d8d"},
+    {"path": "scripts/validate_model_cleanup_controller_v3.py", "sha256": "c2a02261cfb2360feeae8c929754e000707911def435d177f86dfd085beda441"},
+    {"path": "tests/test_model_cleanup_controller_v3.py", "sha256": "333163616d59e7fb3c8082862533183ebfbae64e32cc730b0563a81b938e0290"}
+  ],
+  "package_layout": {
+    "payload_files": 13,
+    "note": "The 12 bound payload files plus this prefreeze contract are copied under their repository-relative paths.",
+    "inventory": "PACKAGE_SHA256SUMS signs every regular payload file and excludes itself.",
+    "symlinks": 0,
+    "python_bytecode_files": 0,
+    "archive_member_prefix": "baseline-model-cleanup-controller-20260904-v3-control/"
+  },
+  "local_archive": "${AGENT_ENHANCE_LOCAL_STAGING}/baseline-model-cleanup-controller-20260904-v3-control.tar.gz",
+  "remote_archive": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v3-control.tar.gz",
+  "remote_root": "/data1/2026/ldh/AgentEnhance/incoming/baseline-model-cleanup-controller-20260904-v3-control",
+  "transport": {
+    "entrypoint": "scripts/sftp_upload_limited.sh",
+    "rate_limit_kbit_per_second": 4096,
+    "resumable_sha_bound_partial": true,
+    "final_collision_allowed": false
+  },
+  "remote_validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "environment": {"PYTHONDONTWRITEBYTECODE": "1"},
+    "commands": [
+      "sha256sum -c PACKAGE_SHA256SUMS",
+      "/data1/anaconda3/envs/clo-infer/bin/python3.11 scripts/validate_model_cleanup_controller_v3.py",
+      "/data1/anaconda3/envs/clo-infer/bin/python3.11 -m unittest discover -s tests -p test_model_cleanup_controller_v3.py -v"
+    ],
+    "negative_gate": "Invoke v3 preflight with a known-absent record below the project model-cleanup run scope; require nonzero exit before any target, quarantine, output record, or project model byte changes.",
+    "network_requests": 0,
+    "gpu_processes_started": 0,
+    "real_model_targets_read": 0,
+    "real_model_files_quarantined": 0,
+    "real_model_files_deleted": 0
+  },
+  "runtime_observation_at_freeze": {
+    "wave1_controller": "RUNNING",
+    "current_method_seed": "wma-mmfu-single seed 0 recovery2",
+    "accepted_units": 46,
+    "rejected_units": 0,
+    "active_or_created_unit_directories": 47,
+    "project_processes": 10,
+    "cleanup_eligible_models": 0
+  },
+  "acceptance_rule": "Accept only a fresh extracted root whose inventory covers exactly all 13 payload files; every package hash, v3 contract validator, and six synthetic tests pass; the negative gate exits nonzero; no network, GPU process, real model access, eligibility record, quarantine, deletion, or numerical row occurs.",
+  "failure_rule": "Retain any archive or extracted root with its observed hashes and failure output. Never repair or reuse a rejected extraction root; a retry requires a separately frozen successor package/root.",
+  "authorization": "This stage authorizes only one limited-SFTP transfer, fresh extraction, static validation, six temporary-fixture tests, and one fail-closed negative invocation. It authorizes no real cleanup preflight, eligibility record, model scan, model quarantine, model deletion, dataset mutation, result mutation, or numerical execution.",
+  "explicitly_prohibited": [
+    "extracting over an existing remote root",
+    "using scp or an unlimited transfer for the archive",
+    "reading or hashing any real model target during package validation",
+    "creating DRY_RUN_ELIGIBLE_V3 evidence",
+    "invoking quarantine or delete against any server model",
+    "deleting or modifying datasets, results, logs, environments, sources, manifests, evidence roots or archives",
+    "treating an inert package acceptance as cleanup eligibility"
+  ],
+  "next_gate": "After remote inert acceptance, record the archive hash, package inventory hash, test output, negative-gate output and zero-mutation observations in an immutable package audit. Cleanup remains blocked until all three comparison tracks complete."
+}
