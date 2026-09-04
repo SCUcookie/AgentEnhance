@@ -1,0 +1,102 @@
+{
+  "schema_version": "agentenhance.memgallery_siglip2_materialization_gate_prefreeze.v1",
+  "gate_id": "memgallery-siglip2-materialization-gate-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_AWAITING_WAVE1_AND_DATA_INTEGRITY",
+  "frozen_at": "2026-09-04T13:05:00+08:00",
+  "purpose": "Make the SigLIP2 acquisition scheduler conditions executable and fail closed so a stale automation or manual command cannot overlap WMA, bypass dataset integrity, use an unowned target, or overwrite an earlier attempt.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-siglip2-model-materialization-prefreeze.v1.json",
+      "sha256": "85a454f6df4d47b0e8c0790fe26f9026dd4be54272c4264db09eb82e7d361318"
+    },
+    {
+      "path": "comparisons/memgallery-siglip2-model-prefetch-manifest.v1.json",
+      "sha256": "4a4ce353eb7a2f59ed6420a77adfb130b9c41074313e2721908f4375a422c7e1"
+    },
+    {
+      "path": "comparisons/baseline-model-ownership-ledger.v2.json",
+      "sha256": "8ba9c463309b15b7ba087dae6882e43cab734f432d75dde3ec41dbfcaa922064"
+    },
+    {
+      "path": "comparisons/memgallery-data-integrity-prefreeze.v1.json",
+      "sha256": "ac1bfd11f9b24d4cd39ac8de3c0ea567ed7c8c10fac40eeaeb350c6dd1e9e29f"
+    },
+    {
+      "path": "scripts/materialize_hf_model_snapshot_v4.py",
+      "sha256": "3489fd20342b19816f24d67c7dafb3ed52b9ac2167770806ba5eded4522ac46b"
+    },
+    {
+      "path": "scripts/gate_memgallery_siglip2_materialization.py",
+      "sha256": "c077cbacf47d78c41a0833d9a2c06b190076b4c0992b1da73b9376cdb65a41b9"
+    },
+    {
+      "path": "tests/test_memgallery_siglip2_materialization_gate.py",
+      "sha256": "8321d906f55556abea3d6225236fb7d3514c71a695ef7fc3d780b59739eeeaa8"
+    }
+  ],
+  "preflight_checks_in_order": [
+    "the frozen materialization contract, prefetch manifest, and downloader hashes match",
+    "the exact Wave-1 recovery2 controller root has TERMINAL_ACCEPTED and lacks TERMINAL_REJECTED",
+    "no Wave-1 launcher, method process, run_wma_seeded process, or vLLM API server is active",
+    "ports 18113, 18114, 18120, 18220, 18221, and 18222 are not listening",
+    "the exact Mem-Gallery integrity root is terminal accepted and its four payload hashes verify",
+    "the integrity identity is 1515 files, 545845389 bytes, 20 dialog files, 1490 images, and 1711 questions at revision af912dab",
+    "QID_ORDER.txt and question-index.jsonl match the hashes in dataset-integrity.json",
+    "ownership ledger v2 binds the exact SigLIP2 revision, target, size, and both M2A/V-Mem dependents with cleanup_eligible=false",
+    "the model target and evidence root are absent"
+  ],
+  "execution": {
+    "working_directory": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-siglip2-materialization-gate-20260904-v1-control",
+    "argv": [
+      "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+      "scripts/gate_memgallery_siglip2_materialization.py",
+      "--contract", "comparisons/memgallery-siglip2-model-materialization-prefreeze.v1.json",
+      "--ownership-ledger", "comparisons/baseline-model-ownership-ledger.v2.json",
+      "--prefetch-manifest", "comparisons/memgallery-siglip2-model-prefetch-manifest.v1.json",
+      "--materializer", "scripts/materialize_hf_model_snapshot_v4.py",
+      "--remote-root", "/data1/2026/ldh/AgentEnhance",
+      "--wave1-controller-root", "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1",
+      "--dataset-integrity-root", "/data1/2026/ldh/AgentEnhance/runs/mem-gallery-data-integrity-af912dab-20260904-v1",
+      "--python", "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+      "--execute"
+    ],
+    "environment_injected_by_gate": {
+      "AGENT_ENHANCE_REMOTE_ROOT": "/data1/2026/ldh/AgentEnhance"
+    },
+    "network_retry_count": 0,
+    "parallel_downloads": 1,
+    "gpu_count": 0,
+    "fresh_target_and_evidence_root_required": true
+  },
+  "test_evidence": {
+    "tests_passed": 4,
+    "covered_invariants": [
+      "active WMA process rejection",
+      "listening model-service port rejection",
+      "missing data-integrity acceptance rejection",
+      "complete released-state preflight acceptance without a network request"
+    ],
+    "network_requests": 0,
+    "downloaded_bytes": 0
+  },
+  "negative_remote_gate": "While Wave 1 remains active, executing the gate without --execute must return PREFLIGHT_REJECTED before any network request or filesystem mutation. The accepted control-package audit must record the observed exit code and prove both target and evidence root remain absent.",
+  "acceptance_rule": "Only one invocation with --execute is permitted after every preflight check passes. The gate prints PREFLIGHT_ACCEPTED, injects the exact remote root for the generic zero-retry downloader, and propagates its terminal exit code without retry.",
+  "failure_rule": "A preflight failure returns exit 4 with network_requests_started=0 and mutation_performed=false. A downstream acquisition failure is retained under the generic v4 materializer failure contract; no in-place repair, resume, overwrite, deletion, or automatic retry is allowed.",
+  "current_state": {
+    "wave1_terminal_accepted": false,
+    "data_integrity_terminal_accepted": false,
+    "preflight_accepted": false,
+    "network_requests_started": 0,
+    "downloaded_bytes": 0,
+    "numeric_rows": 0,
+    "mutation_performed": false
+  },
+  "authorization": "The implementation is frozen, but external execution is not yet authorized. An independently accepted inert control package and all live preflight checks are still required.",
+  "explicitly_prohibited": [
+    "invoking the generic downloader directly and bypassing this gate",
+    "using --execute while Wave 1, its model services, or Mem-Gallery integrity are incomplete",
+    "accepting a process exit without exact dataset, ownership, target, evidence, and hash checks",
+    "adding retries, resuming a partial target, or reusing a rejected evidence root",
+    "starting a SigLIP2 service, method lifecycle, prediction, scoring, or cleanup from this stage"
+  ]
+}

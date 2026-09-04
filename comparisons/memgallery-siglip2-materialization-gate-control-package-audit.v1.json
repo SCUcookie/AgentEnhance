@@ -1,0 +1,87 @@
+{
+  "schema_version": "agentenhance.memgallery_siglip2_materialization_gate_control_package_audit.v1",
+  "audit_id": "memgallery-siglip2-materialization-gate-control-package-20260904-v1",
+  "status": "TERMINAL_ACCEPTED_INERT_CONTROL_PACKAGE",
+  "audited_at": "2026-09-04T13:25:00+08:00",
+  "purpose": "Accept the exact server-side SigLIP2 scheduler gate package and demonstrate fail-closed behavior against the currently active Wave-1 state without starting acquisition.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/memgallery-siglip2-materialization-gate-prefreeze.v1.json",
+      "sha256": "a199867d89ce2c53cf69135470a84de1bfd6c2f3a72898d6d6727404d835594c"
+    },
+    {
+      "path": "scripts/gate_memgallery_siglip2_materialization.py",
+      "sha256": "c077cbacf47d78c41a0833d9a2c06b190076b4c0992b1da73b9376cdb65a41b9"
+    },
+    {
+      "path": "tests/test_memgallery_siglip2_materialization_gate.py",
+      "sha256": "8321d906f55556abea3d6225236fb7d3514c71a695ef7fc3d780b59739eeeaa8"
+    },
+    {
+      "path": "comparisons/baseline-model-ownership-ledger.v2.json",
+      "sha256": "8ba9c463309b15b7ba087dae6882e43cab734f432d75dde3ec41dbfcaa922064"
+    }
+  ],
+  "transport": {
+    "method": "resumable-sftp",
+    "rate_limit_kbit_per_second": 4096,
+    "local_archive": "/Users/spongebob/Documents/ChatGPT/Agent记忆/baseline_staging/mem-gallery-siglip2-materialization-gate-20260904-v1-control.tar.gz",
+    "remote_archive": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-siglip2-materialization-gate-20260904-v1-control.tar.gz",
+    "archive_bytes": 17920,
+    "archive_sha256": "5b899a413786c8854160611d1f9f1fe8eb2c1d1ff0df4848c2d84c06e23eacac"
+  },
+  "accepted_remote_root": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-siglip2-materialization-gate-20260904-v1-control",
+  "package_inventory": {
+    "path": "PACKAGE_SHA256SUMS",
+    "sha256": "56610bd06300f48857295848ee3e1aa2822ec1dd2e00a044a5324115100681b5",
+    "signed_files": 10,
+    "verification": "PASS"
+  },
+  "remote_validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "unit_tests_passed": 4,
+    "unit_tests_failed": 0,
+    "prefreeze_validator": "PASS",
+    "contract_sha256": "a199867d89ce2c53cf69135470a84de1bfd6c2f3a72898d6d6727404d835594c"
+  },
+  "negative_live_gate": {
+    "execute_flag_present": false,
+    "observed_exit_code": 4,
+    "status": "PREFLIGHT_REJECTED",
+    "error_type": "RuntimeError",
+    "error": "Wave 1 controller is not terminal accepted",
+    "network_requests_started": 0,
+    "mutation_performed": false,
+    "model_target_absent_before": true,
+    "model_target_absent_after": true,
+    "evidence_root_absent_before": true,
+    "evidence_root_absent_after": true
+  },
+  "wave1_observation": {
+    "accepted_units": 34,
+    "rejected_units": 0,
+    "current_partial_unit": "035_eb_nav_long_horizon_04",
+    "controller_active": true,
+    "model_services_active": true,
+    "interpretation": "The negative result is expected scheduler evidence, not a SigLIP2 acquisition failure."
+  },
+  "current_state": {
+    "control_package_accepted": true,
+    "materialization_authorized_now": false,
+    "siglip2_downloaded_files": 0,
+    "siglip2_downloaded_bytes": 0,
+    "network_requests_started": 0,
+    "numeric_rows": 0,
+    "official_values_used": false,
+    "cleanup_eligible": false
+  },
+  "next_gate": "After Wave 1 and Mem-Gallery dataset integrity are independently terminal accepted and all blocked processes/ports are absent, rerun the same accepted gate with the frozen --execute argv. Any changed code, package, target, evidence root, revision, or scheduler rule requires a new frozen successor.",
+  "claim_boundary": "This audit proves package identity and fail-closed scheduler behavior only. It proves no model acquisition, import, embedding fidelity, method lifecycle, benchmark quality, superiority, or SOTA claim.",
+  "explicitly_prohibited": [
+    "treating PREFLIGHT_REJECTED as a failed method reproduction",
+    "running the generic downloader directly",
+    "adding --execute before every live preflight condition passes",
+    "editing the accepted incoming control root",
+    "using this control-package acceptance as a numeric result or cleanup authorization"
+  ]
+}
