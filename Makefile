@@ -38,6 +38,7 @@ baseline-check:
 	python3 scripts/validate_memgallery_data_negative_gate.py
 	python3 scripts/validate_memgallery_data_integrity_prefreeze.py
 	python3 scripts/validate_memgallery_data_integrity_control_package.py
+	python3 scripts/validate_memgallery_run_reconciliation_prefreeze.py
 	python3 scripts/validate_wma_local_result_admission.py
 	python3 scripts/validate_wma_wave1_recovery2.py
 	python3 scripts/validate_wma_wave1_recovery2_closure.py

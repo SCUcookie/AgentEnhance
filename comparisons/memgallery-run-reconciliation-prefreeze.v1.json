@@ -1,0 +1,128 @@
+{
+  "schema_version": "agentenhance.memgallery_run_reconciliation_prefreeze.v1",
+  "stage_id": "memgallery-static-run-reconciliation-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_ONLY_AWAITING_DATA_INTEGRITY",
+  "frozen_at": "2026-09-04T08:45:00+08:00",
+  "purpose": "Force every Mem-Gallery method/seed output onto the same frozen 1711-QID surface, retaining exceptions and empty answers as explicit failed rows before scoring or result admission.",
+  "scientific_question": "Can the registered recent memory methods and controls be compared under one local answer model, dataset identity, question order, failure denominator, and evidence schema without filling missing rows from official results?",
+  "estimand_boundary": "This stage audits row completeness and identity only. It does not estimate method quality and cannot rank methods.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/post-wma-cross-track-completion-prefreeze.v1.json",
+      "sha256": "f32a8803fc1448e9e6adbaf7a9ba6747dce47b80cde9dcd30eb75007db7ef1f4"
+    },
+    {
+      "path": "comparisons/memgallery-data-integrity-prefreeze.v1.json",
+      "sha256": "ac1bfd11f9b24d4cd39ac8de3c0ea567ed7c8c10fac40eeaeb350c6dd1e9e29f"
+    },
+    {
+      "path": "scripts/reconcile_memgallery_method_run.py",
+      "sha256": "5fbcc2106b198ece899b672e6402eee3033f951a78110421fefc2690a239855f"
+    },
+    {
+      "path": "tests/test_memgallery_run_reconciliation.py",
+      "sha256": "df58c45154cf929e7dd4f1b67c853a43d6824e273273647b755c08098400a87f"
+    }
+  ],
+  "registered_surface": {
+    "methods": [
+      "a-mem",
+      "memoryos",
+      "universalrag",
+      "ngm",
+      "augustus",
+      "m2a",
+      "v-mem",
+      "no-memory",
+      "full-memory-text",
+      "full-memory-mm",
+      "fifo-recent",
+      "bm25",
+      "naive-rag",
+      "hybrid-rag"
+    ],
+    "seeds": [0, 1, 2],
+    "method_seed_runs": 42,
+    "questions_per_run": 1711,
+    "prediction_rows_if_surface_is_complete": 71862,
+    "drop_after_score_observation_allowed": false
+  },
+  "matched_answer_model": {
+    "repository": "Qwen/Qwen3-VL-8B-Instruct",
+    "revision": "5d854aab08710c16b980ec6d603d863b3821b915",
+    "served_model": "Qwen3-VL-8B-Instruct",
+    "temperature": 0.0,
+    "max_output_tokens": 128,
+    "shared_preexisting_model": true,
+    "cleanup_eligible": false
+  },
+  "required_inputs_per_run": [
+    "accepted Mem-Gallery dataset-integrity.json",
+    "the accepted question-index.jsonl and exact QID_ORDER.txt from the same integrity root",
+    "one TERMINAL_RAW_COMPLETE run-identity.json binding the registered method, seed, frozen method source/implementation SHA-256, answer model, decoding, memory budget, dataset semantic identity, and QID-order SHA-256",
+    "one raw-predictions.jsonl from the same immutable raw run root with exactly one ordered row per frozen qid"
+  ],
+  "raw_prediction_schema": {
+    "schema_version": "agentenhance.memgallery_prediction.v1",
+    "required_fields": [
+      "method_id",
+      "seed",
+      "qid",
+      "status",
+      "prediction",
+      "error_type",
+      "error",
+      "retrieved_memory_ids",
+      "retrieval_count",
+      "latency_seconds"
+    ],
+    "status_values": ["ACCEPTED", "FAILED"],
+    "empty_answer_rule": "An empty or whitespace-only answer must be FAILED with a nonempty error_type and error; it cannot be labeled ACCEPTED.",
+    "retrieval_rule": "Retrieved IDs are unique nonempty strings and retrieval_count equals their exact cardinality.",
+    "latency_rule": "Latency is finite and nonnegative."
+  },
+  "reconciliation_rule": "Raw prediction qids must equal the full frozen QID_ORDER byte-for-byte in order and cardinality. accepted_rows plus failed_rows must equal 1711; no row is dropped for an exception, timeout, empty answer, or unfavorable prediction. Any missing, extra, duplicate, or reordered qid rejects the reconciliation root.",
+  "output_contract": {
+    "root_pattern": "/data1/2026/ldh/AgentEnhance/runs/memgallery-static-<method-id>-seed<0|1|2>-reconciliation-<frozen-stage-id>",
+    "fresh_exact_child_required": true,
+    "accepted_files": [
+      "reconciliation.json",
+      "reconciled-predictions.jsonl",
+      "EVIDENCE_SHA256SUMS",
+      "TERMINAL_ACCEPTED"
+    ],
+    "failure_files": [
+      "reconciliation-failure.json",
+      "EVIDENCE_SHA256SUMS",
+      "TERMINAL_REJECTED"
+    ],
+    "raw_run_is_never_modified_or_deleted": true
+  },
+  "acceptance_rule": "Accept one reconciliation root only when dataset semantic identity and QID-order hashes match, method and seed are registered, source and memory budget are prospectively frozen, answer-model and decoding identities match, all 1711 rows pass schema validation in exact order, accepted plus failed equals 1711, and all evidence hashes verify. Failed rows remain comparison inputs as incorrect answers under the later frozen evaluator.",
+  "failure_rule": "Reject on any identity, schema, qid, denominator, official-value, non-finite latency, retrieval-count, or evidence-write mismatch. Retain the raw run and rejected reconciliation root; any technical recovery requires a separately frozen fresh root.",
+  "downstream_gate": "A reconciled run still has main_comparison_numerical_authorization=false. Method-level scoring, three-seed aggregation, table admission, pairwise statistics, and claims each require separately frozen and accepted stages.",
+  "validation": {
+    "tests_passed": 5,
+    "covered_invariants": [
+      "complete denominator retains failed rows",
+      "missing or reordered qid rejection",
+      "empty accepted answer rejection",
+      "official-value contamination rejection",
+      "non-finite latency rejection"
+    ]
+  },
+  "current_state": {
+    "data_integrity_accepted": false,
+    "raw_runs_started": 0,
+    "reconciled_runs": 0,
+    "prediction_rows_admitted": 0,
+    "official_values_used": false
+  },
+  "explicitly_prohibited": [
+    "running this stage before the exact dataset integrity root is accepted",
+    "generating a missing row from an official paper or released result",
+    "dropping failed, empty, slow, or unfavorable rows",
+    "changing method, seed, memory budget, model, decoding, qid order, or implementation after observing a score",
+    "treating reconciliation acceptance as method-quality or SOTA evidence"
+  ]
+}
