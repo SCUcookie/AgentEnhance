@@ -71,6 +71,7 @@ baseline-check:
 	python3 scripts/validate_memgallery_naiverag_encoder_parity_prefreeze.py
 	python3 scripts/validate_memgallery_naiverag_encoder_probe_capture_prefreeze.py
 	python3 scripts/validate_memgallery_naiverag_float32_service_prefreeze.py
+	python3 scripts/validate_memgallery_naiverag_parity_lifecycle_prefreeze.py
 	python3 scripts/validate_memgallery_control_runner_prefreeze.py
 	python3 scripts/validate_memgallery_raw_run_writer_prefreeze.py
 	python3 scripts/validate_memgallery_lifecycle_controller_prefreeze.py

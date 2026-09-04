@@ -1,0 +1,148 @@
+{
+  "schema_version": "agentenhance.memgallery_naiverag_parity_lifecycle_prefreeze.v1",
+  "stage_id": "memgallery-naiverag-parity-controller-20260904-v1",
+  "status": "FROZEN_IMPLEMENTATION_ONLY_AWAITING_WAVE1_RELEASE_AND_GME_MATERIALIZATION",
+  "frozen_at": "2026-09-04T12:56:05+08:00",
+  "purpose": "Freeze the one-attempt composition that measures official-direct versus float32-vLLM GME encoder parity, proves the service stopped, and only then records the prospective NaiveRAG encoder-path decision.",
+  "scientific_boundary": "This controller is diagnostic implementation-selection infrastructure. It does not read a benchmark example, run a memory method, produce an answer or prediction, compute a benchmark metric, add a comparison row, or establish any SOTA claim.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/wma-r1-wave1-release-gate-prefreeze.v1.json",
+      "sha256": "d9d467a4a910e184aac60d041d548f05aa7a7b70451b583d139144bfa2f6cbd8"
+    },
+    {
+      "path": "comparisons/memgallery-naiverag-encoder-parity-prefreeze.v1.json",
+      "sha256": "15dfd2faa69ea65ef156b4129aadcf326f05d0fb37877436ade75f3ff01f1ff6"
+    },
+    {
+      "path": "comparisons/memgallery-naiverag-encoder-probe-capture-prefreeze.v1.json",
+      "sha256": "3e63c214d1c56fc41e543fcfcd88436194f340ef08abbe4d5718b305cdc73115"
+    },
+    {
+      "path": "comparisons/memgallery-naiverag-float32-service-prefreeze.v1.json",
+      "sha256": "ab4ded378212f467a690c980360fb0083f20188541da09db08fe86e1476e19b3"
+    },
+    {
+      "path": "scripts/run_memgallery_naiverag_parity_lifecycle.py",
+      "sha256": "254108fe52ec749749ae74a8e09cd751a6e947759f0592122e0c2279b02a54eb"
+    },
+    {
+      "path": "tests/test_memgallery_naiverag_parity_lifecycle.py",
+      "sha256": "0c0ef4d1ed0f6c3425f9f8b97611fb9a9a23528e240040a7acfa55c4a5db53e7"
+    }
+  ],
+  "fresh_roots": {
+    "scope": "The exact existing AgentEnhance/runs directory; every lifecycle root must be an absent, non-symlink, direct child before the controller root is created.",
+    "controller": "memgallery-naiverag-parity-controller-20260904-v1",
+    "direct": "memgallery-naiverag-direct-probe-20260904-v1",
+    "service": "memgallery-naiverag-float32-service-20260904-v1",
+    "endpoint": "memgallery-naiverag-endpoint-probe-20260904-v1",
+    "audit": "memgallery-naiverag-parity-audit-20260904-v1",
+    "overwrite": false,
+    "resume": false,
+    "same_root_retry": false
+  },
+  "start_gate": {
+    "wave1_release_status": "TERMINAL_ACCEPTED",
+    "wave1_method_seed_runs": 12,
+    "wave1_accepted_units": 1800,
+    "wave1_accepted_qa": 94872,
+    "wave1_unit_hashes_verified": true,
+    "blocked_processes": 0,
+    "blocked_ports": [],
+    "blocked_tmux_sessions": [],
+    "future_root_collisions": [],
+    "scores_observed": 0,
+    "official_values_used": false,
+    "mutation_performed": false,
+    "allowed_physical_gpu_indices": [1, 3, 4, 5],
+    "selected_gpu_max_used_mib": 100,
+    "exact_python": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "model_snapshot": "Each child capture or service process revalidates the complete 24-file, 8,848,245,026-byte signed GME snapshot before use."
+  },
+  "execution": {
+    "ordered_stages": [
+      "direct_capture",
+      "service_start",
+      "endpoint_capture",
+      "service_stop",
+      "parity_audit"
+    ],
+    "attempts_per_stage": 1,
+    "automatic_retries": 0,
+    "subprocess_isolation": "Every stage is a separate Python process. The official-direct CUDA process exits before the float32 service is allowed to start.",
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "the one preflight-accepted physical GPU",
+      "TRANSFORMERS_OFFLINE": "1",
+      "HF_HUB_OFFLINE": "1"
+    },
+    "endpoint": "http://127.0.0.1:18322/v1/embeddings",
+    "audit_after_stop": true,
+    "service_must_be_terminal_accepted_stopped_before_audit": true
+  },
+  "child_evidence": {
+    "direct_capture_inventory_members": 3,
+    "endpoint_capture_inventory_members": 3,
+    "stopped_service_inventory_members": 7,
+    "parity_audit_inventory_members": 1,
+    "verification": "The controller reparses terminal summaries and recomputes every signed child-file SHA-256 before accepting the child root."
+  },
+  "decision_rule": {
+    "accepted_decisions": [
+      "ENDPOINT_EQUIVALENT",
+      "DIRECT_ENCODER_REQUIRED"
+    ],
+    "ENDPOINT_EQUIVALENT": "Use the frozen float32 vLLM endpoint only when all prospective vector and retrieval-parity thresholds pass.",
+    "DIRECT_ENCODER_REQUIRED": "Use the official direct LMEncoder path when the diagnostic is valid but any frozen parity threshold fails.",
+    "selection_is_diagnostic_only": true,
+    "claim_eligible": false
+  },
+  "failure_semantics": {
+    "controller_status": "TERMINAL_REJECTED",
+    "partial_child_roots_retained": true,
+    "regular_stage_retry": false,
+    "emergency_cleanup": "If and only if READY_FOR_PARITY_PROBE exists without either service terminal marker, make exactly one additional stop invocation. This is ownership-checked safety cleanup, not a scientific retry; the controller remains rejected even when cleanup succeeds.",
+    "other_users_processes_may_be_signaled": false,
+    "same_root_retry_allowed": false
+  },
+  "controller_evidence": {
+    "successful_inventory_members": 13,
+    "successful_files": "controller-record.json, stages.jsonl, controller-summary.json, and stdout/stderr for each of five stages; marker and inventory are not self-inventoried.",
+    "failure_inventory": "controller-record.json, stages.jsonl, controller-failure.json, and stdout/stderr for every attempted stage.",
+    "stage_receipt_fields": [
+      "argv",
+      "restricted environment",
+      "start and finish timestamps",
+      "return code",
+      "stdout and stderr byte counts and SHA-256",
+      "attempts=1",
+      "retry_count=0",
+      "scores_observed=0"
+    ]
+  },
+  "validation": {
+    "synthetic_tests_passed": 7,
+    "covered_invariants": [
+      "five-stage endpoint-equivalent success with service stop before audit",
+      "prospectively accepted direct-required branch",
+      "endpoint failure followed by one accepted safety cleanup and controller rejection",
+      "regular stop failure followed by one emergency cleanup and no accepted controller",
+      "all-root collision rejection before controller creation or command execution",
+      "active Wave1 receipt rejection before controller creation",
+      "child evidence hash tampering rejection"
+    ],
+    "real_release_receipts_consumed": 0,
+    "real_model_files_read": 0,
+    "real_model_loads": 0,
+    "real_gpu_processes_started": 0,
+    "real_endpoint_requests": 0,
+    "real_vectors_observed": 0,
+    "benchmark_examples_read": 0,
+    "predictions_observed": 0,
+    "scores_observed": 0,
+    "numeric_result_rows_added": 0,
+    "official_values_used": false
+  },
+  "next_gate": "After a real terminal-accepted Wave1 release and accepted GME materialization exist, run this exact controller once in the five fixed fresh roots. The resulting accepted branch selects the NaiveRAG encoder implementation before any Mem-Gallery benchmark run.",
+  "authorization": "This implementation freeze authorizes no current service start, model read or load, GPU allocation, endpoint request, vector capture, dataset access, prediction, score, comparison, claim, cleanup, or table mutation."
+}
