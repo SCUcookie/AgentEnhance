@@ -70,6 +70,7 @@ baseline-check:
 	python3 scripts/validate_memgallery_lifecycle_controller_prefreeze.py
 	python3 scripts/validate_wma_local_result_admission.py
 	python3 scripts/validate_wma_wave1_recovery2.py
+	python3 scripts/validate_wma_wave1_release_gate_prefreeze.py
 	python3 scripts/validate_wma_wave1_recovery2_closure.py
 	python3 scripts/validate_wma_wave1_recovery2_result_admission.py
 	python3 scripts/validate_wma_wave1_failure_history_archive.py

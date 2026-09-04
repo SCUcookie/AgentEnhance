@@ -1,0 +1,131 @@
+{
+  "schema_version": "agentenhance.wma_wave1_release_gate_prefreeze.v1",
+  "stage_id": "wma-r1-wave1-release-gate-recovery2-20260904-v1",
+  "status": "FROZEN_READ_ONLY_AWAITING_CONTROLLER_TERMINAL",
+  "frozen_at": "2026-09-04T11:10:00+08:00",
+  "purpose": "Produce one reusable, score-blind proof that the complete Wave1 recovery2 evidence exists and that its controller, workers, services, ports, tmux sessions, storage, and successor-root constraints permit the already frozen closure sequence to begin.",
+  "bound_inputs": [
+    {
+      "path": "comparisons/wma-r1-wave1-full-recovery2-prefreeze.v1.json",
+      "sha256": "8861cf34367ce4fe82a3601c8f3d673a29b966e274cb648c65054b958452f49e"
+    },
+    {
+      "path": "comparisons/wma-r1-wave1-recovery2-closure-prefreeze.v1.json",
+      "sha256": "b52b6e50cc400eaa0d1e9b4d1b7ca161e31ce4fc6f75b78f6ea74e6aab367b05"
+    },
+    {
+      "path": "comparisons/wma-postwave1-release-sequence-prefreeze.v3.json",
+      "sha256": "c976cf2a3bbecbcb3b845b34f7965dbe218da06dcd8a05ce49a95879c2440841"
+    },
+    {
+      "path": "comparisons/wma-small-run-units.v1.csv",
+      "sha256": "027f2c3f757d99cb098a6e1887ac7bc837f726031368a4c758970ee90db33f39"
+    }
+  ],
+  "implementation": {
+    "path": "scripts/audit_wma_wave1_release_gate.py",
+    "sha256": "570838ac3583184d09633aff365702bbd5d0a49aa22eaa7a57bb29aac32564e8",
+    "mode": "read-only",
+    "network_requests": 0,
+    "writes": 0,
+    "scores_read_or_emitted": 0
+  },
+  "synthetic_test": {
+    "path": "tests/test_wma_wave1_release_gate.py",
+    "sha256": "d4f10816abd1d1eec4318fc30128dfbae42fd77508a4712d8fa5aae6ac5ac830",
+    "tests": 5,
+    "covers": [
+      "complete 12-run release acceptance",
+      "controller terminal-state rejection",
+      "per-unit inventory rehash rejection",
+      "active process port or tmux rejection",
+      "future-root collision and storage-headroom rejection"
+    ]
+  },
+  "fixed_surface": {
+    "controller_root": "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-controller-recovery2-20260904-v1",
+    "run_base": "/data1/2026/ldh/AgentEnhance/runs",
+    "methods": ["MMFU_Single", "SimpleMem", "M2A", "ViLoMem"],
+    "seeds": [0, 1, 2],
+    "method_seed_runs": 12,
+    "units_per_run": 150,
+    "accepted_units_total": 1800,
+    "sessions_per_run": 2761,
+    "accepted_sessions_total": 33132,
+    "qa_per_run": 7906,
+    "accepted_qa_total": 94872,
+    "failed_units_allowed": 0,
+    "unit_inventory_sha256": "027f2c3f757d99cb098a6e1887ac7bc837f726031368a4c758970ee90db33f39",
+    "wma_source_commit": "15ea25b723d9c4fb35e8062037aec6a5601e4442",
+    "dataset_manifest_sha256": "9f63a71631ddb2ba506ba4927e4a69e31b8c857a6b72fbd70153201673c8a2cb",
+    "recovery_full_scheduler_sha256": "2df8a4eee3b0a3c121fea863e7f555d55ee2c50646c1cbf7d51700c6e0b1793b",
+    "chat_gpu_memory_utilization": "0.90",
+    "parent_numeric_evidence_reused": false
+  },
+  "required_checks": {
+    "controller": [
+      "TERMINAL_ACCEPTED exists and TERMINAL_REJECTED is absent",
+      "identity contains the exact recovery2 scheduler and resource change",
+      "progress.csv has exactly 12 method-major seed-minor ACCEPTED rows",
+      "controller SHA256SUMS signs exactly identity.txt and progress.csv"
+    ],
+    "method_seed_runs": [
+      "all 12 exact fresh run and aggregate roots exist",
+      "every scheduler has SCHEDULER_EXECUTION_ACCEPTED and no rejection marker",
+      "every run contains exactly the frozen 150 unit names",
+      "all 1800 units are TERMINAL_ACCEPTED and not TERMINAL_REJECTED",
+      "every unit SHA256SUMS member is rehashed",
+      "every scheduler SHA256SUMS member is rehashed and rejected-units.csv is empty",
+      "all 12 aggregate audits report 150 observed of 150 expected, zero failed, 2761 sessions, and 7906 QA",
+      "all aggregate audits bind the frozen source commit, dataset manifest, unit inventory, and main-comparison eligibility",
+      "every aggregate SHA256SUMS member is rehashed"
+    ],
+    "quiescence": {
+      "blocked_project_processes": 0,
+      "blocked_listening_ports": [],
+      "blocked_ports_checked": [18113, 18114, 18120],
+      "agentenhance_wma_tmux_sessions": 0
+    },
+    "storage": {
+      "data1_minimum_free_bytes": 42949672960,
+      "data2_rule": "free bytes must be at least all accepted recovery2 source-evidence bytes plus 10737418240 reserve bytes"
+    },
+    "future_roots": {
+      "must_all_be_absent": [
+        "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-three-seed-summaries-recovery2-20260904-v1",
+        "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-table-projection-recovery2-20260904-v3",
+        "/data1/2026/ldh/AgentEnhance/runs/wma-r1-wave1-local-result-admission-recovery2-20260904-v1",
+        "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-recovery2-20260904-v1",
+        "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-table-projection-recovery2-20260904-v3",
+        "/data2/2026/ldh/AgentEnhance/archives/wma-r1-wave1-failure-history-20260904-v1"
+      ]
+    }
+  },
+  "report_contract": {
+    "accepted_status": "TERMINAL_ACCEPTED",
+    "accepted_only_after_every_check": true,
+    "unit_hashes_mandatory": true,
+    "scores_observed": 0,
+    "official_values_used": false,
+    "mutation_performed": false,
+    "role": "release and provenance evidence only; it is not a numerical result"
+  },
+  "current_observation": {
+    "controller_state": "RUNNING",
+    "accepted_units": 57,
+    "rejected_units": 0,
+    "failed_units": 0,
+    "active_unit": "058_omnigibson_05",
+    "execution_authorized_now": false,
+    "audit_run_now": false
+  },
+  "next_gate": "After the controller becomes terminal and all WMA processes, services, ports, and tmux sessions have exited, package this exact implementation without modification, run it once with mandatory unit hashes, preserve stdout as an immutable release receipt, and independently verify that receipt before stage-1 postprocessing.",
+  "prohibited_actions": [
+    "running the release audit as proof while the controller is active",
+    "skipping unit hashes in an accepted release receipt",
+    "reading or reporting numeric score values during release auditing",
+    "starting closure model materialization or another numerical method before the accepted release receipt",
+    "overwriting any existing future root",
+    "deleting any accepted rejected or failure evidence or any model from this gate"
+  ]
+}
