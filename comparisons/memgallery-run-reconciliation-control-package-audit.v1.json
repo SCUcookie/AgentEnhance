@@ -1,0 +1,76 @@
+{
+  "schema_version": "agentenhance.control_package_audit.v1",
+  "audit_id": "mem-gallery-run-reconciliation-20260904-v1-control",
+  "status": "TERMINAL_ACCEPTED_INERT",
+  "accepted_at": "2026-09-04T09:00:00+08:00",
+  "scientific_evidence_role": "Result-free Mem-Gallery method/seed reconciliation control. It standardizes future local outputs and failure denominators but accepts no prediction, metric, ranking, or SOTA claim.",
+  "bound_stage": {
+    "path": "comparisons/memgallery-run-reconciliation-prefreeze.v1.json",
+    "sha256": "52698bc8edac6a4ce8989f17eb820f5804bcf2f4b63c70b36d00b1adb286c437",
+    "implementation_commit": "3ccc3b6"
+  },
+  "archive": {
+    "local_path": "${AGENT_ENHANCE_LOCAL_STAGING}/mem-gallery-run-reconciliation-20260904-v1-control.tar.gz",
+    "remote_path": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-run-reconciliation-20260904-v1-control.tar.gz",
+    "extraction_root": "/data1/2026/ldh/AgentEnhance/incoming/mem-gallery-run-reconciliation-20260904-v1-control",
+    "bytes": 13717,
+    "sha256": "71a499c3254d7609272e6152bbbbab0b04fe9a27c26f2058bd5208d2343ad0d2",
+    "transport": "OpenSSH SFTP with SHA-bound resumable partial, limited to 4096 Kbit/s",
+    "fresh_before_extraction": true
+  },
+  "package_inventory": {
+    "path": "PACKAGE_SHA256SUMS",
+    "sha256": "0492f671521c54b6089c04d8760366bc48495c4f63bc61e592770f9101fe9d18",
+    "signed_regular_files": 6,
+    "regular_files_including_inventory": 7,
+    "regular_file_bytes_including_inventory": 46918,
+    "symlinks": 0,
+    "python_bytecode_files": 0,
+    "all_signed_files_verified_locally": true,
+    "all_signed_files_verified_remotely": true,
+    "inventory_excludes_itself": true
+  },
+  "remote_validation": {
+    "interpreter": "/data1/anaconda3/envs/clo-infer/bin/python3.11",
+    "environment_mutated": false,
+    "contract_validator": "PASS",
+    "tests_passed": 5,
+    "tests_failed": 0,
+    "network_requests": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0
+  },
+  "negative_data_integrity_gate": {
+    "dataset_integrity_present": false,
+    "run_identity_present": false,
+    "raw_predictions_present": false,
+    "observed_exit_code": 1,
+    "observed_error": "missing reconciliation input: dataset-integrity.json",
+    "output_root_present_before": false,
+    "output_root_present_after": false,
+    "network_requests_started": 0,
+    "numeric_result_rows_added": 0,
+    "status": "ACCEPTED_FAIL_CLOSED"
+  },
+  "registered_future_surface": {
+    "methods": 14,
+    "seeds": 3,
+    "method_seed_runs": 42,
+    "questions_per_run": 1711,
+    "prediction_rows_if_complete": 71862,
+    "current_reconciled_runs": 0,
+    "current_prediction_rows": 0,
+    "official_values_used": false
+  },
+  "execution_authorization": "The control package is accepted but inert. It may run only after the exact Mem-Gallery integrity evidence is accepted and a method-specific raw run has separately frozen source, implementation, memory budget, seed, model, decoding, and fresh paths. Reconciliation acceptance still does not authorize scoring or main-table admission.",
+  "failure_history_rule": "Any future rejected reconciliation and its raw run remain retained. No missing qid may be synthesized, dropped, replaced with an official result, or retried in place.",
+  "mutation_summary": {
+    "control_package_uploaded_and_extracted": true,
+    "dataset_files_downloaded": 0,
+    "dataset_files_modified": 0,
+    "model_files_downloaded": 0,
+    "gpu_processes_started": 0,
+    "numeric_result_rows_added": 0,
+    "files_deleted": 0
+  }
+}
