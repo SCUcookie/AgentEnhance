@@ -1,0 +1,88 @@
+{
+  "schema_version": "agentenhance.causal_locomo_main_table_spec_proposal.v1",
+  "spec_id": "causal-locomo-complete-local-table-20260904-v1",
+  "state": "PROPOSED_RESULT_FREE_NOT_FROZEN_NOT_AUTHORIZED",
+  "proposed_at": "2026-09-04T22:40:00+08:00",
+  "purpose": "Reserve a fixed, same-protocol, local-only Causal-LoCoMo table before any real score is observed, including explicit non-comparable blocker cells and a locked AgentEnhance row.",
+  "parents": [
+    {
+      "path": "comparisons/causal-locomo-offline-evaluator-proposal.v1.json",
+      "sha256": "4b57dcf84d3e6889ab6d0eaa6abcad0e75fedb44f17488d90b023ef6edce31c6"
+    },
+    {
+      "path": "comparisons/baseline-register.v3.csv",
+      "sha256": "ac0a96da3ad98fae135e3b23f4426e334367f3fae93cac705cd052b2eb108759"
+    }
+  ],
+  "template": "comparisons/causal-locomo-main-table-template.v1.csv",
+  "row_order": [
+    "cmi-no-memory",
+    "cmi-full-history",
+    "cmi-vector-memory",
+    "cmi-summary-memory",
+    "cmi-reflection-memory",
+    "cmi-graph-memory",
+    "cmi",
+    "agentenhance-ceu"
+  ],
+  "row_roles": {
+    "local_matched_controls": 5,
+    "protocol_blockers": 2,
+    "this_work_locked": 1,
+    "rows_total": 8,
+    "registered_rows_per_method": 261
+  },
+  "metric_panels": {
+    "task_quality": [
+      "task_score",
+      "task_success_rate"
+    ],
+    "evidence_selection": [
+      "useful_memory_precision",
+      "useful_memory_recall",
+      "useful_memory_f1",
+      "false_positive_memory_acceptance_rate",
+      "false_negative_memory_rejection_rate",
+      "selected_memory_count",
+      "retrieved_memory_count"
+    ],
+    "safety_and_robustness": [
+      "harmful_memory_rejection_rate",
+      "irrelevant_memory_rejection_rate",
+      "outdated_memory_rejection_rate",
+      "context_dependent_memory_accuracy",
+      "poisoned_memory_adoption_rate",
+      "harmful_instruction_following_rate"
+    ],
+    "efficiency_and_reliability": [
+      "endpoint_calls",
+      "failed_endpoint_calls",
+      "prompt_tokens",
+      "completion_tokens",
+      "total_tokens",
+      "wall_seconds"
+    ]
+  },
+  "admission_rules": {
+    "numeric_source": "Only a terminal-accepted local matched run scored by the frozen independent evaluator may populate a numeric cell.",
+    "official_or_development_values": "Remain in separate disclosure artifacts and may not populate this table.",
+    "eligible_failure_rows": "Remain in all 261 registered rows under the prospectively frozen conservative imputation policy.",
+    "protocol_blocked_rows": "Keep all numeric cells blank and status PROTOCOL_BLOCKED.",
+    "agentenhance_row": "Keep all numeric cells blank until the recent-baseline gate is accepted prospectively.",
+    "partial_method_results": "May not populate the method row.",
+    "sota_claim": "Not authorized by this template; any later claim requires complete admitted evidence and a separately audited comparison statement."
+  },
+  "slice_outputs_required_after_admission": [
+    "method by task_family over all seeds",
+    "method by seed",
+    "paired method-minus-no-memory by example and seed",
+    "paired method-minus-full-history by example and seed"
+  ],
+  "current_numeric_state": {
+    "populated_metric_cells": 0,
+    "locally_admitted_method_rows": 0,
+    "official_values_copied": 0,
+    "agentenhance_values_observed": 0
+  },
+  "authorization": "Result-free table design only. It authorizes no real execution, scoring, result admission, superiority or SOTA claim, archive deletion, or model cleanup."
+}

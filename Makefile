@@ -42,6 +42,7 @@ baseline-check:
 	python3 scripts/validate_causal_locomo_raw_writer_proposal.py
 	python3 scripts/validate_causal_locomo_lifecycle_controller_proposal.py
 	python3 scripts/validate_causal_locomo_offline_evaluator_proposal.py
+	python3 scripts/validate_causal_locomo_main_table_proposal.py
 	python3 scripts/validate_memgallery_data_prefetch_manifest.py
 	python3 scripts/validate_memgallery_data_materialization_prefreeze.py
 	python3 scripts/validate_memgallery_data_control_package.py

@@ -1,0 +1,9 @@
+benchmark_id,method_id,display_name,evidence_role,comparison_status,registered_rows,task_score,task_success_rate,useful_memory_precision,useful_memory_recall,useful_memory_f1,harmful_memory_rejection_rate,irrelevant_memory_rejection_rate,outdated_memory_rejection_rate,context_dependent_memory_accuracy,poisoned_memory_adoption_rate,false_positive_memory_acceptance_rate,false_negative_memory_rejection_rate,harmful_instruction_following_rate,endpoint_calls,failed_endpoint_calls,prompt_tokens,completion_tokens,total_tokens,wall_seconds,selected_memory_count,retrieved_memory_count,accepted_rows,failed_rows,run_id,evidence_archive_sha256,notes
+causal-locomo-2026,cmi-no-memory,CMI NoMemory,local-matched-control,PENDING_LOCAL,261,,,,,,,,,,,,,,,,,,,,,,,,,,Inference-blind no-memory lower bound
+causal-locomo-2026,cmi-full-history,CMI FullHistory,local-matched-control,PENDING_LOCAL,261,,,,,,,,,,,,,,,,,,,,,,,,,,Inference-blind full-history control
+causal-locomo-2026,cmi-vector-memory,CMI VectorMemory,local-matched-control,PENDING_LOCAL,261,,,,,,,,,,,,,,,,,,,,,,,,,,Inference-blind fail-closed cosine top-5
+causal-locomo-2026,cmi-summary-memory,CMI SummaryMemory,local-matched-control,PENDING_LOCAL,261,,,,,,,,,,,,,,,,,,,,,,,,,,Inference-blind first-eight content summary
+causal-locomo-2026,cmi-reflection-memory,CMI ReflectionMemory,protocol-blocker,PROTOCOL_BLOCKED,261,,,,,,,,,,,,,,,,,,,,,,,,,,Upstream consumes evaluator-only memory labels
+causal-locomo-2026,cmi-graph-memory,CMI GraphMemory,local-matched-control,PENDING_LOCAL,261,,,,,,,,,,,,,,,,,,,,,,,,,,Inference-blind content graph top-5
+causal-locomo-2026,cmi,CMI,protocol-blocker,PROTOCOL_BLOCKED,261,,,,,,,,,,,,,,,,,,,,,,,,,,Upstream consumes gold IDs labels and answer criteria
+causal-locomo-2026,agentenhance-ceu,AgentEnhance-CEU,this-work,LOCKED_UNTIL_BASELINE_GATE,261,,,,,,,,,,,,,,,,,,,,,,,,,,Run only after the prospective recent-baseline gate
